@@ -13,7 +13,11 @@
 	<?php echo CHtml::encode($data->hari); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('jam')); ?>:</b>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('jam_mulai')); ?>:</b>
+	<?php echo CHtml::encode($data->jam); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('jam_selesai')); ?>:</b>
 	<?php echo CHtml::encode($data->jam); ?>
 	<br />
 

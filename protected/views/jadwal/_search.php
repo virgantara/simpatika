@@ -22,8 +22,13 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'jam'); ?>
-		<?php echo $form->textField($model,'jam',array('size'=>20,'maxlength'=>20)); ?>
+		<?php echo $form->label($model,'jam_mulai'); ?>
+		<?php echo $form->textField($model,'jam_mulai',array('size'=>20,'maxlength'=>20)); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'jam_selesai'); ?>
+		<?php echo $form->textField($model,'jam_selesai',array('size'=>20,'maxlength'=>20)); ?>
 	</div>
 
 	<div class="row">

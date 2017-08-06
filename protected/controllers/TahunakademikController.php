@@ -1,6 +1,6 @@
 <?php
 
-class JadwalController extends Controller
+class TahunakademikController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -62,14 +62,14 @@ class JadwalController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Jadwal;
+		$model=new Tahunakademik;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Jadwal']))
+		if(isset($_POST['Tahunakademik']))
 		{
-			$model->attributes=$_POST['Jadwal'];
+			$model->attributes=$_POST['Tahunakademik'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -91,9 +91,9 @@ class JadwalController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Jadwal']))
+		if(isset($_POST['Tahunakademik']))
 		{
-			$model->attributes=$_POST['Jadwal'];
+			$model->attributes=$_POST['Tahunakademik'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -122,13 +122,9 @@ class JadwalController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$model=new Jadwal('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Jadwal']))
-			$model->attributes=$_GET['Jadwal'];
-
-		$this->render('admin',array(
-			'model'=>$model,
+		$dataProvider=new CActiveDataProvider('Tahunakademik');
+		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
 		));
 	}
 
@@ -137,10 +133,10 @@ class JadwalController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Jadwal('search');
+		$model=new Tahunakademik('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Jadwal']))
-			$model->attributes=$_GET['Jadwal'];
+		if(isset($_GET['Tahunakademik']))
+			$model->attributes=$_GET['Tahunakademik'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -151,12 +147,12 @@ class JadwalController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Jadwal the loaded model
+	 * @return Tahunakademik the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Jadwal::model()->findByPk($id);
+		$model=Tahunakademik::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -164,11 +160,11 @@ class JadwalController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Jadwal $model the model to be validated
+	 * @param Tahunakademik $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='jadwal-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='tahunakademik-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

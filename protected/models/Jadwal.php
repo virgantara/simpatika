@@ -43,20 +43,20 @@ class Jadwal extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('hari, jam, kode_mk, kode_dosen, semester, kelas, prodi, kd_ruangan, kampus', 'required'),
+			array('hari, jam_mulai, jam_selesai, kode_mk, kode_dosen, semester, kelas,fakultas, prodi, kd_ruangan, kampus', 'required'),
 			array('kuota_kelas', 'numerical', 'integerOnly'=>true),
 			array('hari, bobot_formatif, bobot_uts, bobot_uas', 'length', 'max'=>30),
-			array('jam, kode_mk, kode_dosen, kd_ruangan', 'length', 'max'=>20),
+			array('kd_ruangan', 'length', 'max'=>20),
 			array('semester', 'length', 'max'=>5),
-			array('kelas, prodi, tahun_akademik', 'length', 'max'=>10),
-			array('fakultas', 'length', 'max'=>7),
-			array('kampus', 'length', 'max'=>2),
+			array('kelas, tahun_akademik', 'length', 'max'=>10),
+			// array('fakultas', 'length', 'max'=>7),
+			// array('kampus', 'length', 'max'=>2),
 			array('materi', 'length', 'max'=>255),
 			array('bobot_harian1, bobot_harian', 'length', 'max'=>4),
 			array('presensi', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hari, jam, kode_mk, kode_dosen, semester, kelas, fakultas, prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian', 'safe', 'on'=>'search'),
+			array('id, hari, jam_mulai, jam_selesai, kode_mk, kode_dosen, semester, kelas, fakultas, prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -79,14 +79,15 @@ class Jadwal extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'hari' => 'Hari',
-			'jam' => 'Jam',
-			'kode_mk' => 'Kode Mk',
-			'kode_dosen' => 'Kode Dosen',
+			'jam_mulai' => 'Jam Mulai',
+			'jam_selesai' => 'Jam Selesai',
+			'kode_mk' => 'Matkul',
+			'kode_dosen' => 'Nama Dosen',
 			'semester' => 'Semester',
 			'kelas' => 'Kelas',
 			'fakultas' => 'Fakultas',
 			'prodi' => 'Prodi',
-			'kd_ruangan' => 'Kd Ruangan',
+			'kd_ruangan' => 'Kode Ruangan',
 			'tahun_akademik' => 'Tahun Akademik',
 			'kuota_kelas' => 'Kuota Kelas',
 			'kampus' => 'Kampus',
@@ -120,7 +121,7 @@ class Jadwal extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('hari',$this->hari,true);
-		$criteria->compare('jam',$this->jam,true);
+
 		$criteria->compare('kode_mk',$this->kode_mk,true);
 		$criteria->compare('kode_dosen',$this->kode_dosen,true);
 		$criteria->compare('semester',$this->semester,true);

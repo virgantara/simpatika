@@ -1,6 +1,6 @@
 <?php
 
-class JadwalController extends Controller
+class MasterKelasController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -62,14 +62,14 @@ class JadwalController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Jadwal;
+		$model=new MasterKelas;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Jadwal']))
+		if(isset($_POST['MasterKelas']))
 		{
-			$model->attributes=$_POST['Jadwal'];
+			$model->attributes=$_POST['MasterKelas'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -91,9 +91,9 @@ class JadwalController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Jadwal']))
+		if(isset($_POST['MasterKelas']))
 		{
-			$model->attributes=$_POST['Jadwal'];
+			$model->attributes=$_POST['MasterKelas'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -122,13 +122,9 @@ class JadwalController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$model=new Jadwal('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Jadwal']))
-			$model->attributes=$_GET['Jadwal'];
-
-		$this->render('admin',array(
-			'model'=>$model,
+		$dataProvider=new CActiveDataProvider('MasterKelas');
+		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
 		));
 	}
 
@@ -137,10 +133,10 @@ class JadwalController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Jadwal('search');
+		$model=new MasterKelas('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Jadwal']))
-			$model->attributes=$_GET['Jadwal'];
+		if(isset($_GET['MasterKelas']))
+			$model->attributes=$_GET['MasterKelas'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -151,12 +147,12 @@ class JadwalController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Jadwal the loaded model
+	 * @return MasterKelas the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Jadwal::model()->findByPk($id);
+		$model=MasterKelas::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -164,11 +160,11 @@ class JadwalController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Jadwal $model the model to be validated
+	 * @param MasterKelas $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='jadwal-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='master-kelas-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

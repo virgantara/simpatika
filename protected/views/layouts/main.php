@@ -31,6 +31,8 @@
 			'items'=>array(
 				array('label'=>'Jadwal', 'url'=>array('/jadwal/index')),
 				array('label'=>'Mata Kuliah', 'url'=>array('/Mastermatakuliah/index')),
+				array('label'=>'Kelas', 'url'=>array('/MasterKelas/index')),
+				array('label'=>'Kampus', 'url'=>array('/Kampus/index')),
 				array('label'=>'User', 'url'=>array('/user/index')),
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
