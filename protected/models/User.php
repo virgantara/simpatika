@@ -88,7 +88,7 @@ class User extends MyActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'USERNAME' => 'Email',
+			'USERNAME' => 'Username',
 			'PASSWORD' => 'Password',
 			'LEVEL' => 'Level',
 			'STATUS' => 'Status',
@@ -163,6 +163,11 @@ class User extends MyActiveRecord
 
 
 		return $errCode;
+	}
+
+	protected function beforeSave()
+	{
+		$this->PASSWORD = md5($this->PASSWORD);
 	}
 
 	/**
