@@ -20,6 +20,8 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('STATUS')); ?>:</b>
 	<?php echo CHtml::encode($data->STATUS); ?>
 	<br />
-
+	<b><?php echo CHtml::encode($data->getAttributeLabel('kode_prodi')); ?>:</b>
+	<?php echo CHtml::encode($data->kode_prodi); ?>
+	<br />
 
 </div>

@@ -122,9 +122,13 @@ class KampusController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Kampus');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+		$model=new Kampus('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Kampus']))
+			$model->attributes=$_GET['Kampus'];
+
+		$this->render('admin',array(
+			'model'=>$model,
 		));
 	}
 

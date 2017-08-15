@@ -25,5 +25,6 @@ $this->menu=array(
 		'PASSWORD',
 		'LEVEL',
 		'STATUS',
+		'kode_prodi',
 	),
 )); ?>

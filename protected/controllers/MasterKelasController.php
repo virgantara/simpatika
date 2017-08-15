@@ -122,9 +122,14 @@ class MasterKelasController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('MasterKelas');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+		
+		$model=new MasterKelas('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['MasterKelas']))
+			$model->attributes=$_GET['MasterKelas'];
+
+		$this->render('admin',array(
+			'model'=>$model,
 		));
 	}
 

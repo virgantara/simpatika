@@ -27,6 +27,8 @@
  */
 class Jadwal extends CActiveRecord
 {
+
+	
 	/**
 	 * @return string the associated database table name
 	 */
@@ -43,7 +45,7 @@ class Jadwal extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('hari, jam_mulai, jam_selesai, kode_mk, kode_dosen, semester, kelas,fakultas, prodi, kd_ruangan, kampus', 'required'),
+			array('hari, jam_mulai, jam_selesai, kode_mk,nama_mk, kode_dosen,nama_dosen, semester, kelas,fakultas,nama_fakultas, prodi,nama_prodi, kd_ruangan, kampus', 'required'),
 			array('kuota_kelas', 'numerical', 'integerOnly'=>true),
 			array('hari, bobot_formatif, bobot_uts, bobot_uas', 'length', 'max'=>30),
 			array('kd_ruangan', 'length', 'max'=>20),
@@ -56,7 +58,7 @@ class Jadwal extends CActiveRecord
 			array('presensi', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hari, jam_mulai, jam_selesai, kode_mk, kode_dosen, semester, kelas, fakultas, prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian', 'safe', 'on'=>'search'),
+			array('id, hari, jam_mulai, jam_selesai, kode_mk, kode_dosen, nama_dosen,semester, kelas, fakultas, prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +70,9 @@ class Jadwal extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			// 'prodi' => array(self::BELONGS_TO, 'Masterprogramstudi', 'kode_prodi'),
+			// 'matkul' => array(self::BELONGS_TO, 'Mastermatakuliah', 'kode_mk'),
+			// 'dosen' => array(self::BELONGS_TO, 'Masterdosen', 'kode_dosen'),
 		);
 	}
 
@@ -82,7 +87,8 @@ class Jadwal extends CActiveRecord
 			'jam_mulai' => 'Jam Mulai',
 			'jam_selesai' => 'Jam Selesai',
 			'kode_mk' => 'Matkul',
-			'kode_dosen' => 'Nama Dosen',
+			'kode_dosen' => 'NIY',
+			'nama_dosen' => 'Nama Dosen',
 			'semester' => 'Semester',
 			'kelas' => 'Kelas',
 			'fakultas' => 'Fakultas',
@@ -139,6 +145,14 @@ class Jadwal extends CActiveRecord
 		$criteria->compare('bobot_uas',$this->bobot_uas,true);
 		$criteria->compare('bobot_harian1',$this->bobot_harian1,true);
 		$criteria->compare('bobot_harian',$this->bobot_harian,true);
+
+		if(Yii::app()->user->checkAccess(array(WebUser::R_PRODI)))
+		{
+			
+			$prodi = Yii::app()->user->getState('prodi');
+			$criteria->compare('prodi',$prodi);	
+		}
+		
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

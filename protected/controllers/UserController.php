@@ -63,13 +63,14 @@ class UserController extends Controller
 	public function actionCreate()
 	{
 		$model=new User;
-
+		$model->setScenario('repeatPwd');
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
+			// print_r($_POST);exit;
 			if($model->save()){
 				$this->redirect(array('view','id'=>$model->USERNAME));
 			}
@@ -88,7 +89,7 @@ class UserController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
+		$model->setScenario('repeatPwd');
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -124,9 +125,13 @@ class UserController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('User');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+		$model=new User('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['User']))
+			$model->attributes=$_GET['User'];
+
+		$this->render('admin',array(
+			'model'=>$model,
 		));
 	}
 

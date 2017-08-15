@@ -41,24 +41,29 @@ class User extends MyActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('USERNAME, PASSWORD', 'required','message' => Yii::t('yii', '{attribute} harus diisi')),
+			array('USERNAME, PASSWORD,LEVEL,STATUS', 'required','message' => Yii::t('yii', '{attribute} harus diisi')),
 			array('LEVEL, STATUS', 'numerical', 'integerOnly'=>true,'on'=>'form','message' => Yii::t('yii', '{attribute} harus diisi')),
 			array('USERNAME', 'length', 'max'=>255),
-			array('USERNAME', 'unique','message'=>'{attribute} tidak boleh sama.', 'on'=>'form'),
+			array('kode_prodi', 'checkKode'),
+			array('USERNAME', 'unique','message'=>'{attribute} sudah dipakai.', 'on'=>'form'),
 			array('PASSWORD', 'length', 'max'=>100),
-			array('old_password, new_password, repeat_password', 'required', 'on' => 'changePwd'),
-			array('old_password', 'findPasswords', 'on' => 'changePwd'),
-			array('repeat_password', 'compare', 'compareAttribute'=>'new_password', 'on'=>'changePwd'),
-			array('new_password, repeat_password', 'required', 'on' => 'resetPwd'),
-			array('repeat_password', 'compare', 'compareAttribute'=>'new_password', 'on'=>'resetPwd'),
+			array('repeat_password', 'compare', 'compareAttribute'=>'PASSWORD', 'on'=>'repeatPwd','message' => Yii::t('yii', '{attribute} tidak sama dengan PASSWORD')),
+			
 			//array('USERNAME', 'match',
               //  'pattern' => '/^[a-zA-Z\s\d]+$/',
                // 'message' => '{attribute} hanya bisa angka dan huruf'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('USERNAME, PASSWORD, LEVEL, STATUS,PARTNER_ID', 'safe', 'on'=>'search'),
+			array('USERNAME, PASSWORD, LEVEL, STATUS,PARTNER_ID,kode_prodi', 'safe', 'on'=>'search'),
 		);
 	}
+
+	public function checkKode($attribute, $params)
+    {
+    	// print_r($this->kode_prodi);exit;
+		if($this->LEVEL == 3 && empty($this->kode_prodi))
+        	$this->addError($attribute, 'Prodi harus diisi.');
+    }
 	
 	//matching the old password with your existing password.
     public function findPasswords($attribute, $params)
@@ -92,6 +97,8 @@ class User extends MyActiveRecord
 			'PASSWORD' => 'Password',
 			'LEVEL' => 'Level',
 			'STATUS' => 'Status',
+			'kode_prodi' => 'Prodi',
+			'repeat_password' => 'Ulangi Password'
 		);
 	}
 
@@ -168,6 +175,7 @@ class User extends MyActiveRecord
 	protected function beforeSave()
 	{
 		$this->PASSWORD = md5($this->PASSWORD);
+		return parent::beforeSave();
 	}
 
 	/**

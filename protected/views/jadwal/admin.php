@@ -50,9 +50,15 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'jam_mulai',
 		'jam_selesai',
 		'kampus',
-		'prodi',
+		'nama_prodi',
 		'kode_mk',
+		'nama_mk',
+		// array(
+		// 	'header' => 'Nama Mk',
+		// 	'value' => '$data->matkul->nama_mata_kuliah'
+		// ),
 		'kode_dosen',
+		'nama_dosen',
 		'semester',
 
 		

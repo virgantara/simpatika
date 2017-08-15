@@ -28,7 +28,7 @@ class JadwalController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -43,6 +43,129 @@ class JadwalController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionCekKonflik()
+	{
+		if(Yii::app()->request->isAjaxRequest)
+		{
+			$kampus = Yii::app()->request->getPost('k');
+			$hari = Yii::app()->request->getPost('h');
+			$ja = Yii::app()->request->getPost('ja'); 
+			$js = Yii::app()->request->getPost('js');
+
+			$attr = array(
+				'kampus' => $kampus,
+				'hari' => $hari,
+				// 'jam_mulai' => $ja,
+				// 'jam_selesai' => $js
+			);
+			$models = Jadwal::model()->findAllByAttributes($attr);
+			
+			$hasil = array(
+				'code' => 1,
+				'msg' => 'Empty'
+			);
+
+			if(!empty($models))
+			{
+
+				foreach($models as $model)
+				{
+					$current_time = $ja;
+					$curr = DateTime::createFromFormat('H:i:s', $current_time);
+					$timestart = DateTime::createFromFormat('H:i:s', $model->jam_mulai);
+					$timeend = DateTime::createFromFormat('H:i:s', $model->jam_selesai);
+					if ($curr > $timestart && $curr < $timeend)
+					{
+					   
+						$hasil = array(
+							'code' => 2,
+							'msg' => 'Jadwal Pada Jam Ini Sudah Ada.'
+						);
+								   
+
+					   break;
+					}
+				}
+				
+			}
+
+			echo CJSON::encode($hasil);
+
+			
+
+		}
+	}
+
+	public function actionGetDosen()
+	{
+		if(Yii::app()->request->isAjaxRequest)
+		{
+			
+			$q = $_GET['term'];
+			$criteria=new CDbCriteria;
+			$criteria->addSearchCondition('nama_dosen',$q,true,'OR');
+
+			$criteria->limit = 20;
+
+			$model = Masterdosen::model()->findAll($criteria);
+
+			$result = array();
+			foreach($model as $m)
+			{
+
+				$result[] = array(
+					'id' => $m->niy,
+					'value' => $m->nama_dosen,
+
+				);
+			}
+
+
+	        echo CJSON::encode($result);
+		}
+	}
+
+	public function actionGetProdiJadwal()
+	{
+		if(Yii::app()->request->isAjaxRequest)
+		{
+			
+			$cid = Yii::app()->request->getPost('q'); 
+
+			$tahunaktif = Yii::app()->request->cookies['tahunaktif']->value;
+
+			$matkul= Mastermatakuliah::model()->findAll(
+	                array(
+	               'condition'=>'kode_prodi=:cid and tahun_akademik=:thn', 
+	               'params'=>array(
+	               		':cid'=>$cid,
+	               		':thn' => $tahunaktif
+	               	)));
+	        $list = CHtml::listData($matkul, 'kode_mata_kuliah', 'nama_mata_kuliah');    
+
+	        // print_r($list);exit;
+
+	        echo json_encode($list);
+		}
+	}
+
+	public function actionGetProdi()
+	{
+		if(Yii::app()->request->isAjaxRequest)
+		{
+			
+			$cid = Yii::app()->request->getPost('q'); 
+
+			$prodis= Masterprogramstudi::model()->findAll(
+	                array(
+	               'condition'=>'kode_fakultas=:cid', 
+	               'params'=>array(':cid'=>$cid)));
+	            $list = CHtml::listData($prodis, 'kode_prodi', 'nama_prodi');    
+
+	        echo json_encode($list);
+		}
 	}
 
 	/**
@@ -70,8 +193,18 @@ class JadwalController extends Controller
 		if(isset($_POST['Jadwal']))
 		{
 			$model->attributes=$_POST['Jadwal'];
-			if($model->save())
+			$model->nama_dosen = $_POST['nama_dosen'];
+			$fak = Masterfakultas::model()->findByAttributes(array('kode_fakultas'=> $model->fakultas));
+			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=> $model->prodi));
+			$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
+
+			$model->nama_fakultas = $fak->nama_fakultas;
+			$model->nama_prodi = $prodi->nama_prodi;
+			$model->nama_mk = $mk->nama_mata_kuliah;
+			if($model->save()){
+
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('create',array(
@@ -94,8 +227,18 @@ class JadwalController extends Controller
 		if(isset($_POST['Jadwal']))
 		{
 			$model->attributes=$_POST['Jadwal'];
-			if($model->save())
+			$model->nama_dosen = $_POST['nama_dosen'];
+
+			$fak = Masterfakultas::model()->findByAttributes(array('kode_fakultas'=> $model->fakultas));
+			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=> $model->prodi));
+			$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
+
+			$model->nama_fakultas = $fak->nama_fakultas;
+			$model->nama_prodi = $prodi->nama_prodi;
+			$model->nama_mk = $mk->nama_mata_kuliah;
+			if($model->save()){
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('update',array(

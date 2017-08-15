@@ -44,7 +44,7 @@ class UserIdentity extends CUserIdentity
 			$this->setState('isLogin',true);
 			$this->setState('USERNAME', $user->USERNAME);
 			$this->setState('LEVEL', $user->LEVEL);
-		
+			$this->setState('prodi',$user->kode_prodi);
 		
 		
 		}

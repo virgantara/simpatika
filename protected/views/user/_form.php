@@ -19,17 +19,7 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'USERNAME'); ?>
-		<?php echo $form->textField($model,'USERNAME',array('size'=>60,'maxlength'=>100)); ?>
-		<?php echo $form->error($model,'USERNAME'); ?>
-	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'PASSWORD'); ?>
-		<?php echo $form->passwordField($model,'PASSWORD',array('size'=>60,'maxlength'=>100)); ?>
-		<?php echo $form->error($model,'PASSWORD'); ?>
-	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'LEVEL'); ?>
@@ -48,6 +38,16 @@
 	</div>
 
 	<div class="row">
+		<?php 
+		 echo $form->labelEx($model,'kode_prodi'); 
+		 $list = CHtml::listData(Masterprogramstudi::model()->findAll(),'kode_prodi','nama_prodi');
+
+       echo $form->dropDownList($model, 'kode_prodi',$list,array('empty'=> 'Pilih Prodi'));
+       echo $form->error($model,'kode_prodi'); 
+		?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'STATUS'); ?>
 		<?php
 		echo $form->radioButtonList($model, 
@@ -62,6 +62,24 @@
 
 		?>
 		<?php echo $form->error($model,'STATUS'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'USERNAME'); ?>
+		<?php echo $form->textField($model,'USERNAME',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->error($model,'USERNAME'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'PASSWORD'); ?>
+		<?php echo $form->passwordField($model,'PASSWORD',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->error($model,'PASSWORD'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'repeat_password'); ?>
+		<?php echo $form->passwordField($model,'repeat_password',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->error($model,'repeat_password'); ?>
 	</div>
 
 	<div class="row buttons">

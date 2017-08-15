@@ -29,7 +29,7 @@ class SiteController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+		$this->actionLogin();
 	}
 
 	/**
@@ -70,7 +70,12 @@ class SiteController extends Controller
 			{
 				case UserIdentity::ERROR_NONE:
 					
-					$this->redirect(Yii::app()->user->returnUrl);
+					$time_expiration = time()+60*60*24*7; 
+					$tahunaktif = Tahunakademik::model()->findByAttributes(array('buka'=> 'Y'));	
+					$cookie = new CHttpCookie('tahunaktif', $tahunaktif->tahun_id);
+					$cookie->expire = $time_expiration; 
+					Yii::app()->request->cookies['tahunaktif'] = $cookie;	
+					$this->redirect(Yii::app()->createUrl('jadwal/index'));
 					
 					break;
 				case UserIdentity::ERROR_USERNAME_INVALID:

@@ -11,6 +11,8 @@
  */
 class WebUser extends CWebUser {
     const R_SA = '1';
+    const R_BAAK = '2';
+    const R_PRODI = '3';
 
     /**
      * this method is used for checking user right access

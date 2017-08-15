@@ -26,7 +26,7 @@ $this->menu=array(
 		'jam_mulai',
 		'jam_selesai',
 		'kode_mk',
-		'kode_dosen',
+		'nama_dosen',
 		'semester',
 		'kelas',
 		'fakultas',

@@ -122,9 +122,13 @@ class TahunakademikController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Tahunakademik');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
+		$model=new Tahunakademik('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Tahunakademik']))
+			$model->attributes=$_GET['Tahunakademik'];
+
+		$this->render('admin',array(
+			'model'=>$model,
 		));
 	}
 

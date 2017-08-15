@@ -49,6 +49,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'PASSWORD',
 		'LEVEL',
 		'STATUS',
+		'kode_prodi',
 		array(
 			'class'=>'CButtonColumn',
 		),
