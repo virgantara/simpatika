@@ -1,20 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "master_kelas".
+ * This is the model class for table "simak_masterkelas".
  *
- * The followings are the available columns in table 'master_kelas':
+ * The followings are the available columns in table 'simak_masterkelas':
  * @property integer $id
+ * @property string $tahun_akademik
+ * @property string $kd_kelas
  * @property string $nama_kelas
+ * @property string $kuota
+ * @property string $keterangan
  */
-class MasterKelas extends CActiveRecord
+class Masterkelas extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'master_kelas';
+		return 'simak_masterkelas';
 	}
 
 	/**
@@ -25,11 +29,13 @@ class MasterKelas extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nama_kelas', 'required'),
-			array('nama_kelas', 'length', 'max'=>255),
+			array('tahun_akademik, kd_kelas, nama_kelas, kuota, keterangan', 'required'),
+			array('tahun_akademik', 'length', 'max'=>5),
+			array('kd_kelas, nama_kelas, kuota', 'length', 'max'=>10),
+			array('keterangan', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, nama_kelas', 'safe', 'on'=>'search'),
+			array('id, tahun_akademik, kd_kelas, nama_kelas, kuota, keterangan', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,7 +57,11 @@ class MasterKelas extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'tahun_akademik' => 'Tahun Akademik',
+			'kd_kelas' => 'Kd Kelas',
 			'nama_kelas' => 'Nama Kelas',
+			'kuota' => 'Kuota',
+			'keterangan' => 'Keterangan',
 		);
 	}
 
@@ -74,7 +84,11 @@ class MasterKelas extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('tahun_akademik',$this->tahun_akademik,true);
+		$criteria->compare('kd_kelas',$this->kd_kelas,true);
 		$criteria->compare('nama_kelas',$this->nama_kelas,true);
+		$criteria->compare('kuota',$this->kuota,true);
+		$criteria->compare('keterangan',$this->keterangan,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -85,7 +99,7 @@ class MasterKelas extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return MasterKelas the static model class
+	 * @return Masterkelas the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

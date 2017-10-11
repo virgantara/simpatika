@@ -1,18 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "jadwal".
+ * This is the model class for table "simak_jadwal".
  *
- * The followings are the available columns in table 'jadwal':
+ * The followings are the available columns in table 'simak_jadwal':
  * @property integer $id
  * @property string $hari
  * @property string $jam
+ * @property string $jam_mulai
+ * @property string $jam_selesai
  * @property string $kode_mk
+ * @property string $nama_mk
  * @property string $kode_dosen
+ * @property string $nama_dosen
  * @property string $semester
  * @property string $kelas
  * @property string $fakultas
+ * @property string $nama_fakultas
  * @property string $prodi
+ * @property string $nama_prodi
  * @property string $kd_ruangan
  * @property string $tahun_akademik
  * @property integer $kuota_kelas
@@ -27,14 +33,12 @@
  */
 class Jadwal extends CActiveRecord
 {
-
-	
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'jadwal';
+		return 'simak_jadwal';
 	}
 
 	/**
@@ -45,20 +49,20 @@ class Jadwal extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('hari, jam_mulai, jam_selesai, kode_mk,nama_mk, kode_dosen,nama_dosen, semester, kelas,fakultas,nama_fakultas, prodi,nama_prodi, kd_ruangan, kampus', 'required'),
+			array('hari, jam, kode_mk, kode_dosen, semester, kelas, prodi, kd_ruangan, kampus', 'required'),
 			array('kuota_kelas', 'numerical', 'integerOnly'=>true),
 			array('hari, bobot_formatif, bobot_uts, bobot_uas', 'length', 'max'=>30),
-			array('kd_ruangan', 'length', 'max'=>20),
+			array('jam, kode_mk, kode_dosen, kd_ruangan', 'length', 'max'=>20),
+			array('nama_mk, nama_dosen, nama_fakultas, nama_prodi, materi', 'length', 'max'=>255),
 			array('semester', 'length', 'max'=>5),
-			array('kelas, tahun_akademik', 'length', 'max'=>10),
-			// array('fakultas', 'length', 'max'=>7),
-			// array('kampus', 'length', 'max'=>2),
-			array('materi', 'length', 'max'=>255),
+			array('kelas, prodi, tahun_akademik', 'length', 'max'=>10),
+			array('fakultas', 'length', 'max'=>7),
+			array('kampus', 'length', 'max'=>2),
 			array('bobot_harian1, bobot_harian', 'length', 'max'=>4),
-			array('presensi', 'safe'),
+			array('jam_mulai, jam_selesai, presensi', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hari, jam_mulai, jam_selesai, kode_mk, kode_dosen, nama_dosen,semester, kelas, fakultas, prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian', 'safe', 'on'=>'search'),
+			array('id, hari, jam, jam_mulai, jam_selesai, kode_mk, nama_mk, kode_dosen, nama_dosen, semester, kelas, fakultas, nama_fakultas, prodi, nama_prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,9 +74,6 @@ class Jadwal extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			// 'prodi' => array(self::BELONGS_TO, 'Masterprogramstudi', 'kode_prodi'),
-			// 'matkul' => array(self::BELONGS_TO, 'Mastermatakuliah', 'kode_mk'),
-			// 'dosen' => array(self::BELONGS_TO, 'Masterdosen', 'kode_dosen'),
 		);
 	}
 
@@ -84,16 +85,20 @@ class Jadwal extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'hari' => 'Hari',
+			'jam' => 'Jam',
 			'jam_mulai' => 'Jam Mulai',
 			'jam_selesai' => 'Jam Selesai',
-			'kode_mk' => 'Matkul',
-			'kode_dosen' => 'NIY',
+			'kode_mk' => 'Kode Mk',
+			'nama_mk' => 'Nama Mk',
+			'kode_dosen' => 'Kode Dosen',
 			'nama_dosen' => 'Nama Dosen',
 			'semester' => 'Semester',
 			'kelas' => 'Kelas',
 			'fakultas' => 'Fakultas',
+			'nama_fakultas' => 'Nama Fakultas',
 			'prodi' => 'Prodi',
-			'kd_ruangan' => 'Kode Ruangan',
+			'nama_prodi' => 'Nama Prodi',
+			'kd_ruangan' => 'Kd Ruangan',
 			'tahun_akademik' => 'Tahun Akademik',
 			'kuota_kelas' => 'Kuota Kelas',
 			'kampus' => 'Kampus',
@@ -127,13 +132,19 @@ class Jadwal extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('hari',$this->hari,true);
-
+		$criteria->compare('jam',$this->jam,true);
+		$criteria->compare('jam_mulai',$this->jam_mulai,true);
+		$criteria->compare('jam_selesai',$this->jam_selesai,true);
 		$criteria->compare('kode_mk',$this->kode_mk,true);
+		$criteria->compare('nama_mk',$this->nama_mk,true);
 		$criteria->compare('kode_dosen',$this->kode_dosen,true);
+		$criteria->compare('nama_dosen',$this->nama_dosen,true);
 		$criteria->compare('semester',$this->semester,true);
 		$criteria->compare('kelas',$this->kelas,true);
 		$criteria->compare('fakultas',$this->fakultas,true);
+		$criteria->compare('nama_fakultas',$this->nama_fakultas,true);
 		$criteria->compare('prodi',$this->prodi,true);
+		$criteria->compare('nama_prodi',$this->nama_prodi,true);
 		$criteria->compare('kd_ruangan',$this->kd_ruangan,true);
 		$criteria->compare('tahun_akademik',$this->tahun_akademik,true);
 		$criteria->compare('kuota_kelas',$this->kuota_kelas);
@@ -152,7 +163,6 @@ class Jadwal extends CActiveRecord
 			$prodi = Yii::app()->user->getState('prodi');
 			$criteria->compare('prodi',$prodi);	
 		}
-		
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

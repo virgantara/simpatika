@@ -31,7 +31,7 @@
 			'items'=>array(
 				array('label'=>'Jadwal', 'url'=>array('/jadwal/index'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Mata Kuliah', 'url'=>array('/Mastermatakuliah/index'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
-				array('label'=>'Kelas', 'url'=>array('/MasterKelas/index'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
+				array('label'=>'Kelas', 'url'=>array('/MasterKelas/admin'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Kampus', 'url'=>array('/Kampus/index'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Tahun Akademik', 'url'=>array('/Tahunakademik/index'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'User', 'url'=>array('/user/index'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),

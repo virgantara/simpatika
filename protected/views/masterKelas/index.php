@@ -1,18 +1,18 @@
 <?php
-/* @var $this MasterKelasController */
+/* @var $this MasterkelasController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	'Master Kelases',
+	'Masterkelases',
 );
 
 $this->menu=array(
-	array('label'=>'Create MasterKelas', 'url'=>array('create')),
-	array('label'=>'Manage MasterKelas', 'url'=>array('admin')),
+	array('label'=>'Create Masterkelas', 'url'=>array('create')),
+	array('label'=>'Manage Masterkelas', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Master Kelases</h1>
+<h1>Masterkelases</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

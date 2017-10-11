@@ -1,6 +1,6 @@
 <?php
 
-class MasterKelasController extends Controller
+class MasterkelasController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -62,14 +62,14 @@ class MasterKelasController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new MasterKelas;
+		$model=new Masterkelas;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['MasterKelas']))
+		if(isset($_POST['Masterkelas']))
 		{
-			$model->attributes=$_POST['MasterKelas'];
+			$model->attributes=$_POST['Masterkelas'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -91,9 +91,9 @@ class MasterKelasController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['MasterKelas']))
+		if(isset($_POST['Masterkelas']))
 		{
-			$model->attributes=$_POST['MasterKelas'];
+			$model->attributes=$_POST['Masterkelas'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -122,14 +122,9 @@ class MasterKelasController extends Controller
 	 */
 	public function actionIndex()
 	{
-		
-		$model=new MasterKelas('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['MasterKelas']))
-			$model->attributes=$_GET['MasterKelas'];
-
-		$this->render('admin',array(
-			'model'=>$model,
+		$dataProvider=new CActiveDataProvider('Masterkelas');
+		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
 		));
 	}
 
@@ -138,10 +133,10 @@ class MasterKelasController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new MasterKelas('search');
+		$model=new Masterkelas('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['MasterKelas']))
-			$model->attributes=$_GET['MasterKelas'];
+		if(isset($_GET['Masterkelas']))
+			$model->attributes=$_GET['Masterkelas'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -152,12 +147,12 @@ class MasterKelasController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return MasterKelas the loaded model
+	 * @return Masterkelas the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=MasterKelas::model()->findByPk($id);
+		$model=Masterkelas::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -165,11 +160,11 @@ class MasterKelasController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param MasterKelas $model the model to be validated
+	 * @param Masterkelas $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='master-kelas-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='masterkelas-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

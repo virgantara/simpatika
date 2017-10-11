@@ -1,18 +1,18 @@
 <?php
-/* @var $this MasterKelasController */
-/* @var $model MasterKelas */
+/* @var $this MasterkelasController */
+/* @var $model Masterkelas */
 
 $this->breadcrumbs=array(
-	'Master Kelases'=>array('index'),
+	'Masterkelases'=>array('index'),
 	'Create',
 );
 
 $this->menu=array(
-	array('label'=>'List MasterKelas', 'url'=>array('index')),
-	array('label'=>'Manage MasterKelas', 'url'=>array('admin')),
+	array('label'=>'List Masterkelas', 'url'=>array('index')),
+	array('label'=>'Manage Masterkelas', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Create MasterKelas</h1>
+<h1>Create Masterkelas</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>
