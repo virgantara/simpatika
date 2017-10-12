@@ -40,12 +40,16 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('application.components.ComplexGridView', array(
 	'id'=>'jadwal-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		// 'id',
+		array(
+			'header' => 'No',
+			'value'	=> '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+		),
+ 
 		'hari',
 		'jam_mulai',
 		'jam_selesai',
@@ -83,4 +87,20 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 			'class'=>'CButtonColumn',
 		),
 	),
+	'pager'=>array(
+
+                'firstPageLabel'=>'First',
+                'prevPageLabel'=>'Prev',
+                'nextPageLabel'=>'Next',        
+                'lastPageLabel'=>'Last',  
+   				'firstPageCssClass'=>'btn',
+                'previousPageCssClass'=>'btn',
+                'nextPageCssClass'=>'btn',        
+                'lastPageCssClass'=>'btn',
+			    'hiddenPageCssClass'=>'disabled',
+			    'internalPageCssClass'=>'btn',
+			    'selectedPageCssClass'=>'selected',
+			    'maxButtonCount'=>5,
+        ),
+
 )); ?>

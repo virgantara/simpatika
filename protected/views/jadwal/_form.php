@@ -6,7 +6,14 @@
 
 <script src="<?php echo Yii::app()->baseUrl;?>/js/jquery.min.js"></script>
 <script src="<?php echo Yii::app()->baseUrl;?>/js/jquery-ui.min.js"></script>
+
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl;?>/css/jquery-ui.css"> 
+
+<script src="<?php echo Yii::app()->baseUrl;?>/js/jquery-ui-timepicker-addon.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl;?>/css/jquery-ui-timepicker-addon.min.css"> 
+
+
 <script type="text/javascript">
 
 function cekKonflik(){
@@ -85,17 +92,18 @@ function findMk(prodi){
 
 	$(document).ready(function(){
 
-		$('#Jadwal_kampus').change(function(){
+		$('#Jadwal_jam_mulai, #Jadwal_jam_selesai').timepicker({
+			
+			stepMinute: 5,
+			controlType: 'select',
+			oneLine: true,
+		});
+
+		$('#Jadwal_kampus, #Jadwal_hari, #Jadwal_jam_mulai').change(function(){
 			cekKonflik();
 		});
 
-		$('#Jadwal_hari').change(function(){
-			cekKonflik();
-		});
 
-		$('#Jadwal_jam_mulai').keyup(function(){
-			cekKonflik();
-		});
 
 		var fak = $('#Jadwal_fakultas').val();
 		findProdi(fak);
@@ -166,9 +174,8 @@ function findMk(prodi){
 	<div class="row">
 		<?php echo $form->labelEx($model,'kampus'); ?>
 		<?php 
-		$list = CHtml::listData(Kampus::model()->findAll(), 'nama_kampus', function($dsn) {
-		    return ($dsn->nama_kampus);
-		});
+		$list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus','nama_kampus');
+		
 		echo $form->dropDownList($model,'kampus',$list); 
 		// echo $form->textField($model,'kampus',array('size'=>2,'maxlength'=>2)); 
 		?>
@@ -194,7 +201,11 @@ function findMk(prodi){
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'jam_mulai'); ?>
-		<?php echo $form->textField($model,'jam_mulai',array('size'=>20,'maxlength'=>20)); ?>
+
+		<?php 
+		
+		echo $form->textField($model,'jam_mulai',array('size'=>20,'maxlength'=>20)); 
+		?>
 		<?php echo $form->error($model,'jam_mulai'); ?>
 	</div>
 
@@ -289,7 +300,7 @@ function findMk(prodi){
 	<div class="row">
 		<?php echo $form->labelEx($model,'tahun_akademik'); ?>
 		<?php 
-		$list = CHtml::listData(Tahunakademik::model()->findAll(), 'tahun_id', function($dsn) {
+		$list = CHtml::listData(Tahunakademik::model()->findAll(array('order'=>'tahun_id DESC')), 'tahun_id', function($dsn) {
 		    return ($dsn->tahun_id);
 		});
 		echo $form->dropDownList($model,'tahun_akademik',$list); 

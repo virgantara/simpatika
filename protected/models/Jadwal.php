@@ -60,6 +60,7 @@ class Jadwal extends CActiveRecord
 			array('kampus', 'length', 'max'=>2),
 			array('bobot_harian1, bobot_harian', 'length', 'max'=>4),
 			array('jam_mulai, jam_selesai, presensi', 'safe'),
+			array('jam_selesai', 'validatorCompareDateTime', 'compareAttribute' => 'jam_mulai', 'condition' => '>'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, hari, jam, jam_mulai, jam_selesai, kode_mk, nama_mk, kode_dosen, nama_dosen, semester, kelas, fakultas, nama_fakultas, prodi, nama_prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian', 'safe', 'on'=>'search'),
@@ -111,6 +112,30 @@ class Jadwal extends CActiveRecord
 			'bobot_harian' => 'Bobot Harian',
 		);
 	}
+
+	public function validatorCompareDateTime($attribute, $params)
+    {
+        $compareAttribute = $params['compareAttribute'];
+        $condition = $params['condition'];
+        if ($this->hasErrors($attribute) || $this->hasErrors($compareAttribute) || empty($this->$compareAttribute)) {
+            return;
+        }
+        $validateValue = new DateTime($this->$attribute, new DateTimeZone(Yii::app()->getTimeZone()));
+        $compareValue = new DateTime($this->$compareAttribute, new DateTimeZone(Yii::app()->getTimeZone()));
+        switch ($condition) {
+            case '>=':
+                if (($validateValue >= $compareValue) === false) {
+                    $this->addError($attribute, sprintf('The value in the "%s" field must be greater than or equal to the value in the "%s" field', $this->getAttributeLabel($attribute), $this->getAttributeLabel($compareAttribute)));
+                }
+                break;
+ 
+            case '>':
+                if (($validateValue > $compareValue) === false) {
+                    $this->addError($attribute, sprintf('The value in the "%s" field must be greater than the value in the "%s" field', $this->getAttributeLabel($attribute), $this->getAttributeLabel($compareAttribute)));
+                }
+                break;
+        }
+    }
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
@@ -168,6 +193,8 @@ class Jadwal extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+	
 
 	/**
 	 * Returns the static model of the specified AR class.

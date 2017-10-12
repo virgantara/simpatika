@@ -138,6 +138,7 @@ class JadwalController extends Controller
 
 			$matkul= Mastermatakuliah::model()->findAll(
 	                array(
+	                'order' => 'nama_mata_kuliah ASC',
 	               'condition'=>'kode_prodi=:cid and tahun_akademik=:thn', 
 	               'params'=>array(
 	               		':cid'=>$cid,
@@ -201,6 +202,7 @@ class JadwalController extends Controller
 			$model->nama_fakultas = $fak->nama_fakultas;
 			$model->nama_prodi = $prodi->nama_prodi;
 			$model->nama_mk = $mk->nama_mata_kuliah;
+			$model->jam = $model->jam_mulai;
 			if($model->save()){
 
 				$this->redirect(array('view','id'=>$model->id));
