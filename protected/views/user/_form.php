@@ -22,11 +22,11 @@
 
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'LEVEL'); ?>
+		<?php echo $form->labelEx($model,'level'); ?>
 		<?php 
 		// echo $form->textField($model,'LEVEL'); 
  		echo $form->radioButtonList($model, 
- 			'LEVEL', 
+ 			'level', 
  			array('1'=> 'Super Admin','2'=>'BAAK', '3'=>'Prodi'),
  			array(
     'labelOptions'=>array('style'=>'display:inline'), // add this code
@@ -34,7 +34,7 @@
 
  			)); 
 		?>
-		<?php echo $form->error($model,'LEVEL'); ?>
+		<?php echo $form->error($model,'level'); ?>
 	</div>
 
 	<div class="row">
@@ -48,10 +48,10 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'STATUS'); ?>
+		<?php echo $form->labelEx($model,'status'); ?>
 		<?php
 		echo $form->radioButtonList($model, 
- 			'STATUS', 
+ 			'status', 
  			array('1'=> 'AKTIF','0'=>'NON-AKTIF'),
  			array(
     'labelOptions'=>array('style'=>'display:inline'), // add this code
@@ -65,15 +65,15 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'USERNAME'); ?>
-		<?php echo $form->textField($model,'USERNAME',array('size'=>60,'maxlength'=>100)); ?>
-		<?php echo $form->error($model,'USERNAME'); ?>
+		<?php echo $form->labelEx($model,'username'); ?>
+		<?php echo $form->textField($model,'username',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->error($model,'username'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'PASSWORD'); ?>
-		<?php echo $form->passwordField($model,'PASSWORD',array('size'=>60,'maxlength'=>100)); ?>
-		<?php echo $form->error($model,'PASSWORD'); ?>
+		<?php echo $form->labelEx($model,'password'); ?>
+		<?php echo $form->passwordField($model,'password',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->error($model,'password'); ?>
 	</div>
 
 	<div class="row">

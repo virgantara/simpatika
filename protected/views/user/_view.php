@@ -5,20 +5,17 @@
 
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('USERNAME')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->USERNAME), array('view', 'id'=>$data->USERNAME)); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('username')); ?>:</b>
+	<?php echo CHtml::link(CHtml::encode($data->username), array('view', 'id'=>$data->username)); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('PASSWORD')); ?>:</b>
-	<?php echo CHtml::encode($data->PASSWORD); ?>
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('level')); ?>:</b>
+	<?php echo CHtml::encode($data->level); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('LEVEL')); ?>:</b>
-	<?php echo CHtml::encode($data->LEVEL); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('STATUS')); ?>:</b>
-	<?php echo CHtml::encode($data->STATUS); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
+	<?php echo CHtml::encode($data->status); ?>
 	<br />
 	<b><?php echo CHtml::encode($data->getAttributeLabel('kode_prodi')); ?>:</b>
 	<?php echo CHtml::encode($data->kode_prodi); ?>

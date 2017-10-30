@@ -4,18 +4,18 @@
 
 $this->breadcrumbs=array(
 	'Users'=>array('index'),
-	$model->USERNAME=>array('view','id'=>$model->USERNAME),
+	$model->username=>array('view','id'=>$model->id),
 	'Update',
 );
 
 $this->menu=array(
 	array('label'=>'List User', 'url'=>array('index')),
 	array('label'=>'Create User', 'url'=>array('create')),
-	array('label'=>'View User', 'url'=>array('view', 'id'=>$model->USERNAME)),
+	array('label'=>'View User', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Manage User', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Update User <?php echo $model->USERNAME; ?></h1>
+<h1>Update User <?php echo $model->username; ?></h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>
