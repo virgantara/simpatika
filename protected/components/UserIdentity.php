@@ -19,21 +19,21 @@ class UserIdentity extends CUserIdentity
 	 */
 	public function authenticate()
 	{
-		$user = User::model()->findByPk($this->username);
-		
+		$user = User::model()->findByAttributes(array('username' => $this->username));
+			
 		if(is_null($user))
 		{
 
 			$this->errorCode=self::ERROR_USERNAME_INVALID;
 
 		}
-		else if($user->PASSWORD!==$this->password)
+		else if($user->password!==$this->password)
 		{
 			
 			$this->errorCode=self::ERROR_PASSWORD_INVALID;
 
 		}
-		else if($user->STATUS != 1){
+		else if($user->status != 1){
 
 			$this->errorCode=self::ERROR_USER_INACTIVE;
 			
@@ -42,8 +42,8 @@ class UserIdentity extends CUserIdentity
 
 			$this->errorCode=self::ERROR_NONE;
 			$this->setState('isLogin',true);
-			$this->setState('USERNAME', $user->USERNAME);
-			$this->setState('LEVEL', $user->LEVEL);
+			$this->setState('username', $user->username);
+			$this->setState('level', $user->level);
 			$this->setState('prodi',$user->kode_prodi);
 		
 		

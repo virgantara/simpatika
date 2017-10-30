@@ -48,7 +48,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'nama_jam',
 		'jam_mulai',
 		'jam_selesai',
-		'id_jam',
+		// 'id_jam',
 		array(
 			'class'=>'CButtonColumn',
 		),

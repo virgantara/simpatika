@@ -33,12 +33,16 @@
  */
 class Jadwal extends CActiveRecord
 {
+
+	public $SKS;
+
+
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'simak_jadwal';
+		return 'simak_jadwal_temp';
 	}
 
 	/**
@@ -49,7 +53,7 @@ class Jadwal extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('hari, jam, kode_mk, kode_dosen, semester, kelas, prodi, kd_ruangan, kampus', 'required'),
+			array('hari, jam_ke, kode_mk, kode_dosen, semester, kelas, prodi, kd_ruangan, kampus', 'required'),
 			array('kuota_kelas', 'numerical', 'integerOnly'=>true),
 			array('hari, bobot_formatif, bobot_uts, bobot_uas', 'length', 'max'=>30),
 			array('jam, kode_mk, kode_dosen, kd_ruangan', 'length', 'max'=>20),
@@ -60,10 +64,10 @@ class Jadwal extends CActiveRecord
 			array('kampus', 'length', 'max'=>2),
 			array('bobot_harian1, bobot_harian', 'length', 'max'=>4),
 			array('jam_mulai, jam_selesai, presensi', 'safe'),
-			array('jam_selesai', 'validatorCompareDateTime', 'compareAttribute' => 'jam_mulai', 'condition' => '>'),
+			// array('jam_selesai', 'validatorCompareDateTime', 'compareAttribute' => 'jam_mulai', 'condition' => '>'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hari, jam, jam_mulai, jam_selesai, kode_mk, nama_mk, kode_dosen, nama_dosen, semester, kelas, fakultas, nama_fakultas, prodi, nama_prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian', 'safe', 'on'=>'search'),
+			array('id, hari, jam_ke, jam, jam_mulai, jam_selesai, kode_mk, nama_mk, kode_dosen, nama_dosen, semester, kelas, fakultas, nama_fakultas, prodi, nama_prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,7 +79,25 @@ class Jadwal extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'jAM' => array(self::BELONGS_TO, 'Jam', 'jam_ke'),
+			'kAMPUS' => array(self::BELONGS_TO, 'Kampus', 'kampus'),
+			'mk' => array(self::BELONGS_TO, 'Mastermatakuliah', 'kode_mk'),
+			'kELAS' => array(self::BELONGS_TO, 'Masterkelas', 'kelas'),
+			'pRODI' => array(self::BELONGS_TO, 'Masterprogramstudi', 'prodi'),
+			// 'dOSEN' => array(self::BELONGS_TO, 'Masterdosen', 'kode_dosen'),
 		);
+	}
+
+	public function findJadwalDosen($dosen, $hari, $jamke)
+	{
+		$params = array(
+			'kode_dosen' => $dosen,
+			'hari' => $hari,
+			'jam_ke' => $jamke
+		);
+		$model = Jadwal::model()->findByAttributes($params);
+
+		return $model;
 	}
 
 	/**
@@ -86,6 +108,7 @@ class Jadwal extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'hari' => 'Hari',
+			'jam_ke' => 'Jam',
 			'jam' => 'Jam',
 			'jam_mulai' => 'Jam Mulai',
 			'jam_selesai' => 'Jam Selesai',
@@ -194,6 +217,12 @@ class Jadwal extends CActiveRecord
 		));
 	}
 
+	protected function afterFind()
+	{
+		$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $this->kode_mk));
+		$this->SKS = $mk->sks;
+		return parent::afterFind();
+	}
 	
 
 	/**

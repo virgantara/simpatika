@@ -60,7 +60,7 @@ class Masterprogramstudi extends CActiveRecord
 			array('tgl_sk_dikti, tgl_akhir_sk_dikti, tgl_pendirian_program_studi, tgl_sk_akreditasi, tgl_akhir_sk_akreditasi', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, kode_fakultas, kode_jurusan, kode_prodi, kode_jenjang_studi, nama_prodi, semester_awal, no_sk_dikti, tgl_sk_dikti, tgl_akhir_sk_dikti, jml_sks_lulus, kode_status, tahun_semester_mulai, email_prodi, tgl_pendirian_program_studi, no_sk_akreditasi, tgl_sk_akreditasi, tgl_akhir_sk_akreditasi, kode_status_akreditasi, frekuensi_kurikulum, pelaksanaan_kurikulum, nidn_ketua_prodi, telp_ketua_prodi, fax_prodi, nama_operator, hp_operator, telepon_program_studi', 'safe', 'on'=>'search'),
+			array('id, kode_fakultas, kode_jurusan, kode_prodi, kode_jenjang_studi, nama_prodi, semester_awal, no_sk_dikti, tgl_sk_dikti, tgl_akhir_sk_dikti, jml_sks_lulus, kode_status, tahun_semester_mulai, email_prodi, tgl_pendirian_program_studi, no_sk_akreditasi, tgl_sk_akreditasi, tgl_akhir_sk_akreditasi, kode_status_akreditasi, frekuensi_kurikulum, pelaksanaan_kurikulum, nidn_ketua_prodi, telp_ketua_prodi, fax_prodi, nama_operator, hp_operator, telepon_program_studi, singkatan', 'safe', 'on'=>'search'),
 		);
 	}
 

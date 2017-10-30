@@ -28,11 +28,11 @@ class JadwalController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'),
+				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik','template','uploadJadwal','cetakPerDosen','cetakPersonal'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array(),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,6 +43,118 @@ class JadwalController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionCetakPersonal($id)
+	{
+		$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
+		$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$id));
+
+		
+		$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 
+                'L', 'mm', 'A4', true, 'UTF-8');
+
+		$pdf->setPrintHeader(false);
+		$pdf->setPrintFooter(false);
+		$pdf->SetAutoPageBreak(TRUE,PDF_MARGIN_BOTTOM-2);
+		$pdf->AddPage();
+		
+		$this->layout = '';
+		ob_start();
+		//echo $this->renderPartial(“createnewpdf“,array(‘content’=>$content));
+		
+		echo $this->renderPartial('print_jadwalpersonal',array(
+			'model'=>$model,
+			'dosen' => $dosen
+		));
+
+		$data = ob_get_clean();
+		ob_start();
+		$pdf->writeHTML($data);
+
+		$pdf->Output();
+		
+	}
+
+	public function actionCetakPerDosen()
+	{
+
+		$model = null;
+		$dosen = null;
+		if(!empty($_POST['kode_dosen']))
+		{
+			$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$_POST['kode_dosen']));
+			$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$_POST['kode_dosen']));
+
+			
+		}
+
+
+
+		$this->render('preview_perdosen',array(
+			'model' => $model,
+			'dosen' => $dosen
+
+		));
+	}
+
+	public function actionUploadJadwal()
+	{
+
+	}
+
+	public function actionTemplate()
+	{
+		header('Content-type: application/excel');
+		$filename = 'template_jadwal.xls';
+		header('Content-Disposition: attachment; filename='.$filename);
+
+		$data = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">
+		<head>
+		    <!--[if gte mso 9]>
+		    <xml>
+		        <x:ExcelWorkbook>
+		            <x:ExcelWorksheets>
+		                <x:ExcelWorksheet>
+		                    <x:Name>Sheet 1</x:Name>
+		                    <x:WorksheetOptions>
+		                        <x:Print>
+		                            <x:ValidPrinterInfo/>
+		                        </x:Print>
+		                    </x:WorksheetOptions>
+		                </x:ExcelWorksheet>
+		            </x:ExcelWorksheets>
+		        </x:ExcelWorkbook>
+		    </xml>
+		    <![endif]-->
+		</head>
+
+		<body>
+		   <table>
+		   <tr>
+		   <td>Hari (huruf kapital semua)</td>
+		   <td>Jam (format angka)</td>
+		   <td>Waktu (awal-akhir. Contoh : 07:30-09:10)</td>
+		   <td>KD MK</td>
+		   <td>Mata Kuliah</td>
+		   <td>KD (Kode dosen)</td>
+		   <td>NIDN/NIY</td>
+		   <td>Dosen Pengampu</td>
+		   <td>RUANG</td>
+		   <td>KD FT</td>
+		   <td>FAKULTAS</td>
+		   <td>KD PRODI</td>
+		   <td>PRODI</td>
+		   <td>TAHUN (contoh format : 2017-2018)</td>
+		   <td>Semester (format angka. Contoh: 6</td>
+		   <td>Kampus (Hanya dari daftar berikut : {SIMAN, MANTINGAN, GONTOR, KEDIRI, KANDANGAN, MAGELANG})</td>
+		   <td>SKS</td>
+		   <td>Kelas</td>
+			</tr>
+		   </table>
+		</body></html>';
+
+		echo $data;
 	}
 
 	public function actionCekKonflik()
@@ -107,7 +219,7 @@ class JadwalController extends Controller
 			$criteria=new CDbCriteria;
 			$criteria->addSearchCondition('nama_dosen',$q,true,'OR');
 
-			$criteria->limit = 20;
+			$criteria->limit = 10;
 
 			$model = Masterdosen::model()->findAll($criteria);
 

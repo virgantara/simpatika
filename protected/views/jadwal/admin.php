@@ -8,8 +8,11 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
+	array('label'=>'Cetak Jadwal Per Dosen', 'url'=>array('cetakPerDosen')),
 	array('label'=>'List Jadwal', 'url'=>array('index')),
 	array('label'=>'Create Jadwal', 'url'=>array('create')),
+	array('label'=>'Template Jadwal', 'url'=>array('template')),
+
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -51,9 +54,18 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		),
  
 		'hari',
-		'jam_mulai',
-		'jam_selesai',
-		'kampus',
+		array(
+			'header' => 'Jam Mulai',
+			'value' => '$data->jAM->jam_mulai'
+		),
+		array(
+			'header' => 'Jam Selesai',
+			'value' => '$data->jAM->jam_selesai'
+		),
+		array(
+			'header' => 'Kampus',
+			'value' => '$data->kAMPUS->nama_kampus'
+		),
 		'nama_prodi',
 		'kode_mk',
 		'nama_mk',
@@ -66,7 +78,14 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'semester',
 
 		
-		'kelas',
+		array(
+			'header' => 'Kelas',
+			'value' => '$data->kELAS->nama_kelas'
+		),
+		array(
+			'header' => 'SKS',
+			'value' => '$data->SKS'
+		),
 		'kuota_kelas',
 		/*
 		'fakultas',

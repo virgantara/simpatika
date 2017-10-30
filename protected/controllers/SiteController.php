@@ -62,7 +62,7 @@ class SiteController extends Controller
 		if(isset($_POST['User']))
 		{
 		
-		
+			
 			$model->attributes=$_POST['User'];
 			$result = $model->login();
 			// validate user input and redirect to the previous page if valid
@@ -80,12 +80,12 @@ class SiteController extends Controller
 					break;
 				case UserIdentity::ERROR_USERNAME_INVALID:
 				case UserIdentity::ERROR_PASSWORD_INVALID:
-					$model->addError('USERNAME','Incorrect username or password.');
+					$model->addError('username','Incorrect username or password.');
 					
 					break;
 				case UserIdentity::ERROR_USER_INACTIVE:
 
-					$model->addError('USERNAME','Akun Anda belum aktif. Silakan menghubungi Administrator.');
+					$model->addError('username','Akun Anda belum aktif. Silakan menghubungi Administrator.');
 					
 					break;
 			}

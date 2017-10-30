@@ -14,11 +14,11 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('jam_mulai')); ?>:</b>
-	<?php echo CHtml::encode($data->jam); ?>
+	<?php echo CHtml::encode($data->jAM->jam_mulai); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('jam_selesai')); ?>:</b>
-	<?php echo CHtml::encode($data->jam); ?>
+	<?php echo CHtml::encode($data->jAM->jam_selesai); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('kode_mk')); ?>:</b>

@@ -198,24 +198,19 @@ function findMk(prodi){
 		?>
 		<?php echo $form->error($model,'hari'); ?>
 	</div>
-
 	<div class="row">
-		<?php echo $form->labelEx($model,'jam_mulai'); ?>
+		<?php echo $form->labelEx($model,'jam_ke'); ?>
 
 		<?php 
+		$list = CHtml::listData(Jam::model()->findAll(), 'id_jam','nama_jam');
+		// $list[] = array('Lainnya');
 		
-		echo $form->textField($model,'jam_mulai',array('size'=>20,'maxlength'=>20)); 
+		echo $form->dropDownList($model,'jam_ke',$list); 
+
 		?>
-		<?php echo $form->error($model,'jam_mulai'); ?>
+		<?php echo $form->error($model,'jam_ke'); ?>
 	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'jam_selesai'); ?>
-		<?php echo $form->textField($model,'jam_selesai',array('size'=>20,'maxlength'=>20)); ?>
-		<?php echo $form->error($model,'jam_selesai'); ?>
-	</div>
-
-
+	
 	<div class="row">
 		<?php echo $form->labelEx($model,'fakultas'); ?>
 		<?php 
@@ -282,9 +277,10 @@ function findMk(prodi){
 	<div class="row">
 		<?php echo $form->labelEx($model,'kelas'); ?>
 		<?php 
-		$list = CHtml::listData(MasterKelas::model()->findAll(), 'nama_kelas', function($dsn) {
-		    return ($dsn->nama_kelas);
-		});
+		// $list = CHtml::listData(MasterKelas::model()->findAll(), 'nama_kelas', function($dsn) {
+		//     return ($dsn->nama_kelas);
+		// });
+		$list = CHtml::listData(MasterKelas::model()->findAll(), 'id','nama_kelas');
 		echo $form->dropDownList($model,'kelas',$list); 
 		?>
 		<?php echo $form->error($model,'kelas'); ?>

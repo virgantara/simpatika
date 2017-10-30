@@ -4,10 +4,10 @@
  * This is the model class for table "user".
  *
  * The followings are the available columns in table 'user':
- * @property string $USERNAME
- * @property string $PASSWORD
- * @property integer $LEVEL
- * @property integer $STATUS
+ * @property string $username
+ * @property string $password
+ * @property integer $level
+ * @property integer $status
  *
  * The followings are the available model relations:
  * @property Partner[] $partners
@@ -41,36 +41,36 @@ class User extends MyActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('USERNAME, PASSWORD,LEVEL,STATUS', 'required','message' => Yii::t('yii', '{attribute} harus diisi')),
-			array('LEVEL, STATUS', 'numerical', 'integerOnly'=>true,'on'=>'form','message' => Yii::t('yii', '{attribute} harus diisi')),
-			array('USERNAME', 'length', 'max'=>255),
+			array('username, password,level,status', 'required','message' => Yii::t('yii', '{attribute} harus diisi')),
+			array('level, status', 'numerical', 'integerOnly'=>true,'on'=>'form','message' => Yii::t('yii', '{attribute} harus diisi')),
+			array('username', 'length', 'max'=>255),
 			array('kode_prodi', 'checkKode'),
-			array('USERNAME', 'unique','message'=>'{attribute} sudah dipakai.', 'on'=>'form'),
-			array('PASSWORD', 'length', 'max'=>100),
-			array('repeat_password', 'compare', 'compareAttribute'=>'PASSWORD', 'on'=>'repeatPwd','message' => Yii::t('yii', '{attribute} tidak sama dengan PASSWORD')),
+			array('username', 'unique','message'=>'{attribute} sudah dipakai.', 'on'=>'form'),
+			array('password', 'length', 'max'=>100),
+			array('repeat_password', 'compare', 'compareAttribute'=>'password', 'on'=>'repeatPwd','message' => Yii::t('yii', '{attribute} tidak sama dengan password')),
 			
-			//array('USERNAME', 'match',
+			//array('username', 'match',
               //  'pattern' => '/^[a-zA-Z\s\d]+$/',
                // 'message' => '{attribute} hanya bisa angka dan huruf'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('USERNAME, PASSWORD, LEVEL, STATUS,PARTNER_ID,kode_prodi', 'safe', 'on'=>'search'),
+			array('username, password, level, status,PARTNER_ID,kode_prodi,auth_key', 'safe', 'on'=>'search'),
 		);
 	}
 
 	public function checkKode($attribute, $params)
     {
     	// print_r($this->kode_prodi);exit;
-		if($this->LEVEL == 3 && empty($this->kode_prodi))
+		if($this->level == 3 && empty($this->kode_prodi))
         	$this->addError($attribute, 'Prodi harus diisi.');
     }
 	
 	//matching the old password with your existing password.
-    public function findPasswords($attribute, $params)
+    public function findpasswords($attribute, $params)
     {
 		$username = Yii::app()->user->getState('username');
         $user = User::model()->findByPk($username);
-        if ($user->PASSWORD != md5($this->old_password))
+        if ($user->password != md5($this->old_password))
             $this->addError($attribute, 'Old password is incorrect.');
     }
 
@@ -93,12 +93,12 @@ class User extends MyActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'USERNAME' => 'Username',
-			'PASSWORD' => 'Password',
-			'LEVEL' => 'Level',
-			'STATUS' => 'Status',
+			'username' => 'username',
+			'password' => 'password',
+			'level' => 'level',
+			'status' => 'status',
 			'kode_prodi' => 'Prodi',
-			'repeat_password' => 'Ulangi Password'
+			'repeat_password' => 'Ulangi password'
 		);
 	}
 
@@ -120,10 +120,10 @@ class User extends MyActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('USERNAME',$this->USERNAME,true);
-		$criteria->compare('PASSWORD',$this->PASSWORD,true);
-		$criteria->compare('LEVEL',$this->LEVEL);
-		$criteria->compare('STATUS',$this->STATUS);
+		$criteria->compare('username',$this->username,true);
+		$criteria->compare('password',$this->password,true);
+		$criteria->compare('level',$this->level);
+		$criteria->compare('status',$this->status);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -138,9 +138,9 @@ class User extends MyActiveRecord
 	{
 		if(!$this->hasErrors())
 		{
-			$this->_identity=new UserIdentity($this->USERNAME,md5($this->PASSWORD));
+			$this->_identity=new UserIdentity($this->username,md5($this->password));
 			if(!$this->_identity->authenticate())
-				$this->addError('PASSWORD','Username atau password salah');
+				$this->addError('password','username atau password salah');
 		}
 	}
 
@@ -153,7 +153,8 @@ class User extends MyActiveRecord
 		if($this->_identity===null)
 		{
 
-			$this->_identity=new UserIdentity($this->USERNAME,md5($this->PASSWORD));
+
+			$this->_identity=new UserIdentity($this->username,md5($this->password));
 			$this->_identity->authenticate();
 		}
 
@@ -174,7 +175,7 @@ class User extends MyActiveRecord
 
 	protected function beforeSave()
 	{
-		$this->PASSWORD = md5($this->PASSWORD);
+		$this->password = md5($this->password);
 		return parent::beforeSave();
 	}
 

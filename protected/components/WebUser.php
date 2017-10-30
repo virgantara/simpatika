@@ -25,7 +25,7 @@ class WebUser extends CWebUser {
             // Not identified => no rights
             return false;
         }*/
-        $role = $this->getState("LEVEL");
+        $role = $this->getState("level");
 
         
 		if(is_array($operation)){
