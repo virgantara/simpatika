@@ -28,7 +28,7 @@ class JadwalController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik','template','uploadJadwal','cetakPerDosen','cetakPersonal'),
+				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik','template','uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','exportRekap'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -45,6 +45,55 @@ class JadwalController extends Controller
 		);
 	}
 
+	public function actionExportRekap($id)
+	{
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+
+		$criteria=new CDbCriteria;
+		$criteria->compare('prodi',$id);
+		$criteria->order = 'semester DESC';
+		$model = Jadwal::model()->findAll($criteria);	
+		
+		echo $this->renderPartial('rekap_jadwal_xls',array(
+			'model' => $model,
+			'tahun_akademik' => $tahun_akademik
+		));
+	}
+
+	public function actionRekapJadwal()
+	{
+		$models = array();
+
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+
+		if(!empty($_POST['kode_prodi']))
+		{
+			$criteria=new CDbCriteria;
+			$criteria->order = 'nama_kelas ASC';
+			
+			$kelas = Masterkelas::model()->findAll($criteria);
+
+			foreach($kelas as $k)
+			{
+				$m = Jadwal::model()->findRekapJadwal($_POST['kode_prodi'], $k->id);
+				if(!empty($m))
+					$models[] = $m;
+			}
+
+
+
+		}
+
+		
+
+		$this->render('rekap_jadwal',array(
+			'models' => $models,
+			'kelas' => $kelas,
+			'tahun_akademik' => $tahun_akademik
+
+		));
+	}
+
 	public function actionCetakPersonal($id)
 	{
 		$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
@@ -56,7 +105,7 @@ class JadwalController extends Controller
 
 		$pdf->setPrintHeader(false);
 		$pdf->setPrintFooter(false);
-		$pdf->SetAutoPageBreak(TRUE,PDF_MARGIN_BOTTOM-2);
+		$pdf->SetAutoPageBreak(TRUE,10);
 		$pdf->AddPage();
 		
 		$this->layout = '';

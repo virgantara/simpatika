@@ -51,7 +51,11 @@ $(document).ready(function(){
   	}); 
 });
 </script>
-
+<style type="text/css">
+	table.grid tr td{
+		border: 1px solid #999 !important;
+	}
+</style>
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -101,25 +105,39 @@ $list_hari = array(
 			'Kamis'=>'Kamis'
 		);
 ?>
-<table width="50%" >
-	<tr>
-		<td>Nama</td>
-		<td>:</td>
-		<td><?php echo $dosen->nama_dosen;?></td>
-	</tr>
-	<tr>
-		<td>NIY</td>
-		<td>:</td>
-		<td><?php echo $dosen->niy;?></td>
-	</tr>
-	
+
+
+<table style="margin-bottom: 10px">
+  <tr>
+    
+    <td width="40%" style="text-align: left">
+<table width="100%" style="margin-left: 5px">
+ 
+
+  <tr>
+    <td width="15%" style="text-align: left"><strong>Nama</strong></td>
+    <td width="5%"><strong>:</strong></td>
+    <td width="85%" style="text-align: left"><strong><?php echo $dosen->nama_dosen;?></strong></td>
+  </tr>
+  <tr>
+    <td style="text-align: left"><strong>NIY</strong></td>
+    <td><strong>:</strong></td>
+    <td style="text-align: left"><strong><?php echo $dosen->niy;?></strong></td>
+  </tr>
+  
 </table>
-</div>
-<table border="1">
- <thead>
+    </td>
+   
+  </tr>
+</table>
+
+
+<table cellpadding="4" border="1" class="grid">
+  
+  <thead>
     <tr>
-      <th rowspan="2">HARI</th>
-      <th colspan="7" style="text-align: center;">JAM PERKULIAHAN</th>
+      <th width="8%" rowspan="2" style="text-align: center;"><br><br><strong>HARI</strong></th>
+       <th width="91%" colspan="7" style="text-align: center;"><strong>JAM PERKULIAHAN</strong></th>
     </tr>
     <tr>
     <?php 
@@ -127,42 +145,47 @@ $list_hari = array(
     foreach($jam as $j)
     {
     ?>
-      <th><?php echo $j->nama_jam;?><br>
-      	<?php
+      <th width="13%" style="text-align: center"><strong><?php echo $j->nama_jam;?><br>
+        <?php
 
-      	echo substr($j->jam_mulai, 0, -3).' - '.substr($j->jam_selesai, 0, -3);
-      	?>
+        echo substr($j->jam_mulai, 0, -3).' - '.substr($j->jam_selesai, 0, -3);
+        ?></strong>
       </th>
       
     
     <?php 
-	}
+  }
     ?>
     </tr>
-  </thead>
+ </thead>
   <tbody>
 <?php 
-	
+  
 foreach($list_hari as $q => $h)
 {
 
 ?>
  <tr>
-<td><strong><?php echo strtoupper($h);?></strong></td>
+<td  width="8%" style="text-align: center"><br><br><strong><?php echo strtoupper($h);?></strong></td>
 <?php 
 foreach($jam as $j)
 {
 ?>
-<td  style="text-align: center">
+<td width="13%" style="text-align: center;">
 <?php 
-	$jd = Jadwal::model()->findJadwalDosen($dosen->niy, $h, $j->id_jam);
-	// print_r($jd);exit;
-	if(!empty($jd))
+  $jd = Jadwal::model()->findJadwalDosen($dosen->niy, $h, $j->id_jam);
+  // print_r($jd);exit;
+  if(!empty($jd))
   {
     echo $jd->nama_mk.'<br>';
     echo $jd->pRODI->singkatan.'-'.$jd->semester.'<br>';
     echo $jd->kAMPUS->nama_kampus.' / '.$jd->SKS.' SKS';
   }
+  else{
+    echo '<br><br><br><br>';
+  }
+
+  // echo !empty($jd->nama_mk) ? $jd->nama_mk : '';
 ?>
 </td>
 <?php 
@@ -171,11 +194,17 @@ foreach($jam as $j)
 
 
 </tr>
-<?php		
+<?php   
 }
 ?>
 </tbody>
 </table>
-<?php 
+
+<div style="font-size: 9px;text-align: center;">
+<br><br><br>
+Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
+Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id</div>
+
+<?php
 }
 ?>

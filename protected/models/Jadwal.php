@@ -88,6 +88,17 @@ class Jadwal extends CActiveRecord
 		);
 	}
 
+	public function findRekapJadwal($id,$kelas)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->compare('prodi',$id);
+		$criteria->compare('kelas',$kelas);
+		$criteria->order = 'semester ASC';
+		$model = Jadwal::model()->findAll($criteria);	
+
+		return $model;
+	}
+
 	public function findJadwalDosen($dosen, $hari, $jamke)
 	{
 		$params = array(

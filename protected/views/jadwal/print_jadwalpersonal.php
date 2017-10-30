@@ -25,14 +25,14 @@ $list_hari = array(
     
   </tr>
   <tr>
-    <td width="15%" style="text-align: left">Nama</td>
-    <td width="5%">:</td>
-    <td width="85%" style="text-align: left"><?php echo $dosen->nama_dosen;?></td>
+    <td width="15%" style="text-align: left"><strong>Nama</strong></td>
+    <td width="5%"><strong>:</strong></td>
+    <td width="85%" style="text-align: left"><strong><?php echo $dosen->nama_dosen;?></strong></td>
   </tr>
   <tr>
-    <td style="text-align: left">NIY</td>
-    <td>:</td>
-    <td style="text-align: left"><?php echo $dosen->niy;?></td>
+    <td style="text-align: left"><strong>NIY</strong></td>
+    <td><strong>:</strong></td>
+    <td style="text-align: left"><strong><?php echo $dosen->niy;?></strong></td>
   </tr>
   
 </table>
@@ -119,3 +119,8 @@ foreach($jam as $j)
 ?>
 </tbody>
 </table>
+
+<div style="font-size: 9px;text-align: center;">
+<br><br><br>
+Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
+Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id</div>
