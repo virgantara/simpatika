@@ -46,6 +46,11 @@ class JadwalController extends Controller
 		);
 	}
 
+	public function actionPetunjuk()
+	{
+		$this->render('petunjuk');
+	}
+
 	public function actionExportRekap($id)
 	{
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
@@ -237,7 +242,7 @@ class JadwalController extends Controller
 						throw new Exception();
 		        	}
 
-		        	
+
 		        	$m = new Jadwal;	
 					$m->hari = $hari;
 
@@ -319,7 +324,7 @@ class JadwalController extends Controller
 		   'Waktu',
 		   'KD MK',
 		   'Mata Kuliah',
-		   'NIDN/NIY',
+		   'NIY',
 		   'Dosen Pengampu',
 		   'RUANG',
 		   'KD FT',
