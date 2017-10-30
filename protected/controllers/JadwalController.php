@@ -28,11 +28,12 @@ class JadwalController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik','template','uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','exportRekap'),
+				'actions'=>array('template','petunjuk'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(),
+				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','exportRekap'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -151,60 +152,206 @@ class JadwalController extends Controller
 	public function actionUploadJadwal()
 	{
 
+		$model = new Jadwal;
+		$m = new Jadwal;
+
+		if(isset($_POST['Jadwal']))
+        {
+
+			$model->uploadedFile=CUploadedFile::getInstance($model,'uploadedFile');
+
+			Yii::import('ext.PHPExcel.PHPExcel.**', true); 
+
+	        $fileName = $model->uploadedFile->getTempName();
+
+	        $objPHPExcel = PHPExcel_IOFactory::load($fileName);
+	        $sheet = $objPHPExcel->getSheet(0); 
+	        $highestRow = $sheet->getHighestRow(); 
+	        // $highestColumn = $sheet->getHighestColumn();
+	        // $highestColumn++;
+	        // print_r($highestColumn);
+	        //Loop through each row of the worksheet in turn
+
+	        $transaction=Yii::app()->db->beginTransaction();
+	        try
+			{
+				$index = 0;
+		        for ($row = 2; $row <= $highestRow; $row++)
+		        { 
+
+
+		        	$hari = strtoupper($sheet->getCell('A'.$row));
+		        	$jam_ke = $sheet->getCell('B'.$row);
+
+		        	$jam = Jam::model()->findByAttributes(array('nama_jam'=>$jam_ke));
+
+		        	if(empty($jam))
+		        	{
+		        		$m->addError('error','Baris ke-'.($index+1).' : Format Jam Salah atau data jam tidak ada');
+						throw new Exception();
+		        	}
+		        		
+
+		        	$waktu = $sheet->getCell('C'.$row);
+		        	$waktu = explode('-', $waktu);
+		        	if(count($waktu) != 2)
+		        	{
+		        		$m->addError('error','Baris ke-'.($index+1).' : Format Waktu Salah');
+						throw new Exception();
+		        	}
+
+		        	$jam_mulai = $waktu[0];
+
+
+		        	$jam_selesai = $waktu[1];
+		        	// echo $id_jam_ke;
+		        	$kode_mk = $sheet->getCell('D'.$row);
+		        	$nama_mk = $sheet->getCell('E'.$row);
+		        	$kode_dosen = $sheet->getCell('F'.$row);
+		        	$nama_dosen = $sheet->getCell('G'.$row);
+		        	$kd_ruangan = $sheet->getCell('H'.$row);
+		        	$fakultas = $sheet->getCell('I'.$row);
+		        	$nama_fakultas = $sheet->getCell('J'.$row);
+		        	$prodi = $sheet->getCell('K'.$row);
+		        	$nama_prodi = $sheet->getCell('L'.$row);
+		        	$tahun_akademik = $sheet->getCell('M'.$row);
+		        	$semester = $sheet->getCell('N'.$row);
+		        	$kampus = $sheet->getCell('O'.$row);
+		        	$id_kampus = Kampus::model()->findByAttributes(array('nama_kampus'=>$kampus));
+		        	$id_kampus = !empty($id_kampus) ? $id_kampus->id : '';
+
+		        	if(empty($id_kampus))
+		        	{
+		        		$m->addError('error','Baris ke-'.($index+1).' : Nama kampus Salah atau data tidak ada');
+						throw new Exception();
+		        	}
+
+		        	// $sks = $sheet->getCell('P'.$row);
+		        	$kelas = $sheet->getCell('P'.$row);
+		        	$id_kelas = Masterkelas::model()->findByAttributes(array('nama_kelas'=>$kelas));
+		        	$id_kelas = !empty($id_kelas) ? $id_kelas->id : '';
+
+		        	if(empty($id_kelas))
+		        	{
+		        		$m->addError('error','Baris ke-'.($index+1).' : Nama Kelas Salah atau data tidak ada');
+						throw new Exception();
+		        	}
+
+		        	
+		        	$m = new Jadwal;	
+					$m->hari = $hari;
+
+					$m->jam_ke = $jam->id_jam;
+					$m->jam = $jam_mulai.'-'.$jam_selesai;
+					$m->jam_mulai = $jam_mulai;
+					$m->jam_selesai = $jam_selesai;
+					
+					$m->kode_mk = $kode_mk;
+					$m->nama_mk = $nama_mk;
+					$m->kode_dosen = $kode_dosen;
+					$m->nama_dosen = $nama_dosen;
+					$m->semester = $semester;
+					$m->kelas = $id_kelas;
+					
+					$m->fakultas = $fakultas;
+					$m->nama_fakultas = $nama_fakultas;
+					$m->prodi = $prodi;
+					$m->nama_prodi = $nama_prodi;
+					$m->kd_ruangan = $kd_ruangan;
+					$m->tahun_akademik = $tahun_akademik;
+					
+					$m->kuota_kelas = 40;
+					$m->kampus = $id_kampus;
+					// echo $id_kampus;
+					// $m->sks = $sks;
+
+					if($m->validate())
+					{
+
+						$m->save();
+					}
+
+					else
+					{
+						$errors .= 'Baris ke-';
+						$errors .= ($index + 1).' : ';
+						
+						foreach($m->getErrors() as $attribute){
+							foreach($attribute as $error){
+								$errors .= $error.' ';
+							}
+						}
+						
+						$m->addError('error',$errors);
+						throw new Exception();
+					}
+					
+					$index++;
+		        }
+
+		        // $this->redirect(array('trRawatInap/lainnya','id'=>$id));
+		        $transaction->commit();
+	        }
+
+			catch(Exception $e){
+				// Yii::app()->user->setFlash('error', print_r($e->errorInfo));
+				$transaction->rollback();
+			}	
+	    }
+
+
+		$this->render('upload_jadwal',array(
+			'model' => $model,
+			'm' => $m
+
+		));
+
 	}
 
 	public function actionTemplate()
 	{
-		header('Content-type: application/excel');
-		$filename = 'template_jadwal.xls';
-		header('Content-Disposition: attachment; filename='.$filename);
+		Yii::import('ext.PHPExcel.PHPExcel');
+		$objPHPExcel = new PHPExcel();
 
-		$data = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">
-		<head>
-		    <!--[if gte mso 9]>
-		    <xml>
-		        <x:ExcelWorkbook>
-		            <x:ExcelWorksheets>
-		                <x:ExcelWorksheet>
-		                    <x:Name>Sheet 1</x:Name>
-		                    <x:WorksheetOptions>
-		                        <x:Print>
-		                            <x:ValidPrinterInfo/>
-		                        </x:Print>
-		                    </x:WorksheetOptions>
-		                </x:ExcelWorksheet>
-		            </x:ExcelWorksheets>
-		        </x:ExcelWorkbook>
-		    </xml>
-		    <![endif]-->
-		</head>
+		$headers = array(
+			'Hari',
+		   'Jam',
+		   'Waktu',
+		   'KD MK',
+		   'Mata Kuliah',
+		   'NIDN/NIY',
+		   'Dosen Pengampu',
+		   'RUANG',
+		   'KD FT',
+		   'FAKULTAS',
+		   'KD PRODI',
+		   'PRODI',
+		   'TAHUN',
+		   'Semester ',
+		   'Kampus',
+		   // 'SKS',
+		   'Kelas',
+		);
+    
+	    $objPHPExcel->setActiveSheetIndex(0);
 
-		<body>
-		   <table>
-		   <tr>
-		   <td>Hari (huruf kapital semua)</td>
-		   <td>Jam (format angka)</td>
-		   <td>Waktu (awal-akhir. Contoh : 07:30-09:10)</td>
-		   <td>KD MK</td>
-		   <td>Mata Kuliah</td>
-		   <td>KD (Kode dosen)</td>
-		   <td>NIDN/NIY</td>
-		   <td>Dosen Pengampu</td>
-		   <td>RUANG</td>
-		   <td>KD FT</td>
-		   <td>FAKULTAS</td>
-		   <td>KD PRODI</td>
-		   <td>PRODI</td>
-		   <td>TAHUN (contoh format : 2017-2018)</td>
-		   <td>Semester (format angka. Contoh: 6</td>
-		   <td>Kampus (Hanya dari daftar berikut : {SIMAN, MANTINGAN, GONTOR, KEDIRI, KANDANGAN, MAGELANG})</td>
-		   <td>SKS</td>
-		   <td>Kelas</td>
-			</tr>
-		   </table>
-		</body></html>';
-
-		echo $data;
+	    foreach($headers as $q => $v)
+	    {
+	    	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($q,1, $v);
+	    }
+	    
+	    $objPHPExcel->getActiveSheet()->setTitle('jadwal');
+	 
+	    $objPHPExcel->setActiveSheetIndex(0);
+	     
+	    ob_end_clean();
+	    ob_start();
+	    
+	    header('Content-Type: application/vnd.ms-excel');
+	    header('Content-Disposition: attachment;filename="template.xls"');
+	    header('Cache-Control: max-age=0');
+	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+	    $objWriter->save('php://output');
 	}
 
 	public function actionCekKonflik()

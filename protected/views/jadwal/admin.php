@@ -11,8 +11,8 @@ $this->menu=array(
 	array('label'=>'Cetak Jadwal Per Dosen', 'url'=>array('cetakPerDosen')),
 	array('label'=>'List Jadwal', 'url'=>array('index')),
 	array('label'=>'Create Jadwal', 'url'=>array('create')),
-	array('label'=>'Template Jadwal', 'url'=>array('template')),
-
+	// array('label'=>'Template Jadwal', 'url'=>array('template')),
+	array('label'=>'Upload Jadwal', 'url'=>array('uploadJadwal')),
 );
 
 Yii::app()->clientScript->registerScript('search', "

@@ -42,6 +42,18 @@ $this->breadcrumbs=array(
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Login'); ?>
 	</div>
-
+	<ul>
+		<li>
+	<div class="row">
+		Template Jadwal silakan unduh di 
+		<?php echo CHtml::link('sini',array('jadwal/template'));?>
+	</div>
+</li>
+<li>
+	<div class="row">
+		Petunjuk Unggah Jadwal silakan lihat di 
+		<?php echo CHtml::link('sini',array('jadwal/petunjuk'));?>
+	</div></li>
+</ul>
 <?php $this->endWidget(); ?>
 </div><!-- form -->

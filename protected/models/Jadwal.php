@@ -35,6 +35,7 @@ class Jadwal extends CActiveRecord
 {
 
 	public $SKS;
+	public $uploadedFile;
 
 
 	/**
