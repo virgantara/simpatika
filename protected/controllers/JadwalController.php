@@ -66,6 +66,7 @@ class JadwalController extends Controller
 
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 
+		$kelas = null;
 		if(!empty($_POST['kode_prodi']))
 		{
 			$criteria=new CDbCriteria;
