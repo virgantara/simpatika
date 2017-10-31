@@ -188,7 +188,7 @@ class JadwalController extends Controller
 		        	$hari = strtoupper($sheet->getCell('A'.$row));
 		        	$jam_ke = $sheet->getCell('B'.$row);
 
-		        	$jam = Jam::model()->findByAttributes(array('nama_jam'=>$jam_ke));
+		        	$jam = Jam::model()->findByAttributes(array('nama_jam'=>trim($jam_ke)));
 
 		        	if(empty($jam))
 		        	{
@@ -205,10 +205,10 @@ class JadwalController extends Controller
 						throw new Exception();
 		        	}
 
-		        	$jam_mulai = $waktu[0];
+		        	$jam_mulai = trim($waktu[0]);
 
 
-		        	$jam_selesai = $waktu[1];
+		        	$jam_selesai = trim($waktu[1]);
 		        	// echo $id_jam_ke;
 		        	$kode_mk = $sheet->getCell('D'.$row);
 		        	$nama_mk = $sheet->getCell('E'.$row);
