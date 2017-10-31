@@ -296,6 +296,8 @@ class JadwalController extends Controller
 
 		        // $this->redirect(array('trRawatInap/lainnya','id'=>$id));
 		        $transaction->commit();
+		        Yii::app()->user->setFlash('success', "Data Jadwal telah diunggah.");
+				$this->redirect(array('index'));
 	        }
 
 			catch(Exception $e){

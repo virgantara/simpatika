@@ -30,7 +30,14 @@ $('.search-form form').submit(function(){
 ?>
 
 <h1>Manage Jadwals</h1>
+
+
 <?php 
+ foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div style="color:green">' . $message . "</div>\n";
+    }
+    
+
 echo CHtml::link('Cetak Jadwal Personal',array('jadwal/cetakPerDosen'));
 ?>
 
