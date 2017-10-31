@@ -477,7 +477,7 @@ class JadwalController extends Controller
 	                array(
 	               'condition'=>'kode_fakultas=:cid', 
 	               'params'=>array(':cid'=>$cid)));
-	            $list = CHtml::listData($prodis, 'kode_prodi', 'nama_prodi');    
+	            $list = CHtml::listData($prodis, 'kode_prodi', 'singkatan');    
 
 	        echo json_encode($list);
 		}

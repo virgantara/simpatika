@@ -173,12 +173,14 @@ foreach($jam as $j)
 ?>
 <td width="13%" style="text-align: center;">
 <?php 
+
   $jd = Jadwal::model()->findJadwalDosen($dosen->niy, $h, $j->id_jam);
   // print_r($jd);exit;
   if(!empty($jd))
   {
     echo $jd->nama_mk.'<br>';
-    echo $jd->pRODI->singkatan.'-'.$jd->semester.'<br>';
+    // $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$jd->prodi));
+    echo $jd->nama_prodi.'-'.$jd->semester.'<br>';
     echo $jd->kAMPUS->nama_kampus.' / '.$jd->SKS.' SKS';
   }
   else{

@@ -98,7 +98,7 @@ foreach($jam as $j)
   if(!empty($jd))
   {
     echo $jd->nama_mk.'<br>';
-    echo $jd->pRODI->singkatan.'-'.$jd->semester.'<br>';
+    echo $jd->nama_prodi.'-'.$jd->semester.'<br>';
     echo $jd->kAMPUS->nama_kampus.' / '.$jd->SKS.' SKS';
   }
   else{
