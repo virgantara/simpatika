@@ -84,12 +84,12 @@ $list_hari = array(
 
 		di mana kode kelas tersebut mewakili masing-masing kampus.
 		<ul>
-			<li>A Siman</li>
-			<li>B Gontor</li>
-			<li>C Mantingan</li>
-			<li>D Kediri</li>
-			<li>E Kandangan</li>
-			<li>F Magelang</li>
+			<li>A = Siman</li>
+			<li>B = Gontor</li>
+			<li>C = Mantingan</li>
+			<li>D = Kediri</li>
+			<li>E = Kandangan</li>
+			<li>F = Magelang</li>
 
 		</ul> 
 		Adapun angka yang mengikuti adalah urutan jadwal pertemuan. Contoh: A1 adalah kelas Siman Pagi, C1 adalah Mantingan Pagi, C2 adalah Mantingan Siang, C3 adalah Mantingan Sore, dan seterusnya. 
