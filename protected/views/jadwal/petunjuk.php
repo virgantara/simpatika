@@ -11,7 +11,7 @@ $list_hari = array(
 ?>
 
 <h3 style="color: red">
-	Catatan: Harap mengikuti petunjuk unggah di atas. Jika tidak mematuhi, maka akan terjadi <i>error</i> atau kesalahan ketika mengunggah jadwal.
+	Catatan: Harap mengikuti petunjuk unggah berikut. 
 </h3>
 <ol>
 	<li>
