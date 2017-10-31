@@ -280,7 +280,7 @@ function findMk(prodi){
 		// $list = CHtml::listData(MasterKelas::model()->findAll(), 'nama_kelas', function($dsn) {
 		//     return ($dsn->nama_kelas);
 		// });
-		$list = CHtml::listData(MasterKelas::model()->findAll(), 'id','nama_kelas');
+		$list = CHtml::listData(Masterkelas::model()->findAll(), 'id','nama_kelas');
 		echo $form->dropDownList($model,'kelas',$list); 
 		?>
 		<?php echo $form->error($model,'kelas'); ?>
