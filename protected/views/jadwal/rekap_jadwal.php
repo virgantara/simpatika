@@ -65,6 +65,7 @@ if(!empty($models))
 <?php 
 foreach($models as $model)
 {
+	
  ?> 
   <thead>
     <tr>
@@ -112,7 +113,14 @@ foreach($models as $model)
 
 	<td width="5%"><?php echo $m->SKS;?></td>
 	<td width="5%"><?php echo $m->nama_fakultas;?></td>
-	<td width="15%"><?php echo $m->pRODI->singkatan;?></td>
+	<td width="15%">
+		<?php
+		 $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
+		 echo !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
+		 // echo $m->pRODI->singkatan;
+		 ?>
+			
+		</td>
 
 	<td><?php echo $m->semester;?></td>
 

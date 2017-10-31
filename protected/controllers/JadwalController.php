@@ -75,13 +75,15 @@ class JadwalController extends Controller
 		$kelas = null;
 		if(!empty($_POST['kode_prodi']))
 		{
+
 			$criteria=new CDbCriteria;
 			$criteria->order = 'nama_kelas ASC';
 			
 			$kelas = Masterkelas::model()->findAll($criteria);
-
+			// print_r($kelas);exit;
 			foreach($kelas as $k)
 			{
+
 				$m = Jadwal::model()->findRekapJadwal($_POST['kode_prodi'], $k->id);
 				if(!empty($m))
 					$models[] = $m;
@@ -176,6 +178,7 @@ class JadwalController extends Controller
 	        // $highestColumn++;
 	        // print_r($highestColumn);
 	        //Loop through each row of the worksheet in turn
+	        $message = '';
 
 	        $transaction=Yii::app()->db->beginTransaction();
 	        try
@@ -212,8 +215,24 @@ class JadwalController extends Controller
 		        	// echo $id_jam_ke;
 		        	$kode_mk = $sheet->getCell('D'.$row);
 		        	$nama_mk = $sheet->getCell('E'.$row);
+
+		        	$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=>$kode_mk));
+		        	if(empty($mk))
+		        	{
+		        		$message .= '<div style="color:red">- Data MK berikut belum ada di siakad: '.$kode_mk.' '.$nama_mk.' Silakan hubungi ust Samsirin untuk input manual</div>';
+		        		continue;
+		        	}
 		        	$kode_dosen = $sheet->getCell('F'.$row);
+
 		        	$nama_dosen = $sheet->getCell('G'.$row);
+		        	$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$kode_dosen));
+		        	if(empty($dosen))
+		        	{
+		        		$message .= '<div style="color:red">- Data dosen berikut belum ada di siakad: '.$nama_dosen.' Silakan hubungi ust Samsirin untuk input manual</div>';
+		        		continue;
+		    //     		$m->addError('error','Baris ke-'.($index+1).' : Data dosen '.$nama_dosen.' belum ada di siakad');
+						// throw new Exception();
+		        	}
 		        	$kd_ruangan = $sheet->getCell('H'.$row);
 		        	$fakultas = $sheet->getCell('I'.$row);
 		        	$nama_fakultas = $sheet->getCell('J'.$row);
@@ -293,10 +312,14 @@ class JadwalController extends Controller
 					
 					$index++;
 		        }
-
+		        // $message .= '</ul>';
 		        // $this->redirect(array('trRawatInap/lainnya','id'=>$id));
 		        $transaction->commit();
-		        Yii::app()->user->setFlash('success', "Data Jadwal telah diunggah.");
+
+		        if(!empty($message))
+		        	$message = '<h2 style="color:red">Catatan</h2><div>Sebagian data sukses terunggah. Ada beberapa belum, yaitu:</div>'.$message;
+		        // $message = empty($message) ? ' Namun, '.$message : '';
+		        Yii::app()->user->setFlash('success', "Data Jadwal telah diunggah.".$message);
 				$this->redirect(array('index'));
 	        }
 
