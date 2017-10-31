@@ -179,8 +179,9 @@ foreach($jam as $j)
   if(!empty($jd))
   {
     echo $jd->nama_mk.'<br>';
-    // $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$jd->prodi));
-    echo $jd->nama_prodi.'-'.$jd->semester.'<br>';
+    $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$jd->prodi));
+
+    echo !empty($prodi) ? $prodi->singkatan.'-'.$jd->semester.'<br>' : $jd->nama_prodi.'-'.$jd->semester;
     echo $jd->kAMPUS->nama_kampus.' / '.$jd->SKS.' SKS';
   }
   else{
