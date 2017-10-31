@@ -56,6 +56,11 @@ return array(
 		),
 		*/
 
+		
+		'helper' => array(
+			'class' => 'application.extensions.helper.MyHelper'
+		),
+
 		// database settings are configured in database.php
 		'db'=>require(dirname(__FILE__).'/database.php'),
 

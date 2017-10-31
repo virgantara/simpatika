@@ -54,7 +54,7 @@ class Masterdosen extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, no_ktp_dosen, nidn, nama_dosen', 'required'),
+			array('kode_fakultas, kode_prodi, kode_jenjang_studi, no_ktp_dosen, nidn, nama_dosen', 'required'),
 			array('provinsi_dosen', 'numerical', 'integerOnly'=>true),
 			array('kode_pt, home_base', 'length', 'max'=>6),
 			array('kode_fakultas, kode_jurusan, kode_jenjang_studi, kode_jabatan_akademik, kode_pendidikan_tertinggi, kode_status_kerja_pts, kode_status_aktivitas_dosen, tahun_semester', 'length', 'max'=>5),

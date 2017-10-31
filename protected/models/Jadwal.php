@@ -95,14 +95,26 @@ class Jadwal extends CActiveRecord
 		$params = array(
 			'kode_dosen' => $dosen,
 			'hari' => $hari
-		);
+		);			
+
 		$jadwals = Jadwal::model()->findAllByAttributes($params);
 
+		$isconflict = 0;
 		foreach($jadwals as $jadwal)
 		{
+			$time_begin = new DateTime($jadwal->jam_mulai);
+			$time_end = new DateTime($jadwal->jam_selesai);
+		
+			if($jam >= $time_begin && $jam <= $time_end)
+			{
+				$isconflict = 1;
 
-
+				if($isconflict)
+					break;
+			}
 		}
+
+		return $isconflict;
 	}
 
 	public function findRekapJadwal($id,$kelas)
