@@ -58,6 +58,7 @@ class Jadwal extends CActiveRecord
 			array('kuota_kelas', 'numerical', 'integerOnly'=>true),
 			array('hari, bobot_formatif, bobot_uts, bobot_uas', 'length', 'max'=>30),
 			array('jam, kode_mk, kode_dosen, kd_ruangan', 'length', 'max'=>20),
+			array('jam_mulai, jam_selesai', 'type', 'type'=>'datetime', 'datetimeFormat'=>'hh:mm','message'=>'Format {attribute} tidak sesuai. Gunakan format hh:mm'),
 			array('nama_mk, nama_dosen, nama_fakultas, nama_prodi, materi', 'length', 'max'=>255),
 			array('semester', 'length', 'max'=>5),
 			array('kelas, prodi, tahun_akademik', 'length', 'max'=>10),
@@ -68,7 +69,7 @@ class Jadwal extends CActiveRecord
 			// array('jam_selesai', 'validatorCompareDateTime', 'compareAttribute' => 'jam_mulai', 'condition' => '>'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hari, jam_ke, jam, jam_mulai, jam_selesai, kode_mk, nama_mk, kode_dosen, nama_dosen, semester, kelas, fakultas, nama_fakultas, prodi, nama_prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian', 'safe', 'on'=>'search'),
+			array('id, hari, jam_ke, jam, jam_mulai, jam_selesai, kode_mk, nama_mk, kode_dosen, nama_dosen, semester, kelas, fakultas, nama_fakultas, prodi, nama_prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian, bentrok', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -87,6 +88,21 @@ class Jadwal extends CActiveRecord
 			'pRODI' => array(self::BELONGS_TO, 'Masterprogramstudi', 'prodi'),
 			// 'dOSEN' => array(self::BELONGS_TO, 'Masterdosen', 'kode_dosen'),
 		);
+	}
+
+	public function isConflict($dosen, $hari, $jam)
+	{
+		$params = array(
+			'kode_dosen' => $dosen,
+			'hari' => $hari
+		);
+		$jadwals = Jadwal::model()->findAllByAttributes($params);
+
+		foreach($jadwals as $jadwal)
+		{
+
+
+		}
 	}
 
 	public function findRekapJadwal($id,$kelas)

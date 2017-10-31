@@ -28,7 +28,11 @@ $('.search-form form').submit(function(){
 });
 ");
 ?>
-
+<style type="text/css">
+	.bentrok { 
+	    background-color: orange; 
+	}
+</style>
 <h1>Manage Jadwals</h1>
 
 
@@ -44,6 +48,7 @@ echo CHtml::link('Cetak Jadwal Personal',array('jadwal/cetakPerDosen'));
 <?php $this->widget('application.components.ComplexGridView', array(
 	'id'=>'jadwal-grid',
 	'dataProvider'=>$model->search(),
+	'rowCssClassExpression' => '$data->bentrok == 1 ? "bentrok" : ""',
 	'filter'=>$model,
 	'columns'=>array(
 		array(
@@ -52,14 +57,8 @@ echo CHtml::link('Cetak Jadwal Personal',array('jadwal/cetakPerDosen'));
 		),
  
 		'hari',
-		array(
-			'header' => 'Jam Mulai',
-			'value' => '$data->jAM->jam_mulai'
-		),
-		array(
-			'header' => 'Jam Selesai',
-			'value' => '$data->jAM->jam_selesai'
-		),
+		'jam_mulai',
+		'jam_selesai',
 		array(
 			'header' => 'Kampus',
 			'value' => '$data->kAMPUS->nama_kampus'
@@ -85,7 +84,7 @@ echo CHtml::link('Cetak Jadwal Personal',array('jadwal/cetakPerDosen'));
 			'header' => 'SKS',
 			'value' => '$data->SKS'
 		),
-		'kuota_kelas',
+		'bentrok',
 		/*
 		'fakultas',
 		'prodi',

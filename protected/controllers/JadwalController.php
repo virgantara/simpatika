@@ -297,12 +297,12 @@ class JadwalController extends Controller
 
 					else
 					{
-						$errors .= 'Baris ke-';
+						$errors = 'Baris ke-';
 						$errors .= ($index + 1).' : ';
 						
 						foreach($m->getErrors() as $attribute){
 							foreach($attribute as $error){
-								$errors .= $error.' ';
+								$errors .= $error.' <br>';
 							}
 						}
 						
@@ -538,10 +538,15 @@ class JadwalController extends Controller
 			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=> $model->prodi));
 			$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
 
+			
 			$model->nama_fakultas = $fak->nama_fakultas;
 			$model->nama_prodi = $prodi->nama_prodi;
 			$model->nama_mk = $mk->nama_mata_kuliah;
 			$model->jam = $model->jam_mulai;
+			$jam_ke = Jam::model()->findByPk($_POST['Jadwal']['jam_ke']);
+			$model->jam_mulai = $jam_ke->jam_mulai;
+			$model->jam_selesai = $jam_ke->jam_selesai;
+
 			if($model->save()){
 
 				$this->redirect(array('view','id'=>$model->id));
@@ -573,6 +578,10 @@ class JadwalController extends Controller
 			$fak = Masterfakultas::model()->findByAttributes(array('kode_fakultas'=> $model->fakultas));
 			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=> $model->prodi));
 			$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
+
+			$jam_ke = Jam::model()->findByPk($_POST['Jadwal']['jam_ke']);
+			$model->jam_mulai = $jam_ke->jam_mulai;
+			$model->jam_selesai = $jam_ke->jam_selesai;
 
 			$model->nama_fakultas = $fak->nama_fakultas;
 			$model->nama_prodi = $prodi->nama_prodi;
