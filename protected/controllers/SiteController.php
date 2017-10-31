@@ -32,6 +32,11 @@ class SiteController extends Controller
 		$this->actionLogin();
 	}
 
+	public function actionHome()
+	{
+		$this->render('home');
+	}
+
 	/**
 	 * This is the action to handle external exceptions.
 	 */

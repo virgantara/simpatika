@@ -13,7 +13,20 @@ $this->menu=array(
 ?>
 
 <div class="form">
-
+	<h4>Catatan:</h4>
+<ul>
+	<li>
+<div class="row">
+	Template Jadwal silakan unduh di 
+	<?php echo CHtml::link('sini',array('jadwal/template'));?>
+</div>
+</li>
+<li>
+<div class="row">
+	Petunjuk Unggah Jadwal silakan lihat di 
+	<?php echo CHtml::link('sini',array('jadwal/petunjuk'));?>
+</div></li>
+</ul>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'jam-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
