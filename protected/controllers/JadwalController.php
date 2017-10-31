@@ -228,7 +228,7 @@ class JadwalController extends Controller
 		        	$prodi = $sheet->getCell('K'.$row);
 
 		        	$nama_dosen = $sheet->getCell('G'.$row);
-		        	$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$kode_dosen));
+		        	$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$kode_dosen));
 		        	if(empty($dosen))
 		        	{
 
