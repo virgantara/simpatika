@@ -219,7 +219,7 @@ class JadwalController extends Controller
 		        	$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=>$kode_mk));
 		        	if(empty($mk))
 		        	{
-		        		$message .= '<div style="color:red">- Data MK berikut belum ada di siakad: '.$kode_mk.' '.$nama_mk.' Silakan hubungi ust Samsirin untuk input manual</div>';
+		        		$message .= '<div style="color:red">- Data Matkul berikut belum ada di master matkul: '.$kode_mk.' '.$nama_mk.'. Silakan hubungi ust Samsirin untuk input manual</div>';
 		        		continue;
 		        	}
 		        	$kode_dosen = $sheet->getCell('F'.$row);
@@ -228,7 +228,7 @@ class JadwalController extends Controller
 		        	$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$kode_dosen));
 		        	if(empty($dosen))
 		        	{
-		        		$message .= '<div style="color:red">- Data dosen berikut belum ada di siakad: '.$nama_dosen.' Silakan hubungi ust Samsirin untuk input manual</div>';
+		        		$message .= '<div style="color:red">- Data Dosen berikut belum ada di master dosen kode: <strong>'.$kode_dosen.', nama: '.$nama_dosen.'</strong>. Silakan menghubungi ust <strong>Samsirin</strong></div>';
 		        		continue;
 		    //     		$m->addError('error','Baris ke-'.($index+1).' : Data dosen '.$nama_dosen.' belum ada di siakad');
 						// throw new Exception();
@@ -317,7 +317,7 @@ class JadwalController extends Controller
 		        $transaction->commit();
 
 		        if(!empty($message))
-		        	$message = '<h2 style="color:red">Catatan</h2><div>Sebagian data sukses terunggah. Ada beberapa belum, yaitu:</div>'.$message;
+		        	$message = '<strong style="color:red">Catatan</strong><div style="color:orange">Sebagian data sukses terunggah. Ada beberapa belum, yaitu:</div>'.$message;
 		        // $message = empty($message) ? ' Namun, '.$message : '';
 		        Yii::app()->user->setFlash('success', "Data Jadwal telah diunggah.".$message);
 				$this->redirect(array('index'));
