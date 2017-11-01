@@ -43,6 +43,7 @@ class Kampus extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'kelases' => array(self::HAS_MANY, 'Masterkelas', 'id_kampus'),
 		);
 	}
 

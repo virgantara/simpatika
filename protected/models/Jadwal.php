@@ -95,34 +95,86 @@ class Jadwal extends CActiveRecord
 		$params = array(
 			'kode_dosen' => $dosen,
 			'hari' => $hari
-		);			
+		);
+
+		$jadwals = Jadwal::model()->findAllByAttributes($params);
+
+		foreach($jadwals as $jadwal)
+		{
+			$jadwal->bentrok = 0;
+			$jadwal->save(false,array('bentrok'));
+		}			
 
 		$jadwals = Jadwal::model()->findAllByAttributes($params);
 
 		$isconflict = 0;
+
+		$jam = DateTime::createFromFormat('H:i',$jam);
 		foreach($jadwals as $jadwal)
 		{
-			$time_begin = new DateTime($jadwal->jam_mulai);
-			$time_end = new DateTime($jadwal->jam_selesai);
-		
+			$time_begin = DateTime::createFromFormat('H:i',$jadwal->jam_mulai);
+			$time_end = DateTime::createFromFormat('H:i',$jadwal->jam_selesai);
+			
 			if($jam >= $time_begin && $jam <= $time_end)
 			{
 				$isconflict = 1;
 
+				$jadwal->bentrok = 1;
+				$jadwal->save(false,array('bentrok'));
+
 				if($isconflict)
 					break;
 			}
+
+			
 		}
+
 
 		return $isconflict;
 	}
 
-	public function findRekapJadwal($id,$kelas)
+	public function findKampus($id)
 	{
 		$criteria=new CDbCriteria;
 		$criteria->compare('prodi',$id);
-		$criteria->compare('kelas',$kelas);
+		$criteria->order = 'kode_kampus ASC';
+		$criteria->join = 'JOIN simak_jadwal_temp j ON j.kampus = t.id';
+		$criteria->group = 't.kode_kampus';
+		$model = Kampus::model()->findAll($criteria);	
+
+		return $model;
+	}
+
+	public function findSemester($id)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->compare('prodi',$id);
 		$criteria->order = 'semester ASC';
+		$criteria->group = 'semester';
+		$model = Jadwal::model()->findAll($criteria);	
+
+		return $model;
+	}
+
+	public function findRekapJadwalPerkampus($id,$kampus)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->compare('prodi',$id);
+		$criteria->compare('kampus',$kampus);
+		$criteria->order = 'semester ASC';
+		$model = Jadwal::model()->findAll($criteria);	
+
+		return $model;
+	}
+
+	public function findRekapJadwalPerkelas($id,$kampus, $kelas, $semester)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->compare('prodi',$id);
+		$criteria->compare('kampus',$kampus);
+		$criteria->compare('kelas',$kelas);
+		$criteria->compare('semester',$semester);
+		// $criteria->order = 'semester ASC';
 		$model = Jadwal::model()->findAll($criteria);	
 
 		return $model;
@@ -244,6 +296,52 @@ class Jadwal extends CActiveRecord
 		$criteria->compare('bobot_uas',$this->bobot_uas,true);
 		$criteria->compare('bobot_harian1',$this->bobot_harian1,true);
 		$criteria->compare('bobot_harian',$this->bobot_harian,true);
+
+		if(Yii::app()->user->checkAccess(array(WebUser::R_PRODI)))
+		{
+			
+			$prodi = Yii::app()->user->getState('prodi');
+			$criteria->compare('prodi',$prodi);	
+		}
+
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+		));
+	}
+
+	public function searchBentrok()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('id',$this->id);
+		$criteria->compare('hari',$this->hari,true);
+		$criteria->compare('jam',$this->jam,true);
+		$criteria->compare('jam_mulai',$this->jam_mulai,true);
+		$criteria->compare('jam_selesai',$this->jam_selesai,true);
+		$criteria->compare('kode_mk',$this->kode_mk,true);
+		$criteria->compare('nama_mk',$this->nama_mk,true);
+		$criteria->compare('kode_dosen',$this->kode_dosen,true);
+		$criteria->compare('nama_dosen',$this->nama_dosen,true);
+		$criteria->compare('semester',$this->semester,true);
+		$criteria->compare('kelas',$this->kelas,true);
+		$criteria->compare('fakultas',$this->fakultas,true);
+		$criteria->compare('nama_fakultas',$this->nama_fakultas,true);
+		$criteria->compare('prodi',$this->prodi,true);
+		$criteria->compare('nama_prodi',$this->nama_prodi,true);
+		$criteria->compare('kd_ruangan',$this->kd_ruangan,true);
+		$criteria->compare('tahun_akademik',$this->tahun_akademik,true);
+		$criteria->compare('kuota_kelas',$this->kuota_kelas);
+		$criteria->compare('kampus',$this->kampus,true);
+		$criteria->compare('presensi',$this->presensi,true);
+		$criteria->compare('materi',$this->materi,true);
+		$criteria->compare('bobot_formatif',$this->bobot_formatif,true);
+		$criteria->compare('bobot_uts',$this->bobot_uts,true);
+		$criteria->compare('bobot_uas',$this->bobot_uas,true);
+		$criteria->compare('bobot_harian1',$this->bobot_harian1,true);
+		$criteria->compare('bobot_harian',$this->bobot_harian,true);
+		$criteria->compare('bentrok',1,true);
 
 		if(Yii::app()->user->checkAccess(array(WebUser::R_PRODI)))
 		{

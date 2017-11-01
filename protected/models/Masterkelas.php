@@ -35,7 +35,7 @@ class Masterkelas extends CActiveRecord
 			array('keterangan', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, tahun_akademik, kd_kelas, nama_kelas, kuota, keterangan', 'safe', 'on'=>'search'),
+			array('id, tahun_akademik, kd_kelas, nama_kelas, kuota, keterangan, id_kampus', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -47,6 +47,7 @@ class Masterkelas extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'kAMPUS' => array(self::BELONGS_TO, 'Kampus', 'id_kampus'),
 		);
 	}
 

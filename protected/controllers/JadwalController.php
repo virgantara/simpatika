@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','exportRekap'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','exportRekap','listBentrok'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,6 +44,18 @@ class JadwalController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionListBentrok()
+	{
+		$model=new Jadwal('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Jadwal']))
+			$model->attributes=$_GET['Jadwal'];
+
+		$this->render('listBentrok',array(
+			'model'=>$model,
+		));
 	}
 
 	public function actionPetunjuk()
@@ -76,18 +88,15 @@ class JadwalController extends Controller
 		if(!empty($_POST['kode_prodi']))
 		{
 
-			$criteria=new CDbCriteria;
-			$criteria->order = 'nama_kelas ASC';
-			
-			$kelas = Masterkelas::model()->findAll($criteria);
-			// print_r($kelas);exit;
-			foreach($kelas as $k)
-			{
 
-				$m = Jadwal::model()->findRekapJadwal($_POST['kode_prodi'], $k->id);
-				if(!empty($m))
-					$models[] = $m;
-			}
+
+			// foreach($kelas as $k)
+			// {
+
+			// 	$m = Jadwal::model()->findRekapJadwal($_POST['kode_prodi'], $k->id);
+			// 	if(!empty($m))
+			// 		$models[] = $m;
+			// }
 
 
 
@@ -218,18 +227,33 @@ class JadwalController extends Controller
 		        	$kode_mk = $sheet->getCell('D'.$row);
 		        	$nama_mk = $sheet->getCell('E'.$row);
 
-		        	$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=>$kode_mk));
-		        	if(empty($mk))
-		        	{
-		        		$message .= '<div style="color:red">- Data Matkul berikut belum ada di master matkul: '.$kode_mk.' '.$nama_mk.'. Silakan hubungi ust Samsirin untuk input manual</div>';
-		        		continue;
-		        	}
 		        	$kode_dosen = $sheet->getCell('F'.$row);
 
 		        	$fakultas = $sheet->getCell('I'.$row);
 		        	$prodi = $sheet->getCell('K'.$row);
 
 		        	$nama_dosen = $sheet->getCell('G'.$row);
+		        	$tahun_akademik = $sheet->getCell('M'.$row);
+		        	$sks = $sheet->getCell('Q'.$row);
+		        	$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=>$kode_mk));
+		        	if(empty($mk))
+		        	{
+
+		        		$isnew = Mastermatakuliah::model()->quickCreate($tahun_akademik, $fakultas, $prodi, $kode_mk, $nama_mk,$kode_dosen, $sks);
+		        		
+		        		if(!$isnew)
+		        		{
+
+		        			$message .= '<div style="color:red">Wrong data mk</div>';
+		        				continue;
+			        		$m->addError('error','Terjadi kesalahan input data mk');
+							throw new Exception();
+		        		}
+
+		        		// $message .= '<div style="color:red">- Data Matkul berikut belum ada di master matkul: '.$kode_mk.' '.$nama_mk.'. Silakan hubungi ust Samsirin untuk input manual</div>';
+		        		// continue;
+		        	}
+		        	
 		        	$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$kode_dosen));
 		        	if(empty($dosen))
 		        	{
@@ -251,7 +275,7 @@ class JadwalController extends Controller
 		        	$nama_fakultas = $sheet->getCell('J'.$row);
 		        	
 		        	$nama_prodi = $sheet->getCell('L'.$row);
-		        	$tahun_akademik = $sheet->getCell('M'.$row);
+		        	
 		        	$semester = $sheet->getCell('N'.$row);
 		        	$kampus = $sheet->getCell('O'.$row);
 		        	$id_kampus = Kampus::model()->findByAttributes(array('nama_kampus'=>$kampus));
@@ -274,6 +298,7 @@ class JadwalController extends Controller
 						throw new Exception();
 		        	}
 
+		        	
 
 		        	$m = new Jadwal;	
 					$m->hari = $hari;
@@ -294,6 +319,13 @@ class JadwalController extends Controller
 					$m->semester = $semester;
 					$m->kelas = $id_kelas;
 					
+					$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $kode_mk));
+
+					if(!empty($mk))
+					{
+						$mk->sks = $sks;
+						$mk->save(false, array('sks'));
+					}					
 					$m->fakultas = $fakultas;
 					$m->nama_fakultas = $nama_fakultas;
 					$m->prodi = $prodi;
@@ -377,8 +409,8 @@ class JadwalController extends Controller
 		   'TAHUN',
 		   'Semester ',
 		   'Kampus',
-		   // 'SKS',
 		   'Kelas',
+		   'SKS',
 		);
     
 	    $objPHPExcel->setActiveSheetIndex(0);
@@ -565,7 +597,9 @@ class JadwalController extends Controller
 			$model->jam_mulai = substr($jam_ke->jam_mulai, 0, -3);;
 			$model->jam_selesai = substr($jam_ke->jam_selesai, 0, -3);
 
-			
+			$isconflict = Jadwal::model()->isConflict($model->kode_dosen, $model->hari,$jam_ke->jam_mulai);
+
+			$model->bentrok = $isconflict;
 
 			if($model->save()){
 
@@ -600,12 +634,17 @@ class JadwalController extends Controller
 			$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
 
 			$jam_ke = Jam::model()->findByPk($_POST['Jadwal']['jam_ke']);
-			$model->jam_mulai = $jam_ke->jam_mulai;
-			$model->jam_selesai = $jam_ke->jam_selesai;
+			$model->jam_mulai = substr($jam_ke->jam_mulai, 0, -3);;
+			$model->jam_selesai = substr($jam_ke->jam_selesai, 0, -3);
 
 			$model->nama_fakultas = $fak->nama_fakultas;
 			$model->nama_prodi = $prodi->nama_prodi;
 			$model->nama_mk = $mk->nama_mata_kuliah;
+
+			$isconflict = Jadwal::model()->isConflict($model->kode_dosen, $model->hari,$jam_ke->jam_mulai);
+
+			$model->bentrok = $isconflict;
+
 			if($model->save()){
 				$this->redirect(array('view','id'=>$model->id));
 			}
