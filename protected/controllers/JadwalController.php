@@ -94,12 +94,7 @@ class JadwalController extends Controller
 		    'alignment' => array(
 	            'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
 	        ),
-		    'borders' => array(
-		    	'allborders' => array(
-	                'style' => PHPExcel_Style_Border::BORDER_THIN,
-	                'color' => array('rgb' => '000000')
-	            )
-		    )
+		    
 
 		);
 		$objPHPExcel->getDefaultStyle()->applyFromArray($styleArray);
@@ -122,7 +117,36 @@ class JadwalController extends Controller
 		);
     
 	    $sheet = $objPHPExcel->setActiveSheetIndex(0);
+	    $sheet->setCellValueByColumnAndRow(0, 1, "JADWAL REKAP SKS DOSEN");
+	    $sheet->setCellValueByColumnAndRow(0, 2, "UNIVERSITAS DARUSSALAM GONTOR");
+	    $sheet->setCellValueByColumnAndRow(0, 3, "TAHUN AKADEMIK ".strtoupper($tahun_akademik->nama_tahun));
+	    $sheet->mergeCells('A1:N1');
+	    $sheet->mergeCells('A2:N2');
+	    $sheet->mergeCells('A3:N3');
+	    $style = array(
+	        'alignment' => array(
+	            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+	        ),
+	        'font'  => array(
+		        'bold'  => true,
+		        // 'color' => array('rgb' => 'FF0000'),
+		        
+		    ),
+	    );
 
+	    $sheet->getStyle("A1:N1")->applyFromArray($style);
+	    $sheet->getStyle("A2:N2")->applyFromArray($style);
+	    $sheet->getStyle("A3:N3")->applyFromArray($style);
+	    for($i=1;$i<=3;$i++)
+	    	$sheet->getRowDimension($i)->setRowHeight(15);
+
+	    $objDrawing = new PHPExcel_Worksheet_HeaderFooterDrawing();
+		$objDrawing->setName('Image');
+		$baseUrl = $_SERVER['DOCUMENT_ROOT'].'/simjad';
+		$objDrawing->setPath($baseUrl.'/images/logo_unida.png');
+		$objDrawing->setHeight(45);
+		$objDrawing->setCoordinates('A1');
+		$objDrawing->setWorksheet($sheet);
 
 	    $sheet->getColumnDimension('A')->setWidth(4);
 	    $sheet->getColumnDimension('B')->setWidth(8);
@@ -139,10 +163,11 @@ class JadwalController extends Controller
 	    $sheet->getColumnDimension('M')->setWidth(12);
 	    $sheet->getColumnDimension('N')->setWidth(6);
 	    
+	    $rowStart = 4;
 	    foreach($headers as $q => $v)
 	    {
-	    	$sheet->setCellValueByColumnAndRow($q,1, strtoupper($v));
-	    	$cell = $sheet->getCellByColumnAndRow($q,1);
+	    	$sheet->setCellValueByColumnAndRow($q,$rowStart, strtoupper($v));
+	    	$cell = $sheet->getCellByColumnAndRow($q,$rowStart);
 
 	    	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
 	    		array(
@@ -153,6 +178,12 @@ class JadwalController extends Controller
 			        'font' => array(
 			        	'color' => array('rgb'=> 'ffffff')
 			        ),
+			        'borders' => array(
+				    	'allborders' => array(
+			                'style' => PHPExcel_Style_Border::BORDER_THIN,
+			                'color' => array('rgb' => '000000')
+			            )
+				    )
 			        // 'alignment' => array('indent'=>'10')
 	    		)
 	    	);
@@ -160,7 +191,7 @@ class JadwalController extends Controller
 
 	   	$i = 0; 
 
-		$row = 1;
+		$row = $rowStart;
 		foreach($jadwal_prodi as $jd)
 		{
 			$sks_dosen = 0;
@@ -187,7 +218,25 @@ class JadwalController extends Controller
 				$sheet->setCellValueByColumnAndRow(11,$row+1, $m->semester);
 				$sheet->setCellValueByColumnAndRow(12,$row+1, $m->kAMPUS->nama_kampus);
 				$sheet->setCellValueByColumnAndRow(13,$row+1, $m->kELAS->nama_kelas);
+			  	foreach($headers as $q => $v)
+	    		{
+				  	$cell = $sheet->getCellByColumnAndRow($q,$row+1);
+				  	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
+			    		array(
+					        'borders' => array(
+						    	'allborders' => array(
+					                'style' => PHPExcel_Style_Border::BORDER_THIN,
+					                'color' => array('rgb' => '000000')
+					            )
+						    )
+					        // 'alignment' => array('indent'=>'10')
+			    		)
+			    	);
+			  	}
+
 			  	$row++;
+
+			  	
 			}
 
 			$sheet->getRowDimension($row+1)->setRowHeight(15);
@@ -208,6 +257,43 @@ class JadwalController extends Controller
 			$sheet->setCellValueByColumnAndRow(11,$row+1, '');
 			$sheet->setCellValueByColumnAndRow(12,$row+1, '');
 			$sheet->setCellValueByColumnAndRow(13,$row+1, '');
+			foreach($headers as $q => $v)
+    		{
+			  	$cell = $sheet->getCellByColumnAndRow($q,$row+1);
+
+			  	$font_color = '000000';
+			  	if($sks_dosen >= 20)
+			  	{
+			  		$font_color = 'f50c0c';
+			  	} 
+
+			  	else if($sks_dosen <= 15)
+			  	{
+			  		$font_color = 'ff8c00';
+			  	}
+
+			  	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
+		    		array(
+				        'borders' => array(
+					    	'allborders' => array(
+				                'style' => PHPExcel_Style_Border::BORDER_THIN,
+				                'color' => array('rgb' => '000000')
+				            )
+					    ),
+					    'fill' => array(
+				            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+				            'color' => array('rgb' => $font_color)
+				        ),
+				        'font'  => array(
+					        'bold'  => true,
+					        
+					    ),
+				        
+				        // 'alignment' => array('indent'=>'10')
+		    		)
+		    	);
+		  	}
+
 			$row++;
 	    }
 	    $sheet->setTitle('Rekap Jadwal');
