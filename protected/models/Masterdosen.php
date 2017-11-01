@@ -90,6 +90,7 @@ class Masterdosen extends CActiveRecord
 	{
 		$new = new Masterdosen;
 		$new->kode_fakultas = $fakultas;
+		$new->kode_pt = 0;
 		$new->kode_jurusan = $prodi;
 		$new->kode_prodi = $prodi;
 		$new->kode_jenjang_studi = 'B';
