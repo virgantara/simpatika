@@ -189,13 +189,15 @@ class JadwalController extends Controller
 
 
 		        	$hari = strtoupper($sheet->getCell('A'.$row));
+					
+					if(empty($hari))continue;
 		        	$jam_ke = $sheet->getCell('B'.$row);
 
 		        	$jam = Jam::model()->findByAttributes(array('nama_jam'=>trim($jam_ke)));
 
 		        	if(empty($jam))
 		        	{
-		        		$m->addError('error','Baris ke-'.($index+1).' : Format Jam Salah atau data jam tidak ada');
+						$m->addError('error','Baris ke-'.($index+1).' : Format Jam Salah atau data jam tidak ada');
 						throw new Exception();
 		        	}
 		        		
