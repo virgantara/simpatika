@@ -145,7 +145,7 @@ $list_hari = array(
     foreach($jam as $j)
     {
     ?>
-      <th width="13%" style="text-align: center"><strong><?php echo $j->nama_jam;?><br>
+      <th width="13%" style="text-align: center"><strong><?php echo $j->prefix.$j->nama_jam;?><br>
         <?php
 
         echo substr($j->jam_mulai, 0, -3).' - '.substr($j->jam_selesai, 0, -3);

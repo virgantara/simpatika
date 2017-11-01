@@ -32,7 +32,7 @@ class Jam extends CActiveRecord
 			array('jam_selesai', 'validatorCompareDateTime', 'compareAttribute' => 'jam_mulai', 'condition' => '>'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('nama_jam, jam_mulai, jam_selesai, id_jam', 'safe', 'on'=>'search'),
+			array('nama_jam, jam_mulai, jam_selesai, id_jam, prefix', 'safe', 'on'=>'search'),
 		);
 	}
 

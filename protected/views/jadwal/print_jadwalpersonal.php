@@ -18,7 +18,7 @@ $list_hari = array(
 <table width="100%" style="margin-left: 5px">
   <tr>
     <td width="100%" colspan="3" style="text-align: left">
-<h3>JADWAL PERSONAL DOSEN GASAL<br>UNIVERSITAS DARUSSALAM GONTOR<br>T.A. 1438-1438 H / 2017-2018 M
+<h3>JADWAL PERSONAL DOSEN GENAP<br>UNIVERSITAS DARUSSALAM GONTOR<br>T.A. 1438-1438 H / 2017-2018 M
     </h3>
 <br><br><br>
   </td>
@@ -65,7 +65,7 @@ $list_hari = array(
     foreach($jam as $j)
     {
     ?>
-      <th width="13%" style="text-align: center"><strong><?php echo $j->nama_jam;?><br>
+      <th width="13%" style="text-align: center"><strong><?php echo $j->prefix.$j->nama_jam;?><br>
         <?php
 
         echo substr($j->jam_mulai, 0, -3).' - '.substr($j->jam_selesai, 0, -3);
