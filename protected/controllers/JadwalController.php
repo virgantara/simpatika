@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','exportRekap','listBentrok'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -78,35 +78,158 @@ class JadwalController extends Controller
 		));
 	}
 
+	public function actionRekapJadwalXls($id)
+	{
+		$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$id));
+		Yii::import('ext.PHPExcel.PHPExcel');
+		$objPHPExcel = new PHPExcel();
+		$styleArray = array(
+		    'font'  => array(
+		        // 'bold'  => true,
+		        // 'color' => array('rgb' => 'FF0000'),
+		        'size'  => 8,
+		        'name'  => 'Times New Roman'
+		    ),
+		    'borders' => array(
+		    	'allborders' => array(
+	                'style' => PHPExcel_Style_Border::BORDER_THIN,
+	                'color' => array('rgb' => '000000')
+	            )
+		    )
+
+		);
+		$objPHPExcel->getDefaultStyle()->applyFromArray($styleArray);
+
+		$headers = array(
+		   'No',
+		   'Hari',
+		   'Jam',
+		   'Waktu',
+		   'Kode MK',
+		   'Mata Kuliah',
+		   'NIY',
+		   'Nama Dosen',
+		   'SKS',
+		   'Fakultas',
+		   'Prodi',
+		   'SMT',
+		   'Kampus',
+		   'Kelas',
+		);
+    
+	    $sheet = $objPHPExcel->setActiveSheetIndex(0);
+
+	    $sheet->getColumnDimension('A')->setWidth(4);
+	    $sheet->getColumnDimension('B')->setWidth(8);
+	    $sheet->getColumnDimension('C')->setWidth(4);
+	    $sheet->getColumnDimension('D')->setWidth(12);
+	    $sheet->getColumnDimension('E')->setWidth(12);
+	    $sheet->getColumnDimension('F')->setWidth(52);
+	    $sheet->getColumnDimension('G')->setWidth(8);
+	    $sheet->getColumnDimension('H')->setWidth(42);
+	    $sheet->getColumnDimension('I')->setWidth(5);
+	    $sheet->getColumnDimension('J')->setWidth(15);
+	    $sheet->getColumnDimension('K')->setWidth(7);
+	    $sheet->getColumnDimension('L')->setWidth(6);
+	    $sheet->getColumnDimension('M')->setWidth(12);
+	    $sheet->getColumnDimension('N')->setWidth(6);
+	    
+	    $kampuses = Jadwal::model()->findKampus($id);
+
+		foreach($kampuses as $kampus)
+		{	
+			foreach($kampus->kelases as $kelas)
+			{
+				
+				$semesters = Jadwal::model()->findSemester($id);
+
+				$row = 1;
+				foreach($semesters as $semester)
+				{
+					foreach($headers as $q => $v)
+				    {
+				    	$sheet->setCellValueByColumnAndRow($q,$row, strtoupper($v));
+				    	$cell = $sheet->getCellByColumnAndRow($q,$row);
+				    	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
+				    		array(
+				    			'fill' => array(
+						            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+						            'color' => array('rgb' => '000000')
+						        ),
+						        'font' => array(
+						        	'color' => array('rgb'=> 'ffffff')
+						        ),
+				    		)
+				    	);
+				    }
+
+
+				    $i = 0; 
+
+					$model = Jadwal::model()->findRekapJadwalPerkelas($id, $kampus->id, $kelas->id, $semester->semester);
+
+					// $rowSub = $row+1;
+					foreach($model as $m)
+					{
+						$i++;
+						$sheet->setCellValueByColumnAndRow(0,$row+1, $i);
+						$sheet->setCellValueByColumnAndRow(1,$row+1, $m->hari);
+						$sheet->setCellValueByColumnAndRow(2,$row+1, $m->jAM->nama_jam);
+						$sheet->setCellValueByColumnAndRow(3,$row+1, substr($m->jAM->jam_mulai, 0, -3).'-'.substr($m->jAM->jam_selesai, 0, -3));
+						$sheet->setCellValueByColumnAndRow(4,$row+1, $m->kode_mk);
+						$sheet->setCellValueByColumnAndRow(5,$row+1, $m->nama_mk);
+						$sheet->setCellValueByColumnAndRow(6,$row+1, $m->kode_dosen);
+						$sheet->setCellValueByColumnAndRow(7,$row+1, $m->nama_dosen);
+						$sheet->setCellValueByColumnAndRow(8,$row+1, $m->SKS);
+						$sheet->setCellValueByColumnAndRow(9,$row+1, $m->nama_fakultas);
+						$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
+			 			$nm_prodi = !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
+						$sheet->setCellValueByColumnAndRow(10,$row+1, $nm_prodi);
+						$sheet->setCellValueByColumnAndRow(11,$row+1, $m->semester);
+						$sheet->setCellValueByColumnAndRow(12,$row+1, $m->kAMPUS->nama_kampus);
+						$sheet->setCellValueByColumnAndRow(13,$row+1, $m->kELAS->nama_kelas);
+					  	$row++;
+					}
+
+					
+				}
+			}
+		}	   
+	    
+	    $sheet->setTitle('Rekap Jadwal');
+	 
+	    $objPHPExcel->setActiveSheetIndex(0);
+	     
+	    ob_end_clean();
+	    ob_start();
+	    
+	    header('Content-Type: application/vnd.ms-excel');
+	    header('Content-Disposition: attachment;filename="rekap_jadwal_'.$prodi->singkatan.'.xls"');
+	    header('Cache-Control: max-age=0');
+	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+	    $objWriter->save('php://output');
+	}
+
+	public function actionRekapJadwalAll()
+	{
+		
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$jadwal_prodi = Jadwal::model()->findRekapJadwalPerkelasAll($tahun_akademik->tahun_id);
+
+		$this->render('rekap_jadwal_all',array(
+			'jadwal_prodi' => $jadwal_prodi,
+			'tahun_akademik' => $tahun_akademik
+
+		));
+	}
+
 	public function actionRekapJadwal()
 	{
-		$models = array();
-
-		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-
-		$kelas = null;
-		if(!empty($_POST['kode_prodi']))
-		{
-
-
-
-			// foreach($kelas as $k)
-			// {
-
-			// 	$m = Jadwal::model()->findRekapJadwal($_POST['kode_prodi'], $k->id);
-			// 	if(!empty($m))
-			// 		$models[] = $m;
-			// }
-
-
-
-		}
-
 		
-
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		
 		$this->render('rekap_jadwal',array(
-			'models' => $models,
-			'kelas' => $kelas,
+
 			'tahun_akademik' => $tahun_akademik
 
 		));

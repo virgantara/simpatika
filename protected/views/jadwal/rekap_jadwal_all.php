@@ -19,72 +19,8 @@ $this->menu=array(
 </style>
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'jam-form',
-	// Please note: When you enable ajax validation, make sure the corresponding
-	// controller action is handling ajax validation correctly.
-	// There is a call to performAjaxValidation() commented in generated controller code.
-	// See class documentation of CActiveForm for details on this.
-	'enableAjaxValidation'=>false,
-)); ?>
-
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
-
-	<div class="row">
-		<label>Prodi</label>
-		<?php
-		$kode_prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
-    
-    $list = CHtml::listData(Masterprogramstudi::model()->findAll(), 'kode_prodi','nama_prodi');
-    
-		echo CHtml::dropDownList('kode_prodi',$kode_prodi,$list);
-		
-		?>
-
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Lihat'); ?>
-
-		
-		<?php echo !empty($kode_prodi) ? CHtml::link('Export ke XLS',array('jadwal/rekapJadwalXls','id'=>$kode_prodi)) : ''; ?>
-	</div>
-
-<?php $this->endWidget(); ?>
-
-</div><!-- form -->
-
-<?php 
-
-if(!empty($kode_prodi))
-{
-?>
-
 <table border="1" cellpadding="4" style="width: 100%">
-<?php 
-
-	
-// $criteria=new CDbCriteria;
-// $criteria->order = 'kode_kampus ASC';
-
-$kampuses = Jadwal::model()->findKampus($kode_prodi);
-
-foreach($kampuses as $kampus)
-{	
-	foreach($kampus->kelases as $kelas)
-	{
-		
-		$semesters = Jadwal::model()->findSemester($kode_prodi);
-
-		foreach($semesters as $semester)
-		{
-
-
-		
-
- ?> 
-  <thead>
+<thead>
     <tr>
       <th width="3%">No</th>
       <th width="5%">Hari</th>
@@ -106,14 +42,14 @@ foreach($kampuses as $kampus)
     </tr>
   </thead>
   <tbody>
- <?php
+<?php 
 
-
-
+	
+	
 		$i = 0; 
 
-		$model = Jadwal::model()->findRekapJadwalPerkelas($kode_prodi, $kampus->id, $kelas->id, $semester->semester);
-		foreach($model as $m)
+		
+		foreach($jadwal_prodi as $m)
 		{
 		  $i++;
 		?>
@@ -147,14 +83,9 @@ foreach($kampuses as $kampus)
 
 		</tr>
 	<?php 
-			}
-		}
+		
 	}
-}
-?>
-  </tbody>
+	?>
+	  </tbody>
 
-</table>
-<?php 
-}
-?>
+	</table>

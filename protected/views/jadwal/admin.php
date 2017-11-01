@@ -41,8 +41,11 @@ $('.search-form form').submit(function(){
         echo '<div style="color:green">' . $message . "</div>\n";
     }
     
-
-echo CHtml::link('Cetak Jadwal Personal',array('jadwal/cetakPerDosen'));
+echo '<ul>';
+echo '<li>'.CHtml::link('Cetak Jadwal Personal',array('jadwal/cetakPerDosen'),array('target'=>'_blank')).'</li>';
+echo '<li>'.CHtml::link('Rekap Jadwal Per Prodi',array('jadwal/rekapJadwal'),array('target'=>'_blank')).'</li>';
+echo '<li>'.CHtml::link('Rekap Jadwal Semua Dosen',array('jadwal/rekapJadwalAll'),array('target'=>'_blank')).'</li>';
+echo '</ul>';
 ?>
 
 <?php $this->widget('application.components.ComplexGridView', array(

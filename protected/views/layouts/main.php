@@ -33,7 +33,7 @@
 				array('label'=>'Jadwal', 'url'=>array('/jadwal/index'),'visible'=>!Yii::app()->user->isGuest),
 				// array('label'=>'Jadwal Bentrok', 'url'=>array('/jadwal/listBentrok'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Unggah Jadwal', 'url'=>array('/jadwal/uploadJadwal'),'visible'=>!Yii::app()->user->isGuest),
-				array('label'=>'Rekap Jadwal', 'url'=>array('/jadwal/rekapJadwal'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
+				// array('label'=>'Rekap Jadwal', 'url'=>array('/jadwal/rekapJadwal'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Mata Kuliah', 'url'=>array('/Mastermatakuliah/index'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Kelas', 'url'=>array('/MasterKelas/admin'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Kampus', 'url'=>array('/Kampus/index'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),

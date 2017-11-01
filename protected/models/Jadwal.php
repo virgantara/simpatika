@@ -133,6 +133,16 @@ class Jadwal extends CActiveRecord
 		return $isconflict;
 	}
 
+	public function findProdi()
+	{
+		$criteria=new CDbCriteria;
+		$criteria->join = 'JOIN simak_jadwal_temp j ON j.prodi = t.kode_prodi';
+		$criteria->group = 't.kode_prodi';
+		$model = Masterprogramstudi::model()->findAll($criteria);	
+
+		return $model;
+	}
+
 	public function findKampus($id)
 	{
 		$criteria=new CDbCriteria;
@@ -167,6 +177,17 @@ class Jadwal extends CActiveRecord
 		return $model;
 	}
 
+	public function findRekapJadwalPerkelasAll($tahun_akademik)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->compare('tahun_akademik',$tahun_akademik);
+		// $criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
+		$criteria->order = 'kode_dosen ASC';
+		$model = Jadwal::model()->findAll($criteria);	
+
+		return $model;
+	}
+
 	public function findRekapJadwalPerkelas($id,$kampus, $kelas, $semester)
 	{
 		$criteria=new CDbCriteria;
@@ -174,7 +195,8 @@ class Jadwal extends CActiveRecord
 		$criteria->compare('kampus',$kampus);
 		$criteria->compare('kelas',$kelas);
 		$criteria->compare('semester',$semester);
-		// $criteria->order = 'semester ASC';
+		$criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
+		$criteria->order = 'h.urutan ASC';
 		$model = Jadwal::model()->findAll($criteria);	
 
 		return $model;
