@@ -231,47 +231,18 @@ class JadwalController extends Controller
 		        	$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$kode_dosen));
 		        	if(empty($dosen))
 		        	{
-
-		        		$new = new Masterdosen;
-		        		$new->kode_fakultas = $fakultas;
-		        		$new->kode_jurusan = $prodi;
-		        		$new->kode_prodi = $prodi;
-		        		$new->kode_jenjang_studi = 'B';
-		        		$new->no_ktp_dosen = '12345678';
-		        		$new->nidn = $kode_dosen;
-		        		$new->niy = $kode_dosen;
-		        		$new->nama_dosen = $nama_dosen;
-		        		$new->jenis_kelamin = 'L';
-		        		$new->kode_jabatan_akademik = 'A';
-		        		$new->kode_pendidikan_tertinggi = 'B';
-		        		$new->kode_status_kerja_pts = 'A';
-		        		$new->kode_status_aktivitas_dosen = 'A';
+		        		$isnew = Masterdosen::model()->quickCreate($fakultas, $prodi, $kode_dosen, $nama_dosen);
 		        		
-		        		if($new->validate())
+		        		if(!$isnew)
 		        		{
-		        			$new->save();
-		        		}
 
-		        		else
-		        		{
-		        			$errors = 'Baris ke-';
-							$errors .= ($index + 1).' : ';
-							
-							foreach($new->getErrors() as $attribute){
-								foreach($attribute as $error){
-									$errors .= $error.' <br>';
-								}
-							}
-							
-							$m->addError('error',$errors);
+		        			$message .= '<div style="color:red">Wrong data dosen</div>';
+		        				continue;
+			        		$m->addError('error','Terjadi kesalahan input data dosen');
 							throw new Exception();
-							// exit;
 		        		}
 
-		        		// $message .= '<div style="color:red">- Data Dosen berikut belum ada di master dosen kode: <strong>'.$kode_dosen.', nama: '.$nama_dosen.'</strong>. Silakan menghubungi ust <strong>Samsirin</strong></div>';
-		        		// continue;
-		    //     		$m->addError('error','Baris ke-'.($index+1).' : Data dosen '.$nama_dosen.' belum ada di siakad');
-						// throw new Exception();
+		        		
 		        	}
 		        	$kd_ruangan = $sheet->getCell('H'.$row);
 		        	
@@ -589,8 +560,10 @@ class JadwalController extends Controller
 			$model->nama_mk = $mk->nama_mata_kuliah;
 			$model->jam = $model->jam_mulai;
 			$jam_ke = Jam::model()->findByPk($_POST['Jadwal']['jam_ke']);
-			$model->jam_mulai = $jam_ke->jam_mulai;
-			$model->jam_selesai = $jam_ke->jam_selesai;
+			$model->jam_mulai = substr($jam_ke->jam_mulai, 0, -3);;
+			$model->jam_selesai = substr($jam_ke->jam_selesai, 0, -3);
+
+			
 
 			if($model->save()){
 

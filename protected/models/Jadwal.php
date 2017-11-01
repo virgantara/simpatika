@@ -257,6 +257,13 @@ class Jadwal extends CActiveRecord
 		));
 	}
 
+	// protected function beforeSave()
+	// {
+	// 	$this->jam_mulai = $this->jam_mulai.':00';
+	// 	$this->jam_selesai = $this->jam_selesai.':00';
+	// 	return parent::beforeSave();
+	// }
+
 	protected function afterFind()
 	{
 		$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $this->kode_mk));

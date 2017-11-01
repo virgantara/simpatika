@@ -86,6 +86,36 @@ class Masterdosen extends CActiveRecord
 		);
 	}
 
+	public function quickCreate($fakultas, $prodi, $kode_dosen, $nama_dosen)
+	{
+		$new = new Masterdosen;
+		$new->kode_fakultas = $fakultas;
+		$new->kode_jurusan = $prodi;
+		$new->kode_prodi = $prodi;
+		$new->kode_jenjang_studi = 'B';
+		$new->no_ktp_dosen = '12345678';
+		$new->nidn = $kode_dosen;
+		$new->niy = $kode_dosen;
+		$new->nama_dosen = $nama_dosen;
+		$new->jenis_kelamin = 'L';
+		$new->kode_jabatan_akademik = 'A';
+		$new->kode_pendidikan_tertinggi = 'B';
+		$new->kode_status_kerja_pts = 'A';
+		$new->kode_status_aktivitas_dosen = 'A';
+		
+		if($new->validate())
+		{
+			$new->save();
+			return true;
+		}
+
+		else
+		{
+			return false;
+		}
+
+	}
+
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
