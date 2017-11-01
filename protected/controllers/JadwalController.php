@@ -91,6 +91,9 @@ class JadwalController extends Controller
 		        'size'  => 7,
 		        'name'  => 'Times New Roman'
 		    ),
+		    'alignment' => array(
+	            'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+	        ),
 		    'borders' => array(
 		    	'allborders' => array(
 	                'style' => PHPExcel_Style_Border::BORDER_THIN,
@@ -120,6 +123,7 @@ class JadwalController extends Controller
     
 	    $sheet = $objPHPExcel->setActiveSheetIndex(0);
 
+
 	    $sheet->getColumnDimension('A')->setWidth(4);
 	    $sheet->getColumnDimension('B')->setWidth(8);
 	    $sheet->getColumnDimension('C')->setWidth(4);
@@ -139,6 +143,7 @@ class JadwalController extends Controller
 	    {
 	    	$sheet->setCellValueByColumnAndRow($q,1, strtoupper($v));
 	    	$cell = $sheet->getCellByColumnAndRow($q,1);
+
 	    	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
 	    		array(
 	    			'fill' => array(
@@ -148,6 +153,7 @@ class JadwalController extends Controller
 			        'font' => array(
 			        	'color' => array('rgb'=> 'ffffff')
 			        ),
+			        // 'alignment' => array('indent'=>'10')
 	    		)
 	    	);
 	    }
@@ -164,6 +170,7 @@ class JadwalController extends Controller
 		  		$sks_dosen += $m->SKS;
 
 				$i++;
+				$sheet->getRowDimension($row+1)->setRowHeight(15);
 				$sheet->setCellValueByColumnAndRow(0,$row+1, $i);
 				$sheet->setCellValueByColumnAndRow(1,$row+1, $m->hari);
 				$sheet->setCellValueByColumnAndRow(2,$row+1, $m->jAM->nama_jam);
@@ -183,6 +190,7 @@ class JadwalController extends Controller
 			  	$row++;
 			}
 
+			$sheet->getRowDimension($row+1)->setRowHeight(15);
 			$sheet->setCellValueByColumnAndRow(0,$row+1, '');
 			$sheet->setCellValueByColumnAndRow(1,$row+1, '');
 			$sheet->setCellValueByColumnAndRow(2,$row+1, '');
