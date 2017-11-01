@@ -84,7 +84,7 @@ echo CHtml::link('Cetak Jadwal Personal',array('jadwal/cetakPerDosen'));
 			'header' => 'SKS',
 			'value' => '$data->SKS'
 		),
-		'bentrok',
+		
 		/*
 		'fakultas',
 		'prodi',
