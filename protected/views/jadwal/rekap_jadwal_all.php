@@ -18,7 +18,9 @@ $this->menu=array(
 	}
 </style>
 <div class="form">
-
+	<div class="row">
+<?php echo CHtml::link('Export ke XLS',array('jadwal/rekapJadwalAllXls')); ?>
+</div>
 <table border="1" cellpadding="4" style="width: 100%">
 <thead>
     <tr>
@@ -49,9 +51,16 @@ $this->menu=array(
 		$i = 0; 
 
 		
-		foreach($jadwal_prodi as $m)
+		foreach($jadwal_prodi as $jd)
 		{
+		  
+
 		  $i++;
+		  $sks_dosen = 0;
+		  $jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($tahun_akademik->tahun_id,$jd->kode_dosen);
+		  foreach($jadwal_perdosen as $m)
+		  {	
+		  	$sks_dosen += $m->SKS;
 		?>
 		<tr>
 		<td width="3%"><?=$i;?></td>
@@ -83,7 +92,32 @@ $this->menu=array(
 
 		</tr>
 	<?php 
-		
+		}
+
+		?>
+		<tr>
+		<td width="3%"></td>
+		<td width="5%"></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td> </td>
+		<td></td>
+
+		<td width="15%" style="text-align: right">Total SKS</td>
+
+		<td width="5%"><?php echo $sks_dosen;?></td>
+		<td width="5%"></td>
+		<td width="15%"></td>
+
+		<td></td>
+
+		<td></td>
+		<td width="5%"></td>
+
+
+		</tr>
+		<?php
 	}
 	?>
 	  </tbody>

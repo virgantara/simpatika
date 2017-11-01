@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -76,6 +76,144 @@ class JadwalController extends Controller
 			'model' => $model,
 			'tahun_akademik' => $tahun_akademik
 		));
+	}
+
+	public function actionRekapJadwalAllXls()
+	{
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$jadwal_prodi = Jadwal::model()->findRekapJadwalAll($tahun_akademik->tahun_id);
+		Yii::import('ext.PHPExcel.PHPExcel');
+		$objPHPExcel = new PHPExcel();
+		$styleArray = array(
+		    'font'  => array(
+		        // 'bold'  => true,
+		        // 'color' => array('rgb' => 'FF0000'),
+		        'size'  => 7,
+		        'name'  => 'Times New Roman'
+		    ),
+		    'borders' => array(
+		    	'allborders' => array(
+	                'style' => PHPExcel_Style_Border::BORDER_THIN,
+	                'color' => array('rgb' => '000000')
+	            )
+		    )
+
+		);
+		$objPHPExcel->getDefaultStyle()->applyFromArray($styleArray);
+
+		$headers = array(
+		   'No',
+		   'Hari',
+		   'Jam',
+		   'Waktu',
+		   'Kode MK',
+		   'Mata Kuliah',
+		   'NIY',
+		   'Nama Dosen',
+		   'SKS',
+		   'Fakultas',
+		   'Prodi',
+		   'SMT',
+		   'Kampus',
+		   'KLS',
+		);
+    
+	    $sheet = $objPHPExcel->setActiveSheetIndex(0);
+
+	    $sheet->getColumnDimension('A')->setWidth(4);
+	    $sheet->getColumnDimension('B')->setWidth(8);
+	    $sheet->getColumnDimension('C')->setWidth(4);
+	    $sheet->getColumnDimension('D')->setWidth(12);
+	    $sheet->getColumnDimension('E')->setWidth(12);
+	    $sheet->getColumnDimension('F')->setWidth(52);
+	    $sheet->getColumnDimension('G')->setWidth(8);
+	    $sheet->getColumnDimension('H')->setWidth(42);
+	    $sheet->getColumnDimension('I')->setWidth(6);
+	    $sheet->getColumnDimension('J')->setWidth(15);
+	    $sheet->getColumnDimension('K')->setWidth(7);
+	    $sheet->getColumnDimension('L')->setWidth(6);
+	    $sheet->getColumnDimension('M')->setWidth(12);
+	    $sheet->getColumnDimension('N')->setWidth(6);
+	    
+	    foreach($headers as $q => $v)
+	    {
+	    	$sheet->setCellValueByColumnAndRow($q,1, strtoupper($v));
+	    	$cell = $sheet->getCellByColumnAndRow($q,1);
+	    	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
+	    		array(
+	    			'fill' => array(
+			            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+			            'color' => array('rgb' => '000000')
+			        ),
+			        'font' => array(
+			        	'color' => array('rgb'=> 'ffffff')
+			        ),
+	    		)
+	    	);
+	    }
+
+	   	$i = 0; 
+
+		$row = 1;
+		foreach($jadwal_prodi as $jd)
+		{
+			$sks_dosen = 0;
+			$jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($tahun_akademik->tahun_id,$jd->kode_dosen);
+			foreach($jadwal_perdosen as $m)
+			{	
+		  		$sks_dosen += $m->SKS;
+
+				$i++;
+				$sheet->setCellValueByColumnAndRow(0,$row+1, $i);
+				$sheet->setCellValueByColumnAndRow(1,$row+1, $m->hari);
+				$sheet->setCellValueByColumnAndRow(2,$row+1, $m->jAM->nama_jam);
+				$sheet->setCellValueByColumnAndRow(3,$row+1, substr($m->jAM->jam_mulai, 0, -3).'-'.substr($m->jAM->jam_selesai, 0, -3));
+				$sheet->setCellValueByColumnAndRow(4,$row+1, $m->kode_mk);
+				$sheet->setCellValueByColumnAndRow(5,$row+1, $m->nama_mk);
+				$sheet->setCellValueByColumnAndRow(6,$row+1, $m->kode_dosen);
+				$sheet->setCellValueByColumnAndRow(7,$row+1, $m->nama_dosen);
+				$sheet->setCellValueByColumnAndRow(8,$row+1, $m->SKS);
+				$sheet->setCellValueByColumnAndRow(9,$row+1, $m->nama_fakultas);
+				$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
+	 			$nm_prodi = !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
+				$sheet->setCellValueByColumnAndRow(10,$row+1, $nm_prodi);
+				$sheet->setCellValueByColumnAndRow(11,$row+1, $m->semester);
+				$sheet->setCellValueByColumnAndRow(12,$row+1, $m->kAMPUS->nama_kampus);
+				$sheet->setCellValueByColumnAndRow(13,$row+1, $m->kELAS->nama_kelas);
+			  	$row++;
+			}
+
+			$sheet->setCellValueByColumnAndRow(0,$row+1, '');
+			$sheet->setCellValueByColumnAndRow(1,$row+1, '');
+			$sheet->setCellValueByColumnAndRow(2,$row+1, '');
+			$sheet->setCellValueByColumnAndRow(3,$row+1, '');
+			$sheet->setCellValueByColumnAndRow(4,$row+1, '');
+			$sheet->setCellValueByColumnAndRow(5,$row+1, '');
+			$sheet->setCellValueByColumnAndRow(6,$row+1, '');
+			$sheet->setCellValueByColumnAndRow(7,$row+1, 'Total SKS');
+			$sheet->getStyle('H'.($row+1))
+				->getAlignment()
+    			->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+			$sheet->setCellValueByColumnAndRow(8,$row+1, $sks_dosen);
+			$sheet->setCellValueByColumnAndRow(9,$row+1, '');
+			$sheet->setCellValueByColumnAndRow(10,$row+1, '');
+			$sheet->setCellValueByColumnAndRow(11,$row+1, '');
+			$sheet->setCellValueByColumnAndRow(12,$row+1, '');
+			$sheet->setCellValueByColumnAndRow(13,$row+1, '');
+			$row++;
+	    }
+	    $sheet->setTitle('Rekap Jadwal');
+	 
+	    $objPHPExcel->setActiveSheetIndex(0);
+	     
+	    ob_end_clean();
+	    ob_start();
+	    
+	    header('Content-Type: application/vnd.ms-excel');
+	    header('Content-Disposition: attachment;filename="rekap_jadwal_all.xls"');
+	    header('Cache-Control: max-age=0');
+	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+	    $objWriter->save('php://output');
 	}
 
 	public function actionRekapJadwalXls($id)
@@ -214,7 +352,7 @@ class JadwalController extends Controller
 	{
 		
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-		$jadwal_prodi = Jadwal::model()->findRekapJadwalPerkelasAll($tahun_akademik->tahun_id);
+		$jadwal_prodi = Jadwal::model()->findRekapJadwalAll($tahun_akademik->tahun_id);
 
 		$this->render('rekap_jadwal_all',array(
 			'jadwal_prodi' => $jadwal_prodi,
