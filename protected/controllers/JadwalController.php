@@ -142,8 +142,9 @@ class JadwalController extends Controller
 
 	    $objDrawing = new PHPExcel_Worksheet_HeaderFooterDrawing();
 		$objDrawing->setName('Image');
-		$baseUrl = $_SERVER['DOCUMENT_ROOT'].'/simjad';
-		$objDrawing->setPath($baseUrl.'/images/logo_unida.png');
+		$baseUrl = realpath(Yii::app()->basePath . '/../images');
+		// $baseUrl = $_SERVER['DOCUMENT_ROOT'].'/simjad';
+		$objDrawing->setPath($baseUrl.'/logo_unida.png');
 		$objDrawing->setHeight(45);
 		$objDrawing->setCoordinates('A1');
 		$objDrawing->setWorksheet($sheet);
