@@ -21,6 +21,11 @@ class SiteController extends Controller
 		);
 	}
 
+	public function actionMaster()
+	{
+		$this->render('master');
+	}
+
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.

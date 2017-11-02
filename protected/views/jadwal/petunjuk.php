@@ -40,6 +40,10 @@ $list_hari = array(
 		Kolom WAKTU hanya menerima data input dengan format jam mulai-jam selesai.<br> Di mana format jam mulai dan jam selesai adalah hh:mm. Contoh : 07:30-09:10
 	</li>
 	<li>
+		Kode MK yang benar adalah tanpa menggunakan titik (.) atau tanpa spasi. Contoh <strong>BENAR</strong>: K3311245, UNIV22224. Contoh <strong>SALAH</strong> : PMH.5.1.1.3.61, UNIV 2 2 2 2 4 
+	</li>
+
+	<li>
 		Kolom NIY di isi dengan data NIY dosen yang pernah kami kirimkan ke email masing-masing prodi.
 	</li>
 	<li>
@@ -48,6 +52,7 @@ $list_hari = array(
 	<li>
 		RUANG di sini dengan kode ruang. Jika tidak diketahui, silakan diisi dengan tanda dash '-'
 	</li>
+
 	<li>
 		KODE FT adalah kode fakultas. Diisi dengan angka kode fakultas
 	</li>
