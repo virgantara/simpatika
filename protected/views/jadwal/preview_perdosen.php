@@ -69,23 +69,37 @@ $(document).ready(function(){
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
+  <div class="row">
+    <label>Prodi</label>
+    <?php
+    $kode_prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
+    $list = CHtml::listData(Jadwal::model()->findProdi(), 'kode_prodi','nama_prodi');
+    
+    echo CHtml::dropDownList($model,'kode_prodi',$list); 
+    // echo CHtml::textField('nama_dosen',!empty($_POST['nama_dosen']) ? $_POST['nama_dosen'] : '',array('size'=>20,'maxlength'=>20)); 
+    echo CHtml::hiddenField('kode_prodi',$kode_prodi);
+    
+    ?>
 
+  </div>
+<!-- 
 	<div class="row">
-		<label>Nama Dosen</label>
+		<label>Nama Dosen</label> -->
 		<?php
-		$kode_dosen = !empty($_POST['kode_dosen']) ? $_POST['kode_dosen'] : '';
+		// $kode_dosen = !empty($_POST['kode_dosen']) ? $_POST['kode_dosen'] : '';
 		
-		echo CHtml::textField('nama_dosen',!empty($_POST['nama_dosen']) ? $_POST['nama_dosen'] : '',array('size'=>20,'maxlength'=>20)); 
-		echo CHtml::hiddenField('kode_dosen',$kode_dosen);
+		// echo CHtml::textField('nama_dosen',!empty($_POST['nama_dosen']) ? $_POST['nama_dosen'] : '',array('size'=>20,'maxlength'=>20)); 
+		// echo CHtml::hiddenField('kode_dosen',$kode_dosen);
 		
 		?>
-
+<!-- 
 	</div>
-
+ -->
 	<div class="row buttons">
-		<?php echo CHtml::submitButton('Lihat'); ?>
+		<?php echo CHtml::submitButton('Cetak',array('name'=>'cetak')); ?>
 		
-		<?php echo !empty($model) ? CHtml::link('Cetak',array('jadwal/cetakPersonal','id'=>$kode_dosen),array('target'=>'_blank')) : ''; ?>
+		<?php 
+    // echo !empty($model) ? CHtml::link('Cetak',array('jadwal/cetakPersonal','id'=>$kode_dosen),array('target'=>'_blank')) : ''; ?>
 	</div>
 
 <?php $this->endWidget(); ?>

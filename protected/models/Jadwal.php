@@ -133,10 +133,24 @@ class Jadwal extends CActiveRecord
 		return $isconflict;
 	}
 
-	public function findProdi()
+	public function findJadwalPerProdi($id)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->compare('t.prodi',$id);
+		$criteria->group = 't.kode_dosen';
+		$model = Jadwal::model()->findAll($criteria);	
+
+		return $model;
+	}
+
+	public function findProdi($id=0)
 	{
 		$criteria=new CDbCriteria;
 		$criteria->join = 'JOIN simak_jadwal_temp j ON j.prodi = t.kode_prodi';
+		if(!empty($id))
+		{
+			$criteria->condition('j.kode_prodi',$id);
+		}
 		$criteria->group = 't.kode_prodi';
 		$model = Masterprogramstudi::model()->findAll($criteria);	
 

@@ -504,11 +504,51 @@ class JadwalController extends Controller
 
 		$model = null;
 		$dosen = null;
-		if(!empty($_POST['kode_dosen']))
+		if(!empty($_POST['cetak']))
 		{
-			$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$_POST['kode_dosen']));
-			$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$_POST['kode_dosen']));
+			$kode_prodi = $_POST['kode_prodi'];
+			// $model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$_POST['kode_dosen']));
+			// $dosen = Masterdosen::model()->findByAttributes(array('niy'=>$_POST['kode_dosen']));
+			$listprodi = Jadwal::model()->findJadwalPerProdi($kode_prodi);
+			
+			$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 
+				                'L', 'mm', 'A4', true, 'UTF-8');
 
+			$pdf->setPrintHeader(false);
+			$pdf->setPrintFooter(false);
+			$pdf->SetAutoPageBreak(TRUE,10);
+			$this->layout = '';
+			
+			// $data = '';
+			foreach($listprodi as $p)
+			{
+
+				$id = $p->kode_dosen;
+
+				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
+				$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$id));
+
+				
+				
+				$pdf->AddPage();
+				
+				
+				ob_start();	
+				echo $this->renderPartial('print_jadwalpersonal',array(
+					'model'=>$model,
+					'dosen' => $dosen
+				));
+
+				$data = ob_get_clean();
+				
+				
+				$pdf->writeHTML($data);
+				// $pdf->endPage();
+			}
+			
+			ob_end_clean();
+			
+			$pdf->Output();
 			
 		}
 
