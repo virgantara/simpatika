@@ -507,10 +507,10 @@ class JadwalController extends Controller
 		if(!empty($_POST['cetak']))
 		{
 			$kode_prodi = $_POST['kode_prodi'];
-			// $model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$_POST['kode_dosen']));
-			// $dosen = Masterdosen::model()->findByAttributes(array('niy'=>$_POST['kode_dosen']));
-			$listprodi = Jadwal::model()->findJadwalPerProdi($kode_prodi);
 			
+			$listprodi = Jadwal::model()->findJadwalPerProdi($kode_prodi);
+
+
 			$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 
 				                'L', 'mm', 'A4', true, 'UTF-8');
 
@@ -523,7 +523,7 @@ class JadwalController extends Controller
 			foreach($listprodi as $p)
 			{
 
-				$id = $p->kode_dosen;
+				$id = $p->niy;
 
 				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
 				$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$id));

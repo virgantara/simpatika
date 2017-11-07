@@ -78,9 +78,9 @@ $(document).ready(function(){
     $kode_prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
     $list = CHtml::listData(Jadwal::model()->findProdi(), 'kode_prodi','nama_prodi');
     
-    echo CHtml::dropDownList($model,'kode_prodi',$list); 
+    echo CHtml::dropDownList('kode_prodi',$kode_prodi,$list); 
     // echo CHtml::textField('nama_dosen',!empty($_POST['nama_dosen']) ? $_POST['nama_dosen'] : '',array('size'=>20,'maxlength'=>20)); 
-    echo CHtml::hiddenField('kode_prodi',$kode_prodi);
+    // echo CHtml::hiddenField('kode_p/rodi',$kode_prodi);
     
     ?>
 
