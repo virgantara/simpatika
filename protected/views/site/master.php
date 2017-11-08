@@ -46,6 +46,7 @@ echo '<li>'.CHtml::link('Kampus',array('Kampus/index'),array('target'=>'_blank')
 echo '<li>'.CHtml::link('Tahun Akademik',array('Tahunakademik/index'),array('target'=>'_blank')).'</li>';
 echo '<li>'.CHtml::link('Jam Mengajar',array('Jam/admin'),array('target'=>'_blank')).'</li>';
 echo '<li>'.CHtml::link('User',array('user/index'),array('target'=>'_blank')).'</li>';
+echo '<li>'.CHtml::link('Dosen',array('Masterdosen/admin'),array('target'=>'_blank')).'</li>';
 echo '</ul>';
 ?>
 

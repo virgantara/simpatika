@@ -55,11 +55,22 @@ $this->menu=array(
 		{
 		  
 
-		  $i++;
+		  
+		  
+
+		  if(empty($jd->kode_dosen)) continue;
+
+		 
 		  $sks_dosen = 0;
-		  $jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($tahun_akademik->tahun_id,$jd->kode_dosen);
+		  $jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($jd->kode_dosen);
+
+		  // print_r(count($jadwal_perdosen));
+
 		  foreach($jadwal_perdosen as $m)
 		  {	
+
+		  	 $i++;
+
 		  	$sks_dosen += $m->SKS;
 		?>
 		<tr>

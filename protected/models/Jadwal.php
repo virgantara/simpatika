@@ -192,17 +192,17 @@ class Jadwal extends CActiveRecord
 		return $model;
 	}
 
-	public function findRekapJadwalPerDosenAll($tahun_akademik, $kode_dosen)
+	public function findRekapJadwalPerDosenAll($kode_dosen)
 	{
 		$criteria=new CDbCriteria;
 		// $criteria->compare('tahun_akademik',$tahun_akademik);
-		$criteria->compare('kode_dosen',$kode_dosen);
+		$criteria->condition = 'kode_dosen="'.$kode_dosen.'"';
 		$model = Jadwal::model()->findAll($criteria);	
 
 		return $model;
 	}
 
-	public function findRekapJadwalAll($tahun_akademik)
+	public function findRekapJadwalAll($tahun_akademik=0)
 	{
 		$criteria=new CDbCriteria;
 		// $criteria->compare('tahun_akademik',$tahun_akademik);

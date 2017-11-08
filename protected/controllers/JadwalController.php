@@ -195,8 +195,10 @@ class JadwalController extends Controller
 		$row = $rowStart;
 		foreach($jadwal_prodi as $jd)
 		{
+			if(empty($jd->kode_dosen)) continue;
+
 			$sks_dosen = 0;
-			$jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($tahun_akademik->tahun_id,$jd->kode_dosen);
+			$jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($jd->kode_dosen);
 			foreach($jadwal_perdosen as $m)
 			{	
 		  		$sks_dosen += $m->SKS;
@@ -447,7 +449,7 @@ class JadwalController extends Controller
 	{
 		
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-		$jadwal_prodi = Jadwal::model()->findRekapJadwalAll($tahun_akademik->tahun_id);
+		$jadwal_prodi = Jadwal::model()->findRekapJadwalAll();
 
 		$this->render('rekap_jadwal_all',array(
 			'jadwal_prodi' => $jadwal_prodi,
@@ -588,7 +590,7 @@ class JadwalController extends Controller
 	        $transaction=Yii::app()->db->beginTransaction();
 	        try
 			{
-				$index = 0;
+				$index = 1;
 		        for ($row = 2; $row <= $highestRow; $row++)
 		        { 
 
