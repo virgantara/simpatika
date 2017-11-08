@@ -36,6 +36,9 @@ class Jadwal extends CActiveRecord
 
 	public $SKS;
 	public $uploadedFile;
+	public $SEARCH;
+	public $PAGE_SIZE = 10;
+	public $KODEPRODI = 0;
 
 
 	/**
@@ -140,6 +143,20 @@ class Jadwal extends CActiveRecord
 		$criteria->compare('t.kode_prodi',$id);
 		$criteria->group = 't.niy';
 		$model = Masterdosen::model()->findAll($criteria);	
+
+		return $model;
+	}
+
+	public function findProdiInJadwal()
+	{
+		$criteria=new CDbCriteria;
+		// $criteria->join = 'JOIN simak_masterdosen d ON t.kode_prodi = d.kode_prodi ';
+		$criteria->join .= 'JOIN simak_jadwal_temp j ON j.prodi = t.kode_prodi';
+		$criteria->order = 't.kode_fakultas';
+		// $criteria->join = 'JOIN simak_jadwal_temp j ON j.prodi = t.kode_prodi';
+
+		// $criteria->group = 't.kode_prodi';
+		$model = Masterprogramstudi::model()->findAll($criteria);	
 
 		return $model;
 	}
@@ -316,34 +333,30 @@ class Jadwal extends CActiveRecord
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
+		$sort = new CSort();
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('hari',$this->hari,true);
-		$criteria->compare('jam',$this->jam,true);
-		$criteria->compare('jam_mulai',$this->jam_mulai,true);
-		$criteria->compare('jam_selesai',$this->jam_selesai,true);
-		$criteria->compare('kode_mk',$this->kode_mk,true);
-		$criteria->compare('nama_mk',$this->nama_mk,true);
-		$criteria->compare('kode_dosen',$this->kode_dosen,true);
-		$criteria->compare('nama_dosen',$this->nama_dosen,true);
-		$criteria->compare('semester',$this->semester,true);
-		$criteria->compare('kelas',$this->kelas,true);
-		$criteria->compare('fakultas',$this->fakultas,true);
-		$criteria->compare('nama_fakultas',$this->nama_fakultas,true);
-		$criteria->compare('prodi',$this->prodi,true);
-		$criteria->compare('nama_prodi',$this->nama_prodi,true);
-		$criteria->compare('kd_ruangan',$this->kd_ruangan,true);
-		$criteria->compare('tahun_akademik',$this->tahun_akademik,true);
-		$criteria->compare('kuota_kelas',$this->kuota_kelas);
-		$criteria->compare('kampus',$this->kampus,true);
-		$criteria->compare('presensi',$this->presensi,true);
-		$criteria->compare('materi',$this->materi,true);
-		$criteria->compare('bobot_formatif',$this->bobot_formatif,true);
-		$criteria->compare('bobot_uts',$this->bobot_uts,true);
-		$criteria->compare('bobot_uas',$this->bobot_uas,true);
-		$criteria->compare('bobot_harian1',$this->bobot_harian1,true);
-		$criteria->compare('bobot_harian',$this->bobot_harian,true);
+
+		$criteria->addSearchCondition('hari',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jam',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jam_mulai',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jam_selesai',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_mk',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_mk',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_dosen',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_dosen',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kAMPUS.nama_kampus',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kELAS.nama_kelas',$this->SEARCH,true,'OR');
+		$criteria->with = array('kAMPUS','kELAS');
+		$criteria->together = true;
+
+		if($this->KODEPRODI != 0)
+		{
+			$criteria->compare('prodi',$this->KODEPRODI);	
+		}
+		
 
 		if(Yii::app()->user->checkAccess(array(WebUser::R_PRODI)))
 		{
@@ -354,6 +367,11 @@ class Jadwal extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>$sort,
+			'pagination'=>array(
+				'pageSize'=>$this->PAGE_SIZE,
+				
+			),
 		));
 	}
 

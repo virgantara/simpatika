@@ -36,6 +36,24 @@ $('.search-form form').submit(function(){
 <h1>Manage Jadwals</h1>
 
 
+<script type="text/javascript">
+    
+	function updateData(){
+		 $('#jadwal-grid').yiiGridView.update('jadwal-grid', {
+            url:'?r=jadwal/admin&filter='+$('#search').val()+'&size='+$('#size').val()+'&kode_prodi='+$('#kode_prodi').val()   
+        });
+	}
+
+    $(document).ready(function(){
+        $('#search, #size, #kode_prodi').change(function(){
+           	updateData();
+        });
+
+        $('#pencarian').click(function(){
+           	updateData();
+        });
+    });
+</script>
 <?php 
  foreach(Yii::app()->user->getFlashes() as $key => $message) {
         echo '<div style="color:green">' . $message . "</div>\n";
@@ -47,12 +65,25 @@ echo '<li>'.CHtml::link('Rekap Jadwal Per Prodi',array('jadwal/rekapJadwal'),arr
 echo '<li>'.CHtml::link('Rekap Jadwal Semua Dosen',array('jadwal/rekapJadwalAll'),array('target'=>'_blank')).'</li>';
 echo '</ul>';
 ?>
-
+ <div class="pull-right">
+Data per halaman
+<?php echo CHtml::dropDownList('Jadwal[PAGESIZE]',isset($_GET['size'])?$_GET['size']:'',array(10=>10,50=>50,100=>100,200=>200,500=>500),array('id'=>'size','size'=>1)); ?>
+Prodi
+<?php 
+$list_gol = CHtml::listData(Jadwal::model()->findProdiInJadwal(),'kode_prodi','nama_prodi');
+echo CHtml::dropDownList('Jadwal[KODEPRODI]',isset($_GET['kode_prodi'])?$_GET['kode_prodi']:'',$list_gol,array('id'=>'kode_prodi','empty' => 'Semua')); ?>  
+<?php
+echo CHtml::textField('Jadwal[SEARCH]','',array('placeholder'=>'Cari','id'=>'search')); 
+?>   
+<?php
+echo CHtml::button("Cari",array("id"=>"pencarian"));
+?>
+</div> 
 <?php $this->widget('application.components.ComplexGridView', array(
 	'id'=>'jadwal-grid',
 	'dataProvider'=>$model->search(),
 	'rowCssClassExpression' => '$data->bentrok == 1 ? "bentrok" : ""',
-	'filter'=>$model,
+	// 'filter'=>$model,
 	'columns'=>array(
 		array(
 			'header' => 'No',
@@ -88,21 +119,10 @@ echo '</ul>';
 			'value' => '$data->SKS'
 		),
 		
-		/*
-		'fakultas',
-		'prodi',
-		'kd_ruangan',
-		'tahun_akademik',
-		'kuota_kelas',
-		'kampus',
-		'presensi',
-		'materi',
-		'bobot_formatif',
-		'bobot_uts',
-		'bobot_uas',
-		'bobot_harian1',
-		'bobot_harian',
-		*/
+		 array(
+                'class'=>'CCheckBoxColumn',  //Tambahkan kolom untuk checkbos.
+                'selectableRows'=>2,         //MULTIPLE ROWS CAN BE SELECTED.
+                ),
 		array(
 			'class'=>'CButtonColumn',
 		),
@@ -124,3 +144,25 @@ echo '</ul>';
         ),
 
 )); ?>
+
+
+<?php
+Yii::app()->clientScript->registerScript('delete','
+$("#butt").click(function(){
+
+        var checked=$("#jadwal-grid").yiiGridView("getChecked","jadwal-grid_c14"); 
+        var count=checked.length;
+        if(count>0 && confirm("Do you want to delete these "+count+" item(s)"))
+        {
+                $.ajax({
+                        data:{checked:checked},
+                        url:"'.CHtml::normalizeUrl(array('jadwal/removeSelected')).'",
+                        success:function(data){$("#jadwal-grid").yiiGridView("update",{});},              
+                });
+        }
+        });
+');
+?>
+<?php
+echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
+?>

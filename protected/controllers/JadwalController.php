@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,6 +44,16 @@ class JadwalController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionRemoveSelected()
+	{   
+		if(Yii::app()->request->getIsAjaxRequest())
+        {
+            $checkedIDs=$_GET['checked'];
+            foreach($checkedIDs as $id)
+                    Jadwal::model()->deleteByPk($id);
+        }
 	}
 
 	public function actionListBentrok()
@@ -1089,6 +1099,16 @@ class JadwalController extends Controller
 	{
 		$model=new Jadwal('search');
 		$model->unsetAttributes();  // clear any default values
+
+		if(isset($_GET['filter']))
+			$model->SEARCH=$_GET['filter'];
+
+		if(isset($_GET['size']))
+			$model->PAGE_SIZE=$_GET['size'];
+
+		if(isset($_GET['kode_prodi']))
+			$model->KODEPRODI=$_GET['kode_prodi'];
+
 		if(isset($_GET['Jadwal']))
 			$model->attributes=$_GET['Jadwal'];
 
