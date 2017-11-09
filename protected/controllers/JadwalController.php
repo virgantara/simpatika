@@ -363,8 +363,7 @@ class JadwalController extends Controller
 		);
     
 	    $sheet = $objPHPExcel->setActiveSheetIndex(0);
-
-	    $sheet->getColumnDimension('A')->setWidth(4);
+	     $sheet->getColumnDimension('A')->setWidth(4);
 	    $sheet->getColumnDimension('B')->setWidth(8);
 	    $sheet->getColumnDimension('C')->setWidth(4);
 	    $sheet->getColumnDimension('D')->setWidth(12);
@@ -378,20 +377,19 @@ class JadwalController extends Controller
 	    $sheet->getColumnDimension('L')->setWidth(6);
 	    $sheet->getColumnDimension('M')->setWidth(12);
 	    $sheet->getColumnDimension('N')->setWidth(6);
+		$row = 1;
 	    
-	    $kampuses = Jadwal::model()->findKampus($id);
+		$kampuses = Jadwal::model()->findKampus($id);
 
 		foreach($kampuses as $kampus)
 		{	
 			foreach($kampus->kelases as $kelas)
 			{
-				
-				$semesters = Jadwal::model()->findSemester($id);
 
-				$row = 1;
+				$semesters = Jadwal::model()->findSemester($id, $kampus->id, $kelas->id);
 				foreach($semesters as $semester)
 				{
-					foreach($headers as $q => $v)
+				    foreach($headers as $q => $v)
 				    {
 				    	$sheet->setCellValueByColumnAndRow($q,$row, strtoupper($v));
 				    	$cell = $sheet->getCellByColumnAndRow($q,$row);
@@ -406,44 +404,42 @@ class JadwalController extends Controller
 						        ),
 				    		)
 				    	);
+				    	
 				    }
 
-
+				    $row++;
+				    $models = Jadwal::model()->findRekapJadwalPerkelas($id, $kampus->id, $kelas->id, $semester->semester);
 				    $i = 0; 
-
-					$model = Jadwal::model()->findRekapJadwalPerkelas($id, $kampus->id, $kelas->id, $semester->semester);
-
-					// $rowSub = $row+1;
-					foreach($model as $m)
+				    foreach($models as $m)
 					{
 						$i++;
-						$sheet->setCellValueByColumnAndRow(0,$row+1, $i);
-						$sheet->setCellValueByColumnAndRow(1,$row+1, $m->hari);
-						$sheet->setCellValueByColumnAndRow(2,$row+1, $m->jAM->nama_jam);
-						$sheet->setCellValueByColumnAndRow(3,$row+1, substr($m->jAM->jam_mulai, 0, -3).'-'.substr($m->jAM->jam_selesai, 0, -3));
-						$sheet->setCellValueByColumnAndRow(4,$row+1, $m->kode_mk);
-						$sheet->setCellValueByColumnAndRow(5,$row+1, $m->nama_mk);
-						$sheet->setCellValueByColumnAndRow(6,$row+1, $m->kode_dosen);
-						$sheet->setCellValueByColumnAndRow(7,$row+1, $m->nama_dosen);
-						$sheet->setCellValueByColumnAndRow(8,$row+1, $m->SKS);
-						$sheet->setCellValueByColumnAndRow(9,$row+1, $m->nama_fakultas);
+						$sheet->setCellValueByColumnAndRow(0,$row, $i);
+						$sheet->setCellValueByColumnAndRow(1,$row, $m->hari);
+						$sheet->setCellValueByColumnAndRow(2,$row, $m->jAM->nama_jam);
+						$sheet->setCellValueByColumnAndRow(3,$row, substr($m->jAM->jam_mulai, 0, -3).'-'.substr($m->jAM->jam_selesai, 0, -3));
+						$sheet->setCellValueByColumnAndRow(4,$row, $m->kode_mk);
+						$sheet->setCellValueByColumnAndRow(5,$row, $m->nama_mk);
+						$sheet->setCellValueByColumnAndRow(6,$row, $m->kode_dosen);
+						$sheet->setCellValueByColumnAndRow(7,$row, $m->nama_dosen);
+						$sheet->setCellValueByColumnAndRow(8,$row, $m->SKS);
+						$sheet->setCellValueByColumnAndRow(9,$row, $m->nama_fakultas);
 						$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
 			 			$nm_prodi = !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
-						$sheet->setCellValueByColumnAndRow(10,$row+1, $nm_prodi);
-						$sheet->setCellValueByColumnAndRow(11,$row+1, $m->semester);
-						$sheet->setCellValueByColumnAndRow(12,$row+1, $m->kAMPUS->nama_kampus);
-						$sheet->setCellValueByColumnAndRow(13,$row+1, $m->kELAS->nama_kelas);
+						$sheet->setCellValueByColumnAndRow(10,$row, $nm_prodi);
+						$sheet->setCellValueByColumnAndRow(11,$row, $m->semester);
+						$sheet->setCellValueByColumnAndRow(12,$row, $m->kAMPUS->nama_kampus);
+						$sheet->setCellValueByColumnAndRow(13,$row, $m->kELAS->nama_kelas);
 					  	$row++;
 					}
 
-					
 				}
 			}
-		}	   
-	    
-	    $sheet->setTitle('Rekap Jadwal');
+		    
+		}
+
+	     $sheet->setTitle('Rekap Jadwal');
 	 
-	    $objPHPExcel->setActiveSheetIndex(0);
+	    // $objPHPExcel->setActiveSheetIndex(0);
 	     
 	    ob_end_clean();
 	    ob_start();

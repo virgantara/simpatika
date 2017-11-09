@@ -16,6 +16,12 @@ $this->menu=array(
 	table.grid tr td{
 		border: 1px solid #999 !important;
 	}
+
+
+	.bentrok { 
+	    background-color: orange; 
+	}
+
 </style>
 <div class="form">
 
@@ -36,7 +42,7 @@ $this->menu=array(
 		<?php
 		$kode_prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
     
-    $list = CHtml::listData(Masterprogramstudi::model()->findAll(), 'kode_prodi','nama_prodi');
+    $list = CHtml::listData(Jadwal::model()->findProdi(), 'kode_prodi','nama_prodi');
     
 		echo CHtml::dropDownList('kode_prodi',$kode_prodi,$list);
 		
@@ -74,8 +80,8 @@ foreach($kampuses as $kampus)
 {	
 	foreach($kampus->kelases as $kelas)
 	{
-		
-		$semesters = Jadwal::model()->findSemester($kode_prodi);
+
+		$semesters = Jadwal::model()->findSemester($kode_prodi, $kampus->id, $kelas->id);
 
 		foreach($semesters as $semester)
 		{
@@ -115,9 +121,10 @@ foreach($kampuses as $kampus)
 		$model = Jadwal::model()->findRekapJadwalPerkelas($kode_prodi, $kampus->id, $kelas->id, $semester->semester);
 		foreach($model as $m)
 		{
+
 		  $i++;
 		?>
-		<tr>
+		<tr <?php echo $m->bentrok == 1 ? 'class="bentrok"' : '';?>>
 		<td width="3%"><?=$i;?></td>
 		<td width="5%"><?php echo $m->hari;?></td>
 		<td><?php echo $m->jAM->nama_jam;?></td>

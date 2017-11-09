@@ -140,7 +140,7 @@ class Jadwal extends CActiveRecord
 	{
 		$criteria=new CDbCriteria;
 		$criteria->join = 'JOIN simak_jadwal_temp j ON j.kode_dosen = t.niy';
-		$criteria->compare('t.kode_prodi',$id);
+		$criteria->addCondition('t.kode_prodi='.$id);
 		$criteria->group = 't.niy';
 		$model = Masterdosen::model()->findAll($criteria);	
 
@@ -178,7 +178,8 @@ class Jadwal extends CActiveRecord
 	public function findKampus($id)
 	{
 		$criteria=new CDbCriteria;
-		$criteria->compare('prodi',$id);
+		$criteria->addCondition('prodi= :p1');
+		$criteria->params = array(':p1'=>$id);
 		$criteria->order = 'kode_kampus ASC';
 		$criteria->join = 'JOIN simak_jadwal_temp j ON j.kampus = t.id';
 		$criteria->group = 't.kode_kampus';
@@ -187,10 +188,15 @@ class Jadwal extends CActiveRecord
 		return $model;
 	}
 
-	public function findSemester($id)
+	public function findSemester($id, $kampus, $kelas)
 	{
 		$criteria=new CDbCriteria;
-		$criteria->compare('prodi',$id);
+		$criteria->addCondition('prodi=:p1 AND kampus=:p2 AND kelas=:p3');
+		$criteria->params = array(
+			':p1'=>$id,
+			':p2' => $kampus,
+			':p3' => $kelas
+		);
 		$criteria->order = 'semester ASC';
 		$criteria->group = 'semester';
 		$model = Jadwal::model()->findAll($criteria);	
@@ -201,8 +207,11 @@ class Jadwal extends CActiveRecord
 	public function findRekapJadwalPerkampus($id,$kampus)
 	{
 		$criteria=new CDbCriteria;
-		$criteria->compare('prodi',$id);
-		$criteria->compare('kampus',$kampus);
+		$criteria->addCondition('prodi=:p1 AND kampus = :p2');
+		$criteria->params = array(
+			':p1' =>$id,
+			':p2' => $kampus
+		);
 		$criteria->order = 'semester ASC';
 		$model = Jadwal::model()->findAll($criteria);	
 
@@ -213,7 +222,10 @@ class Jadwal extends CActiveRecord
 	{
 		$criteria=new CDbCriteria;
 		// $criteria->compare('tahun_akademik',$tahun_akademik);
-		$criteria->condition = 'kode_dosen="'.$kode_dosen.'"';
+		$criteria->addCondition('kode_dosen=:p1');
+		$criteria->params = array(
+			':p1' =>$kode_dosen
+		);
 		$model = Jadwal::model()->findAll($criteria);	
 
 		return $model;
@@ -234,10 +246,13 @@ class Jadwal extends CActiveRecord
 	public function findRekapJadwalPerkelas($id,$kampus, $kelas, $semester)
 	{
 		$criteria=new CDbCriteria;
-		$criteria->compare('prodi',$id);
-		$criteria->compare('kampus',$kampus);
-		$criteria->compare('kelas',$kelas);
-		$criteria->compare('semester',$semester);
+		$criteria->addCondition('prodi=:p1 AND kampus=:p2 AND kelas=:p3 AND semester=:p4');
+		$criteria->params = array(
+			':p1' => $id,
+			':p2' => $kampus,
+			':p3' => $kelas,
+			':p4' => $semester
+		);
 		$criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
 		$criteria->order = 'h.urutan ASC';
 		$model = Jadwal::model()->findAll($criteria);	
