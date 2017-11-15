@@ -109,10 +109,10 @@ class Mastermatakuliah extends CActiveRecord
 		);
 	}
 
-	public function quickCreate($tahun_akademik, $fakultas, $prodi, $kode_mk, $nama_mk,$nidn, $sks)
+	public function quickCreate($tahun_akademik, $fakultas, $prodi, $kode_mk, $nama_mk,$nidn, $sks, $semester )
 	{
 		$new = new Mastermatakuliah;
-		$new->tahun_akademik = $fakultas;
+		$new->tahun_akademik = $tahun_akademik;
 		$new->kode_pt = '073090';
 		$new->kode_fakultas = $fakultas;
 		$new->kode_prodi = $prodi;
@@ -121,6 +121,7 @@ class Mastermatakuliah extends CActiveRecord
 		$new->nama_mata_kuliah = $nama_mk;
 		$new->nidn = $nidn;
 		$new->sks = $sks;
+		$new->semester = $semester;
 		$new->diktat = 'N';
 		
 		if($new->validate())

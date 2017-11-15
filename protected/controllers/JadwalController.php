@@ -639,11 +639,20 @@ class JadwalController extends Controller
 		        	$nama_dosen = $sheet->getCell('G'.$row);
 		        	$tahun_akademik = $sheet->getCell('M'.$row);
 		        	$sks = $sheet->getCell('Q'.$row);
-		        	$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=>$kode_mk));
+		        	$semester = $sheet->getCell('N'.$row);
+
+		        	$attr = array(
+		        		'kode_mata_kuliah' => $kode_mk,
+		        		'tahun_akademik' => $tahun_akademik,
+		        		'kode_fakultas' => $fakultas,
+		        		'kode_prodi' => $prodi,
+		        		'semester' => $semester
+		        	);
+		        	$mk = Mastermatakuliah::model()->findByAttributes($attr);
 		        	if(empty($mk))
 		        	{
 
-		        		$isnew = Mastermatakuliah::model()->quickCreate($tahun_akademik, $fakultas, $prodi, $kode_mk, $nama_mk,$kode_dosen, $sks);
+		        		$isnew = Mastermatakuliah::model()->quickCreate($tahun_akademik, $fakultas, $prodi, $kode_mk, $nama_mk,$kode_dosen, $sks, $semester);
 		        		
 		        		if(!$isnew)
 		        		{
@@ -680,7 +689,7 @@ class JadwalController extends Controller
 		        	
 		        	$nama_prodi = $sheet->getCell('L'.$row);
 		        	
-		        	$semester = $sheet->getCell('N'.$row);
+		        	
 		        	$kampus = $sheet->getCell('O'.$row);
 		        	$id_kampus = Kampus::model()->findByAttributes(array('nama_kampus'=>$kampus));
 		        	$id_kampus = !empty($id_kampus) ? $id_kampus->id : '';
@@ -939,10 +948,10 @@ class JadwalController extends Controller
 	               	)));
 	        $list = CHtml::listData($matkul, 'kode_mata_kuliah', 'nama_mata_kuliah');    
 
-	        // print_r($list);exit;
-
+	        // echo $tahunaktif;
 	        echo json_encode($list);
 		}
+
 	}
 
 	public function actionGetProdi()

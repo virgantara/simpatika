@@ -62,6 +62,7 @@ function findProdi(fak){
 			$('#Jadwal_prodi').append(row);
 
 			var prodi = $('#Jadwal_prodi').val();
+			// alert(prodi);
 			findMk(prodi);
 		}
 
@@ -78,7 +79,7 @@ function findMk(prodi){
 
 			var jsondata = JSON.parse(data);
 
-
+			console.log(data);
 			var row = '';
 			$.each(jsondata,function(i,item){
 				row += '<option value="'+i+'">'+i+' - '+item+'</option>';
