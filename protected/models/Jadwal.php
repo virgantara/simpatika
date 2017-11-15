@@ -136,6 +136,15 @@ class Jadwal extends CActiveRecord
 		return $isconflict;
 	}
 
+	public function countBentrok()
+	{
+		$criteria=new CDbCriteria;
+		$criteria->addCondition('t.bentrok=1');
+		$model = Jadwal::model()->findAll($criteria);	
+
+		return count($model);
+	}
+
 	public function findJadwalPerProdi($id)
 	{
 		$criteria=new CDbCriteria;

@@ -8,7 +8,7 @@ $list_hari = array(
       'Kamis'=>'Kamis'
     );
 ?>
-<table style="margin-bottom: 10px">
+<table style="margin-bottom: 6px">
   <tr>
     <td style="border-right: 3px solid black;;" width="20%" >
       
@@ -52,7 +52,7 @@ $list_hari = array(
   </tr>
 </table>
 <br><br>
-<table cellpadding="4" border="1">
+<table cellpadding="3" border="1">
   
   <thead>
     <tr>
@@ -102,6 +102,7 @@ foreach($jam as $j)
 
     echo !empty($prodi) ? $prodi->singkatan.'-'.$jd->semester.'<br>' : $jd->nama_prodi.'-'.$jd->semester;
     echo $jd->kAMPUS->nama_kampus.'-'.$jd->kELAS->nama_kelas.' / '.$jd->SKS.' SKS';
+    echo '<br><span style="background-color:yellow">'.substr($jd->jam_mulai, 0, -3).'-'.substr($jd->jam_selesai, 0, -3).'</span>';
   }
   else{
     echo '<br><br><br><br>';
@@ -123,6 +124,6 @@ foreach($jam as $j)
 </table>
 
 <div style="font-size: 9px;text-align: center;">
-<br><br><br>
+<br>
 Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
 Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id</div>

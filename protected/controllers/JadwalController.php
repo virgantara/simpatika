@@ -457,9 +457,12 @@ class JadwalController extends Controller
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$jadwal_prodi = Jadwal::model()->findRekapJadwalAll();
 
+		$total_bentrok = Jadwal::model()->countBentrok();
+
 		$this->render('rekap_jadwal_all',array(
 			'jadwal_prodi' => $jadwal_prodi,
-			'tahun_akademik' => $tahun_akademik
+			'tahun_akademik' => $tahun_akademik,
+			'total_bentrok' => $total_bentrok
 
 		));
 	}

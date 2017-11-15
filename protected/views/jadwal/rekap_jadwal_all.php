@@ -16,12 +16,32 @@ $this->menu=array(
 	table.grid tr td{
 		border: 1px solid #999 !important;
 	}
+
+	caption.status{
+		<?php 
+			if($total_bentrok > 5)
+			{
+				echo 'background: #ec4a4a';
+			}
+
+			else if($total_bentrok >= 1 && $total_bentrok < 5)
+			{
+				echo 'background: #ecbc4a';
+			}
+
+			else
+			{
+				echo 'background: #4aec5d';
+			}
+		?>
+	}
 </style>
 <div class="form">
 	<div class="row">
 <?php echo CHtml::link('Export ke XLS',array('jadwal/rekapJadwalAllXls')); ?>
 </div>
 <table border="1" cellpadding="4" style="width: 100%">
+	 <caption class="status">Ada <?php echo $total_bentrok;?> jadwal bentrok</caption>
 <thead>
     <tr>
       <th width="3%">No</th>
@@ -55,9 +75,6 @@ $this->menu=array(
 		{
 		  
 
-		  
-		  
-
 		  if(empty($jd->kode_dosen)) continue;
 
 		 
@@ -73,11 +90,11 @@ $this->menu=array(
 
 		  	$sks_dosen += $m->SKS;
 		?>
-		<tr>
+		<tr <?php echo $m->bentrok == 1 ? 'style="background-color:orange"' : '';?>>
 		<td width="3%"><?=$i;?></td>
 		<td width="5%"><?php echo $m->hari;?></td>
 		<td><?php echo $m->jAM->nama_jam;?></td>
-		<td><?php echo substr($m->jAM->jam_mulai, 0, -3).'-'.substr($m->jAM->jam_selesai, 0, -3);?></td>
+		<td><?php echo substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3);?></td>
 		<td><?php echo $m->kode_mk;?></td>
 		<td width="15%"><?php echo $m->nama_mk;?></td>
 		<td><?php echo $m->kode_dosen;?></td>
