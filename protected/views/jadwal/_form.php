@@ -79,7 +79,6 @@ function findMk(prodi){
 
 			var jsondata = JSON.parse(data);
 
-			console.log(data);
 			var row = '';
 			$.each(jsondata,function(i,item){
 				row += '<option value="'+i+'">'+i+' - '+item+'</option>';
