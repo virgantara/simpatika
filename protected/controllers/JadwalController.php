@@ -941,15 +941,15 @@ class JadwalController extends Controller
 
 			$tahunaktif = Yii::app()->request->cookies['tahunaktif']->value;
 
-			$matkul= Mastermatakuliah::model()->findAll(
+			$matkul= Jadwal::model()->findAll(
 	                array(
-	                'order' => 'nama_mata_kuliah ASC',
-	               'condition'=>'kode_prodi=:cid and tahun_akademik=:thn', 
+	                'order' => 'nama_mk ASC',
+	               'condition'=>'prodi=:cid and tahun_akademik=:thn', 
 	               'params'=>array(
 	               		':cid'=>$cid,
 	               		':thn' => $tahunaktif
 	               	)));
-	        $list = CHtml::listData($matkul, 'kode_mata_kuliah', 'nama_mata_kuliah');    
+	        $list = CHtml::listData($matkul, 'kode_mk', 'nama_mk');    
 
 	        // echo $tahunaktif;
 	        echo json_encode($list);

@@ -62,6 +62,19 @@ function findProdi(fak){
 			$('#Jadwal_prodi').append(row);
 
 			var prodi = $('#Jadwal_prodi').val();
+
+			<?php 
+				if(!$model->isNewRecord)
+				{
+			?>
+
+				prodi = <?php echo $model->prodi;?>;
+				$('#Jadwal_prodi').val(prodi);
+
+			<?php
+				}
+			?>
+
 			// alert(prodi);
 			findMk(prodi);
 		}
@@ -85,6 +98,18 @@ function findMk(prodi){
 			});
 
 			$('#Jadwal_kode_mk').append(row);
+
+
+			<?php 
+				if(!$model->isNewRecord)
+				{
+			?>
+
+				var kode_mk = '<?php echo $model->kode_mk;?>';
+				$('#Jadwal_kode_mk').val(kode_mk);
+			<?php
+				}
+			?>
 		}
 
 	});
@@ -227,6 +252,7 @@ function findMk(prodi){
 		<?php echo $form->labelEx($model,'prodi'); ?>
 		<?php 
 		$prodis = array();
+
 		echo $form->dropDownList($model,'prodi',$prodis,array('empty' => '(Select a prodi)')); 
 		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
 		?>
