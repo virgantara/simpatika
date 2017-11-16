@@ -235,7 +235,24 @@ function findMk(prodi){
 		?>
 		<?php echo $form->error($model,'jam_ke'); ?>
 	</div>
-	
+	<div class="row">
+		<?php echo $form->labelEx($model,'jam_mulai'); ?>
+		<?php
+
+		
+		echo $form->textField($model,'jam_mulai',array('size'=>20,'maxlength'=>20)); 
+		?>
+		<?php echo $form->error($model,'jam_mulai'); ?>
+	</div>
+	<div class="row">
+		<?php echo $form->labelEx($model,'jam_selesai'); ?>
+		<?php
+
+		
+		echo $form->textField($model,'jam_selesai',array('size'=>20,'maxlength'=>20)); 
+		?>
+		<?php echo $form->error($model,'jam_selesai'); ?>
+	</div>
 	<div class="row">
 		<?php echo $form->labelEx($model,'fakultas'); ?>
 		<?php 
@@ -280,9 +297,14 @@ function findMk(prodi){
 		<?php echo $form->labelEx($model,'nama_dosen'); ?>
 		<?php
 
-		
+		$nama_dosen = '';
+		if(!$model->isNewRecord)
+		{
+			$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$model->kode_dosen));
+			$nama_dosen = $dosen->nama_dosen;
+		}
 		echo $form->hiddenField($model,'kode_dosen',array('size'=>20,'maxlength'=>20));
-		echo CHtml::textField('nama_dosen','',array('size'=>20,'maxlength'=>20)); 
+		echo CHtml::textField('nama_dosen',$nama_dosen,array('size'=>20,'maxlength'=>20,'id'=>'nama_dosen')); 
 		?>
 		<?php echo $form->error($model,'kode_dosen'); ?>
 	</div>

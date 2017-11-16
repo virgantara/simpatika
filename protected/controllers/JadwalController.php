@@ -1049,9 +1049,9 @@ class JadwalController extends Controller
 			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=> $model->prodi));
 			$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
 
-			$jam_ke = Jam::model()->findByPk($_POST['Jadwal']['jam_ke']);
-			$model->jam_mulai = substr($jam_ke->jam_mulai, 0, -3);;
-			$model->jam_selesai = substr($jam_ke->jam_selesai, 0, -3);
+			// $jam_ke = Jam::model()->findByPk($_POST['Jadwal']['jam_ke']);
+			$model->jam_mulai = $_POST['Jadwal']['jam_mulai'];//substr($jam_ke->jam_mulai, 0, -3);;
+			$model->jam_selesai = $_POST['Jadwal']['jam_selesai'];//substr($jam_ke->jam_selesai, 0, -3);
 
 			$model->nama_fakultas = $fak->nama_fakultas;
 			$model->nama_prodi = $prodi->nama_prodi;
