@@ -93,11 +93,37 @@ class Jadwal extends CActiveRecord
 		);
 	}
 
-	public function isConflict($dosen, $hari, $jam)
+	public function updateParalel($dosen, $hari, $jam, $kampus, $mk, $tahunaktif, $semester)
 	{
 		$params = array(
 			'kode_dosen' => $dosen,
-			'hari' => $hari
+			'hari' => $hari,
+			'jam_mulai' => $jam_mulai,
+			'kampus' => $kampus,
+			'kode_mk' => $mk,
+			'semester' => $semester,
+			'tahun_akademik' => $tahunaktif,
+		);
+
+		$jadwals = Jadwal::model()->findAllByAttributes($params);
+
+		foreach($jadwals as $jadwal)
+		{
+			$jadwal->bentrok = 2;
+			$jadwal->save(false,array('bentrok'));
+		}			
+	}
+
+	public function cekKonflik($semester, $dosen, $hari, $jam, $kampus, $mk)
+	{
+
+		$tahunaktif = Yii::app()->request->cookies['tahunaktif']->value;
+
+		// reset all
+		$params = array(
+			'kode_dosen' => $dosen,
+			'semester' => $semester,
+			'tahun_akademik' => $tahunaktif,
 		);
 
 		$jadwals = Jadwal::model()->findAllByAttributes($params);
@@ -108,9 +134,22 @@ class Jadwal extends CActiveRecord
 			$jadwal->save(false,array('bentrok'));
 		}			
 
-		$jadwals = Jadwal::model()->findAllByAttributes($params);
+		$params = array(
+			'kode_dosen' => $dosen,
+			'hari' => $hari,
+			'semester' => $semester,
+			'tahun_akademik' => $tahunaktif,
+			'jam_mulai' => $jam
+		);
 
-		$isconflict = 0;
+		$jadwals = Jadwal::model()->findAllByAttributes($params);
+		foreach($jadwals as $jadwal)
+		{
+			$jadwal->bentrok = 1;
+			$jadwal->save(false,array('bentrok'));
+		}	
+
+		// $isconflict = 0;
 
 		$jam = DateTime::createFromFormat('H:i',$jam);
 		foreach($jadwals as $jadwal)
@@ -118,22 +157,21 @@ class Jadwal extends CActiveRecord
 			$time_begin = DateTime::createFromFormat('H:i',$jadwal->jam_mulai);
 			$time_end = DateTime::createFromFormat('H:i',$jadwal->jam_selesai);
 			
-			if($jam >= $time_begin && $jam <= $time_end)
+			if($jam == $time_begin)
 			{
-				$isconflict = 1;
+				// $isconflict = 1;
 
 				$jadwal->bentrok = 1;
 				$jadwal->save(false,array('bentrok'));
 
-				if($isconflict)
-					break;
 			}
 
 			
 		}
 
-
-		return $isconflict;
+		// update paralel
+		$this->updateParalel($dosen, $hari, $jam, $kampus, $mk, $tahunaktif, $semester);
+		// return $isconflict;
 	}
 
 	public function countBentrok()

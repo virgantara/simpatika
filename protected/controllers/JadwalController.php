@@ -722,9 +722,7 @@ class JadwalController extends Controller
 					$m->jam_mulai = $jam_mulai;
 					$m->jam_selesai = $jam_selesai;
 
-					$isconflict = Jadwal::model()->isConflict($kode_dosen, $hari,$jam_mulai);
-
-					$m->bentrok = $isconflict;
+					
 
 					$m->kode_mk = $kode_mk;
 					$m->nama_mk = $nama_mk;
@@ -756,6 +754,7 @@ class JadwalController extends Controller
 					{
 
 						$m->save();
+						Jadwal::model()->cekKonflik($kode_dosen, $hari,$jam_mulai, $id_kampus, $kode_mk);
 					}
 
 					else
@@ -1011,12 +1010,13 @@ class JadwalController extends Controller
 			$model->jam_mulai = substr($jam_ke->jam_mulai, 0, -3);;
 			$model->jam_selesai = substr($jam_ke->jam_selesai, 0, -3);
 
-			$isconflict = Jadwal::model()->isConflict($model->kode_dosen, $model->hari,$jam_ke->jam_mulai);
+			
 
-			$model->bentrok = $isconflict;
+			// $model->bentrok = $isconflict;
 
-			if($model->save()){
-
+			if($model->save())
+			{
+				Jadwal::model()->cekKonflik($model->kode_dosen, $model->hari,$jam_ke->jam_mulai, $model->kampus, $model->kode_mk);
 				$this->redirect(array('view','id'=>$model->id));
 			}
 		}
@@ -1062,11 +1062,11 @@ class JadwalController extends Controller
 			$model->nama_prodi = $prodi->singkatan;
 			$model->nama_mk = $mk->nama_mata_kuliah;
 
-			$isconflict = Jadwal::model()->isConflict($model->kode_dosen, $model->hari,$model->jam_mulai);
+			
 
-			$model->bentrok = $isconflict;
-
-			if($model->save()){
+			if($model->save())
+			{
+				Jadwal::model()->cekKonflik($model->kode_dosen, $model->hari,$model->jam_mulai,$model->kampus, $model->kode_mk);
 				$this->redirect(array('view','id'=>$model->id));
 			}
 		}
