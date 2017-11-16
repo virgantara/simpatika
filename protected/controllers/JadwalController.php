@@ -218,7 +218,7 @@ class JadwalController extends Controller
 				$sheet->setCellValueByColumnAndRow(0,$row+1, $i);
 				$sheet->setCellValueByColumnAndRow(1,$row+1, $m->hari);
 				$sheet->setCellValueByColumnAndRow(2,$row+1, $m->jAM->nama_jam);
-				$sheet->setCellValueByColumnAndRow(3,$row+1, substr($m->jAM->jam_mulai, 0, -3).'-'.substr($m->jAM->jam_selesai, 0, -3));
+				$sheet->setCellValueByColumnAndRow(3,$row+1, substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3));
 				$sheet->setCellValueByColumnAndRow(4,$row+1, $m->kode_mk);
 				$sheet->setCellValueByColumnAndRow(5,$row+1, $m->nama_mk);
 				$sheet->setCellValueByColumnAndRow(6,$row+1, $m->kode_dosen);
@@ -1049,9 +1049,16 @@ class JadwalController extends Controller
 			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=> $model->prodi));
 			$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
 
+
 			// $jam_ke = Jam::model()->findByPk($_POST['Jadwal']['jam_ke']);
 			$model->jam_mulai = $_POST['Jadwal']['jam_mulai'];//substr($jam_ke->jam_mulai, 0, -3);;
 			$model->jam_selesai = $_POST['Jadwal']['jam_selesai'];//substr($jam_ke->jam_selesai, 0, -3);
+
+			if(strlen($model->jam_mulai) > 5 && strlen($model->jam_selesai) > 5)
+			{
+				$model->jam_mulai = substr($model->jam_mulai,0,-3);
+				$model->jam_selesai = substr($model->jam_selesai,0,-3);
+			}
 
 			$model->nama_fakultas = $fak->nama_fakultas;
 			$model->nama_prodi = $prodi->nama_prodi;
