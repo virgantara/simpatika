@@ -89,6 +89,8 @@ $this->menu=array(
 		  	 $i++;
 
 		  	$sks_dosen += $m->SKS;
+
+
 		?>
 		<tr <?php echo $m->bentrok == 1 ? 'style="background-color:orange"' : '';?>>
 		<td width="3%"><?=$i;?></td>

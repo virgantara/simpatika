@@ -93,20 +93,49 @@ foreach($jam as $j)
 ?>
 <td width="13%" style="text-align: center;font-size:8px">
 <?php 
-  $jd = Jadwal::model()->findJadwalDosen($dosen->kode_dosen, $h, $j->id_jam);
-  // print_r($jd);exit;
-  if(!empty($jd))
-  {
-    echo $jd->nama_mk.'<br>';
-    $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$jd->prodi));
+  $jadwaldsn = Jadwal::model()->findJadwalDosen($dosen->kode_dosen, $h, $j->id_jam);
 
-    echo !empty($prodi) ? $prodi->singkatan.'-'.$jd->semester.'<br>' : $jd->nama_prodi.'-'.$jd->semester;
-    echo $jd->kAMPUS->nama_kampus.'-'.$jd->kELAS->nama_kelas.' / '.$jd->SKS.' SKS';
-    echo '<br><span style="background-color:yellow">'.substr($jd->jam_mulai, 0, -3).'-'.substr($jd->jam_selesai, 0, -3).'</span>';
+  if(!empty($jadwaldsn))
+  {
+    $idx = 0;
+    $label0 = '';
+    $label1 = '';
+    $label2 = '';
+    $label3 = '';
+    $nama_prodi = '';
+    foreach($jadwaldsn as $jd)
+    {
+      $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$jd->prodi));
+
+      if($idx == 0)
+      {
+         $nama_prodi .= $jd->nama_prodi;
+      }
+
+      else
+      {
+        $nama_prodi .= '/'.$jd->nama_prodi;
+      }
+
+      $label0 = $jd->nama_mk.'<br>';
+      $label1 = !empty($prodi) ? $prodi->singkatan.'-'.$jd->semester.'<br>' : $nama_prodi.'-'.$jd->semester;
+      $label2 = $jd->kAMPUS->nama_kampus.'-'.$jd->kELAS->nama_kelas.' / '.$jd->SKS.' SKS';
+      $label3 = '<br><span style="background-color:yellow">'.substr($jd->jam_mulai, 0, -3).'-'.substr($jd->jam_selesai, 0, -3).'</span>';
+      
+      $idx++;
+    }
+
+    echo $label0;
+    echo $label1;
+    echo $label2;
+    echo $label3;
   }
-  else{
+
+  else
+  {
     echo '<br><br><br><br>';
   }
+  
 
   // echo !empty($jd->nama_mk) ? $jd->nama_mk : '';
 ?>

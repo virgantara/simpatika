@@ -323,7 +323,7 @@ class Jadwal extends CActiveRecord
 			'hari' => $hari,
 			'jam_ke' => $jamke
 		);
-		$model = Jadwal::model()->findByAttributes($params);
+		$model = Jadwal::model()->findAllByAttributes($params);
 
 		return $model;
 	}
