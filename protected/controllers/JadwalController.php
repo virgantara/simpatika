@@ -754,7 +754,7 @@ class JadwalController extends Controller
 					{
 
 						$m->save();
-						Jadwal::model()->cekKonflik($kode_dosen, $hari,$jam_mulai, $id_kampus, $kode_mk);
+						Jadwal::model()->cekKonflik($semester, $kode_dosen, $hari,$jam_mulai, $id_kampus, $kode_mk);
 					}
 
 					else
@@ -1016,7 +1016,7 @@ class JadwalController extends Controller
 
 			if($model->save())
 			{
-				Jadwal::model()->cekKonflik($model->kode_dosen, $model->hari,$jam_ke->jam_mulai, $model->kampus, $model->kode_mk);
+				Jadwal::model()->cekKonflik($model->semester, $model->kode_dosen, $model->hari,$jam_ke->jam_mulai, $model->kampus, $model->kode_mk);
 				$this->redirect(array('view','id'=>$model->id));
 			}
 		}
@@ -1066,7 +1066,7 @@ class JadwalController extends Controller
 
 			if($model->save())
 			{
-				Jadwal::model()->cekKonflik($model->kode_dosen, $model->hari,$model->jam_mulai,$model->kampus, $model->kode_mk);
+				Jadwal::model()->cekKonflik($model->semester, $model->kode_dosen, $model->hari,$model->jam_mulai,$model->kampus, $model->kode_mk);
 				$this->redirect(array('view','id'=>$model->id));
 			}
 		}
