@@ -170,7 +170,7 @@ class Jadwal extends CActiveRecord
 		}
 
 		// update paralel
-		$this->updateParalel($dosen, $hari, $jam, $kampus, $mk, $tahunaktif, $semester);
+		// $this->updateParalel($dosen, $hari, $jam, $kampus, $mk, $tahunaktif, $semester);
 		// return $isconflict;
 	}
 
