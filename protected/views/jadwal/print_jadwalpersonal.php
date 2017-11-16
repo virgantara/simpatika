@@ -32,7 +32,7 @@ $list_hari = array(
   <tr>
     <td style="text-align: left"><strong>NIY</strong></td>
     <td><strong>:</strong></td>
-    <td style="text-align: left"><strong><?php echo $dosen->niy;?></strong></td>
+    <td style="text-align: left"><strong><?php echo $dosen->kode_dosen;?></strong></td>
   </tr>
   
 </table>
@@ -93,7 +93,7 @@ foreach($jam as $j)
 ?>
 <td width="13%" style="text-align: center;font-size:8px">
 <?php 
-  $jd = Jadwal::model()->findJadwalDosen($dosen->niy, $h, $j->id_jam);
+  $jd = Jadwal::model()->findJadwalDosen($dosen->kode_dosen, $h, $j->id_jam);
   // print_r($jd);exit;
   if(!empty($jd))
   {
@@ -124,6 +124,6 @@ foreach($jam as $j)
 </table>
 
 <div style="font-size: 9px;text-align: center;">
-<br>
+
 Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
 Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id</div>

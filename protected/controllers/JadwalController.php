@@ -537,9 +537,7 @@ class JadwalController extends Controller
 				$id = $p->niy;
 
 				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
-				$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$id));
-
-				
+				$dosen = Jadwal::model()->findDosenInJadwal($id);				
 				
 				$pdf->AddPage();
 				
@@ -1061,7 +1059,7 @@ class JadwalController extends Controller
 			}
 
 			$model->nama_fakultas = $fak->nama_fakultas;
-			$model->nama_prodi = $prodi->nama_prodi;
+			$model->nama_prodi = $prodi->singkatan;
 			$model->nama_mk = $mk->nama_mata_kuliah;
 
 			$isconflict = Jadwal::model()->isConflict($model->kode_dosen, $model->hari,$model->jam_mulai);
