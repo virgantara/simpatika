@@ -57,7 +57,7 @@ class Jadwal extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('hari, jam_ke, kode_mk, kode_dosen, semester, kelas, prodi, kd_ruangan, kampus', 'required'),
+			array('hari, jam_ke, kode_mk, kode_dosen, semester, kelas, prodi, kampus', 'required'),
 			array('kuota_kelas', 'numerical', 'integerOnly'=>true),
 			array('hari, bobot_formatif, bobot_uts, bobot_uas', 'length', 'max'=>30),
 			array('jam, kode_mk, kode_dosen, kd_ruangan', 'length', 'max'=>20),
