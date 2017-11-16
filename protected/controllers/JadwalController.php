@@ -1057,7 +1057,7 @@ class JadwalController extends Controller
 			$model->nama_prodi = $prodi->nama_prodi;
 			$model->nama_mk = $mk->nama_mata_kuliah;
 
-			$isconflict = Jadwal::model()->isConflict($model->kode_dosen, $model->hari,$jam_ke->jam_mulai);
+			$isconflict = Jadwal::model()->isConflict($model->kode_dosen, $model->hari,$jam_mulai);
 
 			$model->bentrok = $isconflict;
 
