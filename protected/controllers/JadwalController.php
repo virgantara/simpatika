@@ -301,7 +301,7 @@ class JadwalController extends Controller
     		{
 			  	$cell = $sheet->getCellByColumnAndRow($q,$row+1);
 
-			  	$font_color = 'ffffff';
+			  	$font_color = '57d54c';
 			  	if($sks_dosen >= 20)
 			  	{
 			  		$font_color = 'f50c0c';
