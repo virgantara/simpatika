@@ -114,25 +114,58 @@ class Jadwal extends CActiveRecord
 		}			
 	}
 
-	public function cekKonflik($semester, $dosen, $hari, $jam, $kampus, $mk)
+	public function findListParalel($jam, $hari, $semester)
 	{
-
 		$tahunaktif = Yii::app()->request->cookies['tahunaktif']->value;
-
-		// reset all
 		$params = array(
-			'kode_dosen' => $dosen,
+			// 'kode_dosen' => $kode_dosen,
+			'hari' => $hari,
 			'semester' => $semester,
 			'tahun_akademik' => $tahunaktif,
+			'jam_mulai' => $jam,
+			'bentrok' => 2
 		);
 
 		$jadwals = Jadwal::model()->findAllByAttributes($params);
+		return $jadwals;
+	}
 
-		foreach($jadwals as $jadwal)
-		{
-			$jadwal->bentrok = 0;
-			$jadwal->save(false,array('bentrok'));
-		}			
+	public function findListBentrok($kode_dosen, $jam, $hari, $semester)
+	{
+		$tahunaktif = Yii::app()->request->cookies['tahunaktif']->value;
+		$params = array(
+			'kode_dosen' => $kode_dosen,
+			'hari' => $hari,
+			'semester' => $semester,
+			'tahun_akademik' => $tahunaktif,
+			'jam_mulai' => $jam,
+			// 'bentrok' => 1
+		);
+
+		$jadwals = Jadwal::model()->findAllByAttributes($params);
+		return $jadwals;
+	}
+
+	public function cekKonflik($prodi, $semester, $dosen, $hari, $jam, $kampus, $mk)
+	{
+
+		// $jam = $jam.':00';
+		$tahunaktif = Yii::app()->request->cookies['tahunaktif']->value;
+
+		// reset all
+		// $params = array(
+		// 	// 'kode_dosen' => $dosen,
+		// 	// 'semester' => $semester,
+		// 	'tahun_akademik' => $tahunaktif,
+		// );
+
+		// $jadwals = Jadwal::model()->findAllByAttributes($params);
+
+		// foreach($jadwals as $jadwal)
+		// {
+		// 	$jadwal->bentrok = 0;
+		// 	$jadwal->save(false,array('bentrok'));
+		// }			
 
 		$params = array(
 			'kode_dosen' => $dosen,
@@ -149,25 +182,28 @@ class Jadwal extends CActiveRecord
 			$jadwal->save(false,array('bentrok'));
 		}	
 
-		// $isconflict = 0;
+		$criteria=new CDbCriteria;
+		$criteria->addCondition('prodi <>:p1 AND kampus=:p2 AND kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6 AND semester =:p7 AND kode_mk=:p8');
+		$criteria->params = array(
+			':p1'=> $prodi,
+			':p2' => $kampus,
+			':p3' => $dosen,
+			':p4' => $hari,
+			':p5' => $jam,
+			':p6' => $tahunaktif,
+			':p7' => $semester,
+			':p8'=> $mk
+		);
+		$jadwals = Jadwal::model()->findAll($criteria);	
 
-		$jam = DateTime::createFromFormat('H:i',$jam);
 		foreach($jadwals as $jadwal)
 		{
-			$time_begin = DateTime::createFromFormat('H:i',$jadwal->jam_mulai);
-			$time_end = DateTime::createFromFormat('H:i',$jadwal->jam_selesai);
-			
-			if($jam == $time_begin)
-			{
-				// $isconflict = 1;
+			$jadwal->bentrok = 2;
+			$jadwal->save(false,array('bentrok'));
+		}			
 
-				$jadwal->bentrok = 1;
-				$jadwal->save(false,array('bentrok'));
 
-			}
-
-			
-		}
+		
 
 		// update paralel
 		// $this->updateParalel($dosen, $hari, $jam, $kampus, $mk, $tahunaktif, $semester);

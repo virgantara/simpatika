@@ -22,7 +22,7 @@ $this->menu=array(
 <div class="form">
 	
 <table border="1" cellpadding="4" style="width: 100%">
-	<caption>Jadwal Bentrok Dosen : <?php echo $jadwal->kode_dosen.'-'.$jadwal->nama_dosen;?></caption>
+	<caption>Jadwal Paralel Dosen : <?php echo $jadwal->kode_dosen.'-'.$jadwal->nama_dosen;?></caption>
 <thead>
     <tr>
       <th width="3%">No</th>

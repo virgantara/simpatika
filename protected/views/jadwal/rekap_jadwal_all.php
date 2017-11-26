@@ -60,7 +60,7 @@ $this->menu=array(
       <th>Semester</th>
       <th>Kampus</th>
       <th width="5%">Kelas</th>
-     
+     <th>Action</th>
     </tr>
   </thead>
   <tbody>
@@ -118,7 +118,14 @@ $this->menu=array(
 
 		<td><?php echo $m->kAMPUS->nama_kampus;?></td>
 		<td width="5%"><?php echo $m->kELAS->nama_kelas;?></td>
-
+		<td>
+		 <?php 
+		 if($m->bentrok==1)
+		 	echo CHtml::link('Bentrok',array('jadwal/listBentrok','id'=>$m->id),array('target'=>'_blank'));
+		 else if($m->bentrok==2)
+		 	echo CHtml::link('Paralel',array('jadwal/listParalel','id'=>$m->id),array('target'=>'_blank'));
+		 ?>
+		</td>
 
 		</tr>
 	<?php 

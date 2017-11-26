@@ -124,6 +124,8 @@ class Mastermatakuliah extends CActiveRecord
 		$new->semester = $semester;
 		$new->diktat = 'N';
 		
+
+
 		if($new->validate())
 		{
 			$new->save();
@@ -132,6 +134,7 @@ class Mastermatakuliah extends CActiveRecord
 
 		else
 		{
+			print_r($new->getErrors());
 			return false;
 		}
 

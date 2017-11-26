@@ -61,10 +61,10 @@ class Masterdosen extends CActiveRecord
 			array('kode_prodi', 'length', 'max'=>15),
 			array('no_ktp_dosen, nidn, nip_pns', 'length', 'max'=>30),
 			array('niy, gelar_depan, no_hp_dosen', 'length', 'max'=>20),
-			array('nama_dosen, tempat_lahir_dosen', 'length', 'max'=>50),
+			array('tempat_lahir_dosen', 'length', 'max'=>50),
 			array('gelar_akademik, kabupaten_dosen', 'length', 'max'=>10),
 			array('jenis_kelamin', 'length', 'max'=>1),
-			array('photo_dosen', 'length', 'max'=>255),
+			array('nama_dosen, photo_dosen', 'length', 'max'=>255),
 			array('no_telp_dosen', 'length', 'max'=>25),
 			array('email_dosen', 'length', 'max'=>100),
 			array('agama_dosen', 'length', 'max'=>2),
@@ -112,6 +112,7 @@ class Masterdosen extends CActiveRecord
 
 		else
 		{
+			print_r($new->getErrors());
 			return false;
 		}
 

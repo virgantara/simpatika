@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -46,6 +46,7 @@ class JadwalController extends Controller
 		);
 	}
 
+	
 	public function actionRemoveSelected()
 	{   
 		if(Yii::app()->request->getIsAjaxRequest())
@@ -56,15 +57,41 @@ class JadwalController extends Controller
         }
 	}
 
-	public function actionListBentrok()
+	public function actionListParalel($id)
 	{
-		$model=new Jadwal('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Jadwal']))
-			$model->attributes=$_GET['Jadwal'];
 
+		$jadwal = Jadwal::model()->findByPk($id);
+
+
+		$model=Jadwal::model()->findListParalel(
+			$jadwal->kode_dosen,
+			$jadwal->jam_mulai,
+			$jadwal->hari,
+			$jadwal->semester
+		);
+		
 		$this->render('listBentrok',array(
 			'model'=>$model,
+			'jadwal' => $jadwal
+		));
+	}
+
+	public function actionListBentrok($id)
+	{
+
+		$jadwal = Jadwal::model()->findByPk($id);
+
+
+		$model=Jadwal::model()->findListBentrok(
+			$jadwal->kode_dosen,
+			$jadwal->jam_mulai,
+			$jadwal->hari,
+			$jadwal->semester
+		);
+		
+		$this->render('listBentrok',array(
+			'model'=>$model,
+			'jadwal' => $jadwal
 		));
 	}
 
@@ -659,8 +686,9 @@ class JadwalController extends Controller
 		        		{
 
 		        			$message .= '<div style="color:red">Wrong data mk</div>';
-		        				continue;
-			        		$m->addError('error','Terjadi kesalahan input data mk');
+		        				// continue;
+		        			$m->addError('error','Baris ke-'.($index+1).' : Terjadi kesalahan input data mk');
+			        		// $m->addError('error','Terjadi kesalahan input data mk');
 							throw new Exception();
 		        		}
 
@@ -668,18 +696,22 @@ class JadwalController extends Controller
 		        		// continue;
 		        	}
 		        	
-		        	$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$kode_dosen));
-		        	if(empty($dosen))
+		        	$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$kode_dosen));
+		        	$dosenuser = SimakUsers::model()->findByAttributes(array('nim'=>$kode_dosen));
+		        	if(empty($dosen) && empty($dosenuser))
 		        	{
 		        		$isnew = Masterdosen::model()->quickCreate($fakultas, $prodi, $kode_dosen, $nama_dosen);
 		        		
+
+
 		        		if(!$isnew)
 		        		{
 
-		        			$message .= '<div style="color:red">Wrong data dosen</div>';
-		        				continue;
-			        		$m->addError('error','Terjadi kesalahan input data dosen');
-							throw new Exception();
+	        			$message .= '<div style="color:red">Data Dosen belum ada di master dosen</div>';
+	        				// continue;
+	        			$m->addError('error','Baris ke-'.($index+1).' : Data Dosen belum ada di master dosen');
+		        		// $m->addError('error','Terjadi kesalahan input data dosen');
+						throw new Exception();
 		        		}
 
 		        		
@@ -752,9 +784,9 @@ class JadwalController extends Controller
 
 					if($m->validate())
 					{
-
+						Jadwal::model()->cekKonflik($prodi, $semester, $kode_dosen, $hari,$jam_mulai, $id_kampus, $kode_mk);
 						$m->save();
-						Jadwal::model()->cekKonflik($semester, $kode_dosen, $hari,$jam_mulai, $id_kampus, $kode_mk);
+						
 					}
 
 					else

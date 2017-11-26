@@ -67,7 +67,7 @@ echo '</ul>';
 ?>
  <div class="pull-right">
 Data per halaman
-<?php echo CHtml::dropDownList('Jadwal[PAGESIZE]',isset($_GET['size'])?$_GET['size']:'',array(10=>10,50=>50,100=>100,200=>200,500=>500),array('id'=>'size','size'=>1)); ?>
+<?php echo CHtml::dropDownList('Jadwal[PAGESIZE]',isset($_GET['size'])?$_GET['size']:'',array(10=>10,50=>50,100=>100,200=>200),array('id'=>'size','size'=>1)); ?>
 Prodi
 <?php 
 $list_gol = CHtml::listData(Jadwal::model()->findProdiInJadwal(),'kode_prodi','nama_prodi');
@@ -79,6 +79,9 @@ echo CHtml::textField('Jadwal[SEARCH]','',array('placeholder'=>'Cari','id'=>'sea
 echo CHtml::button("Cari",array("id"=>"pencarian"));
 ?>
 </div> 
+<?php
+echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
+?>
 <?php $this->widget('application.components.ComplexGridView', array(
 	'id'=>'jadwal-grid',
 	'dataProvider'=>$model->search(),
@@ -162,7 +165,4 @@ $("#butt").click(function(){
         }
         });
 ');
-?>
-<?php
-echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 ?>
