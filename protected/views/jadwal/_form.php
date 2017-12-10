@@ -2,6 +2,9 @@
 /* @var $this JadwalController */
 /* @var $model Jadwal */
 /* @var $form CActiveForm */
+$tahunaktif = Yii::app()->request->cookies['tahunaktif']->value;
+
+
 ?>
 
 <script src="<?php echo Yii::app()->baseUrl;?>/js/jquery.min.js"></script>
@@ -83,6 +86,8 @@ function findProdi(fak){
 }
 
 function findMk(prodi){
+
+
 	$.ajax({
 		type : 'POST',
 		data : 'q='+prodi,
@@ -190,7 +195,8 @@ function findMk(prodi){
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
-)); ?>
+)); 
+?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
@@ -286,8 +292,9 @@ function findMk(prodi){
 		//     return ($mk->kode_mata_kuliah . ' - '. $mk->nama_mata_kuliah);
 		// });
 
-		$mks = array();
-		echo $form->dropDownList($model,'kode_mk',$mks,array('empty' => '(Select a mk)')); 
+		$listmk = array();
+
+		echo $form->dropDownList($model,'kode_mk',$listmk,array('empty' => '(Select a mk)')); 
 		// echo $form->dropDownList($model,'kode_mk',$listmk); 
 		?>
 		<?php echo $form->error($model,'kode_mk'); ?>
@@ -300,7 +307,7 @@ function findMk(prodi){
 		$nama_dosen = '';
 		if(!$model->isNewRecord)
 		{
-			$dosen = Masterdosen::model()->findByAttributes(array('niy'=>$model->kode_dosen));
+			$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$model->kode_dosen));
 			$nama_dosen = $dosen->nama_dosen;
 		}
 		echo $form->hiddenField($model,'kode_dosen',array('size'=>20,'maxlength'=>20));

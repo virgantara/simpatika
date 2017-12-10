@@ -986,7 +986,7 @@ class JadwalController extends Controller
 			
 			$cid = Yii::app()->request->getPost('q'); 
 
-			$tahunaktif = Yii::app()->request->cookies['tahunaktif']->value;
+			$tahunaktif = '20172';
 
 			$matkul= Jadwal::model()->findAll(
 	                array(
@@ -997,7 +997,7 @@ class JadwalController extends Controller
 	               		':thn' => $tahunaktif
 	               	)));
 	        $list = CHtml::listData($matkul, 'kode_mk', 'nama_mk');    
-
+	        // print_r($matkul);exit;
 	        // echo $tahunaktif;
 	        echo json_encode($list);
 		}
@@ -1061,10 +1061,11 @@ class JadwalController extends Controller
 			$model->jam_selesai = substr($jam_ke->jam_selesai, 0, -3);
 
 			
-
+			$model->bentrok = 0;
 			if($model->save())
 			{
-				Jadwal::model()->cekKonflik($model->semester, $model->kode_dosen, $model->hari,$jam_ke->jam_mulai, $model->kampus, $model->kode_mk);
+				Jadwal::model()->cekKonflik($model, $model->prodi, $model->semester, $model->kode_dosen, $model->hari,$model->jam_mulai, $model->kampus, $model->nama_mk,$model->kode_mk);
+				
 				$this->redirect(array('view','id'=>$model->id));
 			}
 		}
@@ -1114,7 +1115,8 @@ class JadwalController extends Controller
 
 			if($model->save())
 			{
-				Jadwal::model()->cekKonflik($model->semester, $model->kode_dosen, $model->hari,$model->jam_mulai,$model->kampus, $model->kode_mk);
+				Jadwal::model()->cekKonflik($model, $model->prodi, $model->semester, $model->kode_dosen, $model->hari,$model->jam_mulai, $model->kampus, $model->nama_mk,$model->kode_mk);
+				
 				$this->redirect(array('view','id'=>$model->id));
 			}
 		}
