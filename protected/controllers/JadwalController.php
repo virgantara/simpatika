@@ -97,13 +97,24 @@ class JadwalController extends Controller
 
 		$jadwal = Jadwal::model()->findByPk($id);
 
-
-		$model=Jadwal::model()->findListBentrok(
-			$jadwal->kode_dosen,
-			$jadwal->jam_mulai,
-			$jadwal->hari,
-			$jadwal->semester
-		);
+		$withs = array();
+		if($jadwal->bentrok_with != '')
+		{
+			$withs = explode('|', $jadwal->bentrok_with);
+		}
+		
+		$model = array();
+		foreach($withs as $q => $v)
+		{
+			if(empty($v)) continue;
+			$model[] = Jadwal::model()->findByPk($v);
+		}
+		// print_r($withs);exit;
+		// $model=Jadwal::model()->findListBentrok(
+		// 	$jadwal->kode_dosen,
+		// 	$jadwal->jam_mulai,
+		// 	$jadwal->hari
+		// );
 		
 		$this->render('listBentrok',array(
 			'model'=>$model,
@@ -804,7 +815,7 @@ class JadwalController extends Controller
 					{
 						
 						$m->save();
-						Jadwal::model()->cekKonflik($m, $prodi, $semester, $kode_dosen, $hari,$jam_mulai, $id_kampus, $nama_mk,$kode_mk);
+						Jadwal::model()->cekKonflik($m);
 					}
 
 					else
@@ -1064,7 +1075,7 @@ class JadwalController extends Controller
 			$model->bentrok = 0;
 			if($model->save())
 			{
-				Jadwal::model()->cekKonflik($model, $model->prodi, $model->semester, $model->kode_dosen, $model->hari,$model->jam_mulai, $model->kampus, $model->nama_mk,$model->kode_mk);
+				Jadwal::model()->cekKonflik($model);
 				
 				$this->redirect(array('view','id'=>$model->id));
 			}
@@ -1112,12 +1123,14 @@ class JadwalController extends Controller
 			$model->nama_mk = $mk->nama_mata_kuliah;
 
 			
+			$model->bentrok = 0;
 
 			if($model->save())
 			{
-				Jadwal::model()->cekKonflik($model, $model->prodi, $model->semester, $model->kode_dosen, $model->hari,$model->jam_mulai, $model->kampus, $model->nama_mk,$model->kode_mk);
-				
-				$this->redirect(array('view','id'=>$model->id));
+				Jadwal::model()->cekKonflik($model);
+
+
+				$this->redirect(array('index'));
 			}
 		}
 

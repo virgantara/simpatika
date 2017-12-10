@@ -72,7 +72,7 @@ class Jadwal extends CActiveRecord
 			// array('jam_selesai', 'validatorCompareDateTime', 'compareAttribute' => 'jam_mulai', 'condition' => '>'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hari, jam_ke, jam, jam_mulai, jam_selesai, kode_mk, nama_mk, kode_dosen, nama_dosen, semester, kelas, fakultas, nama_fakultas, prodi, nama_prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian, bentrok', 'safe', 'on'=>'search'),
+			array('id, hari, jam_ke, jam, jam_mulai, jam_selesai, kode_mk, nama_mk, kode_dosen, nama_dosen, semester, kelas, fakultas, nama_fakultas, prodi, nama_prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian, bentrok, bentrok_with', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -166,50 +166,27 @@ class Jadwal extends CActiveRecord
 			// 'semester' => $semester,
 			'tahun_akademik' => $tahunaktif,
 			'jam_mulai' => $jam,
-			// 'bentrok' => 1
+			'bentrok' => 1
 		);
 
 		$jadwals = Jadwal::model()->findAllByAttributes($params);
 		return $jadwals;
 	}
 
-	public function cekKonflik($m, $prodi, $semester, $dosen, $hari, $jam, $kampus, $nama_mk, $kode_mk)
+	public function cekKonflik($m)
 	{
 
 		// $jam = $jam.':00';
 		$tahunaktif = '20172';
 
-		// reset all
-		// $params = array(
-		// 	// 'kode_dosen' => $dosen,
-		// 	// 'semester' => $semester,
-		// 	'tahun_akademik' => $tahunaktif,
-		// );
-
-		// $jadwals = Jadwal::model()->findAllByAttributes($params);
-
-		// foreach($jadwals as $jadwal)
-		// {
-		// 	$jadwal->bentrok = 0;
-		// 	$jadwal->save(false,array('bentrok'));
-		// }			
-
-		// $params = array(
-		// 	'kode_dosen' => $dosen,
-		// 	'hari' => $hari,
-		// 	'semester' => $semester,
-		// 	'tahun_akademik' => $tahunaktif,
-		// 	'jam_mulai' => $jam
-		// );
-
 		$criteria=new CDbCriteria;
 		$criteria->addCondition('kampus <>:p2 AND kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6');
 		$criteria->params = array(
 			// ':p1'=> $prodi,
-			':p2' => $kampus,
-			':p3' => $dosen,
-			':p4' => $hari,
-			':p5' => $jam,
+			':p2' => $m->kampus,
+			':p3' => $m->kode_dosen,
+			':p4' => $m->hari,
+			':p5' => $m->jam_mulai,
 			':p6' => $tahunaktif,
 			// ':p7' => $semester,
 			// ':p8'=> $kode_mk
@@ -219,35 +196,44 @@ class Jadwal extends CActiveRecord
 		// $m->save(save(false,array('bentrok'));
 		
 		$jadwals = Jadwal::model()->findAll($criteria);
+		$is_bentrok = false;
+		$bentrok_with = '';
 		foreach($jadwals as $jadwal)
 		{
 
-
+			$is_bentrok = true;
 			$jadwal->bentrok = 1;
 			$jadwal->save(false,array('bentrok'));
 			
-			$m->bentrok = 1;
-			$m->save(false,array('bentrok'));
+			$bentrok_with .= $jadwal->id.'|';
+			
 		}	
+
+		if($is_bentrok)
+		{
+			$m->bentrok = 1;
+			$m->bentrok_with = $bentrok_with;
+			$m->save(false,array('bentrok','bentrok_with'));
+		}
 
 		$criteria=new CDbCriteria;
 		$criteria->addCondition('kampus=:p2 AND kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6 AND semester =:p7 AND nama_mk=:p8');
 		$criteria->params = array(
 			// ':p1'=> $prodi,
-			':p2' => $kampus,
-			':p3' => $dosen,
-			':p4' => $hari,
-			':p5' => $jam,
+			':p2' => $m->kampus,
+			':p3' => $m->kode_dosen,
+			':p4' => $m->hari,
+			':p5' => $m->jam_mulai,
 			':p6' => $tahunaktif,
-			':p7' => $semester,
-			':p8'=> $nama_mk
+			':p7' => $m->semester,
+			':p8'=> $m->nama_mk
 		);
 		$jadwals = Jadwal::model()->findAll($criteria);	
 
 		foreach($jadwals as $jadwal)
 		{
 
-			if($jadwal->prodi != $prodi)
+			if($jadwal->prodi != $m->prodi)
 			{
 			// paralel
 				$jadwal->bentrok = 2;
@@ -620,6 +606,7 @@ class Jadwal extends CActiveRecord
 	{
 		$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $this->kode_mk));
 		$this->SKS = $mk->sks;
+		$this->hari = trim($this->hari);
 		return parent::afterFind();
 	}
 	
