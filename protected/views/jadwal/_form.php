@@ -217,15 +217,15 @@ function findMk(prodi){
 	<div class="row">
 		<?php echo $form->labelEx($model,'hari'); 
 		$list_hari = array(
-			'SABTU'=>'Sabtu',
-			'AHAD'=> 'Ahad',
-			'SENIN'=>'Senin',
-			'SELASA'=>'Selasa',
-			'RABU'=> 'Rabu',
-			'KAMIS'=>'Kamis'
+			'SABTU'=>'SABTU',
+			'AHAD'=> 'AHAD',
+			'SENIN'=>'SENIN',
+			'SELASA'=>'SELASA',
+			'RABU'=> 'RABU',
+			'KAMIS'=>'KAMIS'
 		);
 
-		print_r($model->hari);
+		// print_r($model->hari);
 		// CHtml::listData(ClassificationLevels::model()->findAll(), 'id', 'name')
 		echo $form->dropDownList($model,'hari',$list_hari); 
 		?>
