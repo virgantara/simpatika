@@ -130,13 +130,13 @@ class Jadwal extends CActiveRecord
 		return $jadwals;
 	}
 
-	public function findListBentrok($kode_dosen, $jam, $hari, $semester)
+	public function findListBentrok($kode_dosen, $jam, $hari)
 	{
-		$tahunaktif = Yii::app()->request->cookies['tahunaktif']->value;
+		$tahunaktif = '20172';;
 		$params = array(
 			'kode_dosen' => $kode_dosen,
 			'hari' => $hari,
-			'semester' => $semester,
+			// 'semester' => $semester,
 			'tahun_akademik' => $tahunaktif,
 			'jam_mulai' => $jam,
 			// 'bentrok' => 1
@@ -146,11 +146,11 @@ class Jadwal extends CActiveRecord
 		return $jadwals;
 	}
 
-	public function cekKonflik($prodi, $semester, $dosen, $hari, $jam, $kampus, $mk)
+	public function cekKonflik($m, $prodi, $semester, $dosen, $hari, $jam, $kampus, $nama_mk, $kode_mk)
 	{
 
 		// $jam = $jam.':00';
-		$tahunaktif = Yii::app()->request->cookies['tahunaktif']->value;
+		$tahunaktif = '20172';
 
 		// reset all
 		// $params = array(
@@ -167,39 +167,67 @@ class Jadwal extends CActiveRecord
 		// 	$jadwal->save(false,array('bentrok'));
 		// }			
 
-		$params = array(
-			'kode_dosen' => $dosen,
-			'hari' => $hari,
-			'semester' => $semester,
-			'tahun_akademik' => $tahunaktif,
-			'jam_mulai' => $jam
+		// $params = array(
+		// 	'kode_dosen' => $dosen,
+		// 	'hari' => $hari,
+		// 	'semester' => $semester,
+		// 	'tahun_akademik' => $tahunaktif,
+		// 	'jam_mulai' => $jam
+		// );
+
+		$criteria=new CDbCriteria;
+		$criteria->addCondition('kampus <>:p2 AND kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6');
+		$criteria->params = array(
+			// ':p1'=> $prodi,
+			':p2' => $kampus,
+			':p3' => $dosen,
+			':p4' => $hari,
+			':p5' => $jam,
+			':p6' => $tahunaktif,
+			// ':p7' => $semester,
+			// ':p8'=> $kode_mk
 		);
 
-		$jadwals = Jadwal::model()->findAllByAttributes($params);
+		// $m->bentrok = 0;
+		// $m->save(save(false,array('bentrok'));
+		
+		$jadwals = Jadwal::model()->findAll($criteria);
 		foreach($jadwals as $jadwal)
 		{
+
+
 			$jadwal->bentrok = 1;
 			$jadwal->save(false,array('bentrok'));
+			
+			$m->bentrok = 1;
+			$m->save(false,array('bentrok'));
 		}	
 
 		$criteria=new CDbCriteria;
-		$criteria->addCondition('prodi <>:p1 AND kampus=:p2 AND kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6 AND semester =:p7 AND kode_mk=:p8');
+		$criteria->addCondition('kampus=:p2 AND kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6 AND semester =:p7 AND nama_mk=:p8');
 		$criteria->params = array(
-			':p1'=> $prodi,
+			// ':p1'=> $prodi,
 			':p2' => $kampus,
 			':p3' => $dosen,
 			':p4' => $hari,
 			':p5' => $jam,
 			':p6' => $tahunaktif,
 			':p7' => $semester,
-			':p8'=> $mk
+			':p8'=> $nama_mk
 		);
 		$jadwals = Jadwal::model()->findAll($criteria);	
 
 		foreach($jadwals as $jadwal)
 		{
-			$jadwal->bentrok = 2;
-			$jadwal->save(false,array('bentrok'));
+
+			if($jadwal->prodi != $prodi)
+			{
+			// paralel
+				$jadwal->bentrok = 2;
+				$jadwal->save(false,array('bentrok'));
+				$m->bentrok = 2;
+				$m->save(false,array('bentrok'));
+			}
 		}			
 
 
@@ -310,6 +338,20 @@ class Jadwal extends CActiveRecord
 		return $model;
 	}
 
+	public function findRekapJadwalPerDosenAllBentrok($kode_dosen)
+	{
+		$criteria=new CDbCriteria;
+		// $criteria->compare('tahun_akademik',$tahun_akademik);
+		$criteria->addCondition('kode_dosen=:p1 AND bentrok = :p2');
+		$criteria->params = array(
+			':p1' =>$kode_dosen,
+			':p2' => 1,
+		);
+		$model = Jadwal::model()->findAll($criteria);	
+
+		return $model;
+	}
+
 	public function findRekapJadwalPerDosenAll($kode_dosen)
 	{
 		$criteria=new CDbCriteria;
@@ -318,6 +360,18 @@ class Jadwal extends CActiveRecord
 		$criteria->params = array(
 			':p1' =>$kode_dosen
 		);
+		$model = Jadwal::model()->findAll($criteria);	
+
+		return $model;
+	}
+
+	public function findRekapJadwalAllBentrok($tahun_akademik=0)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->compare('bentrok',1);
+		// $criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
+		$criteria->order = 'kode_dosen ASC';
+		$criteria->group = 'kode_dosen';
 		$model = Jadwal::model()->findAll($criteria);	
 
 		return $model;

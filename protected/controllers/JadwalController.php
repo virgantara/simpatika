@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,6 +44,22 @@ class JadwalController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+
+	public function actionRekapJadwalBentrok()
+	{
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$jadwal_prodi = Jadwal::model()->findRekapJadwalAllBentrok();
+
+		$total_bentrok = Jadwal::model()->countBentrok();
+
+		$this->render('rekap_jadwal_bentrok',array(
+			'jadwal_prodi' => $jadwal_prodi,
+			'tahun_akademik' => $tahun_akademik,
+			'total_bentrok' => $total_bentrok
+
+		));
 	}
 
 	
@@ -786,9 +802,9 @@ class JadwalController extends Controller
 
 					if($m->validate())
 					{
-						Jadwal::model()->cekKonflik($prodi, $semester, $kode_dosen, $hari,$jam_mulai, $id_kampus, $kode_mk);
-						$m->save();
 						
+						$m->save();
+						Jadwal::model()->cekKonflik($m, $prodi, $semester, $kode_dosen, $hari,$jam_mulai, $id_kampus, $nama_mk,$kode_mk);
 					}
 
 					else
@@ -1045,8 +1061,6 @@ class JadwalController extends Controller
 			$model->jam_selesai = substr($jam_ke->jam_selesai, 0, -3);
 
 			
-
-			// $model->bentrok = $isconflict;
 
 			if($model->save())
 			{
