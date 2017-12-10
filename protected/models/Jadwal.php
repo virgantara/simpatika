@@ -93,6 +93,33 @@ class Jadwal extends CActiveRecord
 		);
 	}
 
+	public function findJadwalDosenParalel($jadwal)
+	{
+		$dosen = $jadwal->kode_dosen;
+		$hari = $jadwal->hari;
+		$jam = $jadwal->jam_mulai;
+		$kampus = $jadwal->kampus;
+		$nama_mk = $jadwal->nama_mk;
+		$tahunaktif = $jadwal->tahun_akademik;
+		$semester = $jadwal->semester;
+
+		$criteria=new CDbCriteria;
+		$criteria->addCondition('kampus=:p2 AND kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6 AND semester =:p7 AND nama_mk=:p8');
+		$criteria->params = array(
+			// ':p1'=> $prodi,
+			':p2' => $kampus,
+			':p3' => $dosen,
+			':p4' => $hari,
+			':p5' => $jam,
+			':p6' => $tahunaktif,
+			':p7' => $semester,
+			':p8'=> $nama_mk
+		);
+		$jadwals = Jadwal::model()->findAll($criteria);	
+
+		return $jadwals;
+	}
+
 	public function updateParalel($dosen, $hari, $jam, $kampus, $mk, $tahunaktif, $semester)
 	{
 		$params = array(
@@ -259,10 +286,10 @@ class Jadwal extends CActiveRecord
 	public function findJadwalPerProdi($id)
 	{
 		$criteria=new CDbCriteria;
-		$criteria->join = 'JOIN simak_jadwal_temp j ON j.kode_dosen = t.niy';
-		$criteria->addCondition('t.kode_prodi='.$id);
-		$criteria->group = 't.niy';
-		$model = Masterdosen::model()->findAll($criteria);	
+		// $criteria->join = 'JOIN simak_jadwal_temp j ON j.kode_dosen = t.nidn';
+		$criteria->addCondition('t.prodi='.$id);
+		$criteria->group = 't.kode_dosen';
+		$model = Jadwal::model()->findAll($criteria);	
 
 		return $model;
 	}

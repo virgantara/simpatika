@@ -579,7 +579,7 @@ class JadwalController extends Controller
 			foreach($listprodi as $p)
 			{
 
-				$id = $p->niy;
+				$id = $p->kode_dosen;
 
 				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
 				$dosen = Jadwal::model()->findDosenInJadwal($id);				

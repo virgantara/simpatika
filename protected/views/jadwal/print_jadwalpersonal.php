@@ -118,7 +118,27 @@ foreach($jam as $j)
       }
 
       $label0 = $jd->nama_mk.'<br>';
-      $label1 = !empty($prodi) ? $prodi->singkatan.'-'.$jd->semester.'<br>' : $nama_prodi.'-'.$jd->semester;
+      $lbl_prodi = '';
+      if($jd->bentrok == 2)
+      {
+        $jadwal_paralel = Jadwal::model()->findJadwalDosenParalel($jd);
+        $index = 0;
+        foreach($jadwal_paralel as $jp)
+        {
+          if($index != 0)
+            $lbl_prodi .= '/'.$jp->nama_prodi;
+          else
+            $lbl_prodi .= $jp->nama_prodi;
+
+          $index++;
+        }
+      }
+
+      else
+      {
+        $lbl_prodi = $prodi->singkatan;
+      }
+      $label1 = !empty($prodi) ? $lbl_prodi.'-'.$jd->semester.'<br>' : $nama_prodi.'-'.$jd->semester;
       $label2 = $jd->kAMPUS->nama_kampus.'-'.$jd->kELAS->nama_kelas.' / '.$jd->SKS.' SKS';
       $label3 = '<br><span style="background-color:yellow">'.substr($jd->jam_mulai, 0, -3).'-'.substr($jd->jam_selesai, 0, -3).'</span>';
       
