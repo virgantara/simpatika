@@ -224,6 +224,8 @@ function findMk(prodi){
 			'RABU'=> 'Rabu',
 			'KAMIS'=>'Kamis'
 		);
+
+		print_r($model->hari);
 		// CHtml::listData(ClassificationLevels::model()->findAll(), 'id', 'name')
 		echo $form->dropDownList($model,'hari',$list_hari); 
 		?>
