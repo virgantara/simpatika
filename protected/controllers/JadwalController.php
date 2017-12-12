@@ -636,7 +636,7 @@ class JadwalController extends Controller
 		{
 			$kode_prodi = $_POST['kode_prodi'];
 			
-			$listprodi = Jadwal::model()->findJadwalPerProdi($kode_prodi);
+			$listprodidosen = Masterdosen::model()->findAllByAttributes(array('kode_prodi'=>$kode_prodi));
 
 
 			$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 
@@ -648,14 +648,16 @@ class JadwalController extends Controller
 			$this->layout = '';
 			
 			// $data = '';
-			foreach($listprodi as $p)
+			foreach($listprodidosen as $p)
 			{
 
-				$id = $p->kode_dosen;
+				$id = $p->nidn;
 
 				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
 				$dosen = Jadwal::model()->findDosenInJadwal($id);				
 				
+				if(empty($dosen)) continue;
+
 				$pdf->AddPage();
 				
 				
