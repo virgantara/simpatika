@@ -1,13 +1,6 @@
-<table style="margin-bottom: 6px;" width="100%">
-  <tr>
-    <td width="100%" style="text-align: center;" >
-      
-      <img width="120" src="<?php echo Yii::app()->baseUrl;?>/images/logo_unida.png"/>
-    </td>
-    
-  </tr>
-</table>
-<br><br>
+
+<br><br><br><br><br><br>
+
 <table width="100%" style="font-size: 10">
   <tr>
     <td width="10%">Lampiran:</td>
@@ -102,7 +95,3 @@
   </tr>
 </table>
 <br><br>
-<div style="font-size: 8px;text-align: center;bottom:10px">
-
-Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
-Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id</div>
