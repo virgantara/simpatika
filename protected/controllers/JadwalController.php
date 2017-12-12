@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,6 +44,64 @@ class JadwalController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionCetakLampiran()
+	{
+		$model = null;
+		$dosen = null;
+		if(!empty($_POST['cetak']))
+		{
+			$kode_prodi = $_POST['kode_prodi'];
+			
+			$listprodi = Jadwal::model()->findJadwalPerProdi($kode_prodi);
+
+			$setting_sk = JadwalLampiranSk::model()->find();
+
+			$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 'P', 'mm', 'A4', true, 'UTF-8');
+
+			$pdf->setPrintHeader(false);
+			$pdf->setPrintFooter(false);
+			$pdf->SetAutoPageBreak(TRUE,10);
+			$this->layout = '';
+			
+			// $data = '';
+			foreach($listprodi as $p)
+			{
+
+				$id = $p->kode_dosen;
+
+				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
+				$dosen = Jadwal::model()->findDosenInJadwal($id);				
+				
+				$pdf->AddPage();
+				
+				
+				ob_start();	
+				echo $this->renderPartial('print_lampiran_sk',array(
+					'model'=>$model,
+					'dosen' => $dosen,
+					'setting_sk' => $setting_sk
+				));
+
+				$data = ob_get_clean();
+				
+				$pdf->writeHTML($data);
+			}
+			
+			ob_end_clean();
+			
+			$pdf->Output();
+			
+		}
+
+
+
+		$this->render('lampiran_sk',array(
+			'model' => $model,
+			'dosen' => $dosen
+
+		));
 	}
 
 
