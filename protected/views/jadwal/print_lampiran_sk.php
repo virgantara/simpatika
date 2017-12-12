@@ -70,6 +70,8 @@
    </tr>
       <?php     
     }
+
+    else{
   ?>
    <tr>
       <td width="35%"  style="text-align: center;"><?=$m->nama_mk;?></td>
@@ -80,6 +82,7 @@
      
    </tr>
    <?php 
+ }
    $counter++;
  }
    ?>
