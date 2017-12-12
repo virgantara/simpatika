@@ -76,7 +76,7 @@ $(document).ready(function(){
     <label>Prodi</label>
     <?php
     $kode_prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
-    $list = CHtml::listData(Jadwal::model()->findProdi(), 'kode_prodi','nama_prodi');
+    $list = CHtml::listData(Masterprogramstudi::model()->findAll(), 'kode_prodi','nama_prodi');
     
     echo CHtml::dropDownList('kode_prodi',$kode_prodi,$list); 
     // echo CHtml::textField('nama_dosen',!empty($_POST['nama_dosen']) ? $_POST['nama_dosen'] : '',array('size'=>20,'maxlength'=>20)); 

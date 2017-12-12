@@ -1,7 +1,13 @@
-
-
-<br><br><br><br><br><br>
-
+<table style="margin-bottom: 6px;" width="100%">
+  <tr>
+    <td width="100%" style="text-align: center;" >
+      
+      <img width="120" src="<?php echo Yii::app()->baseUrl;?>/images/logo_unida.png"/>
+    </td>
+    
+  </tr>
+</table>
+<br><br>
 <table width="100%" style="font-size: 10;font-family: 'Times'">
   <tr>
     <td width="10%">Lampiran:</td>
@@ -32,10 +38,10 @@
   
   <thead>
     <tr>
-      <th width="13%"  style="text-align: center;"><strong>NIY</strong></th>
+      <th width="16%"  style="text-align: center;"><strong>NIY</strong></th>
       <th width="20%"  style="text-align: center;"><strong>NAMA<br>DOSEN</strong></th>
       <th width="35%"  style="text-align: center;"><strong>MATA KULIAH</strong></th>
-    <th width="10%"  style="text-align: center;"><strong>PRODI</strong></th>
+    <th width="7%"  style="text-align: center;"><strong>PRODI</strong></th>
     <th width="7%"  style="text-align: center;"><strong>SMTR</strong></th>
     <th width="10%"  style="text-align: center;"><strong>KELAS</strong></th>
     <th width="5%"  style="text-align: center;"><strong>SKS</strong></th>
@@ -53,10 +59,10 @@
     {
       ?>
         <tr>
-     <td width="13%" rowspan="<?=count($model)+1;?>" style="text-align: center;"><?=$m->kode_dosen;?></td>
+     <td width="16%" rowspan="<?=count($model)+1;?>" style="text-align: center;"><?=$m->kode_dosen;?></td>
       <td width="20%" rowspan="<?=count($model)+1;?>" style="text-align: center;"><?=$m->nama_dosen;?></td>
       <td width="35%"  style="text-align: center;"><?=$m->nama_mk;?></td>
-    <td width="10%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
+    <td width="7%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
     <td width="10%"  style="text-align: center;"><?=$kelas->nama_kelas;?></td>
     <td width="5%"  style="text-align: center;"><?=$m->SKS;?></td>
@@ -69,7 +75,7 @@
   ?>
    <tr>
       <td width="35%"  style="text-align: center;"><?=$m->nama_mk;?></td>
-    <td width="10%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
+    <td width="7%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
     <td width="10%"  style="text-align: center;"><?=$kelas->nama_kelas;?></td>
     <td width="5%"  style="text-align: center;"><?=$m->SKS;?></td>
@@ -88,11 +94,9 @@
     <td width="55%" style="text-align: left">
       <br><br><br><br><br>
       <p>Ditetapkan di Ponorogo,</p>
-      <p>Pada Tanggal <?=$setting_sk->tanggal_sk;?><br>Rektor UNIDA Gontor.<br><br><br><br></p>
+      <p>Pada Tanggal <?=$setting_sk->tanggal_sk;?><br>Rektor UNIDA Gontor.</p>
+      <img width="200px" src="<?php echo Yii::app()->baseUrl;?>/images/ttd.jpg"/>
       
-      <p><strong><u>Prof. Dr. Amal Fathullah Zarkasyi, M.A.</u></strong><br>
-      NIY. 780043</p>
     </td>
   </tr>
 </table>
-<br><br>
