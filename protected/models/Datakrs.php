@@ -140,6 +140,7 @@ class Datakrs extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$sort = new CSort();
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('kode_pt',$this->kode_pt,true);
@@ -175,6 +176,11 @@ class Datakrs extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>$sort,
+			'pagination'=>array(
+				'pageSize'=>100,
+				
+			),
 		));
 	}
 
