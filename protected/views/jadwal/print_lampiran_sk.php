@@ -34,7 +34,7 @@
   </tr>
 </table>
 <br><br>
-<table cellpadding="3" border="1" width="100%" style="font-size: 10;font-family: 'Times'">
+<table cellpadding="2" border="1" width="100%" style="font-size: 10;font-family: 'Times'">
   
   <thead>
     <tr>
@@ -92,10 +92,10 @@
   <tr>
     <td width="45%">&nbsp;</td>
     <td width="55%" style="text-align: left">
-      <br><br><br><br><br>
+      
       <p>Ditetapkan di Ponorogo,</p>
       <p>Pada Tanggal <?=$setting_sk->tanggal_sk;?><br>Rektor UNIDA Gontor.</p>
-      <img width="200px" src="<?php echo Yii::app()->baseUrl;?>/images/ttd.jpg"/>
+      <img width="180px" src="<?php echo Yii::app()->baseUrl;?>/images/ttd.jpg"/>
       
     </td>
   </tr>
