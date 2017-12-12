@@ -72,7 +72,7 @@ class UserController extends Controller
 			$model->attributes=$_POST['User'];
 			// print_r($_POST);exit;
 			if($model->save()){
-				$this->redirect(array('view','id'=>$model->USERNAME));
+				$this->redirect(array('view','id'=>$model->username));
 			}
 		}
 
@@ -97,7 +97,7 @@ class UserController extends Controller
 		{
 			$model->attributes=$_POST['User'];
 			if($model->save()){
-				$this->redirect(array('view','id'=>$model->USERNAME));
+				$this->redirect(array('view','id'=>$model->username));
 			}
 		}
 
