@@ -75,7 +75,7 @@ if(!empty($kode_prodi))
 // $criteria->order = 'kode_kampus ASC';
 
 $kampuses = Jadwal::model()->findKampus($kode_prodi);
-
+// print_r($kampuses);exit;
 foreach($kampuses as $kampus)
 {	
 	foreach($kampus->kelases as $kelas)

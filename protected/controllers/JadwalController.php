@@ -526,7 +526,7 @@ class JadwalController extends Controller
 	public function actionRekapJadwal()
 	{
 		
-		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahun_akademik = '20172';//Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		
 		$this->render('rekap_jadwal',array(
 

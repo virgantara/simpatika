@@ -298,7 +298,7 @@ class Jadwal extends CActiveRecord
 	{
 		$criteria=new CDbCriteria;
 		$criteria->join = 'JOIN simak_masterdosen d ON t.kode_prodi = d.kode_prodi ';
-		$criteria->join .= 'JOIN simak_jadwal_temp j ON j.kode_dosen = d.niy';
+		$criteria->join .= 'JOIN simak_jadwal_temp j ON j.kode_dosen = d.nidn';
 		$criteria->order = 't.kode_fakultas';
 		// $criteria->join = 'JOIN simak_jadwal_temp j ON j.prodi = t.kode_prodi';
 
@@ -316,7 +316,11 @@ class Jadwal extends CActiveRecord
 		$criteria->order = 'kode_kampus ASC';
 		$criteria->join = 'JOIN simak_jadwal_temp j ON j.kampus = t.id';
 		$criteria->group = 't.kode_kampus';
+
+
 		$model = Kampus::model()->findAll($criteria);	
+
+
 
 		return $model;
 	}
