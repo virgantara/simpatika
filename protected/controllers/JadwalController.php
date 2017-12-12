@@ -69,11 +69,14 @@ class JadwalController extends Controller
 			foreach($listdosenprodi as $p)
 			{
 
+				
 				$id = $p->nidn;
 
 				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
 				$dosen = Jadwal::model()->findDosenInJadwal($id);				
 				
+				if(empty($dosen)) continue;
+
 				$pdf->AddPage();
 				
 				
