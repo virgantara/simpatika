@@ -33,11 +33,11 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('delete'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -1220,14 +1220,7 @@ class JadwalController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$model=new Jadwal('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Jadwal']))
-			$model->attributes=$_GET['Jadwal'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
+		$this->actionAdmin();
 	}
 
 	/**
