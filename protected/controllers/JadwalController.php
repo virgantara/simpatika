@@ -1180,6 +1180,10 @@ class JadwalController extends Controller
 			$model->nama_prodi = $prodi->singkatan;
 			$model->nama_mk = $mk->nama_mata_kuliah;
 
+			$mk->sks = $_POST['sks'];
+
+			$mk->save(false,array('sks'));
+
 			
 			$model->bentrok = 0;
 

@@ -365,6 +365,12 @@ function findMk(prodi){
 	</div>
 
 	<div class="row">
+		<?php echo CHtml::label('SKS',''); ?>
+		<?php echo CHtml::textField('sks',$model->SKS); ?>
+
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'kuota_kelas'); ?>
 		<?php echo $form->textField($model,'kuota_kelas'); ?>
 		<?php echo $form->error($model,'kuota_kelas'); ?>
