@@ -46,7 +46,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'filter'=>$model,
 	'columns'=>array(
 		// 'id',
-		'kode_fak',
+		// 'kode_fak',
 		'kode_prodi',
 		
 		'kode_mk',
@@ -56,6 +56,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'kode_dosen',
 		// 'namadosen',
 		'semester',
+		'tahun_akademik',
 		'kode_jadwal',
 		'kelas',
 		/*
