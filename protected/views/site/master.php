@@ -50,6 +50,7 @@ echo '<li>'.CHtml::link('Jam Mengajar',array('Jam/admin'),array('target'=>'_blan
 echo '<li>'.CHtml::link('User',array('user/index'),array('target'=>'_blank')).'</li>';
 echo '<li>'.CHtml::link('Dosen',array('Masterdosen/admin'),array('target'=>'_blank')).'</li>';
 echo '<li>'.CHtml::link('User di SIAKAD',array('users/index')).'</li>';
+echo '<li>'.CHtml::link('DATAKRS di SIAKAD',array('datakrs/index')).'</li>';
 echo '</ul>';
 ?>
 
