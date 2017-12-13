@@ -8,6 +8,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
+	array('label'=>'Preview Jadwal Peronal', 'url'=>array('previewJadwalPersonal')),
 	array('label'=>'Cetak Jadwal Per Dosen', 'url'=>array('cetakPerDosen')),
 	array('label'=>'List Jadwal', 'url'=>array('index')),
 	array('label'=>'Create Jadwal', 'url'=>array('create')),

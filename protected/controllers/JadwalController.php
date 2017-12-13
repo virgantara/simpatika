@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,6 +44,51 @@ class JadwalController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionPreviewJadwalPersonal()
+	{
+
+		$model = null;
+		$dosen = null;
+		if(!empty($_POST['cetak']))
+		{
+			$kode_prodi = $_POST['kode_prodi'];
+			
+			$listprodidosen = Masterdosen::model()->findAllByAttributes(array('kode_prodi'=>$kode_prodi));
+
+
+			
+			$this->layout = '';
+			
+			foreach($listprodidosen as $p)
+			{
+
+				$id = $p->nidn;
+
+				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
+				$dosen = Jadwal::model()->findDosenInJadwal($id);				
+				
+				if(empty($dosen)) continue;
+
+				
+				echo $this->renderPartial('preview_personal',array(
+					'model'=>$model,
+					'dosen' => $dosen
+				));
+
+				
+			}
+			
+		}
+
+
+
+		$this->render('preview_perdosen',array(
+			'model' => $model,
+			'dosen' => $dosen
+
+		));
 	}
 
 	public function actionCetakLampiran()
