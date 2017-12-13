@@ -3,6 +3,7 @@ assets/*
 protected/runtime/*
 database.php
 
+*.tar.gz
 
 *.db
 *.sql
