@@ -79,7 +79,7 @@ class JadwalController extends Controller
 
 				
 			}
-			
+			exit;	
 		}
 
 
