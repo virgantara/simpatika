@@ -2,7 +2,7 @@
 /* @var $this JadwalController */
 /* @var $model Jadwal */
 /* @var $form CActiveForm */
-$tahunaktif = Yii::app()->request->cookies['tahunaktif']->value;
+$tahunaktif = '20172';//Yii::app()->request->cookies['tahunaktif']->value'';
 
 
 ?>
