@@ -65,7 +65,7 @@ class JadwalController extends Controller
 			$pdf->SetAutoPageBreak(TRUE,10);
 			$this->layout = '';
 			
-			// $data = '';
+			
 			foreach($listdosenprodi as $p)
 			{
 
@@ -647,7 +647,6 @@ class JadwalController extends Controller
 			$pdf->SetAutoPageBreak(TRUE,10);
 			$this->layout = '';
 			
-			// $data = '';
 			foreach($listprodidosen as $p)
 			{
 
@@ -1121,18 +1120,29 @@ class JadwalController extends Controller
 		{
 			$model->attributes=$_POST['Jadwal'];
 			$model->nama_dosen = $_POST['nama_dosen'];
+
 			$fak = Masterfakultas::model()->findByAttributes(array('kode_fakultas'=> $model->fakultas));
 			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=> $model->prodi));
 			$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
 
-			
+
+			// $jam_ke = Jam::model()->findByPk($_POST['Jadwal']['jam_ke']);
+			$model->jam_mulai = $_POST['Jadwal']['jam_mulai'];//substr($jam_ke->jam_mulai, 0, -3);;
+			$model->jam_selesai = $_POST['Jadwal']['jam_selesai'];//substr($jam_ke->jam_selesai, 0, -3);
+
+			if(strlen($model->jam_mulai) > 5 && strlen($model->jam_selesai) > 5)
+			{
+				$model->jam_mulai = substr($model->jam_mulai,0,-3);
+				$model->jam_selesai = substr($model->jam_selesai,0,-3);
+			}
+
 			$model->nama_fakultas = $fak->nama_fakultas;
-			$model->nama_prodi = $prodi->nama_prodi;
+			$model->nama_prodi = $prodi->singkatan;
 			$model->nama_mk = $mk->nama_mata_kuliah;
-			$model->jam = $model->jam_mulai;
-			$jam_ke = Jam::model()->findByPk($_POST['Jadwal']['jam_ke']);
-			$model->jam_mulai = substr($jam_ke->jam_mulai, 0, -3);;
-			$model->jam_selesai = substr($jam_ke->jam_selesai, 0, -3);
+
+			$mk->sks = $_POST['sks'];
+
+			$mk->save(false,array('sks'));
 
 			
 			$model->bentrok = 0;
