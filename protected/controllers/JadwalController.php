@@ -1195,7 +1195,11 @@ class JadwalController extends Controller
 			$model->nama_prodi = $prodi->singkatan;
 			$model->nama_mk = $mk->nama_mata_kuliah;
 
-			$mk = Mastermatakuliah::model()->findAllByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
+			$attr = array(
+				'kode_mata_kuliah'=> $model->kode_mk,
+				'tahun_akademik' => '20172'
+			);
+			$mk = Mastermatakuliah::model()->findAllByAttributes($attr);
 			
 			foreach($mk as $mk)
 			{
