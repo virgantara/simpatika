@@ -260,6 +260,15 @@ class Jadwal extends CActiveRecord
 		return count($model);
 	}
 
+	public function findDosenInJadwalByProdi($id)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->addCondition('t.kode_prodi="'.$id.'"');
+		$model = Jadwal::model()->find($criteria);	
+
+		return $model;
+	}
+
 	public function findDosenInJadwal($id)
 	{
 		$criteria=new CDbCriteria;

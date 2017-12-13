@@ -65,7 +65,7 @@ class JadwalController extends Controller
 			$pdf->SetAutoPageBreak(TRUE,10);
 			$this->layout = '';
 			
-			// $data = '';
+			
 			foreach($listdosenprodi as $p)
 			{
 
@@ -647,7 +647,6 @@ class JadwalController extends Controller
 			$pdf->SetAutoPageBreak(TRUE,10);
 			$this->layout = '';
 			
-			// $data = '';
 			foreach($listprodidosen as $p)
 			{
 
