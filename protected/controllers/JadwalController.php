@@ -1178,7 +1178,7 @@ class JadwalController extends Controller
 
 			$fak = Masterfakultas::model()->findByAttributes(array('kode_fakultas'=> $model->fakultas));
 			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=> $model->prodi));
-			$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
+			
 
 
 			// $jam_ke = Jam::model()->findByPk($_POST['Jadwal']['jam_ke']);
@@ -1195,10 +1195,16 @@ class JadwalController extends Controller
 			$model->nama_prodi = $prodi->singkatan;
 			$model->nama_mk = $mk->nama_mata_kuliah;
 
-			$mk->sks = $_POST['sks'];
+			$mk = Mastermatakuliah::model()->findAllByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
+			
+			foreach($mk as $mk)
+			{
+				$mk->sks = $_POST['sks'];
 
-			$mk->save(false,array('sks'));
-
+				$mk->save(false,array('sks'));
+	
+			}
+			
 			
 			$model->bentrok = 0;
 
