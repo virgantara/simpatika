@@ -1191,23 +1191,26 @@ class JadwalController extends Controller
 				$model->jam_selesai = substr($model->jam_selesai,0,-3);
 			}
 
-			$model->nama_fakultas = $fak->nama_fakultas;
-			$model->nama_prodi = $prodi->singkatan;
-			$model->nama_mk = $mk->nama_mata_kuliah;
-
 			$attr = array(
 				'kode_mata_kuliah'=> $model->kode_mk,
-				'tahun_akademik' => '20172'
+				// 'tahun_akademik' => '20172'
 			);
 			$mk = Mastermatakuliah::model()->findAllByAttributes($attr);
 			
+			$nama_mk = '';
 			foreach($mk as $mk)
 			{
 				$mk->sks = $_POST['sks'];
 
 				$mk->save(false,array('sks'));
-	
+				$nama_mk = $mk->nama_mata_kuliah;
 			}
+
+			$model->nama_fakultas = $fak->nama_fakultas;
+			$model->nama_prodi = $prodi->singkatan;
+			$model->nama_mk = $nama_mk;
+
+			
 			
 			
 			$model->bentrok = 0;
