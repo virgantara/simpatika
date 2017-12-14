@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwal','rekapJadwalXls','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,6 +44,76 @@ class JadwalController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionCetakPersonalAll()
+	{
+
+		// $model = null;
+		// $dosen = null;
+		// if(!empty($_POST['cetak']))
+		// {
+		$masterprodi = Masterprogramstudi::model()->findAll();
+
+		
+
+
+		$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 
+			                'L', 'mm', 'A4', true, 'UTF-8');
+
+		$pdf->setPrintHeader(false);
+		$pdf->setPrintFooter(false);
+		$pdf->SetAutoPageBreak(TRUE,10);
+		$this->layout = '';
+
+		foreach($masterprodi as $prodi)
+		{
+			$kode_prodi = $prodi->kode_prodi;
+			$listprodidosen = Masterdosen::model()->findAllByAttributes(array('kode_prodi'=>$kode_prodi));
+		
+			foreach($listprodidosen as $p)
+			{
+
+				$id = $p->nidn;
+
+				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
+				$dosen = Jadwal::model()->findDosenInJadwal($id);				
+				
+				if(empty($dosen)) continue;
+
+				$pdf->AddPage();
+				
+				
+				ob_start();	
+				echo $this->renderPartial('print_jadwalpersonal',array(
+					'model'=>$model,
+					'dosen' => $dosen
+				));
+
+				$data = ob_get_clean();
+				
+				
+				$pdf->writeHTML($data);
+				// $pdf->endPage();
+			}
+		
+		}
+		ob_end_clean();
+		
+		$pdf->Output();
+	
+		
+		
+		
+	
+
+
+
+		// $this->render('preview_perdosen',array(
+		// 	'model' => $model,
+		// 	'dosen' => $dosen
+
+		// ));
 	}
 
 	public function actionPreviewJadwalPersonal()

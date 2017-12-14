@@ -107,6 +107,7 @@ foreach($jam as $j)
     {
       $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$jd->prodi));
 
+      if(empty($prodi)) continue;
       if($idx == 0)
       {
          $nama_prodi .= $jd->nama_prodi;
