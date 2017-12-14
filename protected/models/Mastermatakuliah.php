@@ -124,6 +124,7 @@ class Mastermatakuliah extends CActiveRecord
 		$new->sks = $sks;
 		$new->semester = $semester;
 		$new->diktat = 'N';
+		$new->sms = 2;
 		
 
 
