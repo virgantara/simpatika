@@ -200,13 +200,14 @@ class Jadwal extends CActiveRecord
 		$bentrok_with = '';
 		foreach($jadwals as $jadwal)
 		{
-
-			$is_bentrok = true;
-			$jadwal->bentrok = 1;
-			$jadwal->save(false,array('bentrok'));
-			
-			$bentrok_with .= $jadwal->id.'|';
-			
+			if($m->id != $jadwal->id)
+			{
+				$is_bentrok = true;
+				$jadwal->bentrok = 1;
+				$jadwal->save(false,array('bentrok'));
+				
+				$bentrok_with .= $jadwal->id.'|';
+			}
 		}	
 
 		if($is_bentrok)
