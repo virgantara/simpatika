@@ -534,7 +534,7 @@ class JadwalController extends Controller
 	    $sheet->getColumnDimension('C')->setWidth(12);
 	    $sheet->getColumnDimension('D')->setWidth(12);
 	    $sheet->getColumnDimension('E')->setWidth(52);
-	    $sheet->getColumnDimension('F')->setWidth(10);
+	    $sheet->getColumnDimension('F')->setWidth(12);
 	    $sheet->getColumnDimension('G')->setWidth(42);
 	    $sheet->getColumnDimension('H')->setWidth(8);
 	    $sheet->getColumnDimension('I')->setWidth(5);
