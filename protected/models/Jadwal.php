@@ -237,11 +237,11 @@ class Jadwal extends CActiveRecord
 			if($jadwal->prodi != $m->prodi)
 			{
 			// paralel
-				$jadwal->bentrok_with = '';
+				$jadwal->bentrok_with = '-';
 				$jadwal->bentrok = 2;
 				$jadwal->save(false,array('bentrok','bentrok_with'));
 				$m->bentrok = 2;
-				$m->bentrok_with = '';
+				$m->bentrok_with = '-';
 				$m->save(false,array('bentrok','bentrok_with'));
 			}
 		}			
