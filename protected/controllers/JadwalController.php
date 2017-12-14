@@ -508,7 +508,7 @@ class JadwalController extends Controller
 		$objPHPExcel->getDefaultStyle()->applyFromArray($styleArray);
 
 		$headers = array(
-		   'No',
+		   // 'No',
 		   'Hari',
 		   'Jam',
 		   'Waktu',
@@ -516,29 +516,36 @@ class JadwalController extends Controller
 		   'Mata Kuliah',
 		   'NIY',
 		   'Nama Dosen',
-		   'SKS',
+		   'RUANG',
+		   'KF',
 		   'Fakultas',
+		   'KP',
 		   'Prodi',
+		   'TAHUN',
 		   'SMT',
 		   'Kampus',
 		   'Kelas',
+		   'SKS',
 		);
     
 	    $sheet = $objPHPExcel->setActiveSheetIndex(0);
-	     $sheet->getColumnDimension('A')->setWidth(4);
-	    $sheet->getColumnDimension('B')->setWidth(8);
-	    $sheet->getColumnDimension('C')->setWidth(4);
+	     $sheet->getColumnDimension('A')->setWidth(8);
+	    $sheet->getColumnDimension('B')->setWidth(4);
+	    $sheet->getColumnDimension('C')->setWidth(12);
 	    $sheet->getColumnDimension('D')->setWidth(12);
-	    $sheet->getColumnDimension('E')->setWidth(12);
-	    $sheet->getColumnDimension('F')->setWidth(52);
-	    $sheet->getColumnDimension('G')->setWidth(8);
-	    $sheet->getColumnDimension('H')->setWidth(42);
+	    $sheet->getColumnDimension('E')->setWidth(52);
+	    $sheet->getColumnDimension('F')->setWidth(10);
+	    $sheet->getColumnDimension('G')->setWidth(42);
+	    $sheet->getColumnDimension('H')->setWidth(8);
 	    $sheet->getColumnDimension('I')->setWidth(5);
 	    $sheet->getColumnDimension('J')->setWidth(15);
-	    $sheet->getColumnDimension('K')->setWidth(7);
-	    $sheet->getColumnDimension('L')->setWidth(6);
-	    $sheet->getColumnDimension('M')->setWidth(12);
+	    $sheet->getColumnDimension('K')->setWidth(5);
+	    $sheet->getColumnDimension('L')->setWidth(10);
+	    $sheet->getColumnDimension('M')->setWidth(8);
 	    $sheet->getColumnDimension('N')->setWidth(6);
+	    $sheet->getColumnDimension('O')->setWidth(12);
+	    $sheet->getColumnDimension('P')->setWidth(6);
+	    $sheet->getColumnDimension('Q')->setWidth(6);
 		$row = 1;
 	    
 		$kampuses = Jadwal::model()->findKampus($id);
@@ -575,22 +582,26 @@ class JadwalController extends Controller
 				    foreach($models as $m)
 					{
 						$i++;
-						$sheet->setCellValueByColumnAndRow(0,$row, $i);
-						$sheet->setCellValueByColumnAndRow(1,$row, $m->hari);
-						$sheet->setCellValueByColumnAndRow(2,$row, $m->jAM->nama_jam);
-						$sheet->setCellValueByColumnAndRow(3,$row, substr($m->jAM->jam_mulai, 0, -3).'-'.substr($m->jAM->jam_selesai, 0, -3));
-						$sheet->setCellValueByColumnAndRow(4,$row, $m->kode_mk);
-						$sheet->setCellValueByColumnAndRow(5,$row, $m->nama_mk);
-						$sheet->setCellValueByColumnAndRow(6,$row, $m->kode_dosen);
-						$sheet->setCellValueByColumnAndRow(7,$row, $m->nama_dosen);
-						$sheet->setCellValueByColumnAndRow(8,$row, $m->SKS);
+						// $sheet->setCellValueByColumnAndRow(0,$row, $i);
+						$sheet->setCellValueByColumnAndRow(0,$row, $m->hari);
+						$sheet->setCellValueByColumnAndRow(1,$row, $m->jAM->nama_jam);
+						$sheet->setCellValueByColumnAndRow(2,$row, substr($m->jAM->jam_mulai, 0, -3).'-'.substr($m->jAM->jam_selesai, 0, -3));
+						$sheet->setCellValueByColumnAndRow(3,$row, $m->kode_mk);
+						$sheet->setCellValueByColumnAndRow(4,$row, $m->nama_mk);
+						$sheet->setCellValueByColumnAndRow(5,$row, $m->kode_dosen);
+						$sheet->setCellValueByColumnAndRow(6,$row, $m->nama_dosen);
+						$sheet->setCellValueByColumnAndRow(7,$row, $m->kd_ruangan);
+						$sheet->setCellValueByColumnAndRow(8,$row, $m->fakultas);
 						$sheet->setCellValueByColumnAndRow(9,$row, $m->nama_fakultas);
+						$sheet->setCellValueByColumnAndRow(10,$row, $m->prodi);
 						$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
 			 			$nm_prodi = !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
-						$sheet->setCellValueByColumnAndRow(10,$row, $nm_prodi);
-						$sheet->setCellValueByColumnAndRow(11,$row, $m->semester);
-						$sheet->setCellValueByColumnAndRow(12,$row, $m->kAMPUS->nama_kampus);
-						$sheet->setCellValueByColumnAndRow(13,$row, $m->kELAS->nama_kelas);
+						$sheet->setCellValueByColumnAndRow(11,$row, $nm_prodi);
+						$sheet->setCellValueByColumnAndRow(12,$row, $m->tahun_akademik);
+						$sheet->setCellValueByColumnAndRow(13,$row, $m->semester);
+						$sheet->setCellValueByColumnAndRow(14,$row, $m->kAMPUS->nama_kampus);
+						$sheet->setCellValueByColumnAndRow(15,$row, $m->kELAS->nama_kelas);
+						$sheet->setCellValueByColumnAndRow(16,$row, $m->SKS);
 					  	$row++;
 					}
 
