@@ -180,10 +180,10 @@ class Jadwal extends CActiveRecord
 		$tahunaktif = '20172';
 
 		$criteria=new CDbCriteria;
-		$criteria->addCondition('kampus <>:p2 AND kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6');
+		$criteria->addCondition('kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6');
 		$criteria->params = array(
 			// ':p1'=> $prodi,
-			':p2' => $m->kampus,
+			// ':p2' => $m->kampus,
 			':p3' => $m->kode_dosen,
 			':p4' => $m->hari,
 			':p5' => $m->jam_mulai,
