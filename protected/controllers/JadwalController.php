@@ -1097,7 +1097,7 @@ class JadwalController extends Controller
 			{
 
 				$result[] = array(
-					'id' => $m->niy,
+					'id' => $m->nidn,
 					'value' => $m->nama_dosen,
 
 				);
