@@ -38,7 +38,7 @@
   
   <thead>
     <tr>
-      <th width="15%"  style="text-align: center;"><strong>NIY</strong></th>
+      <th width="15%"  style="text-align: center;"><strong>KD</strong></th>
       <th width="20%"  style="text-align: center;"><strong>NAMA<br>DOSEN</strong></th>
       <th width="35%"  style="text-align: center;"><strong>MATA KULIAH</strong></th>
     <th width="8%"  style="text-align: center;"><strong>PRODI</strong></th>

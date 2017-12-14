@@ -30,7 +30,7 @@ $list_hari = array(
     <td width="85%" style="text-align: left"><strong><?php echo $dosen->nama_dosen;?></strong></td>
   </tr>
   <tr>
-    <td style="text-align: left"><strong>NIY</strong></td>
+    <td style="text-align: left"><strong>KD</strong></td>
     <td><strong>:</strong></td>
     <td style="text-align: left"><strong><?php echo $dosen->kode_dosen;?></strong></td>
   </tr>
