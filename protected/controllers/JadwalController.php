@@ -651,6 +651,7 @@ class JadwalController extends Controller
 				    $i = 0; 
 				    foreach($models as $m)
 					{
+						$m = (object)$m;
 						$i++;
 						// $sheet->setCellValueByColumnAndRow(0,$row, $i);
 						$sheet->setCellValueByColumnAndRow(0,$row, $m->hari);
@@ -1187,15 +1188,32 @@ class JadwalController extends Controller
 
 			$tahunaktif = '20172';
 
-			$matkul= Jadwal::model()->findAll(
-	                array(
-	                'order' => 'nama_mk ASC',
-	               'condition'=>'prodi=:cid and tahun_akademik=:thn', 
-	               'params'=>array(
-	               		':cid'=>$cid,
-	               		':thn' => $tahunaktif
-	               	)));
-	        $list = CHtml::listData($matkul, 'kode_mk', 'nama_mk');    
+			$list = Yii::app()->db->createCommand()
+		    ->select('*')
+		    ->from('simak_jadwal_temp t')
+		    ->where('prodi=:p1 AND tahun_akademik=:p2', array(':p1'=>$cid,':p2'=>$tahunaktif))
+		    ->queryAll();
+			// $matkul= Jadwal::model()->findAll(
+	  //               array(
+	  //               'order' => 'nama_mk ASC',
+	  //              'condition'=>'prodi=:cid and tahun_akademik=:thn', 
+	  //              'params'=>array(
+	  //              		':cid'=>$cid,
+	  //              		':thn' => $tahunaktif
+	  //              	)));
+
+		    $result = array();
+		    foreach($list as $l)
+		    {
+		    	$l = (object)$l;
+		    	$result[] = array(
+		    		'kode_mk' => $l->kode_mk,
+		    		'nama_mk' => $l->nama_mk
+		    	);
+		    }
+
+		    // print_r($result)
+	        $list = CHtml::listData($result, 'kode_mk', 'nama_mk');    
 	        // print_r($matkul);exit;
 	        // echo $tahunaktif;
 	        echo json_encode($list);
@@ -1342,7 +1360,7 @@ class JadwalController extends Controller
 				$krs->sks = $_POST['sks'];
 
 				$krs->save(false,array('sks'));
-				
+
 			}
 
 			$model->nama_fakultas = $fak->nama_fakultas;

@@ -420,19 +420,33 @@ class Jadwal extends CActiveRecord
 
 	public function findRekapJadwalPerkelas($id,$kampus, $kelas, $semester)
 	{
-		$criteria=new CDbCriteria;
-		$criteria->addCondition('prodi=:p1 AND kampus=:p2 AND kelas=:p3 AND semester=:p4');
-		$criteria->params = array(
-			':p1' => $id,
-			':p2' => $kampus,
-			':p3' => $kelas,
-			':p4' => $semester
-		);
-		$criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
-		$criteria->order = 'h.urutan ASC';
-		$model = Jadwal::model()->findAll($criteria);	
 
-		return $model;
+		$user = Yii::app()->db->createCommand()
+	    ->select('*')
+	    ->from('simak_jadwal_temp t')
+	    ->join('m_hari h', 'h.nama_hari=t.hari')
+	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
+	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+	    ->join('simak_kampus km', 'km.id=t.kampus')
+	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+	    ->where('prodi=:p1 AND kampus=:p2 AND kelas=:p3 AND t.semester =:p4', array(':p1'=>$id,':p2'=>$kampus,':p3'=>$kelas,':p4'=>$semester))
+	    ->group('t.id')
+	    ->order('h.urutan ASC')
+	    ->queryAll();
+
+		// $criteria=new CDbCriteria;
+		// $criteria->addCondition('t.prodi=:p1 AND t.kampus=:p2 AND t.kelas=:p3 AND t.semester=:p4');
+		// $criteria->params = array(
+		// 	':p1' => $id,
+		// 	':p2' => $kampus,
+		// 	':p3' => $kelas,
+		// 	':p4' => $semester
+		// );
+		// $criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
+		// $criteria->order = 'h.urutan ASC';
+		// $model = Jadwal::model()->findAll($criteria);	
+
+		return $user;
 	}
 
 	public function findJadwalDosen($dosen, $hari, $jamke)
