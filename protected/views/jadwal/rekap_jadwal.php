@@ -147,7 +147,7 @@ foreach($kampuses as $kampus)
 			</td>
 
 		<td><?php 
-		echo $kode_prodi.' '.$kampus->id.' '.$kelas->id.' '. $semester->semester.'<br>';
+		// echo $kode_prodi.' '.$kampus->id.' '.$kelas->id.' '. $semester->semester.'<br>';
 		
 		echo $semester->semester;?></td>
 

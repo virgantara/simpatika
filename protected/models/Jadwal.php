@@ -84,11 +84,11 @@ class Jadwal extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'jAM' => array(self::BELONGS_TO, 'Jam', 'jam_ke'),
-			'kAMPUS' => array(self::BELONGS_TO, 'Kampus', 'kampus'),
-			'mk' => array(self::BELONGS_TO, 'Mastermatakuliah', 'kode_mk'),
-			'kELAS' => array(self::BELONGS_TO, 'Masterkelas', 'kelas'),
-			'pRODI' => array(self::BELONGS_TO, 'Masterprogramstudi', 'prodi'),
+			// 'jAM' => array(self::BELONGS_TO, 'Jam', 'jam_ke'),
+			// 'kAMPUS' => array(self::BELONGS_TO, 'Kampus', 'kampus'),
+			// 'mk' => array(self::BELONGS_TO, 'Mastermatakuliah', 'kode_mk'),
+			// 'kELAS' => array(self::BELONGS_TO, 'Masterkelas', 'kelas'),
+			// 'pRODI' => array(self::BELONGS_TO, 'Masterprogramstudi', 'prodi'),
 			// 'dOSEN' => array(self::BELONGS_TO, 'Masterdosen', 'kode_dosen'),
 		);
 	}
@@ -103,21 +103,39 @@ class Jadwal extends CActiveRecord
 		$tahunaktif = $jadwal->tahun_akademik;
 		$semester = $jadwal->semester;
 
-		$criteria=new CDbCriteria;
-		$criteria->addCondition('kampus=:p2 AND kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6 AND semester =:p7 AND nama_mk=:p8');
-		$criteria->params = array(
-			// ':p1'=> $prodi,
-			':p2' => $kampus,
+		$model = Yii::app()->db->createCommand()
+	    ->select('*')
+	    ->from('simak_jadwal_temp t')
+	    ->join('m_hari h', 'h.nama_hari=t.hari')
+	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
+	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+	    ->join('simak_kampus km', 'km.id=t.kampus')
+	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+	    ->where('kampus=:p2 AND kode_dosen=:p3 AND hari=:p4 AND t.jam_mulai=:p5 AND t.tahun_akademik=:p6 AND t.semester=:p7 AND t.nama_mk =:p8', array(
+	    	':p2' => $kampus,
 			':p3' => $dosen,
 			':p4' => $hari,
 			':p5' => $jam,
 			':p6' => $tahunaktif,
 			':p7' => $semester,
-			':p8'=> $nama_mk
-		);
-		$jadwals = Jadwal::model()->findAll($criteria);	
+			':p8'=> $nama_mk))
+	    ->queryAll();
 
-		return $jadwals;
+		// $criteria=new CDbCriteria;
+		// $criteria->addCondition('kampus=:p2 AND kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6 AND semester =:p7 AND nama_mk=:p8');
+		// $criteria->params = array(
+		// 	// ':p1'=> $prodi,
+		// 	':p2' => $kampus,
+		// 	':p3' => $dosen,
+		// 	':p4' => $hari,
+		// 	':p5' => $jam,
+		// 	':p6' => $tahunaktif,
+		// 	':p7' => $semester,
+		// 	':p8'=> $nama_mk
+		// );
+		// $jadwals = Jadwal::model()->findAll($criteria);	
+
+		return $model;
 	}
 
 	public function updateParalel($dosen, $hari, $jam, $kampus, $mk, $tahunaktif, $semester)
@@ -265,6 +283,7 @@ class Jadwal extends CActiveRecord
 
 	public function findDosenInJadwalByProdi($id)
 	{
+		
 		$criteria=new CDbCriteria;
 		$criteria->addCondition('t.kode_prodi="'.$id.'"');
 		$model = Jadwal::model()->find($criteria);	
@@ -274,9 +293,18 @@ class Jadwal extends CActiveRecord
 
 	public function findDosenInJadwal($id)
 	{
-		$criteria=new CDbCriteria;
-		$criteria->addCondition('t.kode_dosen="'.$id.'"');
-		$model = Jadwal::model()->find($criteria);	
+		$model = Yii::app()->db->createCommand()
+	    ->select('*')
+	    ->from('simak_jadwal_temp t')
+	    ->join('m_hari h', 'h.nama_hari=t.hari')
+	    ->join('simak_masterdosen d', 'd.nidn=t.kode_dosen')
+	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
+	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+	    ->join('simak_kampus km', 'km.id=t.kampus')
+	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+	    ->where('kode_dosen=:p1', array(':p1'=>$id))
+	    ->group('t.kode_dosen')
+	    ->queryAll();
 
 		return $model;
 	}
@@ -451,12 +479,23 @@ class Jadwal extends CActiveRecord
 
 	public function findJadwalDosen($dosen, $hari, $jamke)
 	{
-		$params = array(
-			'kode_dosen' => $dosen,
-			'hari' => $hari,
-			'jam_ke' => $jamke
-		);
-		$model = Jadwal::model()->findAllByAttributes($params);
+		$model = Yii::app()->db->createCommand()
+	    ->select('*')
+	    ->from('simak_jadwal_temp t')
+	    ->join('m_hari h', 'h.nama_hari=t.hari')
+	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
+	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+	    ->join('simak_kampus km', 'km.id=t.kampus')
+	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+	    ->where('kode_dosen=:p1 AND hari=:p2 AND jam_ke=:p3', array(':p1'=>$dosen,':p2'=>$hari,':p3'=>$jamke))
+	    ->queryAll();
+
+		// $params = array(
+		// 	'kode_dosen' => $dosen,
+		// 	'hari' => $hari,
+		// 	'jam_ke' => $jamke
+		// );
+		// $model = Jadwal::model()->findAllByAttributes($params);
 
 		return $model;
 	}

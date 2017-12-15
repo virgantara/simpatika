@@ -105,6 +105,7 @@ foreach($jam as $j)
     $nama_prodi = '';
     foreach($jadwaldsn as $jd)
     {
+      $jd = (object)$jd;
       $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$jd->prodi));
 
       if(empty($prodi)) continue;
@@ -127,6 +128,7 @@ foreach($jam as $j)
         $index = 0;
         foreach($jadwal_paralel as $jp)
         {
+          $jp = (object)$jp;
           if($index != 0)
             $lbl_prodi .= '/'.$jp->nama_prodi;
           else
@@ -141,7 +143,7 @@ foreach($jam as $j)
         $lbl_prodi = $prodi->singkatan;
       }
       $label1 = !empty($prodi) ? $lbl_prodi.'-'.$jd->semester.'<br>' : $nama_prodi.'-'.$jd->semester;
-      $label2 = $jd->kAMPUS->nama_kampus.'-'.$jd->kELAS->nama_kelas.' / '.$jd->SKS.' SKS';
+      $label2 = $jd->nama_kampus.'-'.$jd->nama_kelas.' / '.$jd->sks.' SKS';
       $label3 = '<br><span style="background-color:yellow">'.substr($jd->jam_mulai, 0, -3).'-'.substr($jd->jam_selesai, 0, -3).'</span>';
       
       $idx++;
