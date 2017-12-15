@@ -1332,6 +1332,19 @@ class JadwalController extends Controller
 				$nama_mk = $mk->nama_mata_kuliah;
 			}
 
+			$attr = array(
+				'kode_mk'=> $model->kode_mk,
+				'tahun_akademik' => '20172'
+			);
+			$datakrs = Datakrs::model()->findAllByAttributes($attr);
+			foreach($datakrs as $krs)
+			{
+				$krs->sks = $_POST['sks'];
+
+				$krs->save(false,array('sks'));
+				
+			}
+
 			$model->nama_fakultas = $fak->nama_fakultas;
 			$model->nama_prodi = $prodi->singkatan;
 			$model->nama_mk = $nama_mk;
