@@ -469,7 +469,7 @@ class Jadwal extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'hari' => 'Hari',
-			'jam_ke' => 'Jam',
+			'jam_ke' => 'Jam ke',
 			'jam' => 'Jam',
 			'jam_mulai' => 'Jam Mulai',
 			'jam_selesai' => 'Jam Selesai',

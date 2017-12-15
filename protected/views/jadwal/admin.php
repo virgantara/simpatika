@@ -95,6 +95,7 @@ echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 		),
  
 		'hari',
+		'jam_ke',
 		'jam_mulai',
 		'jam_selesai',
 		array(
