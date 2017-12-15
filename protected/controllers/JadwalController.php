@@ -655,8 +655,8 @@ class JadwalController extends Controller
 						$i++;
 						// $sheet->setCellValueByColumnAndRow(0,$row, $i);
 						$sheet->setCellValueByColumnAndRow(0,$row, $m->hari);
-						$sheet->setCellValueByColumnAndRow(1,$row, $m->jAM->nama_jam);
-						$sheet->setCellValueByColumnAndRow(2,$row, substr($m->jAM->jam_mulai, 0, -3).'-'.substr($m->jAM->jam_selesai, 0, -3));
+						$sheet->setCellValueByColumnAndRow(1,$row, $m->nama_jam);
+						$sheet->setCellValueByColumnAndRow(2,$row, substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3));
 						$sheet->setCellValueByColumnAndRow(3,$row, $m->kode_mk);
 						$sheet->setCellValueByColumnAndRow(4,$row, $m->nama_mk);
 						$sheet->setCellValueByColumnAndRow(5,$row, $m->kode_dosen);
@@ -670,9 +670,9 @@ class JadwalController extends Controller
 						$sheet->setCellValueByColumnAndRow(11,$row, $nm_prodi);
 						$sheet->setCellValueByColumnAndRow(12,$row, $m->tahun_akademik);
 						$sheet->setCellValueByColumnAndRow(13,$row, $m->semester);
-						$sheet->setCellValueByColumnAndRow(14,$row, $m->kAMPUS->nama_kampus);
-						$sheet->setCellValueByColumnAndRow(15,$row, $m->kELAS->nama_kelas);
-						$sheet->setCellValueByColumnAndRow(16,$row, $m->SKS);
+						$sheet->setCellValueByColumnAndRow(14,$row, $m->nama_kampus);
+						$sheet->setCellValueByColumnAndRow(15,$row, $m->nama_kelas);
+						$sheet->setCellValueByColumnAndRow(16,$row, $m->sks);
 					  	$row++;
 					}
 
