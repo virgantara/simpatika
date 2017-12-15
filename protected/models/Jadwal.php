@@ -84,12 +84,12 @@ class Jadwal extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			// 'jAM' => array(self::BELONGS_TO, 'Jam', 'jam_ke'),
-			// 'kAMPUS' => array(self::BELONGS_TO, 'Kampus', 'kampus'),
-			// 'mk' => array(self::BELONGS_TO, 'Mastermatakuliah', 'kode_mk'),
-			// 'kELAS' => array(self::BELONGS_TO, 'Masterkelas', 'kelas'),
-			// 'pRODI' => array(self::BELONGS_TO, 'Masterprogramstudi', 'prodi'),
-			// 'dOSEN' => array(self::BELONGS_TO, 'Masterdosen', 'kode_dosen'),
+			'jAM' => array(self::BELONGS_TO, 'Jam', 'jam_ke'),
+			'kAMPUS' => array(self::BELONGS_TO, 'Kampus', 'kampus'),
+			'mk' => array(self::BELONGS_TO, 'Mastermatakuliah', 'kode_mk'),
+			'kELAS' => array(self::BELONGS_TO, 'Masterkelas', 'kelas'),
+			'pRODI' => array(self::BELONGS_TO, 'Masterprogramstudi', 'prodi'),
+			'dOSEN' => array(self::BELONGS_TO, 'Masterdosen', 'kode_dosen'),
 		);
 	}
 
