@@ -117,7 +117,6 @@ foreach($kampuses as $kampus)
 
 
 		$i = 0; 
-
 		$model = Jadwal::model()->findRekapJadwalPerkelas($kode_prodi, $kampus->id, $kelas->id, $semester->semester);
 		foreach($model as $m)
 		{
@@ -147,7 +146,10 @@ foreach($kampuses as $kampus)
 				
 			</td>
 
-		<td><?php echo $m->semester;?></td>
+		<td><?php 
+		echo $kode_prodi.' '.$kampus->id.' '.$kelas->id.' '. $semester->semester.'<br>';
+		
+		echo $semester->semester;?></td>
 
 		<td><?php echo $m->nama_kampus;?></td>
 		<td width="5%"><?php echo $m->nama_kelas;?></td>

@@ -669,7 +669,7 @@ class JadwalController extends Controller
 			 			$nm_prodi = !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
 						$sheet->setCellValueByColumnAndRow(11,$row, $nm_prodi);
 						$sheet->setCellValueByColumnAndRow(12,$row, $m->tahun_akademik);
-						$sheet->setCellValueByColumnAndRow(13,$row, $m->semester);
+						$sheet->setCellValueByColumnAndRow(13,$row, $semester->semester);
 						$sheet->setCellValueByColumnAndRow(14,$row, $m->nama_kampus);
 						$sheet->setCellValueByColumnAndRow(15,$row, $m->nama_kelas);
 						$sheet->setCellValueByColumnAndRow(16,$row, $m->sks);
