@@ -76,10 +76,23 @@ class JadwalController extends Controller
 
 				$id = $p->nidn;
 
-				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
+				$model = Yii::app()->db->createCommand()
+			    ->select('*')
+			    ->from('simak_jadwal_temp t')
+			    ->join('m_hari h', 'h.nama_hari=t.hari')
+			    ->join('m_jam j', 'j.id_jam=t.jam_ke')
+			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+			    ->join('simak_kampus km', 'km.id=t.kampus')
+			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+			    ->where('kode_dosen=:p1', array(':p1' => $id))
+			    ->queryAll();
+
+
 				$dosen = Jadwal::model()->findDosenInJadwal($id);				
 				
-				if(empty($dosen)) continue;
+				if(count($dosen) == 0) continue;
+
+				$dosen = (object)$dosen[0];
 
 				$pdf->AddPage();
 				
