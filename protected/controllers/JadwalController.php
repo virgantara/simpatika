@@ -823,7 +823,7 @@ class JadwalController extends Controller
 				
 				if(count($dosen) == 0) continue;
 
-				
+
 				$dosen = (object)$dosen[0];
 
 
@@ -1236,8 +1236,8 @@ class JadwalController extends Controller
 
 			$list = Yii::app()->db->createCommand()
 		    ->select('*')
-		    ->from('simak_jadwal_temp t')
-		    ->where('prodi=:p1 AND tahun_akademik=:p2', array(':p1'=>$cid,':p2'=>$tahunaktif))
+		    ->from('simak_mastermatakuliah t')
+		    ->where('kode_prodi=:p1 AND tahun_akademik=:p2', array(':p1'=>$cid,':p2'=>$tahunaktif))
 		    ->queryAll();
 			// $matkul= Jadwal::model()->findAll(
 	  //               array(
@@ -1253,8 +1253,8 @@ class JadwalController extends Controller
 		    {
 		    	$l = (object)$l;
 		    	$result[] = array(
-		    		'kode_mk' => $l->kode_mk,
-		    		'nama_mk' => $l->nama_mk
+		    		'kode_mk' => $l->kode_mata_kuliah,
+		    		'nama_mk' => $l->nama_mata_kuliah
 		    	);
 		    }
 
