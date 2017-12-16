@@ -420,7 +420,7 @@ class Jadwal extends CActiveRecord
 		// $model = Jadwal::model()->findAll($criteria);	
 
 		$model = Yii::app()->db->createCommand()
-	    ->select('*')
+	    ->select('*, t.id as idjadwal')
 	    ->from('simak_jadwal_temp t')
 	    ->join('m_hari h', 'h.nama_hari=t.hari')
 	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
@@ -604,7 +604,7 @@ class Jadwal extends CActiveRecord
 		$sort = new CSort();
 		$criteria=new CDbCriteria;
 
-
+		$criteria->addSearchCondition('t.id',$this->SEARCH,true,'OR');
 		$criteria->addSearchCondition('hari',$this->SEARCH,true,'OR');
 		$criteria->addSearchCondition('jam',$this->SEARCH,true,'OR');
 		$criteria->addSearchCondition('jam_mulai',$this->SEARCH,true,'OR');
