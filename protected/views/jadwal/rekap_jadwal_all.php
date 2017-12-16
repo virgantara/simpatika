@@ -60,7 +60,7 @@ $this->menu=array(
       <th>Semester</th>
       <th>Kampus</th>
       <th width="5%">Kelas</th>
-     <th>Action</th>
+     <!-- <th>Action</th> -->
     </tr>
   </thead>
   <tbody>
@@ -74,7 +74,7 @@ $this->menu=array(
 		foreach($jadwal_prodi as $jd)
 		{
 		  
-
+		  $jd = (object)$jd;
 		  if(empty($jd->kode_dosen)) continue;
 
 		 
@@ -85,17 +85,17 @@ $this->menu=array(
 
 		  foreach($jadwal_perdosen as $m)
 		  {	
-
+		  	$m = (object)$m;
 		  	 $i++;
 
-		  	$sks_dosen += $m->SKS;
+		  	$sks_dosen += $m->sks;
 
 
 		?>
 		<tr <?php echo $m->bentrok == 1 ? 'style="background-color:orange"' : '';?>>
 		<td width="3%"><?=$i;?></td>
 		<td width="5%"><?php echo $m->hari;?></td>
-		<td><?php echo $m->jAM->nama_jam;?></td>
+		<td><?php echo $m->nama_jam;?></td>
 		<td><?php echo substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3);?></td>
 		<td><?php echo $m->kode_mk;?></td>
 		<td width="15%"><?php echo $m->nama_mk;?></td>
@@ -103,7 +103,7 @@ $this->menu=array(
 
 		<td width="15%"><?php echo $m->nama_dosen;?></td>
 
-		<td width="5%"><?php echo $m->SKS;?></td>
+		<td width="5%"><?php echo $m->sks;?></td>
 		<td width="5%"><?php echo $m->nama_fakultas;?></td>
 		<td width="15%">
 			<?php
@@ -116,16 +116,16 @@ $this->menu=array(
 
 		<td><?php echo $m->semester;?></td>
 
-		<td><?php echo $m->kAMPUS->nama_kampus;?></td>
-		<td width="5%"><?php echo $m->kELAS->nama_kelas;?></td>
-		<td>
+		<td><?php echo $m->nama_kampus;?></td>
+		<td width="5%"><?php echo $m->nama_kelas;?></td>
+		<!-- <td> -->
 		 <?php 
-		 if($m->bentrok==1)
-		 	echo CHtml::link('Bentrok',array('jadwal/listBentrok','id'=>$m->id),array('target'=>'_blank'));
-		 else if($m->bentrok==2)
-		 	echo CHtml::link('Paralel',array('jadwal/listParalel','id'=>$m->id),array('target'=>'_blank'));
+		 // if($m->bentrok==1)
+		 // 	echo CHtml::link('Bentrok',array('jadwal/listBentrok','id'=>$m->id),array('target'=>'_blank'));
+		 // else if($m->bentrok==2)
+		 // 	echo CHtml::link('Paralel',array('jadwal/listParalel','id'=>$m->id),array('target'=>'_blank'));
 		 ?>
-		</td>
+		<!-- </td> -->
 
 		</tr>
 	<?php 
@@ -150,7 +150,7 @@ $this->menu=array(
 		<td></td>
 
 		<td></td>
-		<td width="5%"></td>
+		<!-- <td width="5%"></td> -->
 
 
 		</tr>

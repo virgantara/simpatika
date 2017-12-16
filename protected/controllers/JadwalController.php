@@ -464,32 +464,34 @@ class JadwalController extends Controller
 		$row = $rowStart;
 		foreach($jadwal_prodi as $jd)
 		{
+			$jd = (object)$jd;
 			if(empty($jd->kode_dosen)) continue;
 
 			$sks_dosen = 0;
 			$jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($jd->kode_dosen);
 			foreach($jadwal_perdosen as $m)
 			{	
-		  		$sks_dosen += $m->SKS;
+				$m = (object)$m;
+		  		$sks_dosen += $m->sks;
 
 				$i++;
 				$sheet->getRowDimension($row+1)->setRowHeight(15);
 				$sheet->setCellValueByColumnAndRow(0,$row+1, $i);
 				$sheet->setCellValueByColumnAndRow(1,$row+1, $m->hari);
-				$sheet->setCellValueByColumnAndRow(2,$row+1, $m->jAM->nama_jam);
+				$sheet->setCellValueByColumnAndRow(2,$row+1, $m->nama_jam);
 				$sheet->setCellValueByColumnAndRow(3,$row+1, substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3));
 				$sheet->setCellValueByColumnAndRow(4,$row+1, $m->kode_mk);
 				$sheet->setCellValueByColumnAndRow(5,$row+1, $m->nama_mk);
 				$sheet->setCellValueByColumnAndRow(6,$row+1, $m->kode_dosen);
 				$sheet->setCellValueByColumnAndRow(7,$row+1, $m->nama_dosen);
-				$sheet->setCellValueByColumnAndRow(8,$row+1, $m->SKS);
+				$sheet->setCellValueByColumnAndRow(8,$row+1, $m->sks);
 				$sheet->setCellValueByColumnAndRow(9,$row+1, $m->nama_fakultas);
 				$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
 	 			$nm_prodi = !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
 				$sheet->setCellValueByColumnAndRow(10,$row+1, $nm_prodi);
 				$sheet->setCellValueByColumnAndRow(11,$row+1, $m->semester);
-				$sheet->setCellValueByColumnAndRow(12,$row+1, $m->kAMPUS->nama_kampus);
-				$sheet->setCellValueByColumnAndRow(13,$row+1, $m->kELAS->nama_kelas);
+				$sheet->setCellValueByColumnAndRow(12,$row+1, $m->nama_kampus);
+				$sheet->setCellValueByColumnAndRow(13,$row+1, $m->nama_kelas);
 			  	foreach($headers as $q => $v)
 	    		{
 				  	$cell = $sheet->getCellByColumnAndRow($q,$row+1);
@@ -730,7 +732,7 @@ class JadwalController extends Controller
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$jadwal_prodi = Jadwal::model()->findRekapJadwalAll();
 
-		$total_bentrok = Jadwal::model()->countBentrok();
+		$total_bentrok = 0;//Jadwal::model()->countBentrok();
 
 		$this->render('rekap_jadwal_all',array(
 			'jadwal_prodi' => $jadwal_prodi,

@@ -411,13 +411,25 @@ class Jadwal extends CActiveRecord
 
 	public function findRekapJadwalPerDosenAll($kode_dosen)
 	{
-		$criteria=new CDbCriteria;
-		// $criteria->compare('tahun_akademik',$tahun_akademik);
-		$criteria->addCondition('kode_dosen=:p1');
-		$criteria->params = array(
-			':p1' =>$kode_dosen
-		);
-		$model = Jadwal::model()->findAll($criteria);	
+		// $criteria=new CDbCriteria;
+		// // $criteria->compare('tahun_akademik',$tahun_akademik);
+		// $criteria->addCondition('kode_dosen=:p1');
+		// $criteria->params = array(
+		// 	':p1' =>$kode_dosen
+		// );
+		// $model = Jadwal::model()->findAll($criteria);	
+
+		$model = Yii::app()->db->createCommand()
+	    ->select('*')
+	    ->from('simak_jadwal_temp t')
+	    ->join('m_hari h', 'h.nama_hari=t.hari')
+	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
+	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+	    ->join('simak_kampus km', 'km.id=t.kampus')
+	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+	    ->where('kode_dosen=:p1', array(':p1'=>$kode_dosen))
+	    ->order('t.kode_dosen ASC')
+	    ->queryAll();
 
 		return $model;
 	}
@@ -436,12 +448,25 @@ class Jadwal extends CActiveRecord
 
 	public function findRekapJadwalAll($tahun_akademik=0)
 	{
-		$criteria=new CDbCriteria;
-		// $criteria->compare('tahun_akademik',$tahun_akademik);
-		// $criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
-		$criteria->order = 'kode_dosen ASC';
-		$criteria->group = 'kode_dosen';
-		$model = Jadwal::model()->findAll($criteria);	
+		// $criteria=new CDbCriteria;
+		// // $criteria->compare('tahun_akademik',$tahun_akademik);
+		// // $criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
+		// $criteria->order = 'kode_dosen ASC';
+		// $criteria->group = 'kode_dosen';
+		// $model = Jadwal::model()->findAll($criteria);	
+
+		$model = Yii::app()->db->createCommand()
+	    ->select('*')
+	    ->from('simak_jadwal_temp t')
+	    ->join('m_hari h', 'h.nama_hari=t.hari')
+	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
+	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+	    ->join('simak_kampus km', 'km.id=t.kampus')
+	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+	    ->group('t.kode_dosen')
+	    ->order('t.kode_dosen ASC')
+	    ->queryAll();
+
 
 		return $model;
 	}
