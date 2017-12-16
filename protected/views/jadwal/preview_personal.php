@@ -18,7 +18,7 @@ $list_hari = array(
 <table width="100%" style="margin-left: 5px">
   <tr>
     <td width="100%" colspan="3" style="text-align: left">
-<h3>JADWAL PERSONAL DOSEN GENAP<br>UNIVERSITAS DARUSSALAM GONTOR<br>T.A. 1438-1438 H / 2017-2018 M
+<h3>JADWAL PERSONAL DOSEN GENAP<br>UNIVERSITAS DARUSSALAM GONTOR<br>T.A. 1438-1439 H / 2017-2018 M
     </h3>
 <br><br><br>
   </td>
