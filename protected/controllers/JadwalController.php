@@ -202,11 +202,11 @@ class JadwalController extends Controller
 
 			$setting_sk = JadwalLampiranSk::model()->find();
 
-			$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 'P', 'mm', 'A4', true, 'UTF-8');
+			// $pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 'P', 'mm', 'A4', true, 'UTF-8');
 
-			$pdf->setPrintHeader(false);
-			$pdf->setPrintFooter(false);
-			$pdf->SetAutoPageBreak(TRUE,10);
+			// $pdf->setPrintHeader(false);
+			// $pdf->setPrintFooter(false);
+			// $pdf->SetAutoPageBreak(TRUE,10);
 			$this->layout = '';
 			
 			
@@ -224,24 +224,25 @@ class JadwalController extends Controller
 
 				$dosen = (object)$dosen[0];
 
-				$pdf->AddPage();
+				// $pdf->AddPage();
 				
 				
-				ob_start();	
+				// ob_start();	
 				echo $this->renderPartial('print_lampiran_sk',array(
 					'model'=>$model,
 					'dosen' => $dosen,
 					'setting_sk' => $setting_sk
 				));
 
-				$data = ob_get_clean();
+				// $data = ob_get_clean();
 				
-				$pdf->writeHTML($data);
+				// $pdf->writeHTML($data);
 			}
+			exit;
+			// ob_end_clean();
 			
-			ob_end_clean();
-			
-			$pdf->Output();
+			// $prodi = Masterprogramstudi::model()->findByPk($kode_prodi);
+			// $pdf->Output('sk_'.strtolower($prodi->singkatan).'.pdf');
 			
 		}
 

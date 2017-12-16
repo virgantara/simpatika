@@ -38,6 +38,9 @@
  */
 class Masterdosen extends CActiveRecord
 {
+
+	public $SEARCH;
+	public $PAGE_SIZE = 50;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -175,41 +178,26 @@ class Masterdosen extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$sort = new CSort();
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('kode_pt',$this->kode_pt,true);
-		$criteria->compare('kode_fakultas',$this->kode_fakultas,true);
-		$criteria->compare('kode_jurusan',$this->kode_jurusan,true);
-		$criteria->compare('kode_prodi',$this->kode_prodi,true);
-		$criteria->compare('kode_jenjang_studi',$this->kode_jenjang_studi,true);
-		$criteria->compare('no_ktp_dosen',$this->no_ktp_dosen,true);
-		$criteria->compare('nidn',$this->nidn,true);
-		$criteria->compare('niy',$this->niy,true);
-		$criteria->compare('nama_dosen',$this->nama_dosen,true);
-		$criteria->compare('gelar_depan',$this->gelar_depan,true);
-		$criteria->compare('gelar_akademik',$this->gelar_akademik,true);
-		$criteria->compare('tempat_lahir_dosen',$this->tempat_lahir_dosen,true);
-		$criteria->compare('tgl_lahir_dosen',$this->tgl_lahir_dosen,true);
-		$criteria->compare('jenis_kelamin',$this->jenis_kelamin,true);
-		$criteria->compare('kode_jabatan_akademik',$this->kode_jabatan_akademik,true);
-		$criteria->compare('kode_pendidikan_tertinggi',$this->kode_pendidikan_tertinggi,true);
-		$criteria->compare('kode_status_kerja_pts',$this->kode_status_kerja_pts,true);
-		$criteria->compare('kode_status_aktivitas_dosen',$this->kode_status_aktivitas_dosen,true);
-		$criteria->compare('tahun_semester',$this->tahun_semester,true);
-		$criteria->compare('nip_pns',$this->nip_pns,true);
-		$criteria->compare('home_base',$this->home_base,true);
-		$criteria->compare('photo_dosen',$this->photo_dosen,true);
-		$criteria->compare('no_telp_dosen',$this->no_telp_dosen,true);
-		$criteria->compare('no_hp_dosen',$this->no_hp_dosen,true);
-		$criteria->compare('email_dosen',$this->email_dosen,true);
-		$criteria->compare('alamat_dosen',$this->alamat_dosen,true);
-		$criteria->compare('alamat_domisili',$this->alamat_domisili,true);
-		$criteria->compare('kabupaten_dosen',$this->kabupaten_dosen,true);
-		$criteria->compare('provinsi_dosen',$this->provinsi_dosen);
-		$criteria->compare('agama_dosen',$this->agama_dosen,true);
+		$criteria->addSearchCondition('nidn',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('niy',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_dosen',$this->SEARCH,true,'OR');
+		
+
+		if($this->kode_prodi != 0)
+		{
+			$criteria->compare('kode_prodi',$this->kode_prodi);	
+		}
+		
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>$sort,
+			'pagination'=>array(
+				'pageSize'=>$this->PAGE_SIZE,
+				
+			),
 		));
 	}
 

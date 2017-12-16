@@ -1,4 +1,39 @@
-
+<table style="margin-bottom: 6px;" width="100%">
+  <tr>
+    <td width="100%" style="text-align: center;" >
+      
+      <img width="120" src="<?php echo Yii::app()->baseUrl;?>/images/logo_unida.png"/>
+    </td>
+    
+  </tr>
+</table>
+<br><br>
+<table width="100%" style="font-size: 10;font-family: 'Times'">
+  <tr>
+    <td width="10%">Lampiran:</td>
+    <td width="90%"><?=$setting_sk->bunyi_lampiran;?>
+      <br>
+      <table width="100%">
+      <tr>
+        <td width="17%">Nomor</td>
+        <td width="3%">:</td>
+        <td width="80%"><?=$setting_sk->nomor_sk;?></td>
+      </tr>
+      <tr>
+        <td width="17%">Tanggal</td>
+        <td width="3%">:</td>
+        <td width="80%"><?=$setting_sk->tanggal_sk;?></td>
+      </tr>
+      <tr>
+        <td width="17%">Tentang:</td>
+        <td width="3%">:</td>
+        <td width="80%"><?=$setting_sk->tentang;?></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+<br><br>
 <table cellpadding="2" border="1" width="100%" style="font-size: 10;font-family: 'Times'">
   
   <thead>
@@ -52,4 +87,16 @@
  }
    ?>
  </tbody>
+</table>
+<table width="100%" style="font-size: 10;font-family: 'Times';">
+  <tr>
+    <td width="45%">&nbsp;</td>
+    <td width="55%" style="text-align: left">
+      
+      <p>Ditetapkan di Ponorogo,</p>
+      <p>Pada Tanggal <?=$setting_sk->tanggal_sk;?><br>Rektor UNIDA Gontor.</p>
+      <img width="210px" src="<?php echo Yii::app()->baseUrl;?>/images/ttd.jpg"/>
+      <!-- <u><strong><p>Prof. Dr. Amal Fathullah Zarkasyi, M.A.</p></strong></u> -->
+    </td>
+  </tr>
 </table>

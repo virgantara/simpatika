@@ -28,24 +28,47 @@ $('.search-form form').submit(function(){
 
 <h1>Manage Masterdosens</h1>
 
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
+<script type="text/javascript">
+    
+	function updateData(){
+		 $('#masterdosen-grid').yiiGridView.update('masterdosen-grid', {
+            url:'?r=masterdosen/admin&filter='+$('#search').val()+'&size='+$('#size').val()+'&kode_prodi='+$('#kode_prodi').val()   
+        });
+	}
 
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
-)); ?>
-</div><!-- search-form -->
+    $(document).ready(function(){
+        $('#search, #size, #kode_prodi').change(function(){
+           	updateData();
+        });
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+        $('#pencarian').click(function(){
+           	updateData();
+        });
+    });
+</script>
+ <div class="pull-right">
+Data per halaman
+<?php echo CHtml::dropDownList('Masterdosen[PAGE_SIZE]',isset($_GET['size'])?$_GET['size']:'',array(10=>10,50=>50,100=>100,200=>200),array('id'=>'size','size'=>1)); ?>
+Prodi
+<?php 
+$list_gol = CHtml::listData(Masterprogramstudi::model()->findAll(),'kode_prodi','nama_prodi');
+echo CHtml::dropDownList('Masterdosen[KODEPRODI]',isset($_GET['kode_prodi'])?$_GET['kode_prodi']:'',$list_gol,array('id'=>'kode_prodi','empty' => 'Semua')); ?>  
+<?php
+echo CHtml::textField('Masterdosen[SEARCH]','',array('placeholder'=>'Cari','id'=>'search')); 
+?>   
+<?php
+echo CHtml::button("Cari",array("id"=>"pencarian"));
+?>
+</div> 
+<?php $this->widget('application.components.ComplexGridView', array(
 	'id'=>'masterdosen-grid',
 	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	
 	'columns'=>array(
-		
+		array(
+			'header' => 'No',
+			'value'	=> '$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+		),
 		'kode_prodi',
 		'nidn',
 		'niy',

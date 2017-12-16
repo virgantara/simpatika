@@ -137,6 +137,16 @@ class MasterdosenController extends Controller
 	{
 		$model=new Masterdosen('search');
 		$model->unsetAttributes();  // clear any default values
+
+		if(isset($_GET['filter']))
+			$model->SEARCH=$_GET['filter'];
+
+		if(isset($_GET['size']))
+			$model->PAGE_SIZE=$_GET['size'];
+
+		if(isset($_GET['kode_prodi']))
+			$model->kode_prodi=$_GET['kode_prodi'];
+
 		if(isset($_GET['Masterdosen']))
 			$model->attributes=$_GET['Masterdosen'];
 

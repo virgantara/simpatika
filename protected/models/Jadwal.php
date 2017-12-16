@@ -304,6 +304,7 @@ class Jadwal extends CActiveRecord
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
 	    ->where('kode_dosen=:p1', array(':p1'=>$id))
 	    ->group('t.kode_dosen')
+	    ->order('d.nama_dosen')
 	    ->queryAll();
 
 		return $model;
