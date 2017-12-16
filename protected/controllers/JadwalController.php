@@ -219,7 +219,10 @@ class JadwalController extends Controller
 				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
 				$dosen = Jadwal::model()->findDosenInJadwal($id);				
 				
-				if(empty($dosen)) continue;
+				if(count($dosen) == 0) continue;
+
+
+				$dosen = (object)$dosen[0];
 
 				$pdf->AddPage();
 				
