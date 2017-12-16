@@ -53,8 +53,12 @@
   $counter = 1;
   foreach($model as $m)
   {
+    $m= (object)$m;
+
 
     $kelas = Masterkelas::model()->findByPk($m->kelas);
+
+    
     if($counter==1)
     {
       ?>
@@ -65,7 +69,7 @@
     <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
     <td width="10%"  style="text-align: center;"><?=$kelas->nama_kelas;?></td>
-    <td width="5%"  style="text-align: center;"><?=$m->SKS;?></td>
+    <td width="5%"  style="text-align: center;"><?=$m->sks;?></td>
      
    </tr>
       <?php     
@@ -78,7 +82,7 @@
     <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
     <td width="10%"  style="text-align: center;"><?=$kelas->nama_kelas;?></td>
-    <td width="5%"  style="text-align: center;"><?=$m->SKS;?></td>
+    <td width="5%"  style="text-align: center;"><?=$m->sks;?></td>
      
    </tr>
    <?php 

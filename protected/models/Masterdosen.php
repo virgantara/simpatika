@@ -190,6 +190,7 @@ class Masterdosen extends CActiveRecord
 			$criteria->compare('kode_prodi',$this->kode_prodi);	
 		}
 		
+		$criteria->order = 'nama_dosen';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -202,11 +202,11 @@ class JadwalController extends Controller
 
 			$setting_sk = JadwalLampiranSk::model()->find();
 
-			// $pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 'P', 'mm', 'A4', true, 'UTF-8');
+			$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 'P', 'mm', 'A4', true, 'UTF-8');
 
-			// $pdf->setPrintHeader(false);
-			// $pdf->setPrintFooter(false);
-			// $pdf->SetAutoPageBreak(TRUE,10);
+			$pdf->setPrintHeader(false);
+			$pdf->setPrintFooter(false);
+			$pdf->SetAutoPageBreak(TRUE,10);
 			$this->layout = '';
 			
 			
@@ -216,33 +216,44 @@ class JadwalController extends Controller
 				
 				$id = $p->nidn;
 
-				$model = Jadwal::model()->findAllByAttributes(array('kode_dosen'=>$id));
-				$dosen = Jadwal::model()->findDosenInJadwal($id);				
-				
-				if(count($dosen) == 0) continue;
+				$model = Yii::app()->db->createCommand()
+			    ->select('*, t.id as idjadwal')
+			    ->from('simak_jadwal_temp t')
+			    ->join('m_hari h', 'h.nama_hari=t.hari')
+			    ->join('m_jam j', 'j.id_jam=t.jam_ke')
+			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+			    ->join('simak_kampus km', 'km.id=t.kampus')
+			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+			    ->where('kode_dosen=:p1', array(':p1' => $id))
+			    ->group('idjadwal')
+			    ->queryAll();
 
+			    $size = count($model);
+			    // echo count($model).'<br>';
+			    if($size == 0) continue;
+			
 
-				$dosen = (object)$dosen[0];
-
-				// $pdf->AddPage();
+				
+				$pdf->AddPage();
 				
 				
-				// ob_start();	
+				ob_start();	
 				echo $this->renderPartial('print_lampiran_sk',array(
 					'model'=>$model,
-					'dosen' => $dosen,
+					// 'dosen' => $dosen,
 					'setting_sk' => $setting_sk
 				));
 
-				// $data = ob_get_clean();
+				$data = ob_get_clean();
 				
-				// $pdf->writeHTML($data);
+				$pdf->writeHTML($data);
 			}
-			exit;
-			// ob_end_clean();
+
+			// exit;
+			ob_end_clean();
 			
 			// $prodi = Masterprogramstudi::model()->findByPk($kode_prodi);
-			// $pdf->Output('sk_'.strtolower($prodi->singkatan).'.pdf');
+			$pdf->Output('sk_'.$kode_prodi.'.pdf');
 			
 		}
 

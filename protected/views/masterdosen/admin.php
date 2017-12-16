@@ -48,7 +48,7 @@ $('.search-form form').submit(function(){
 </script>
  <div class="pull-right">
 Data per halaman
-<?php echo CHtml::dropDownList('Masterdosen[PAGE_SIZE]',isset($_GET['size'])?$_GET['size']:'',array(10=>10,50=>50,100=>100,200=>200),array('id'=>'size','size'=>1)); ?>
+<?php echo CHtml::dropDownList('Masterdosen[PAGE_SIZE]',isset($_GET['size'])?$_GET['size']:'',array(50=>50,100=>100,200=>200),array('id'=>'size','size'=>1)); ?>
 Prodi
 <?php 
 $list_gol = CHtml::listData(Masterprogramstudi::model()->findAll(),'kode_prodi','nama_prodi');

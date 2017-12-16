@@ -1,4 +1,39 @@
-
+<table style="margin-bottom: 6px;" width="100%">
+  <tr>
+    <td width="100%" style="text-align: center;" >
+      
+      <img width="120" src="<?php echo Yii::app()->baseUrl;?>/images/logo_unida.png"/>
+    </td>
+    
+  </tr>
+</table>
+<br><br>
+<table width="100%" style="font-size: 10;font-family: 'Times'">
+  <tr>
+    <td width="10%">Lampiran:</td>
+    <td width="90%"><?=$setting_sk->bunyi_lampiran;?>
+      <br>
+      <table width="100%">
+      <tr>
+        <td width="17%">Nomor</td>
+        <td width="3%">:</td>
+        <td width="80%"><?=$setting_sk->nomor_sk;?></td>
+      </tr>
+      <tr>
+        <td width="17%">Tanggal</td>
+        <td width="3%">:</td>
+        <td width="80%"><?=$setting_sk->tanggal_sk;?></td>
+      </tr>
+      <tr>
+        <td width="17%">Tentang:</td>
+        <td width="3%">:</td>
+        <td width="80%"><?=$setting_sk->tentang;?></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+<br><br>
 <table cellpadding="2" border="1" width="100%" style="font-size: 10;font-family: 'Times'">
   
   <thead>
@@ -18,8 +53,12 @@
   $counter = 1;
   foreach($model as $m)
   {
+    $m= (object)$m;
 
-    $kelas = Masterkelas::model()->findByPk($m->kelas);
+
+    
+
+
     if($counter==1)
     {
       ?>
@@ -29,8 +68,8 @@
       <td width="35%"  style="text-align: center;"><?=$m->nama_mk;?></td>
     <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
-    <td width="10%"  style="text-align: center;"><?=$kelas->nama_kelas;?></td>
-    <td width="5%"  style="text-align: center;"><?=$m->SKS;?></td>
+    <td width="10%"  style="text-align: center;"><?=$m->nama_kelas;?></td>
+    <td width="5%"  style="text-align: center;"><?=$m->sks;?></td>
      
    </tr>
       <?php     
@@ -42,8 +81,8 @@
       <td width="35%"  style="text-align: center;"><?=$m->nama_mk;?></td>
     <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
-    <td width="10%"  style="text-align: center;"><?=$kelas->nama_kelas;?></td>
-    <td width="5%"  style="text-align: center;"><?=$m->SKS;?></td>
+    <td width="10%"  style="text-align: center;"><?=$m->nama_kelas;?></td>
+    <td width="5%"  style="text-align: center;"><?=$m->sks;?></td>
      
    </tr>
    <?php 
@@ -52,4 +91,16 @@
  }
    ?>
  </tbody>
+</table>
+<table width="100%" style="font-size: 10;font-family: 'Times';">
+  <tr>
+    <td width="45%">&nbsp;</td>
+    <td width="55%" style="text-align: left">
+      
+      <p>Ditetapkan di Ponorogo,</p>
+      <p>Pada Tanggal <?=$setting_sk->tanggal_sk;?><br>Rektor UNIDA Gontor.</p>
+      <img width="210px" src="<?php echo Yii::app()->baseUrl;?>/images/ttd.jpg"/>
+      <!-- <u><strong><p>Prof. Dr. Amal Fathullah Zarkasyi, M.A.</p></strong></u> -->
+    </td>
+  </tr>
 </table>
