@@ -428,6 +428,7 @@ class Jadwal extends CActiveRecord
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
 	    ->where('kode_dosen=:p1', array(':p1'=>$kode_dosen))
+	    ->group('idjadwal')
 	    ->order('t.kode_dosen ASC')
 	    ->queryAll();
 
