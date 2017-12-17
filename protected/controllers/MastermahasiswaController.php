@@ -110,6 +110,7 @@ class MastermahasiswaController extends Controller
 		        	$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$kd_dosen));
 		        	if(!empty($mhs) && !empty($dosen))
 		        	{
+		        		echo $mhs->nim_mhs.' '.$dosen->nidn.' - '.$dosen->id;
 		        		$mhs->nip_promotor = $dosen->id;
 		        		$mhs->save(false, array('nip_promotor'));
 		        	// print_r($kd_dosen);	
