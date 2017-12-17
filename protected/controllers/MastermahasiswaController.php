@@ -128,9 +128,10 @@ class MastermahasiswaController extends Controller
 
 
 		        Yii::app()->user->setFlash('success', "Data PA telah diunggah");
-				$this->redirect(array('uploadPA'));
+				// $this->redirect(array('uploadPA'));
 		        // exit;
 				$transaction->commit();
+				exit;
 			}
 
 			catch(Exception $e)
