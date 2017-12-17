@@ -81,7 +81,63 @@ class MastermahasiswaController extends Controller
 
 	public function actionUploadPA()
 	{
+		$model = new Mastermahasiswa;
+		$m = new Mastermahasiswa;
+		if(isset($_POST['Mastermahasiswa']))
+        {
+			$model->uploadedFile=CUploadedFile::getInstance($model,'uploadedFile');
+			Yii::import('ext.PHPExcel.PHPExcel.**', true); 
 
+	        $fileName = $model->uploadedFile->getTempName();
+
+	        $objPHPExcel = PHPExcel_IOFactory::load($fileName);
+	        $sheet = $objPHPExcel->getSheet(0); 
+	        $highestRow = $sheet->getHighestRow(); 
+
+	        $transaction=Yii::app()->db->beginTransaction();
+	        try
+			{
+				$index = 1;
+				for ($row = 2; $row <= $highestRow; $row++)
+		        {
+		        	$kd_dosen = trim($sheet->getCell('A'.$row));
+		        	$nim = trim($sheet->getCell('C'.$row));
+
+		        	$attr = array(
+		        		'nim_mhs' => $nim
+		        	);
+		        	$mhs = Mastermahasiswa::model()->findByAttributes($attr);
+		        	if(!empty($mhs))
+		        	{
+		        		$mhs->nip_promotor = $kd_dosen;
+		        		$mhs->save(false, array('nip_promotor'));
+		        	// print_r($kd_dosen);	
+		        	}
+
+		        	else
+		        	{
+		        		$m->addError('error','Baris ke-'.($index+1).' : Data NIM : '.$nim.' tidak terdaftar atau berbeda di SIAKAD');
+		        		// $m->addError('error','Terjadi kesalahan input data mk');
+						throw new Exception();
+		        	}
+		        	
+		        	$index++;	 
+		        }
+
+		        // exit;
+				$transaction->commit();
+			}
+
+			catch(Exception $e)
+			{
+				$transaction->rollback();
+			}	
+		}
+
+		$this->render('uploadPA',array(
+			'model' => $model,
+			'm' => $m,
+		));
 	}
 
 	/**

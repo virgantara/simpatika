@@ -71,6 +71,8 @@
  */
 class Mastermahasiswa extends CActiveRecord
 {
+
+	public $uploadedFile;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -280,6 +282,7 @@ class Mastermahasiswa extends CActiveRecord
 		$criteria->compare('tgl_sk_yudisium',$this->tgl_sk_yudisium,true);
 		$criteria->compare('status_mahasiswa',$this->status_mahasiswa);
 		$criteria->compare('kampus',$this->kampus,true);
+		$criteria->order = 'nim_mhs DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

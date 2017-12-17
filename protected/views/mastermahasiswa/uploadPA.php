@@ -3,13 +3,9 @@
 /* @var $model Jadwal */
 
 $this->breadcrumbs=array(
-	'Jadwals'=>array('index'),
+	'PA'=>array('index'),
 );
 
-$this->menu=array(
-	// array('label'=>'List Jadwal', 'url'=>array('index')),
-	// array('label'=>'Manage Jadwal', 'url'=>array('admin')),
-);
 ?>
 
 <div class="form">
@@ -17,15 +13,11 @@ $this->menu=array(
 <ul>
 	<li>
 <div class="row">
-	Template Jadwal silakan unduh di 
-	<?php echo CHtml::link('sini',array('jadwal/template'));?>
+	Template PA silakan unduh di 
+	<?php echo CHtml::link('sini',array('mastermahasiswa/templatePA'));?>
 </div>
 </li>
-<li>
-<div class="row">
-	Petunjuk Unggah Jadwal silakan lihat di 
-	<?php echo CHtml::link('sini',array('jadwal/petunjuk'));?>
-</div></li>
+
 </ul>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'jam-form',
@@ -37,7 +29,6 @@ $this->menu=array(
 
 	'htmlOptions'=>array('enctype'=>'multipart/form-data'),
 )); ?>
-
 	<?php
 
 echo $form->error($m, 'error');
