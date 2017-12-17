@@ -65,7 +65,7 @@ class MastermahasiswaController extends Controller
 	    	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($q,1, $v);
 	    }
 	    
-	    $objPHPExcel->getActiveSheet()->setTitle('jadwal');
+	    $objPHPExcel->getActiveSheet()->setTitle('mhs_pa');
 	 
 	    $objPHPExcel->setActiveSheetIndex(0);
 	     

@@ -32,7 +32,7 @@ class MasterdosenController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','unduhDataDosen'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -46,7 +46,107 @@ class MasterdosenController extends Controller
 	}
 
 
+	public function actionUnduhDataDosen()
+	{
+		Yii::import('ext.PHPExcel.PHPExcel');
+		$objPHPExcel = new PHPExcel();
+		$styleArray = array(
+		    'font'  => array(
+		        // 'bold'  => true,
+		        // 'color' => array('rgb' => 'FF0000'),
+		        'size'  => 8,
+		        'name'  => 'Times New Roman'
+		    ),
+		    'borders' => array(
+		    	'allborders' => array(
+	                'style' => PHPExcel_Style_Border::BORDER_THIN,
+	                'color' => array('rgb' => '000000')
+	            )
+		    )
 
+		);
+		$headers = array(
+		   'No',
+		   'Kode Dosen',
+		   'NIY',
+		   'Nama Dosen',
+		  	
+		);
+    
+	    $objPHPExcel->setActiveSheetIndex(0);
+
+	    foreach($headers as $q => $v)
+	    {
+	    	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($q,1, $v);
+	    }
+	    
+	    $objPHPExcel->getActiveSheet()->setTitle('dosen');
+	 
+	    $objPHPExcel->setActiveSheetIndex(0);
+	    $objPHPExcel->getActiveSheet()->freezePane('E2');
+	    $sheet = $objPHPExcel->setActiveSheetIndex(0);
+
+	    $sheet->getColumnDimension('A')->setWidth(5);
+	    $sheet->getColumnDimension('B')->setWidth(20);
+	    $sheet->getColumnDimension('C')->setWidth(16);
+	    $sheet->getColumnDimension('D')->setWidth(42);
+
+
+	    $dosen = Masterdosen::model()->findAll();
+	    
+
+	    foreach($headers as $q => $v)
+	    {
+	    	$sheet->setCellValueByColumnAndRow($q,1, strtoupper($v));
+	    	$cell = $sheet->getCellByColumnAndRow($q,1);
+	    	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
+	    		array(
+	    			'fill' => array(
+			            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+			            'color' => array('rgb' => '000000')
+			        ),
+			        'font' => array(
+			        	'color' => array('rgb'=> 'ffffff')
+			        ),
+	    		)
+	    	);
+	    	
+	    }
+
+	    $i = 0;
+	    $row = 1;
+	    foreach($dosen as $d)
+	    {
+	    	$i++;
+	    	$row++;
+	    	$sheet->setCellValueByColumnAndRow(0,$row, $i);
+			$sheet->setCellValueByColumnAndRow(1,$row, $d->nidn);
+			$sheet->setCellValueByColumnAndRow(2,$row, $d->niy);
+			$sheet->setCellValueByColumnAndRow(3,$row, strtoupper($d->nama_dosen));
+	    	
+	    	for($j = 0;$j<4;$j++)
+	    	{
+	    		$cell = $sheet->getCellByColumnAndRow($j,$row);	
+	    		$cell->getStyle($cell->getColumn().$cell->getRow())
+	    		->getNumberFormat()
+    			->setFormatCode(
+			        PHPExcel_Style_NumberFormat::FORMAT_TEXT
+			    );
+	    	}
+	    	
+	    	
+	    }
+	     
+	    ob_end_clean();
+	    ob_start();
+	    
+	    header('Content-Type: application/vnd.ms-excel');
+	    header('Content-Disposition: attachment;filename="templatePA.xls"');
+	    header('Cache-Control: max-age=0');
+	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+	    $objWriter->save('php://output');
+	    
+	}
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed

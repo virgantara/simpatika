@@ -17,6 +17,12 @@ $this->breadcrumbs=array(
 	<?php echo CHtml::link('sini',array('mastermahasiswa/templatePA'));?>
 </div>
 </li>
+	<li>
+<div class="row">
+	Daftar Kode Dosen unduh di
+	<?php echo CHtml::link('sini',array('masterdosen/unduhDataDosen'));?>
+</div>
+</li>
 
 </ul>
 <?php $form=$this->beginWidget('CActiveForm', array(
