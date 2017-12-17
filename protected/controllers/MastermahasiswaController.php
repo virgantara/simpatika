@@ -107,9 +107,10 @@ class MastermahasiswaController extends Controller
 		        		'nim_mhs' => $nim
 		        	);
 		        	$mhs = Mastermahasiswa::model()->findByAttributes($attr);
-		        	if(!empty($mhs))
+		        	$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$kd_dosen));
+		        	if(!empty($mhs) && !empty($dosen))
 		        	{
-		        		$mhs->nip_promotor = $kd_dosen;
+		        		$mhs->nip_promotor = $dosen->id;
 		        		$mhs->save(false, array('nip_promotor'));
 		        	// print_r($kd_dosen);	
 		        	}
@@ -124,6 +125,9 @@ class MastermahasiswaController extends Controller
 		        	$index++;	 
 		        }
 
+
+		        Yii::app()->user->setFlash('success', "Data PA telah diunggah");
+				$this->redirect(array('uploadPA'));
 		        // exit;
 				$transaction->commit();
 			}

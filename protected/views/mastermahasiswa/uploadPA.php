@@ -30,7 +30,9 @@ $this->breadcrumbs=array(
 	'htmlOptions'=>array('enctype'=>'multipart/form-data'),
 )); ?>
 	<?php
-
+ foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div style="color:green">' . $message . "</div>\n";
+    }
 echo $form->error($m, 'error');
 	 ?>
 	<div class="row">
