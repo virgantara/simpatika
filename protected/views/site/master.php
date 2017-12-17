@@ -51,6 +51,8 @@ echo '<li>'.CHtml::link('User',array('user/index')).'</li>';
 echo '<li>'.CHtml::link('Dosen',array('Masterdosen/admin')).'</li>';
 echo '<li>'.CHtml::link('User di SIAKAD',array('users/index')).'</li>';
 echo '<li>'.CHtml::link('DATAKRS di SIAKAD',array('datakrs/index')).'</li>';
+echo '<li>'.CHtml::link('Upload Pembimbing Akademik',array('mastermahasiswa/uploadPA')).'</li>';
+
 echo '</ul>';
 ?>
 
