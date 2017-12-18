@@ -39,7 +39,6 @@
 				array('label'=>'Cetak Jadwal Personal All', 'url'=>array('/jadwal/cetakPersonalAll'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Cetak Lampiran SK', 'url'=>array('/jadwal/cetakLampiran'),'visible'=>!Yii::app()->user->isGuest),
 				
-				array('label'=>'Rekap Jadwal Per Prodi', 'url'=>array('/jadwal/rekapJadwal'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Rekap Jadwal Semua Dosen', 'url'=>array('/jadwal/rekapJadwalAll'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Rekap Jadwal Bentrok', 'url'=>array('/jadwal/rekapJadwalBentrok'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				
