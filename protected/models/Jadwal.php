@@ -104,7 +104,7 @@ class Jadwal extends CActiveRecord
 		$semester = $jadwal->semester;
 
 		$model = Yii::app()->db->createCommand()
-	    ->select('*')
+	    ->select('*, t.id as idjadwal')
 	    ->from('simak_jadwal_temp t')
 	    ->join('m_hari h', 'h.nama_hari=t.hari')
 	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
@@ -119,6 +119,7 @@ class Jadwal extends CActiveRecord
 			':p6' => $tahunaktif,
 			':p7' => $semester,
 			':p8'=> $nama_mk))
+	    ->group('idjadwal')
 	    ->queryAll();
 
 		// $criteria=new CDbCriteria;
