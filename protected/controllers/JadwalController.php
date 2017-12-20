@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete','cetakJurnal'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -46,7 +46,80 @@ class JadwalController extends Controller
 		);
 	}
 
+	public function actionCetakJurnal()
+	{
+		$model = null;
+		$dosen = null;
+		if(!empty($_POST['cetak']))
+		{
+			$kode_prodi = $_POST['kode_prodi'];
+			
+			$listdosenprodi = Masterdosen::model()->findAllByAttributes(array('kode_prodi'=>$kode_prodi));
 
+			$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 'P', 'mm', 'A4', true, 'UTF-8');
+
+			$pdf->setPrintHeader(false);
+			$pdf->setPrintFooter(false);
+			$pdf->SetAutoPageBreak(TRUE,10);
+			$this->layout = '';
+			
+			$prodi = Masterprogramstudi::model()->findByPk($kode_prodi);
+
+			foreach($listdosenprodi as $p)
+			{
+
+				$id = $p->nidn;
+
+				$model = Yii::app()->db->createCommand()
+			    ->select('*, t.id as idjadwal')
+			    ->from('simak_jadwal_temp t')
+			    ->join('m_hari h', 'h.nama_hari=t.hari')
+			    ->join('m_jam j', 'j.id_jam=t.jam_ke')
+			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+			    ->join('simak_kampus km', 'km.id=t.kampus')
+			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+			    ->where('kode_dosen=:p1', array(':p1' => $id))
+			    ->group('idjadwal')
+			    ->queryAll();
+
+			    $size = count($model);
+			    // echo count($model).'<br>';
+			    if($size == 0) continue;
+			
+
+				$dosen = Jadwal::model()->findDosenInJadwal($id);				
+				
+				if(count($dosen) == 0) continue;
+
+				$dosen = (object)$dosen[0];
+
+				$pdf->AddPage();
+				
+				
+				ob_start();	
+				echo $this->renderPartial('print_jurnal',array(
+					'model'=>$model,
+					'dosen'=>$dosen,
+					'prodi'=>$prodi
+				));
+				$data = ob_get_clean();
+				
+				$pdf->writeHTML($data);
+			}
+
+			ob_end_clean();
+			$pdf->Output('jurnal_'.$kode_prodi.'.pdf');
+			
+		}
+
+
+
+		$this->render('preview_jurnal',array(
+			'model' => $model,
+			'dosen' => $dosen
+
+		));
+	}
 
 	public function actionCetakPersonalAll()
 	{
