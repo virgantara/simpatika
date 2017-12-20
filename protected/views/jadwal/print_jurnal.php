@@ -92,6 +92,7 @@ foreach($model as $m)
   }
   ?>
 </table>
+<br><br>
 <?php 
 }
 ?>
