@@ -1513,8 +1513,11 @@ class JadwalController extends Controller
 			
 			$model->bentrok = 0;
 
+			$model->modified = date('Y-m-d H:i:s');
+
 			if($model->save())
 			{
+
 				Jadwal::model()->cekKonflik($model);
 
 
