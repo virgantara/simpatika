@@ -32,6 +32,20 @@ $this->breadcrumbs=array(
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
+<div class="row">
+    <label>Kampus</label>
+    <?php
+    $kode_kampus = !empty($_POST['kode_kampus']) ? $_POST['kode_kampus'] : '';
+    $list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus','nama_kampus');
+    
+    
+    echo CHtml::dropDownList('kode_kampus',$kode_kampus,$list); 
+    // echo CHtml::textField('nama_dosen',!empty($_POST['nama_dosen']) ? $_POST['nama_dosen'] : '',array('size'=>20,'maxlength'=>20)); 
+    // echo CHtml::hiddenField('kode_p/rodi',$kode_prodi);
+    
+    ?>
+
+  </div>
   <div class="row">
     <label>Prodi</label>
     <?php
@@ -40,6 +54,26 @@ $this->breadcrumbs=array(
     
     
     echo CHtml::dropDownList('kode_prodi',$kode_prodi,$list); 
+    // echo CHtml::textField('nama_dosen',!empty($_POST['nama_dosen']) ? $_POST['nama_dosen'] : '',array('size'=>20,'maxlength'=>20)); 
+    // echo CHtml::hiddenField('kode_p/rodi',$kode_prodi);
+    
+    ?>
+
+  </div>
+  <div class="row">
+    <label>Hari</label>
+    <?php
+    $hari = !empty($_POST['hari']) ? $_POST['hari'] : '';
+    $list = array('SABTU'=>'SABTU',
+'AHAD'=>'AHAD',
+'SENIN'=>'SENIN',
+'SELASA'=>'SELASA',
+'RABU'=>'RABU',
+'KAMIS'=>'KAMIS',
+'JUMAT'=>'JUMAT');
+    
+    
+    echo CHtml::dropDownList('hari',$hari,$list); 
     // echo CHtml::textField('nama_dosen',!empty($_POST['nama_dosen']) ? $_POST['nama_dosen'] : '',array('size'=>20,'maxlength'=>20)); 
     // echo CHtml::hiddenField('kode_p/rodi',$kode_prodi);
     

@@ -22,6 +22,11 @@ $this->menu=array(
 	    background-color: orange; 
 	}
 
+	.updated{
+		background-color: blue;
+		color:white;
+	}
+
 </style>
 <div class="form">
 
@@ -122,9 +127,26 @@ foreach($kampuses as $kampus)
 		{
 
 			$m = (object)$m;
+
+			// $d1 = strtotime($m->created);
+			// $d2 = strtotime($m->modified);
+			$datetime1 = new DateTime($m->created);
+			$datetime2 = new DateTime($m->modified);
+			$interval = $datetime1->diff($datetime2);
+			$durasi = $interval->format('%d');
+
+			// print_r($durasi.' '.$m->kode_mk);
+
+			$updated = '';
+			if($durasi <=7 && $m->created != $m->modified)
+				$updated = 'class="updated"';
+			else if($m->bentrok == 1)
+				$updated = 'class="bentrok"';
+			
+			
 		  $i++;
 		?>
-		<tr <?php echo $m->bentrok == 1 ? 'class="bentrok"' : '';?>>
+		<tr <?php echo $updated;?>>
 		<td width="3%"><?=$i;?></td>
 		<td width="5%"><?php echo $m->hari;?></td>
 		<td><?php echo $m->nama_jam;?></td>

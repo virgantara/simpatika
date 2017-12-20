@@ -53,6 +53,9 @@ class JadwalController extends Controller
 		if(!empty($_POST['cetak']))
 		{
 			$kode_prodi = $_POST['kode_prodi'];
+			$kode_kampus = $_POST['kode_kampus'];
+			$hari = $_POST['hari'];
+
 			
 			$listdosenprodi = Masterdosen::model()->findAllByAttributes(array('kode_prodi'=>$kode_prodi));
 
@@ -78,7 +81,7 @@ class JadwalController extends Controller
 			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 			    ->join('simak_kampus km', 'km.id=t.kampus')
 			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-			    ->where('kode_dosen=:p1', array(':p1' => $id))
+			    ->where('kode_dosen=:p1 AND kampus=:p2 AND hari=:p3', array(':p1' => $id,':p2'=>$kode_kampus,':p3'=>$hari))
 			    ->group('idjadwal')
 			    ->queryAll();
 
