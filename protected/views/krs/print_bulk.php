@@ -85,7 +85,7 @@ $listkrs = Yii::app()->db->createCommand()
 			   </tr> 
   </table>
 <br><br><br>
-	 <table border="0" width="100%" style="font-size:9px;font-weight:bold;;font-family: 'Times'">
+	 <table border="0" width="100%" style="font-size:9px;;font-family: 'Times'">
         <tr>
             <td align="center" colspan="2">&nbsp;</td>
             <td align="center" colspan="4">Mengetahui</td>
