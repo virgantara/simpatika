@@ -18,7 +18,7 @@
     <table border="0" width="100%" style="font-family: 'Times';font-size: 9px">
     	<tr>
         	<td align="left" width="100px">Nama Mahasiswa</td>
-            <td align="left" width="600px" > : <?php echo $mhs->nama_mahasiswa;?> </td>
+            <td align="left" width="600px" > : <?php echo ucwords($mhs->nama_mahasiswa);?> </td>
             <td align="center">&nbsp;</td>
         </tr>
         <tr>
@@ -109,7 +109,7 @@ $listkrs = Yii::app()->db->createCommand()
         </tr>
         <tr>
             <td align="center" colspan="2">&nbsp;</td>
-            <td align="center" colspan="4">(<?php echo !empty($dosenPA)?$dosenPA->nama_dosen : "......................................................................." ?>)</td>
+            <td align="center" colspan="4">(<?php echo !empty($dosenPA)?$dosenPA->nama_dosen : "............................................" ?>)</td>
             <td align="center" colspan="2">&nbsp;</td>
             <td align="center" colspan="4">( <?php echo $mhs->nama_mahasiswa ?>) </td>
 			<td align="center" colspan="2">&nbsp;</td>
