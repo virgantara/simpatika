@@ -31,7 +31,7 @@
 			'items'=>array(
 				array('label'=>'Home', 'url'=>array('/site/home'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Jadwal', 'url'=>array('/jadwal/index'),'visible'=>!Yii::app()->user->isGuest),
-				
+				array('label'=>'Cetak Bulk KRS', 'url'=>array('/krs/bulk'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Unggah Jadwal', 'url'=>array('/jadwal/uploadJadwal'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				
 				array('label'=>'Unggah PA', 'url'=>array('/mastermahasiswa/uploadPA'),'visible'=>!Yii::app()->user->isGuest),
