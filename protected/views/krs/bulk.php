@@ -31,7 +31,7 @@ $this->breadcrumbs=array(
  <div class="pull-right">
 Angkatan
 <?php 
-echo CHtml::dropDownList('angkatan',isset($_GET['angkatan'])?$_GET['angkatan']:'',array('372016'=>'TI 4 - 372016','362015'=>'TI 6 - 362015','352014'=>'TI 8 - 362015'),array('id'=>'angkatan')); ?>  
+echo CHtml::dropDownList('angkatan',isset($_GET['angkatan'])?$_GET['angkatan']:'',array('372016'=>'TI 4 - 372016','362015'=>'TI 6 - 362015','352014'=>'TI 8 - 352014'),array('id'=>'angkatan')); ?>  
 Semester
 <?php 
 echo CHtml::dropDownList('semester',isset($_GET['semester'])?$_GET['semester']:'',array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5','6'=>'6'),array('id'=>'semester')); ?>  
