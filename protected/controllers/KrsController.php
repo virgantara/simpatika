@@ -32,7 +32,7 @@ class KrsController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','bulk'),
+				'actions'=>array('create','update','bulk','kartu'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,6 +43,112 @@ class KrsController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionKartu()
+	{
+		if(!empty($_POST['kode_prodi'])&& !empty($_POST['kode_kampus']))
+		{
+
+			$kode_prodi = $_POST['kode_prodi'];
+			$kode_kampus = $_POST['kode_kampus'];
+			
+
+			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$kode_prodi));
+			$fakultas = Masterfakultas::model()->findByAttributes(array('kode_fakultas'=>$prodi->kode_fakultas));
+			$kampus = Kampus::model()->findByAttributes(array('kode_kampus'=>$kode_kampus));
+			$dekan = Masterdosen::model()->findByAttributes(array('nidn'=>$fakultas->pejabat));
+
+			$thn = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+
+			$listmhs = Yii::app()->db->createCommand()
+		     ->select('*')
+		     ->from('simak_mastermahasiswa m')
+		     ->join('simak_datakrs d', 'd.mahasiswa=m.nim_mhs')
+		     ->where('m.kode_prodi=:p1 AND d.tahun_akademik=:p2 AND status_aktivitas="A" AND kampus=:p3',array(':p1'=>$kode_prodi,':p2'=>$thn->tahun_id,':p3'=>$kode_kampus))
+		     ->order('m.nim_mhs')
+		     ->group('m.nim_mhs')
+		     // ->limit(1)
+		     ->queryAll();
+
+
+		    if(empty($listmhs))
+		    {
+		    	Yii::app()->user->setFlash('success', "Tidak Ada Data Mahasiswa.");
+		    	$this->redirect(array('kartu'));
+		    }
+
+
+		    $tanggal = date('d-m-Y');
+
+		    $bulans =  array(
+		    	'01' => 'Januari',
+		    	'02' => 'Februari',
+		    	'03' => 'Maret',
+		    	'04' => 'April',
+		    	'05' => 'Mei',
+		    	'06' => 'Juni',
+		    	'07' => 'Juli',
+		    	'08' => 'Agustus',
+		    	'09' => 'September',
+		    	'10' => 'Oktober',
+		    	'11' => 'November',
+		    	'12' => 'Desember'
+		    );
+
+		    $tgl = explode('-', $tanggal);
+
+		    $tanggal = $tgl[0].' '.$bulans[$tgl[1]].' '.$tgl[2];
+
+			$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 'P', 'mm', 'A4', true, 'UTF-8');
+
+			$pdf->setPrintHeader(false);
+			$pdf->setPrintFooter(false);
+			$pdf->SetAutoPageBreak(TRUE,10);
+			$this->layout = '';
+
+			date_default_timezone_set('Asia/Jakarta');
+			foreach($listmhs as $m)
+			{
+
+			  	$m = (object)$m;
+	
+				$pdf->AddPage();
+				
+				
+				ob_start();	
+				echo $this->renderPartial('print_kartu',array(
+					'thn' => $thn,
+					'mhs' => $m,
+					'prodi' => $prodi,
+					'tanggal' =>$tanggal,
+					'fakultas'=>$fakultas,
+					'kampus' =>$kampus,
+					'dekan'=>$dekan
+				));
+			
+				
+				$data = ob_get_clean();
+				
+				$pdf->writeHTML($data);
+
+				$style = array(
+				    'border' => false,
+    				'padding' => 0,
+				    'fgcolor' => array(0,0,0),
+				    'bgcolor' => false, //array(255,255,255)
+				);
+				$tgl = date('Y-m-d H:i:s');
+
+				$pdf->write2DBarcode($m->nim_mhs.'#'.$m->nama_mahasiswa.'#'.strtotime($tgl), 'QRCODE,Q', 20, 220, 30, 30, $style, 'N');
+			}
+
+			ob_end_clean();
+			$pdf->Output('kartu_'.$kode_prodi.'.pdf');
+			exit;
+		}
+
+		$this->render('kartu');
 	}
 
 	public function actionBulk()
