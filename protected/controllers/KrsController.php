@@ -53,6 +53,38 @@ class KrsController extends Controller
 			$angkatan = $_POST['angkatan'];
 			$semester = $_POST['semester'];
 			$tanggal = $_POST['tanggal'];
+			$krs_khs = $_POST['krs_khs'];
+			$tahun_akademik = $_POST['tahun_akademik'];
+			$kp = '55601';
+
+			if($angkatan == '352014')
+			{
+				if($semester > 6)
+				{
+					$this->redirect(array('bulk'));
+				}
+			}
+
+			else if($angkatan == '362015')
+			{
+				if($semester > 4)
+				{
+					$this->redirect(array('bulk'));
+				}
+			}
+
+			else if($angkatan == '372016')
+			{
+				if($semester > 2)
+				{
+					$this->redirect(array('bulk'));
+				}
+			}	
+
+
+			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$kp));
+			$kaprodi = Masterdosen::model()->findByAttributes(array('nidn'=>$prodi->nidn_ketua_prodi));
+			$thn = Tahunakademik::model()->findByAttributes(array('tahun_id'=>$tahun_akademik));
 
 			$listmhs = Yii::app()->db->createCommand()
 		     ->select('*')
@@ -81,12 +113,6 @@ class KrsController extends Controller
 
 		    $tanggal = $tgl[0].' '.$bulans[$tgl[1]].' '.$tgl[2];
 
-			
-			// $criteria=new CDbCriteria;
-			// $criteria->addSearchCondition('mahasiswa',$angkatan,true,'OR');
-			// $criteria->order = 'mahasiswa ASC';
-			// $listmhs = Datakrs::model()->findAll($criteria);	
-		    
 			$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 'P', 'mm', 'A4', true, 'UTF-8');
 
 			$pdf->setPrintHeader(false);
@@ -100,18 +126,39 @@ class KrsController extends Controller
 
 			  	$m = (object)$m;
 
+			  	$ipk = Yii::app()->helper->calc_ipk($m->nim_mhs, $angkatan,$semester);
+
 			  	$dosenPA = Masterdosen::model()->findByPk($m->nip_promotor);
 				
 				$pdf->AddPage();
 				
 				
 				ob_start();	
-				echo $this->renderPartial('print_bulk',array(
-					'mhs' => $m,
-					'dosenPA' => $dosenPA,
-					'semester' => $semester,
-					'tanggal' => $tanggal
-				));
+
+				if($krs_khs == 'KRS')
+				{
+					echo $this->renderPartial('print_bulk',array(
+						'thn' => $thn,
+						'mhs' => $m,
+						'dosenPA' => $dosenPA,
+						'semester' => $semester,
+						'tanggal' => $tanggal,
+					));
+				}
+
+				else if($krs_khs == 'KHS')
+				{
+					echo $this->renderPartial('print_bulk_khs',array(
+						'thn' => $thn,
+						'mhs' => $m,
+						'dosenPA' => $dosenPA,
+						'semester' => $semester,
+						'tanggal' => $tanggal,
+						'kaprodi' => $kaprodi,
+						'ipk' => $ipk
+					));
+				}
+				
 				$data = ob_get_clean();
 				
 				$pdf->writeHTML($data);

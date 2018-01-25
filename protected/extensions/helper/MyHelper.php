@@ -3,6 +3,141 @@
 class MyHelper extends CApplicationComponent
 {
 
+	function calc_ipk_lalu($nim, $semester)
+	{
+
+		$semester = ($semester == 1) ? 0 : $semester -= 1;
+
+
+
+		$listkrs = Yii::app()->db->createCommand()
+		    ->select('*')
+		    ->from('view_datakrs_mhs')
+		    ->where('mahasiswa=:p1 AND semester=:p2',array(':p1'=>$nim,':p2'=>$semester))
+		    ->queryAll();
+
+		$total_sks = 0;
+	    $i = 0;
+	    $nilai_bobot= 0;
+	    $sks_gagal = 0;
+	    foreach($listkrs as $krs)
+	   	{
+	   		$i++;
+	   		$krs = (object)$krs;
+
+			$nilai_angka = !empty($krs->nilai_angka) ? $krs->nilai_angka : 0;
+			$nilai_huruf = !empty($krs->nilai_huruf) ? $krs->nilai_huruf : '';
+
+			$nilai_angka = Yii::app()->helper->konvert_nilai_huruf($nilai_huruf);
+			$nilai_bobot = $nilai_bobot + $krs->sks * $nilai_angka;
+
+			if($nilai_angka < 2)
+				$sks_gagal += $krs->sks;
+
+			$total_sks += $krs->sks;
+		}
+
+		$ips = $total_sks > 0 ? round($nilai_bobot / $total_sks,2) : 0;
+
+		return round($ips,2);
+	}
+
+	function calc_ipk($nim, $angkatan, $semester)
+	{
+
+		$list_smt = array();
+
+		if($angkatan == '352014')
+		{
+			if($semester <=6)
+			{
+				for($i=1;$i<=$semester;$i++)
+				{
+					$list_smt[$i-1] = $i;
+				}
+			}
+		}
+
+		else if($angkatan == '362015')
+		{
+			if($semester <=4)
+			{
+				for($i=1;$i<=$semester;$i++)
+				{
+					$list_smt[$i-1] = $i;
+				}
+			}
+		}
+
+		else if($angkatan == '372016')
+		{
+			if($semester <=2)
+			{
+				for($i=1;$i<=$semester;$i++)
+				{
+					$list_smt[$i-1] = $i;
+				}
+			}
+		}			
+
+	
+
+		$total_sks = 0;
+		$nilai_bobot= 0;
+		    
+
+		foreach($list_smt as $semester)
+		{
+			$listkrs = Yii::app()->db->createCommand()
+			    ->select('*')
+			    ->from('view_datakrs_mhs')
+			    ->where('mahasiswa=:p1 AND semester=:p2',array(':p1'=>$nim,':p2'=>$semester))
+			    ->queryAll();
+
+			foreach($listkrs as $krs)
+		   	{
+		   		
+		   		$krs = (object)$krs;
+
+				$nilai_angka = !empty($krs->nilai_angka) ? $krs->nilai_angka : 0;
+				$nilai_huruf = !empty($krs->nilai_huruf) ? $krs->nilai_huruf : '';
+
+				$nilai_angka = Yii::app()->helper->konvert_nilai_huruf($nilai_huruf);
+				$nilai_bobot = $nilai_bobot + $krs->sks * $nilai_angka;
+
+				// if($nilai_angka < 2)
+				// 	$sks_gagal += $krs->sks;
+
+				$total_sks += $krs->sks;
+			}
+		}
+
+		return $total_sks > 0 ? round($nilai_bobot / $total_sks,2) : 0;
+	}
+
+	function konvert_nilai_huruf($huruf)
+	{
+		
+		$konversi = Konversi::model()->findByAttributes(array('huruf'=>$huruf));	
+		
+		return !empty($konversi) ? $konversi->angka : 0;
+	}
+
+	function konvert_nilai_angka($nilai)
+	{
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'sampai >= '.$nilai.' AND dari <= '.$nilai;
+
+		$rn = RangeNilai::model()->find($criteria);
+
+		$konversi = null;
+		if(!empty($rn))
+		{
+			$konversi = Konversi::model()->findByAttributes(array('huruf'=>$rn->nilai_huruf));	
+		}
+		return !empty($konversi) ? $konversi->angka : 0;
+	}
+
 	function contains($haystack, $needle)
 	{
 		return strpos($haystack, $needle) !== false; 

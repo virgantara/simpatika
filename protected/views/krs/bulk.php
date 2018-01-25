@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 
 ?>
 
-<h1>Cetak Bulk KRS</h1>
+<h1>Cetak Bulk KRS/KHS</h1>
 
 
 <?php 
@@ -26,15 +26,24 @@ $this->breadcrumbs=array(
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+    'htmlOptions' => array(
+        'target' => '_blank'
+    )
 )); 
 ?>
  <div class="pull-right">
+
+<?php 
+echo CHtml::dropDownList('krs_khs',isset($_GET['krs_khs'])?$_GET['krs_khs']:'',array('KRS'=>'KRS','KHS'=>'KHS'),array('id'=>'krs_khs')); ?>  
 Angkatan
 <?php 
 echo CHtml::dropDownList('angkatan',isset($_GET['angkatan'])?$_GET['angkatan']:'',array('372016'=>'TI 4 - 372016','362015'=>'TI 6 - 362015','352014'=>'TI 8 - 352014'),array('id'=>'angkatan')); ?>  
 Semester
 <?php 
-echo CHtml::dropDownList('semester',isset($_GET['semester'])?$_GET['semester']:'',array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5','6'=>'6'),array('id'=>'semester')); ?>  
+echo CHtml::dropDownList('semester',isset($_GET['semester'])?$_GET['semester']:'',array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5','6'=>'6'),array('id'=>'semester')); ?> 
+Tahun Akademik
+<?php 
+echo CHtml::dropDownList('tahun_akademik',isset($_GET['tahun_akademik'])?$_GET['tahun_akademik']:'',array('20141'=>'20141','20142'=>'20142','20151'=>'20151','20152'=>'20152','20161'=>'20161','20162'=>'20162'),array('id'=>'tahun_akademik')); ?>  
 Tanggal Cetak
 <?php 
 $this->widget('zii.widgets.jui.CJuiDatePicker',array(
