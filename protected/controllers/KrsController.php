@@ -68,7 +68,7 @@ class KrsController extends Controller
 		     ->where('m.kode_prodi=:p1 AND d.tahun_akademik=:p2 AND status_aktivitas="A" AND kampus=:p3',array(':p1'=>$kode_prodi,':p2'=>$thn->tahun_id,':p3'=>$kode_kampus))
 		     ->order('m.nim_mhs')
 		     ->group('m.nim_mhs')
-		     ->limit(1)
+		     // ->limit(1)
 		     ->queryAll();
 
 
