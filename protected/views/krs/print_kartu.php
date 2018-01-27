@@ -2,9 +2,9 @@
  	
     <tr>
         <td width="20%" style="border-bottom: 1px solid black">
-       <img src="<?php echo Yii::app()->baseUrl;?>images/logonew.jpg" width="90px"/>
+       <img src="<?php echo Yii::app()->baseUrl;?>images/logonew.jpg" width="80px"/>
       </td> 
-      <td colspan="3" style="text-align: center;border-bottom: 1px solid black"><b>UNIVERSITAS DARUSSALAM GONTOR</b>
+      <td colspan="3" style="text-align: center;border-bottom: 1px solid black"><br><br><b>UNIVERSITAS DARUSSALAM GONTOR</b>
         <br>Jalan Raya Siman Km.6 254<br><b>Telp : </b>+62 352 483 762<br><b>Email : </b>rektorat@unida.gontor.ac.id <br><b>Website : </b> www.unida.gontor.ac.id
       </td width="80%" >
       </tr>
