@@ -1,16 +1,16 @@
 <table border="0" style="font-size:9px;font-weight:bold;;font-family: 'Times'" width="100%">
  	
     <tr>
-        <td width="100px">
+        <td width="20%" style="border-bottom: 1px solid black">
        <img src="<?php echo Yii::app()->baseUrl;?>images/logonew.jpg" width="90px"/>
       </td> 
-      <td colspan="3"><b>UNIVERSITAS DARUSSALAM GONTOR</b>
+      <td colspan="3" style="text-align: center;border-bottom: 1px solid black"><b>UNIVERSITAS DARUSSALAM GONTOR</b>
         <br>Jalan Raya Siman Km.6 254<br><b>Telp : </b>+62 352 483 762<br><b>Email : </b>rektorat@unida.gontor.ac.id <br><b>Website : </b> www.unida.gontor.ac.id
-      </td>
+      </td width="80%" >
       </tr>
       <tr>
         <td colspan="4" align="center">
-          <hr>
+          
         </td>
       </tr>
       <tr>
@@ -24,10 +24,10 @@
  <br>  <br> 
     <table border="0" width="100%" style="font-family: 'Times';font-size: 8px;font-weight: bold;">
     	<tr>
-        <td width="80%">
+        <td width="60%">
           <table border="0" width="100%" >
          <tr>
-           <td align="left" width="200px"> NAMA</td>
+           <td align="left" width="100px"> NAMA</td>
            <td align="center" width="10px">:</td>
            <td align="left" width="600px" ><?php echo ucwords($mhs->nama_mahasiswa);?></td>
          </tr>
@@ -67,14 +67,15 @@
          </tr>
         </table>
         </td>
-        <td align="center">
+        <td align="center" width="40%">
          
-        <img src="<?php echo Yii::app()->baseUrl;?>images/noimage.jpg" width="100"/>
+        <img  src="<?php echo Yii::app()->baseUrl;?>images/noimage.jpg" width="70"/>
         
         </td>
       </tr>
      
     </table>
+    <br><br>
 <table  border="1" width="100%" style="font-size:8px;;font-family: 'Times'" cellpadding="3">
   <tr>
 	    <th style="padding:5px;text-align: center;" width="5%"><strong>No</strong></th>
