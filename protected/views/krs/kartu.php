@@ -43,6 +43,19 @@ Kampus
 $list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus','nama_kampus');
 echo CHtml::dropDownList('kode_kampus',isset($_GET['kode_kampus'])?$_GET['kode_kampus']:'',$list,array('id'=>'kode_kampus')); 
 
+echo ' Semester '; 
+$list = array(
+	'1'=>'Semester 1',
+	'2'=>'Semester 2',
+	'3'=>'Semester 3',
+	'4'=>'Semester 4',
+	'5'=>'Semester 5',
+	'6'=>'Semester 6',
+	'7'=>'Semester 7',
+	'8'=>'Semester 8',
+);
+echo CHtml::dropDownList('semester',isset($_GET['semester'])?$_GET['semester']:'',$list,array('id'=>'semester')); 
+
  echo CHtml::submitButton('Cetak'); ?>
 </div> 
 

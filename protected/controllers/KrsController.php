@@ -52,6 +52,7 @@ class KrsController extends Controller
 
 			$kode_prodi = $_POST['kode_prodi'];
 			$kode_kampus = $_POST['kode_kampus'];
+			$semester = $_POST['semester'];
 			
 
 			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$kode_prodi));
@@ -65,7 +66,7 @@ class KrsController extends Controller
 		     ->select('*')
 		     ->from('simak_mastermahasiswa m')
 		     ->join('simak_datakrs d', 'd.mahasiswa=m.nim_mhs')
-		     ->where('m.kode_prodi=:p1 AND d.tahun_akademik=:p2 AND status_aktivitas="A" AND kampus=:p3',array(':p1'=>$kode_prodi,':p2'=>$thn->tahun_id,':p3'=>$kode_kampus))
+		     ->where('m.kode_prodi=:p1 AND d.tahun_akademik=:p2 AND status_aktivitas="A" AND kampus=:p3 AND d.semester=:p4',array(':p1'=>$kode_prodi,':p2'=>$thn->tahun_id,':p3'=>$kode_kampus, ':p4'=>$semester))
 		     ->order('m.nim_mhs')
 		     ->group('m.nim_mhs')
 		     // ->limit(1)
