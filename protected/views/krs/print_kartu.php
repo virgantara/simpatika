@@ -76,7 +76,7 @@
      
     </table>
     <br><br>
-<table  border="1" width="100%" style="font-size:6px;;font-family: 'Times'" cellpadding="1">
+<table  border="1" width="100%" style="font-size:6px;;font-family: 'Times'" cellpadding="2">
   <tr>
       <th style="padding:5px;text-align: center;" width="5%"><strong>No</strong></th>
      <th style="padding:5px;text-align: center;" width="30%"><strong>MATA KULIAH</strong></th>
@@ -133,7 +133,7 @@
 <br><br>
    <table border="0" width="100%" style="font-size:6px;;font-family: 'Times'">
          <tr>
-    <td>
+    <td width="70%">
       Catatan : <br>
       1. Kartu Ujian ini harap dibawa pada saat ujian <br>
       2. Pakaian hitam putih/kemeja <br>
@@ -141,10 +141,8 @@
       4. Kolom nilai diisi setelah nilai keluar sebagai kontrol untuk mengambil KHS
       
     </td>
-    <td>
-       
-    </td>
-    <td align="left" valign="top">
+    
+    <td align="left" valign="top" width="30%">
        PONOROGO,  <?php echo $tanggal; ?><br>
        DEKAN 
        <br>
