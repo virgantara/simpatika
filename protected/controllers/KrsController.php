@@ -141,7 +141,7 @@ class KrsController extends Controller
 				);
 				$tgl = date('Y-m-d H:i:s');
 
-				$pdf->write2DBarcode($m->nim_mhs.'#'.$m->nama_mahasiswa.'#'.strtotime($tgl), 'QRCODE,Q', 20, 160, 30, 30, $style, 'N');
+				$pdf->write2DBarcode($m->nim_mhs.'#'.$m->nama_mahasiswa.'#'.$tgl, 'QRCODE,Q', 20, 160, 30, 30, $style, 'N');
 			}
 
 			ob_end_clean();
