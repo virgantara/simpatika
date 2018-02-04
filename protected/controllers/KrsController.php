@@ -101,7 +101,7 @@ class KrsController extends Controller
 
 		    $tanggal = $tgl[0].' '.$bulans[$tgl[1]].' '.$tgl[2];
 
-			$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 'P', 'mm', 'A5', true, 'UTF-8');
+			$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 'P', 'mm', 'A4', true, 'UTF-8');
 
 			$pdf->setPrintHeader(false);
 			$pdf->setPrintFooter(false);
@@ -141,7 +141,7 @@ class KrsController extends Controller
 				);
 				$tgl = date('Y-m-d H:i:s');
 
-				$pdf->write2DBarcode($m->nim_mhs.'#'.$m->nama_mahasiswa.'#'.$tgl, 'QRCODE,Q', 20, 160, 30, 30, $style, 'N');
+				$pdf->write2DBarcode($m->nim_mhs.'#'.$m->nama_mahasiswa.'#'.$tgl, 'QRCODE,Q', 20, 220, 30, 30, $style, 'N');
 			}
 
 			ob_end_clean();

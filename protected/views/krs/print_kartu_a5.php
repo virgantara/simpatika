@@ -1,4 +1,4 @@
-<table border="0" style="font-size:9px;font-weight:bold;;font-family: 'Times'" width="100%">
+<table border="0" style="font-size:8px;font-weight:bold;;font-family: 'Times'" width="100%">
   
     <tr>
         <td width="20%" style="border-bottom: 1px solid black">
@@ -15,14 +15,14 @@
       </tr>
       <tr>
         <td colspan="4" align="center">
-          <strong style="font-size: 12px">KARTU UJIAN TENGAH SEMESTER</strong>
+          <strong style="font-size:9px">KARTU UJIAN TENGAH SEMESTER</strong>
         </td>
       </tr>
        
    </table>
    
  <br>  <br> 
-    <table border="0" width="100%" style="font-family: 'Times';font-size: 8px;font-weight: bold;">
+    <table border="0" width="100%" style="font-family: 'Times';font-size:6px;font-weight: bold;">
       <tr>
         <td width="60%">
           <table border="0" width="100%" >
@@ -69,14 +69,14 @@
         </td>
         <td align="center" width="40%">
          
-        <img  src="<?php echo Yii::app()->baseUrl;?>images/noimage.jpg" width="70"/>
+        <img  src="<?php echo Yii::app()->baseUrl;?>images/noimage.jpg" width="50"/>
         
         </td>
       </tr>
      
     </table>
     <br><br>
-<table  border="1" width="100%" style="font-size:8px;;font-family: 'Times'" cellpadding="3">
+<table  border="1" width="100%" style="font-size:6px;;font-family: 'Times'" cellpadding="2">
   <tr>
       <th style="padding:5px;text-align: center;" width="5%"><strong>No</strong></th>
      <th style="padding:5px;text-align: center;" width="30%"><strong>MATA KULIAH</strong></th>
@@ -131,9 +131,9 @@
          </tr> 
   </table>
 <br><br>
-   <table border="0" width="100%" style="font-size:8px;;font-family: 'Times'">
+   <table border="0" width="100%" style="font-size:6px;;font-family: 'Times'">
          <tr>
-    <td>
+    <td width="70%">
       Catatan : <br>
       1. Kartu Ujian ini harap dibawa pada saat ujian <br>
       2. Pakaian hitam putih/kemeja <br>
@@ -141,10 +141,8 @@
       4. Kolom nilai diisi setelah nilai keluar sebagai kontrol untuk mengambil KHS
       
     </td>
-    <td>
-       
-    </td>
-    <td align="left" valign="top">
+    
+    <td align="left" valign="top" width="30%">
        PONOROGO,  <?php echo $tanggal; ?><br>
        DEKAN 
        <br>
