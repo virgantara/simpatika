@@ -155,7 +155,7 @@
        <br>
        <br>
        <u style="margin: 4px"><strong><?php echo !empty($dekan) ? $dekan->nama_dosen : '';?></strong></u><br>
-       NIDN : <?php echo !empty($dekan) ? $dekan->nidn : '';?>
+       NIY : <?php echo !empty($dekan) ? $dekan->niy : '';?>
        
     </td>
     
