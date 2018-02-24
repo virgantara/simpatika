@@ -838,7 +838,10 @@ class JadwalController extends Controller
 	public function actionRekapJadwal()
 	{
 		
-		$tahun_akademik = '20172';//Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		//$tahun_akademik = '20172';//Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+
+		$tahun_akademik = $tahun_akademik->tahun_id;
 		
 		$this->render('rekap_jadwal',array(
 
@@ -1327,7 +1330,11 @@ class JadwalController extends Controller
 			
 			$cid = Yii::app()->request->getPost('q'); 
 
-			$tahunaktif = '20172';
+			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+
+			$tahunaktif = $tahun_akademik->tahun_id;
+
+			// $tahunaktif = '20172';
 
 			$list = Yii::app()->db->createCommand()
 		    ->select('*')
@@ -1491,9 +1498,13 @@ class JadwalController extends Controller
 				$nama_mk = $mk->nama_mata_kuliah;
 			}
 
+			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+
+			$tahun_akademik = $tahun_akademik->tahun_id;
+
 			$attr = array(
 				'kode_mk'=> $model->kode_mk,
-				'tahun_akademik' => '20172'
+				'tahun_akademik' => $tahun_akademik
 			);
 			$datakrs = Datakrs::model()->findAllByAttributes($attr);
 			foreach($datakrs as $krs)
