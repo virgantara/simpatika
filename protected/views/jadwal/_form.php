@@ -133,8 +133,7 @@ function findMk(prodi){
 			cekKonflik();
 		});
 
-
-
+		
 		var fak = $('#Jadwal_fakultas').val();
 		findProdi(fak);
 

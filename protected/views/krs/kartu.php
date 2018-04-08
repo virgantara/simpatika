@@ -49,6 +49,8 @@ for($i=1;$i<=16;$i++){
 	$list[$i] = 'Semester '.$i;
 }
 echo CHtml::dropDownList('semester',isset($_GET['semester'])?$_GET['semester']:'',$list,array('id'=>'semester')); 
+echo ' Jenis Kartu ';
+echo CHtml::dropDownList('jenis',isset($_GET['jenis'])?$_GET['jenis']:'',array('uts'=>'UTS','uas'=>'UAS'),array('id'=>'jenis')); 
 
  echo CHtml::submitButton('Cetak'); ?>
 </div> 

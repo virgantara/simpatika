@@ -15,7 +15,7 @@
       </tr>
       <tr>
         <td colspan="4" align="center">
-          <strong style="font-size: 12px">KARTU UJIAN TENGAH SEMESTER</strong>
+          <strong style="font-size: 12px">KARTU UJIAN <?=$jenis;?> SEMESTER</strong>
         </td>
       </tr>
        
@@ -120,11 +120,13 @@
   }
 ?>
              <tr>
-           <td colspan="4" valign="middle" align="right">
+           <td colspan="2" valign="middle" align="right">
              <b>Total SKS </b> 
            </td>
+           <td> <?=$total_sks;?>    </td>
+           <td></td>
            <td align="center">
-             <?=$total_sks;?>          </td>
+                  </td>
            <td>
            </td>
             

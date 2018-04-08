@@ -108,6 +108,9 @@ class KrsController extends Controller
 			$pdf->SetAutoPageBreak(TRUE,10);
 			$this->layout = '';
 
+			$q = $_POST['jenis'];
+			$jenis = ($q == 'uts') ? 'TENGAH' : 'AKHIR';
+
 			date_default_timezone_set('Asia/Jakarta');
 			foreach($listmhs as $m)
 			{
@@ -116,6 +119,7 @@ class KrsController extends Controller
 	
 				$pdf->AddPage();
 				
+
 				
 				ob_start();	
 				echo $this->renderPartial('print_kartu',array(
@@ -125,7 +129,8 @@ class KrsController extends Controller
 					'tanggal' =>$tanggal,
 					'fakultas'=>$fakultas,
 					'kampus' =>$kampus,
-					'dekan'=>$dekan
+					'dekan'=>$dekan,
+					'jenis' => $jenis
 				));
 			
 				
