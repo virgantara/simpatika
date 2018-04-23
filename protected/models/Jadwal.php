@@ -178,7 +178,9 @@ class Jadwal extends CActiveRecord
 
 	public function findListBentrok($kode_dosen, $jam, $hari)
 	{
-		$tahunaktif = '20172';;
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahunaktif = $tahun_akademik->tahun_id;
+
 		$params = array(
 			'kode_dosen' => $kode_dosen,
 			'hari' => $hari,
@@ -196,7 +198,8 @@ class Jadwal extends CActiveRecord
 	{
 
 		// $jam = $jam.':00';
-		$tahunaktif = '20172';
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahunaktif = $tahun_akademik->tahun_id;
 
 		$criteria=new CDbCriteria;
 		$criteria->addCondition('kode_dosen=:p3 AND hari=:p4 AND jam_mulai=:p5 AND tahun_akademik =:p6');
