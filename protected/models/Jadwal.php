@@ -277,9 +277,11 @@ class Jadwal extends CActiveRecord
 	}
 
 	public function countBentrok()
-	{
+	{	
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahunaktif = $tahun_akademik->tahun_id;
 		$criteria=new CDbCriteria;
-		$criteria->addCondition('t.bentrok=1');
+		$criteria->addCondition('t.bentrok=1 AND tahun_akademik='.$tahunaktif);
 		$model = Jadwal::model()->findAll($criteria);	
 
 		return count($model);
