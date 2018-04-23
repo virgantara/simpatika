@@ -404,10 +404,13 @@ class Jadwal extends CActiveRecord
 	{
 		$criteria=new CDbCriteria;
 		// $criteria->compare('tahun_akademik',$tahun_akademik);
-		$criteria->addCondition('kode_dosen=:p1 AND bentrok = :p2');
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$criteria->addCondition('kode_dosen=:p1 AND bentrok = :p2 AND tahun_akademik=:p3');
+
 		$criteria->params = array(
 			':p1' =>$kode_dosen,
 			':p2' => 1,
+			':p3' => $tahun_akademik->tahun_id
 		);
 		$model = Jadwal::model()->findAll($criteria);	
 
@@ -423,7 +426,7 @@ class Jadwal extends CActiveRecord
 		// 	':p1' =>$kode_dosen
 		// );
 		// $model = Jadwal::model()->findAll($criteria);	
-
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$model = Yii::app()->db->createCommand()
 	    ->select('*, t.id as idjadwal')
 	    ->from('simak_jadwal_temp t')
@@ -432,7 +435,7 @@ class Jadwal extends CActiveRecord
 	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-	    ->where('kode_dosen=:p1', array(':p1'=>$kode_dosen))
+	    ->where('kode_dosen=:p1 AND t.tahun_akademik=:p2', array(':p1'=>$kode_dosen,':p2'=>$tahun_akademik->tahun_id))
 	    ->group('idjadwal')
 	    ->order('t.kode_dosen ASC')
 	    ->queryAll();
@@ -442,8 +445,10 @@ class Jadwal extends CActiveRecord
 
 	public function findRekapJadwalAllBentrok($tahun_akademik=0)
 	{
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$criteria=new CDbCriteria;
 		$criteria->compare('bentrok',1);
+		$criteria->compare('tahun_akademik',$tahun_akademik->tahun_id);
 		// $criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
 		$criteria->order = 'kode_dosen ASC';
 		$criteria->group = 'kode_dosen';
@@ -460,7 +465,7 @@ class Jadwal extends CActiveRecord
 		// $criteria->order = 'kode_dosen ASC';
 		// $criteria->group = 'kode_dosen';
 		// $model = Jadwal::model()->findAll($criteria);	
-
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$model = Yii::app()->db->createCommand()
 	    ->select('*')
 	    ->from('simak_jadwal_temp t')
@@ -469,6 +474,7 @@ class Jadwal extends CActiveRecord
 	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+	    ->where('t.tahun_akademik=:p1', array(':p1'=>$tahun_akademik->tahun_id))
 	    ->group('t.kode_dosen')
 	    ->order('t.kode_dosen ASC')
 	    ->queryAll();
@@ -479,7 +485,7 @@ class Jadwal extends CActiveRecord
 
 	public function findRekapJadwalPerkelas($id,$kampus, $kelas, $semester)
 	{
-
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$user = Yii::app()->db->createCommand()
 	    ->select('*')
 	    ->from('simak_jadwal_temp t')
@@ -488,7 +494,7 @@ class Jadwal extends CActiveRecord
 	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-	    ->where('prodi=:p1 AND kampus=:p2 AND kelas=:p3 AND t.semester =:p4', array(':p1'=>$id,':p2'=>$kampus,':p3'=>$kelas,':p4'=>$semester))
+	    ->where('prodi=:p1 AND kampus=:p2 AND kelas=:p3 AND t.semester =:p4 AND tahun_akademik=:p5', array(':p1'=>$id,':p2'=>$kampus,':p3'=>$kelas,':p4'=>$semester,':p5'=>$tahun_akademik->tahun_id))
 	    ->group('t.id')
 	    ->order('h.urutan ASC')
 	    ->queryAll();
@@ -510,6 +516,7 @@ class Jadwal extends CActiveRecord
 
 	public function findJadwalDosen($dosen, $hari, $jamke)
 	{
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$model = Yii::app()->db->createCommand()
 	    ->select('*')
 	    ->from('simak_jadwal_temp t')
@@ -518,7 +525,7 @@ class Jadwal extends CActiveRecord
 	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-	    ->where('kode_dosen=:p1 AND hari=:p2 AND jam_ke=:p3', array(':p1'=>$dosen,':p2'=>$hari,':p3'=>$jamke))
+	    ->where('kode_dosen=:p1 AND hari=:p2 AND jam_ke=:p3 AND tahun_akademik=:p4', array(':p1'=>$dosen,':p2'=>$hari,':p3'=>$jamke,':p4'=>$tahun_akademik->tahun_id))
 	    ->queryAll();
 
 		// $params = array(
