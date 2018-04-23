@@ -607,6 +607,10 @@ class Jadwal extends CActiveRecord
 		$sort = new CSort();
 		$criteria=new CDbCriteria;
 
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+
+
+
 		$criteria->addSearchCondition('t.id',$this->SEARCH,true,'OR');
 		$criteria->addSearchCondition('hari',$this->SEARCH,true,'OR');
 		$criteria->addSearchCondition('jam',$this->SEARCH,true,'OR');
@@ -627,6 +631,8 @@ class Jadwal extends CActiveRecord
 		{
 			$criteria->compare('prodi',$this->KODEPRODI);	
 		}
+
+		$criteria->compare('t.tahun_akademik',$tahun_akademik->tahun_id);
 		
 
 		if(Yii::app()->user->checkAccess(array(WebUser::R_PRODI)))

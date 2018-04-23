@@ -70,6 +70,13 @@ class TahunakademikController extends Controller
 		if(isset($_POST['Tahunakademik']))
 		{
 			$model->attributes=$_POST['Tahunakademik'];
+			if($model->buka == 'Y'){
+				$models = Tahunakademik::model()->findAll();
+				foreach($models as $m){
+					$m->buka = 'N';
+					$m->save(false,array('buka'));
+				}
+			}
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -94,8 +101,17 @@ class TahunakademikController extends Controller
 		if(isset($_POST['Tahunakademik']))
 		{
 			$model->attributes=$_POST['Tahunakademik'];
-			if($model->save())
+			if($model->buka == 'Y'){
+				$models = Tahunakademik::model()->findAll();
+				foreach($models as $m){
+					$m->buka = 'N';
+					$m->save(false,array('buka'));
+				}
+			}
+			if($model->save()){
+
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('update',array(
@@ -122,14 +138,7 @@ class TahunakademikController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$model=new Tahunakademik('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Tahunakademik']))
-			$model->attributes=$_GET['Tahunakademik'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
+		$this->redirect(array('admin'));
 	}
 
 	/**

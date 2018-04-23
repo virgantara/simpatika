@@ -45,7 +45,7 @@ echo '<li>'.CHtml::link('Lampiran SK Jadwal',array('JadwalLampiranSk/admin')).'<
 echo '<li>'.CHtml::link('Mata Kuliah',array('Mastermatakuliah/index')).'</li>';
 echo '<li>'.CHtml::link('Kelas',array('MasterKelas/admin')).'</li>';
 echo '<li>'.CHtml::link('Kampus',array('Kampus/index')).'</li>';
-echo '<li>'.CHtml::link('Tahun Akademik',array('Tahunakademik/index')).'</li>';
+echo '<li>'.CHtml::link('Tahun Akademik',array('tahunakademik/index')).'</li>';
 echo '<li>'.CHtml::link('Jam Mengajar',array('Jam/admin')).'</li>';
 echo '<li>'.CHtml::link('User',array('user/index')).'</li>';
 echo '<li>'.CHtml::link('Dosen',array('Masterdosen/admin')).'</li>';
