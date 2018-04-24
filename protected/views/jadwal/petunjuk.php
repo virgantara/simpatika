@@ -81,7 +81,10 @@ $list_hari = array(
 	<li>
 		KELAS diambil dari data berikut:
 		<?php 
-		foreach(Masterkelas::model()->findAll() as $item)
+
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahunaktif = $tahun_akademik->tahun_id;
+		foreach(Masterkelas::model()->findAllByAttributes(array('tahun_akademik'=>$tahunaktif)) as $item)
 		{
 			echo $item->nama_kelas.', ';
 		}
