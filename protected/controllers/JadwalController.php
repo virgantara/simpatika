@@ -407,6 +407,7 @@ class JadwalController extends Controller
 			if(empty($v)) continue;
 			$model[] = Jadwal::model()->findByPk($v);
 		}
+		
 		// print_r($withs);exit;
 		// $model=Jadwal::model()->findListBentrok(
 		// 	$jadwal->kode_dosen,

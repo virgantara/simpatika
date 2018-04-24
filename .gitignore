@@ -2,6 +2,7 @@
 assets/*
 protected/runtime/*
 database.php
+jadwal/*
 
 *.tar.gz
 

@@ -230,6 +230,10 @@ class Jadwal extends CActiveRecord
 				
 				$bentrok_with .= $jadwal->id.'|';
 			}
+
+			// else{
+			// 	$is_bentrok = false;
+			// }
 		}	
 
 		if($is_bentrok)
@@ -278,10 +282,19 @@ class Jadwal extends CActiveRecord
 
 	public function countBentrok()
 	{	
+		// $tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		// $tahunaktif = $tahun_akademik->tahun_id;
+		// $criteria=new CDbCriteria;
+		// $criteria->addCondition('t.bentrok=1 AND tahun_akademik='.$tahunaktif);
+		// $model = Jadwal::model()->findAll($criteria);	
+
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-		$tahunaktif = $tahun_akademik->tahun_id;
 		$criteria=new CDbCriteria;
-		$criteria->addCondition('t.bentrok=1 AND tahun_akademik='.$tahunaktif);
+		$criteria->compare('bentrok',1);
+		$criteria->compare('tahun_akademik',$tahun_akademik->tahun_id);
+		// $criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
+		$criteria->order = 'kode_dosen ASC';
+		// $criteria->group = 'kode_dosen';
 		$model = Jadwal::model()->findAll($criteria);	
 
 		return count($model);

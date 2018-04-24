@@ -55,7 +55,8 @@ $this->menu=array(
 
 		  foreach($model as $m)
 		  {	
-
+		  	if(empty($m)) 
+		  		continue;
 		  	 $i++;
 
 		  	// $sks_dosen += $m->SKS;

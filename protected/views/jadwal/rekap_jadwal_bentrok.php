@@ -120,6 +120,9 @@ $this->menu=array(
 		<td width="5%"><?php echo $m->kELAS->nama_kelas;?></td>
 		<td>
 		 <?php 
+
+		 echo CHtml::link('Update',array('jadwal/update','id'=>$m->id),array('target'=>'_blank'));
+		 echo '&nbsp;';
 		 if($m->bentrok==1)
 		 	echo CHtml::link('Bentrok',array('jadwal/listBentrok','id'=>$m->id),array('target'=>'_blank'));
 		 else if($m->bentrok==2)
