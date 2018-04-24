@@ -127,17 +127,33 @@ class Mastermatakuliah extends CActiveRecord
 		$new->sms = 2;
 		
 
+		$msg = array();
 
 		if($new->validate())
 		{
 			$new->save();
-			return true;
+			$msg = array(
+				'code' => '200',
+				'message' => 'sukses'
+			);
+			return $msg;
 		}
 
 		else
 		{
-			print_r($new->getErrors());
-			return false;
+			$errors = '';
+			
+			foreach($new->getErrors() as $attribute){
+				foreach($attribute as $error){
+					$errors .= $error.' ';
+				}
+			}
+			
+			$msg = array(
+				'code' => '501',
+				'message' => $errors
+			);
+			return $msg;
 		}
 
 	}

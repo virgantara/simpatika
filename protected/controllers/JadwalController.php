@@ -407,7 +407,7 @@ class JadwalController extends Controller
 			if(empty($v)) continue;
 			$model[] = Jadwal::model()->findByPk($v);
 		}
-		
+
 		// print_r($withs);exit;
 		// $model=Jadwal::model()->findListBentrok(
 		// 	$jadwal->kode_dosen,
@@ -1045,12 +1045,12 @@ class JadwalController extends Controller
 
 		        		$isnew = Mastermatakuliah::model()->quickCreate($tahun_akademik, $fakultas, $prodi, $kode_mk, $nama_mk,$kode_dosen, $sks, $semester);
 		        		
-		        		if(!$isnew)
+		        		if($isnew['code']!='200')
 		        		{
 
 		        			$message .= '<div style="color:red">Wrong data mk</div>';
 		        				// continue;
-		        			$m->addError('error','Baris ke-'.($index+1).' : Terjadi kesalahan input data mk');
+		        			$m->addError('error','Baris ke-'.($index+1).' : Terjadi kesalahan input data mk: '.$isnew['message']);
 			        		// $m->addError('error','Terjadi kesalahan input data mk');
 							throw new Exception();
 		        		}
@@ -1103,6 +1103,8 @@ class JadwalController extends Controller
 
 		        	if(empty($id_kelas))
 		        	{
+
+		        		// print_r($m->getErrors());
 		        		$m->addError('error','Baris ke-'.($index+1).' : Nama Kelas Salah atau data tidak ada');
 						throw new Exception();
 		        	}
