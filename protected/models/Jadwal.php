@@ -375,9 +375,11 @@ class Jadwal extends CActiveRecord
 
 	public function findKampus($id)
 	{
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahunaktif = $tahun_akademik->tahun_id;
 		$criteria=new CDbCriteria;
-		$criteria->addCondition('prodi= :p1');
-		$criteria->params = array(':p1'=>$id);
+		$criteria->addCondition('prodi= :p1 AND j.tahun_akademik=:p2');
+		$criteria->params = array(':p1'=>$id,':p2'=>$tahunaktif);
 		$criteria->order = 'kode_kampus ASC';
 		$criteria->join = 'JOIN simak_jadwal_temp j ON j.kampus = t.id';
 		$criteria->group = 't.kode_kampus';
@@ -521,7 +523,7 @@ class Jadwal extends CActiveRecord
 	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-	    ->where('prodi=:p1 AND kampus=:p2 AND kelas=:p3 AND t.semester =:p4 AND tahun_akademik=:p5', array(':p1'=>$id,':p2'=>$kampus,':p3'=>$kelas,':p4'=>$semester,':p5'=>$tahun_akademik->tahun_id))
+	    ->where('prodi=:p1 AND kampus=:p2 AND kelas=:p3 AND t.semester =:p4 AND t.tahun_akademik=:p5', array(':p1'=>$id,':p2'=>$kampus,':p3'=>$kelas,':p4'=>$semester,':p5'=>$tahun_akademik->tahun_id))
 	    ->group('t.id')
 	    ->order('h.urutan ASC')
 	    ->queryAll();
