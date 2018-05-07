@@ -1072,24 +1072,33 @@ class JadwalController extends Controller
 		        	
 		        	$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$kode_dosen));
 		        	$dosenuser = SimakUsers::model()->findByAttributes(array('nim'=>$kode_dosen));
-		        	if(empty($dosen) && empty($dosenuser))
+		        	if(empty($dosen))
 		        	{
-		        		$isnew = Masterdosen::model()->quickCreate($fakultas, $prodi, $kode_dosen, $nama_dosen);
+		        		// $isnew = Masterdosen::model()->quickCreate($fakultas, $prodi, $kode_dosen, $nama_dosen);
 		        		
 
 
-		        		if(!$isnew)
-		        		{
+		        		// if(!$isnew)
+		        		// {
 
 	        			$message .= '<div style="color:red">Data Dosen belum ada di master dosen</div>';
 	        				// continue;
 	        			$m->addError('error','Baris ke-'.($index+1).' : Data Dosen belum ada di master dosen');
 		        		// $m->addError('error','Terjadi kesalahan input data dosen');
 						throw new Exception();
-		        		}
-
-		        		
+		        		// }
+	
 		        	}
+
+		        	if(empty($dosenuser))
+		        	{
+		        		$message .= '<div style="color:red">Data Dosen belum punya akun SIAKAD</div>';
+	        				// continue;
+	        			$m->addError('error','Baris ke-'.($index+1).' : Data Dosen belum punya user SIAKAD');
+		        		// $m->addError('error','Terjadi kesalahan input data dosen');
+						throw new Exception();
+		        	}
+
 		        	$kd_ruangan = $sheet->getCell('H'.$row);
 		        	
 		        	$nama_fakultas = $sheet->getCell('J'.$row);
