@@ -305,7 +305,7 @@ class Jadwal extends CActiveRecord
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$tahunaktif = $tahun_akademik->tahun_id;
 		$criteria=new CDbCriteria;
-		$criteria->addCondition('t.kode_prodi="'.$id.'" AND tahun_akademik='.$tahunaktif);
+		$criteria->addCondition('t.kode_prodi="'.$id.'" AND t.tahun_akademik='.$tahunaktif);
 		$model = Jadwal::model()->find($criteria);	
 
 		return $model;
