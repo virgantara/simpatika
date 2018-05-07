@@ -311,7 +311,7 @@ function findMk(prodi){
 		if(!$model->isNewRecord)
 		{
 			$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$model->kode_dosen));
-			echo $model->kode_dosen;
+			// echo $model->kode_dosen;
 			if(!empty($dosen))
 				$nama_dosen = $dosen->nama_dosen;
 		}
