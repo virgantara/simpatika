@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete','cetakJurnal'),
+				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete','cetakJurnal','paralel'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,6 +44,17 @@ class JadwalController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionParalel($id, $par)
+	{
+		$model = $this->loadModel($id);
+
+		$model->bentrok = $par;
+		$model->save(false,array('bentrok'));
+
+
+		$this->redirect(array('rekapJadwalBentrok'));
 	}
 
 	public function actionCetakJurnal()

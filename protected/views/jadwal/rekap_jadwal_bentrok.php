@@ -122,7 +122,17 @@ $this->menu=array(
 		 <?php 
 
 		 echo CHtml::link('Update',array('jadwal/update','id'=>$m->id),array('target'=>'_blank'));
-		 echo '&nbsp;';
+		 echo '<br>';
+
+		 // if($m->bentrok == 2){
+		 // 	echo CHtml::link('Unparalel',array('jadwal/paralel','id'=>$m->id,'par'=>1));
+		 // }
+		 // else{
+		 if(Yii::app()->user->checkAccess(array(WebUser::R_SA))){
+		 echo CHtml::link('Paralel',array('jadwal/paralel','id'=>$m->id,'par'=>2));
+		}
+		 // }
+		 echo '<br>';
 		 if($m->bentrok==1)
 		 	echo CHtml::link('Bentrok',array('jadwal/listBentrok','id'=>$m->id),array('target'=>'_blank'));
 		 else if($m->bentrok==2)
