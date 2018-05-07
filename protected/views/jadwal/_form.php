@@ -311,7 +311,9 @@ function findMk(prodi){
 		if(!$model->isNewRecord)
 		{
 			$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$model->kode_dosen));
-			$nama_dosen = $dosen->nama_dosen;
+			echo $model->kode_dosen;
+			if(!empty($dosen))
+				$nama_dosen = $dosen->nama_dosen;
 		}
 		echo $form->hiddenField($model,'kode_dosen',array('size'=>20,'maxlength'=>20));
 		echo CHtml::textField('nama_dosen',$nama_dosen,array('size'=>20,'maxlength'=>20,'id'=>'nama_dosen')); 

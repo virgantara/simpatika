@@ -155,8 +155,9 @@ echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 Yii::app()->clientScript->registerScript('delete','
 $("#butt").click(function(){
 
-        var checked=$("#jadwal-grid").yiiGridView("getChecked","jadwal-grid_c14"); 
+        var checked=$("#jadwal-grid").yiiGridView("getChecked","jadwal-grid_c15"); 
         var count=checked.length;
+
         if(count>0 && confirm("Do you want to delete these "+count+" item(s)"))
         {
                 $.ajax({
