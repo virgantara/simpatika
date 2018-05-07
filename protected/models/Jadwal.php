@@ -324,7 +324,7 @@ class Jadwal extends CActiveRecord
 	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-	    ->where('kode_dosen=:p1 AND tahun_akademik=:p2', array(':p1'=>$id,':p2'=>$tahunaktif))
+	    ->where('kode_dosen=:p1 AND t.tahun_akademik=:p2', array(':p1'=>$id,':p2'=>$tahunaktif))
 	    ->group('t.kode_dosen')
 	    ->order('d.nama_dosen')
 	    ->queryAll();
@@ -554,7 +554,7 @@ class Jadwal extends CActiveRecord
 	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-	    ->where('kode_dosen=:p1 AND hari=:p2 AND jam_ke=:p3 AND tahun_akademik=:p4', array(':p1'=>$dosen,':p2'=>$hari,':p3'=>$jamke,':p4'=>$tahun_akademik->tahun_id))
+	    ->where('kode_dosen=:p1 AND hari=:p2 AND jam_ke=:p3 AND t.tahun_akademik=:p4', array(':p1'=>$dosen,':p2'=>$hari,':p3'=>$jamke,':p4'=>$tahun_akademik->tahun_id))
 	    ->queryAll();
 
 		// $params = array(
