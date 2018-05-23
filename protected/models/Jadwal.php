@@ -95,12 +95,14 @@ class Jadwal extends CActiveRecord
 
 	public function findJadwalDosenParalel($jadwal)
 	{
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahunaktif = $tahun_akademik->tahun_id;
 		$dosen = $jadwal->kode_dosen;
 		$hari = $jadwal->hari;
 		$jam = $jadwal->jam_mulai;
 		$kampus = $jadwal->kampus;
 		$nama_mk = $jadwal->nama_mk;
-		$tahunaktif = $jadwal->tahun_akademik;
+		// $tahunaktif = $jadwal->tahun_akademik;
 		$semester = $jadwal->semester;
 
 		$model = Yii::app()->db->createCommand()

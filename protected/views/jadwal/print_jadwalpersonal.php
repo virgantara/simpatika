@@ -142,7 +142,7 @@ foreach($jam as $j)
       {
         $lbl_prodi = $prodi->singkatan;
       }
-      $label1 = !empty($prodi) ? $lbl_prodi.'-'.$jd->semester.'<br>' : $nama_prodi.'-'.$jd->semester;
+      $label1 = $lbl_prodi.'-'.$jd->semester.'<br>';
       $label2 = $jd->nama_kampus.'-'.$jd->nama_kelas.' / '.$jd->sks.' SKS';
       $label3 = '<br><span style="background-color:yellow">'.substr($jd->jam_mulai, 0, -3).'-'.substr($jd->jam_selesai, 0, -3).'</span>';
       
