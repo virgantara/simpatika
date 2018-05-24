@@ -167,7 +167,8 @@ class JadwalController extends Controller
 		$masterprodi = Masterprogramstudi::model()->findAll();
 
 		
-
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahunaktif = $tahun_akademik->tahun_id;
 
 		$pdf = Yii::createComponent('application.extensions.tcpdf.ETcPdf', 
 			                'L', 'mm', 'A4', true, 'UTF-8');
@@ -195,7 +196,7 @@ class JadwalController extends Controller
 			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 			    ->join('simak_kampus km', 'km.id=t.kampus')
 			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-			    ->where('kode_dosen=:p1', array(':p1' => $id))
+			    ->where('kode_dosen=:p1 AND t.tahun_akademik=:p2', array(':p1' => $id,':p2'=>$tahunaktif))
 			    ->queryAll();
 
 
