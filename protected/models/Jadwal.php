@@ -549,7 +549,7 @@ class Jadwal extends CActiveRecord
 	{
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$model = Yii::app()->db->createCommand()
-	    ->select('*')
+	    ->select('t.*,km.nama_kampus,kls.nama_kelas,m.sks')
 	    ->from('simak_jadwal_temp t')
 	    ->join('m_hari h', 'h.nama_hari=t.hari')
 	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
