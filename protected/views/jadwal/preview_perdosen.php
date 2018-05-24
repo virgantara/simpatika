@@ -100,6 +100,7 @@ $(document).ready(function(){
 	</div>
  -->
 	<div class="row buttons">
+    <?php echo CHtml::submitButton('Lihat',array('name'=>'lihat')); ?>
 		<?php echo CHtml::submitButton('Cetak',array('name'=>'cetak')); ?>
 		
 		<?php 
@@ -110,122 +111,9 @@ $(document).ready(function(){
 
 </div><!-- form -->
 
-<?php
-if(!empty($model))
-{
-
-$list_hari = array(
-			'Sabtu'=>'Sabtu',
-			'Ahad'=> 'Ahad',
-			'Senin'=>'Senin',
-			'Selasa'=>'Selasa',
-			'Rabu'=> 'Rabu',
-			'Kamis'=>'Kamis'
-		);
-?>
-
-
-<table style="margin-bottom: 10px">
-  <tr>
-    
-    <td width="40%" style="text-align: left">
-<table width="100%" style="margin-left: 5px">
- 
-
-  <tr>
-    <td width="15%" style="text-align: left"><strong>Nama</strong></td>
-    <td width="5%"><strong>:</strong></td>
-    <td width="85%" style="text-align: left"><strong><?php echo $dosen->nama_dosen;?></strong></td>
-  </tr>
-  <tr>
-    <td style="text-align: left"><strong>NIY</strong></td>
-    <td><strong>:</strong></td>
-    <td style="text-align: left"><strong><?php echo $dosen->niy;?></strong></td>
-  </tr>
-  
-</table>
-    </td>
-   
-  </tr>
-</table>
-
-
-<table cellpadding="4" border="1" class="grid">
-  
-  <thead>
-    <tr>
-      <th width="8%" rowspan="2" style="text-align: center;"><br><br><strong>HARI</strong></th>
-       <th width="91%" colspan="7" style="text-align: center;"><strong>JAM PERKULIAHAN</strong></th>
-    </tr>
-    <tr>
-    <?php 
-    $jam = Jam::model()->findAll();
-    foreach($jam as $j)
-    {
-    ?>
-      <th width="13%" style="text-align: center"><strong><?php echo $j->prefix.$j->nama_jam;?><br>
-        <?php
-
-        echo substr($j->jam_mulai, 0, -3).' - '.substr($j->jam_selesai, 0, -3);
-        ?></strong>
-      </th>
-      
-    
-    <?php 
-  }
-    ?>
-    </tr>
- </thead>
-  <tbody>
-<?php 
-  
-foreach($list_hari as $q => $h)
-{
-
-?>
- <tr>
-<td  width="8%" style="text-align: center"><br><br><strong><?php echo strtoupper($h);?></strong></td>
-<?php 
-foreach($jam as $j)
-{
-?>
-<td width="13%" style="text-align: center;">
-<?php 
-
-  $jd = Jadwal::model()->findJadwalDosen($dosen->niy, $h, $j->id_jam);
-  // print_r($jd);exit;
-  if(!empty($jd))
-  {
-    echo $jd->nama_mk.'<br>';
-    $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$jd->prodi));
-
-    echo !empty($prodi) ? $prodi->singkatan.'-'.$jd->semester.'<br>' : $jd->nama_prodi.'-'.$jd->semester;
-    echo $jd->kAMPUS->nama_kampus.' / '.$jd->SKS.' SKS';
-  }
-  else{
-    echo '<br><br><br><br>';
-  }
-
-  // echo !empty($jd->nama_mk) ? $jd->nama_mk : '';
-?>
-</td>
-<?php 
-}
-?>
-
-
-</tr>
-<?php   
-}
-?>
-</tbody>
-</table>
 
 <div style="font-size: 9px;text-align: center;">
 <br><br><br>
 Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
 Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id</div>
 
-<?php
-}
-?>

@@ -9,20 +9,18 @@ $list_hari = array(
     );
 
 $tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+    
 ?>
-<table style="margin-bottom: 6px">
+<table >
   <tr>
-    <td style="border-right: 3px solid black;;" width="20%" >
-      
-      <img src="<?php echo Yii::app()->baseUrl;?>/images/logo_unida.png"/>
-    </td>
+    
     <td width="40%" style="text-align: left">
 <table width="100%" style="margin-left: 5px">
   <tr>
     <td width="100%" colspan="3" style="text-align: left">
 <h3>JADWAL PERSONAL DOSEN<br>UNIVERSITAS DARUSSALAM GONTOR<br>T.A. <?=strtoupper($tahun_akademik->nama_tahun);?>
     </h3>
-<br><br><br>
+
   </td>
     
   </tr>
@@ -39,22 +37,11 @@ $tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
   
 </table>
     </td>
-    <td width="40%" style="font-size:10px; border:1px solid black">
-      
-      <ul>
-        <li><i>Mengabsen secara langsung dan meminta tanda tangan kepada mahasiswa.</i></li>
-        <li><i>Tatap muka perkuliahan minimal 14 kali/semester. UTS dan UAS masing-masing 7 kali tatap muka.</i></li>
-        <li><i>Jika berhalangan masuk atau ada revisi jadwal, mohon konfirmasi:<br>
-         <i>Ka.Bag. Perkuliahan : Samsirin, M.Pd.I. (085233677225)</i><br>
-            <i>Kasubbag Jadwal : Islam Daroini, S.Pd.I. (085784321239)</i>
-            
-        </i></li>
-      </ul>
-    </td>
+   
   </tr>
 </table>
-<br><br>
-<table cellpadding="3" border="1">
+
+<table cellpadding="3" border="1" width="100%">
   
   <thead>
     <tr>
@@ -93,7 +80,7 @@ foreach($list_hari as $q => $h)
 foreach($jam as $j)
 {
 ?>
-<td width="13%" style="text-align: center;font-size:8px">
+<td width="13%" style="text-align: center;">
 <?php 
   $jadwaldsn = Jadwal::model()->findJadwalDosen($dosen->kode_dosen, $h, $j->id_jam);
 
@@ -178,7 +165,3 @@ foreach($jam as $j)
 </tbody>
 </table>
 
-<div style="font-size: 9px;text-align: center;">
-
-Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
-Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id</div>

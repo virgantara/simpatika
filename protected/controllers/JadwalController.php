@@ -28,12 +28,12 @@ class JadwalController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('template','petunjuk','rekapJadwal','rekapJadwalXls'),
+				'actions'=>array('template','petunjuk','rekapJadwal','rekapJadwalXls','cetakPerDosen'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPerDosen','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete','cetakJurnal','paralel','refdosen'),
+				,'uploadJadwal','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete','cetakJurnal','paralel','refdosen'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -982,6 +982,49 @@ class JadwalController extends Controller
 			ob_end_clean();
 			
 			$pdf->Output();
+			
+		}
+
+		else if(!empty($_POST['lihat']))
+		{
+			$kode_prodi = $_POST['kode_prodi'];
+			
+			$listprodidosen = Masterdosen::model()->findAllByAttributes(array('kode_prodi'=>$kode_prodi));
+			
+			foreach($listprodidosen as $p)
+			{
+
+				$id = $p->nidn;
+
+				$model = Yii::app()->db->createCommand()
+			    ->select('*')
+			    ->from('simak_jadwal_temp t')
+			    ->join('m_hari h', 'h.nama_hari=t.hari')
+			    ->join('m_jam j', 'j.id_jam=t.jam_ke')
+			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+			    ->join('simak_kampus km', 'km.id=t.kampus')
+			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+			    ->where('kode_dosen=:p1', array(':p1' => $id))
+			    ->queryAll();
+
+				$dosen = Jadwal::model()->findDosenInJadwal($id);				
+				
+				if(count($dosen) == 0) continue;
+
+
+				$dosen = (object)$dosen[0];
+
+
+				if(empty($dosen)) continue;
+				
+				$this->renderPartial('lihat_jadwalpersonal',array(
+					'model'=>$model,
+					'dosen' => $dosen
+				));
+
+			}
+
+			exit;
 			
 		}
 
