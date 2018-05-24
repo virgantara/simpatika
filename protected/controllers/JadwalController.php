@@ -1017,7 +1017,7 @@ class JadwalController extends Controller
 
 				if(empty($dosen)) continue;
 				
-				$this->renderPartial('lihat_jadwalpersonal',array(
+				$this->renderPartial('lihat_jadwalPersonal',array(
 					'model'=>$model,
 					'dosen' => $dosen
 				));
