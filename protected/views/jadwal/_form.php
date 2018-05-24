@@ -2,7 +2,9 @@
 /* @var $this JadwalController */
 /* @var $model Jadwal */
 /* @var $form CActiveForm */
-$tahunaktif = '20172';//Yii::app()->request->cookies['tahunaktif']->value'';
+// $tahunaktif = '20172';//Yii::app()->request->cookies['tahunaktif']->value'';
+
+
 
 
 ?>
@@ -128,6 +130,23 @@ function findMk(prodi){
 			controlType: 'select',
 			oneLine: true,
 		});
+
+		$('#Jadwal_jam_ke').change(function(){
+			$.ajax({
+				type : 'POST',
+				data : 'term='+$(this).val(),
+				url: "<?php echo Yii::app()->createUrl('jam/ajaxJam');?>",
+				success : function(data){
+
+					var data = JSON.parse(data);
+                	$('#Jadwal_jam_mulai').val(data.jam_mulai);
+                	$('#Jadwal_jam_selesai').val(data.jam_selesai);
+				}
+
+			});
+			
+		});
+
 
 		$('#Jadwal_kampus, #Jadwal_hari, #Jadwal_jam_mulai').change(function(){
 			cekKonflik();

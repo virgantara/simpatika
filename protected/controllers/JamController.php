@@ -28,7 +28,7 @@ class JamController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','ajaxJam'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -43,6 +43,25 @@ class JamController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionAjaxJam()
+	{
+		if(Yii::app()->request->isAjaxRequest)
+		{
+			
+			$q = $_POST['term'];
+			
+			$m = Jam::model()->findByPk($q);
+
+			$result = array(
+				'id' => $m->id_jam,
+				'jam_mulai' => $m->jam_mulai,
+				'jam_selesai' => $m->jam_selesai,
+			);
+
+	        echo CJSON::encode($result);
+		}
 	}
 
 	/**
