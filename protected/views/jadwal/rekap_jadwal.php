@@ -47,7 +47,7 @@ $this->menu=array(
 		<?php
 		$kode_prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
     
-    $list = CHtml::listData(Jadwal::model()->findProdi(), 'kode_prodi','nama_prodi');
+    $list = CHtml::listData(Jadwal::model()->findAll(), 'kode_prodi','nama_prodi');
     
 		echo CHtml::dropDownList('kode_prodi',$kode_prodi,$list);
 		

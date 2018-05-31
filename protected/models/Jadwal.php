@@ -363,7 +363,12 @@ class Jadwal extends CActiveRecord
 
 	public function findProdi()
 	{
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahunaktif = $tahun_akademik->tahun_id;
+
 		$criteria=new CDbCriteria;
+		$criteria->addCondition('prodi= :p1 AND j.tahun_akademik=:p2');
+		$criteria->params = array(':p1'=>$id,':p2'=>$tahunaktif);
 		$criteria->join = 'JOIN simak_masterdosen d ON t.kode_prodi = d.kode_prodi ';
 		$criteria->join .= 'JOIN simak_jadwal_temp j ON j.kode_dosen = d.nidn';
 		$criteria->order = 't.kode_fakultas';
