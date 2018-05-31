@@ -370,7 +370,7 @@ class Jadwal extends CActiveRecord
 		$criteria->join = 'JOIN simak_masterdosen d ON t.kode_prodi = d.kode_prodi ';
 		$criteria->join .= 'JOIN simak_jadwal_temp j ON j.kode_dosen = d.nidn';
 		$criteria->addCondition('j.tahun_akademik=:p1');
-		$criteria->params = array(':p1'=>$id);
+		$criteria->params = array(':p1'=>$tahunaktif);
 		
 		$criteria->order = 't.kode_fakultas';
 		// $criteria->join = 'JOIN simak_jadwal_temp j ON j.prodi = t.kode_prodi';
