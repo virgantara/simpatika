@@ -99,8 +99,10 @@ class JadwalController extends Controller
 			$pdf->SetAutoPageBreak(TRUE,10);
 			$this->layout = '';
 			
-			$prodi = Masterprogramstudi::model()->findByPk($kode_prodi);
-
+			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$kode_prodi));
+			
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahunaktif = $tahun_akademik->tahun_id;
 			foreach($listdosenprodi as $p)
 			{
 
@@ -114,7 +116,7 @@ class JadwalController extends Controller
 			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 			    ->join('simak_kampus km', 'km.id=t.kampus')
 			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-			    ->where('kode_dosen=:p1 AND kampus=:p2 AND hari=:p3', array(':p1' => $id,':p2'=>$kode_kampus,':p3'=>$hari))
+			    ->where('kode_dosen=:p1 AND kampus=:p2 AND hari=:p3 AND t.tahun_akademik=:p4', array(':p1' => $id,':p2'=>$kode_kampus,':p3'=>$hari,':p4'=>$tahunaktif))
 			    ->group('idjadwal')
 			    ->queryAll();
 
@@ -142,7 +144,7 @@ class JadwalController extends Controller
 				
 				$pdf->writeHTML($data);
 			}
-
+			
 			ob_end_clean();
 			$pdf->Output('jurnal_'.$kode_prodi.'.pdf');
 			
