@@ -11,7 +11,7 @@ $list_hari = array(
 <?php 
 // $i = 0;
 $tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-$tahunaktif = $tahun_akademik->tahun_id;
+
 foreach($model as $m)
 {
 
@@ -34,7 +34,7 @@ foreach($model as $m)
   <?php 
   // echo substr($tahunaktif->semester, -1) % 2 == 0 ? 'GENAP' : 'GANJIL';
   ?>
-   T.A. <?=$tahunaktif->nama_tahun;?>
+   T.A. <?=$tahun_akademik->nama_tahun;?>
     </h4>
   </td>
     
