@@ -10,7 +10,8 @@ $list_hari = array(
 ?>
 <?php 
 // $i = 0;
-
+$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+$tahunaktif = $tahun_akademik->tahun_id;
 foreach($model as $m)
 {
 
@@ -31,9 +32,9 @@ foreach($model as $m)
     <td width="100%" colspan="3" style="text-align: left">
 <h4>JURNAL MATERI KULIAH<br>UNIVERSITAS DARUSSALAM GONTOR<br>SEMESTER 
   <?php 
-  echo substr($m->tahun_akademik, -1) % 2 == 0 ? 'GENAP' : 'GANJIL';
+  // echo substr($tahunaktif->semester, -1) % 2 == 0 ? 'GENAP' : 'GANJIL';
   ?>
-   T.A. 1438-1439 H / 2017-2018 M
+   T.A. <?=$tahunaktif->nama_tahun;?>
     </h4>
   </td>
     
