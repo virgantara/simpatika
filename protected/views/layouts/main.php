@@ -48,7 +48,7 @@
 				array('label'=>'Master', 'url'=>array('/site/master'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Laporan Data Ortu', 'url'=>array('/site/dataortu'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Log', 'url'=>array('/logs/admin'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
-				
+				array('label'=>'Foto', 'url'=>array('/utils/foto'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
 
