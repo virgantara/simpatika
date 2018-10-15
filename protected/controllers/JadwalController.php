@@ -1080,7 +1080,7 @@ class JadwalController extends Controller
 
 		        	if(empty($jam))
 		        	{
-						$m->addError('error','Baris ke-'.($index+1).' : Format Jam Salah atau data jam tidak ada');
+						$m->addError('error','Baris ke-'.($index).' : Format Jam Salah atau data jam tidak ada');
 						throw new Exception();
 		        	}
 		        		
@@ -1089,7 +1089,7 @@ class JadwalController extends Controller
 		        	$waktu = explode('-', $waktu);
 		        	if(count($waktu) != 2)
 		        	{
-		        		$m->addError('error','Baris ke-'.($index+1).' : Format Waktu Salah');
+		        		$m->addError('error','Baris ke-'.($index).' : Format Waktu Salah');
 						throw new Exception();
 		        	}
 
@@ -1129,7 +1129,7 @@ class JadwalController extends Controller
 
 		        			$message .= '<div style="color:red">Wrong data mk</div>';
 		        				// continue;
-		        			$m->addError('error','Baris ke-'.($index+1).' : Terjadi kesalahan input data mk: '.$isnew['message']);
+		        			$m->addError('error','Baris ke-'.($index).' : Terjadi kesalahan input data mk: '.$isnew['message']);
 			        		// $m->addError('error','Terjadi kesalahan input data mk');
 							throw new Exception();
 		        		}
@@ -1151,7 +1151,7 @@ class JadwalController extends Controller
 
 	        			$message .= '<div style="color:red">Data Dosen belum ada di master dosen</div>';
 	        				// continue;
-	        			$m->addError('error','Baris ke-'.($index+1).' : Data Dosen belum ada di master dosen');
+	        			$m->addError('error','Baris ke-'.($index).' : Data Dosen belum ada di master dosen');
 		        		// $m->addError('error','Terjadi kesalahan input data dosen');
 						throw new Exception();
 		        		// }
@@ -1162,7 +1162,7 @@ class JadwalController extends Controller
 		        	{
 		        		$message .= '<div style="color:red">Data Dosen belum punya akun SIAKAD</div>';
 	        				// continue;
-	        			$m->addError('error','Baris ke-'.($index+1).' : Data Dosen belum punya user SIAKAD');
+	        			$m->addError('error','Baris ke-'.($index).' : Data Dosen belum punya user SIAKAD');
 		        		// $m->addError('error','Terjadi kesalahan input data dosen');
 						throw new Exception();
 		        	}
@@ -1180,7 +1180,7 @@ class JadwalController extends Controller
 
 		        	if(empty($id_kampus))
 		        	{
-		        		$m->addError('error','Baris ke-'.($index+1).' : Nama kampus Salah atau data tidak ada');
+		        		$m->addError('error','Baris ke-'.($index).' : Nama kampus Salah atau data tidak ada');
 						throw new Exception();
 		        	}
 
@@ -1193,7 +1193,7 @@ class JadwalController extends Controller
 		        	{
 
 		        		// print_r($m->getErrors());
-		        		$m->addError('error','Baris ke-'.($index+1).' : Nama Kelas Salah atau data tidak ada');
+		        		$m->addError('error','Baris ke-'.($index).' : Nama Kelas Salah atau data tidak ada');
 						throw new Exception();
 		        	}
 
