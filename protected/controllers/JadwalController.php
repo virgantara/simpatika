@@ -1070,7 +1070,7 @@ class JadwalController extends Controller
 		        for ($row = 2; $row <= $highestRow; $row++)
 		        { 
 
-
+		        	$index++;
 		        	$hari = strtoupper($sheet->getCell('A'.$row));
 					
 					if(empty($hari))continue;
@@ -1144,7 +1144,7 @@ class JadwalController extends Controller
 		        	{
 		        		// $isnew = Masterdosen::model()->quickCreate($fakultas, $prodi, $kode_dosen, $nama_dosen);
 		        		
-
+		        		// echo ($kode_dosen);exit;
 
 		        		// if(!$isnew)
 		        		// {
@@ -1257,7 +1257,7 @@ class JadwalController extends Controller
 						throw new Exception();
 					}
 					
-					$index++;
+					
 		        }
 
 		        // $message .= '</ul>';
