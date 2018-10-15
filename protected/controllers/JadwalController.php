@@ -1070,7 +1070,7 @@ class JadwalController extends Controller
 		        for ($row = 2; $row <= $highestRow; $row++)
 		        { 
 
-		        	$index++;
+		        	$index = $row;
 		        	$hari = strtoupper($sheet->getCell('A'.$row));
 					
 					if(empty($hari))continue;
