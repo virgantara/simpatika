@@ -312,7 +312,10 @@ class JadwalController extends Controller
 		{
 			$kode_prodi = $_POST['kode_prodi'];
 			
-			$listdosenprodi = Masterdosen::model()->findAllByAttributes(array('kode_prodi'=>$kode_prodi));
+			$listdosenprodi = Masterdosen::model()->findAllByAttributes(array(
+				'kode_prodi'=>$kode_prodi,
+				
+			));
 
 			$setting_sk = JadwalLampiranSk::model()->find();
 
@@ -323,12 +326,14 @@ class JadwalController extends Controller
 			$pdf->SetAutoPageBreak(TRUE,10);
 			$this->layout = '';
 			
-			
+			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 			foreach($listdosenprodi as $p)
 			{
 
 				
 				$id = $p->nidn;
+
+
 
 				$model = Yii::app()->db->createCommand()
 			    ->select('*, t.id as idjadwal')
@@ -338,7 +343,10 @@ class JadwalController extends Controller
 			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 			    ->join('simak_kampus km', 'km.id=t.kampus')
 			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-			    ->where('kode_dosen=:p1', array(':p1' => $id))
+			    ->where('kode_dosen=:p1 and t.tahun_akademik=:p2', array(
+			    	':p1' => $id,
+			    	':p2' => $tahun_akademik->tahun_id
+			    ))
 			    ->group('idjadwal')
 			    ->queryAll();
 
@@ -1070,7 +1078,7 @@ class JadwalController extends Controller
 		        for ($row = 2; $row <= $highestRow; $row++)
 		        { 
 
-		        	$index = $row;
+		        	$index++;
 		        	$hari = strtoupper($sheet->getCell('A'.$row));
 					
 					if(empty($hari))continue;

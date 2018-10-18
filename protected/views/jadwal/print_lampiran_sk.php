@@ -99,8 +99,15 @@
       
       <p>Ditetapkan di Ponorogo,</p>
       <p>Pada Tanggal <?=$setting_sk->tanggal_sk;?><br>Rektor UNIDA Gontor.</p>
-      <img width="210px" src="<?php echo Yii::app()->baseUrl;?>/images/ttd.jpg"/>
-      <!-- <u><strong><p>Prof. Dr. Amal Fathullah Zarkasyi, M.A.</p></strong></u> -->
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <!-- <img width="210px" src="<?php echo Yii::app()->baseUrl;?>/images/ttd.jpg"/> -->
+      <p><strong><u>Prof. Dr. Amal Fathullah Zarkasyi, M.A.</u></strong><br>NIY. 780043</p>
+
+
     </td>
   </tr>
 </table>
