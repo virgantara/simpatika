@@ -884,9 +884,9 @@ class JadwalController extends Controller
 	{
 	
 
-		$prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
+		$kode_prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-		$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$prodi));
+		$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$kode_prodi));
 
 		$tahun_akademik = $tahun_akademik->tahun_id;	
 		$models = Kampus::model()->findAll();
@@ -894,7 +894,7 @@ class JadwalController extends Controller
 			$list_kampus[$m->kode_kampus] = $m->nama_kampus;
 		}
 
-		$mks = Mastermatakuliah::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik,'kode_prodi'=>$prodi]);
+		$mks = Mastermatakuliah::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik,'kode_prodi'=>$prodi->kode_prodi]);
 
 		$list_mk = [];
 		foreach($mks as $mk){
