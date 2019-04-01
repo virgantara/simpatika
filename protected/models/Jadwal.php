@@ -488,7 +488,7 @@ class Jadwal extends CActiveRecord
 		$criteria->compare('tahun_akademik',$tahun_akademik->tahun_id);
 		// $criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
 		$criteria->order = 'kode_dosen ASC';
-		$criteria->group = 'kode_dosen';
+		// $criteria->group = 'kode_dosen';
 		$model = Jadwal::model()->findAll($criteria);	
 
 		return $model;
@@ -755,7 +755,10 @@ class Jadwal extends CActiveRecord
 	protected function afterFind()
 	{
 		$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $this->kode_mk));
-		$this->SKS = $mk->sks;
+		if(empty($mk)){
+			echo 'Kode MK '.$this->kode_mk.' tidak ada di Master Matakuliah';exit;
+		}
+		$this->SKS = !empty($mk) ? $mk->sks : 0;
 		$this->hari = trim($this->hari);
 		return parent::afterFind();
 	}

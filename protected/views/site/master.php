@@ -35,7 +35,7 @@ $('.search-form form').submit(function(){
 </style>
 <h1>Manage Data Master</h1>
 
-
+<p>
 <?php 
 
     
@@ -57,3 +57,18 @@ echo '<li>'.CHtml::link('Mahasiswa',array('Mastermahasiswa/index')).'</li>';
 echo '</ul>';
 ?>
 
+</p>
+<h1>Ref FEEDER</h1>
+<p>
+<?php 
+
+    
+echo '<ul>';
+
+echo '<li>'.CHtml::link('Prodi',array('feeder/prodi')).'</li>';
+
+
+echo '</ul>';
+?>
+	
+</p>

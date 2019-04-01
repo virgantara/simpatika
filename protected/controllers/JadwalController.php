@@ -314,7 +314,7 @@ class JadwalController extends Controller
 			
 			$listdosenprodi = Masterdosen::model()->findAllByAttributes(array(
 				'kode_prodi'=>$kode_prodi,
-				
+				'nidn' => '160573'
 			));
 
 			$setting_sk = JadwalLampiranSk::model()->find();

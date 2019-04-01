@@ -20,7 +20,7 @@ class WebUser extends CWebUser {
      * @param <array> $params
      * @return <boolean>
      */
-    public function checkAccess($operation, $params=array()) {
+    public function checkAccess($operation, $params=array(), $allowCaching = true) {
         /*if (empty($this->id)) {
             // Not identified => no rights
             return false;
