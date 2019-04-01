@@ -882,16 +882,38 @@ class JadwalController extends Controller
 
 	public function actionRekapJadwal()
 	{
-		
+	
 
+		$prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$prodi));
 
-		$tahun_akademik = $tahun_akademik->tahun_id;
+		$tahun_akademik = $tahun_akademik->tahun_id;	
+		$models = Kampus::model()->findAll();
+		foreach($models as $m){
+			$list_kampus[$m->kode_kampus] = $m->nama_kampus;
+		}
+
+		$mks = Mastermatakuliah::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik,'kode_prodi'=>$prodi->kode_prodi]);
+
+		$list_mk = [];
+		foreach($mks as $mk){
+			$list_mk[$mk->kode_mata_kuliah] = $mk;
+		}
+
+		$kelas = Masterkelas::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik]);
+		
+		$list_kelas = [];
+		foreach($kelas as $k){
+			$list_kelas[$k->id] = $k->nama_kelas;
+		}
 		
 		$this->render('rekap_jadwal',array(
-
-			'tahun_akademik' => $tahun_akademik
-
+			'list_kampus' => $list_kampus,
+			'tahun_akademik' => $tahun_akademik,
+			'list_kelas' => $list_kelas,
+			'prodi' => $prodi,
+			'list_mk' => $list_mk
 		));
 	}
 
@@ -1071,6 +1093,25 @@ class JadwalController extends Controller
 	        //Loop through each row of the worksheet in turn
 	        $message = '';
 
+	      
+
+			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+
+			$tahun_akademik = $tahun_akademik->tahun_id;	
+
+			$kelas = Masterkelas::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik]);
+		
+			$list_kelas = [];
+			foreach($kelas as $k){
+				$list_kelas[$k->nama_kelas] = $k;
+			}
+
+			$list_kampus = [];
+			$kampuses = Kampus::model()->findAll();
+			foreach($kampuses as $km){
+				$list_kampus[$km->kode_kampus] = $km->kode_kampus;
+			}
+
 	        $transaction=Yii::app()->db->beginTransaction();
 	        try
 			{
@@ -1115,7 +1156,7 @@ class JadwalController extends Controller
 		        	$prodi = $sheet->getCell('K'.$row);
 
 		        	$nama_dosen = $sheet->getCell('G'.$row);
-		        	$tahun_akademik = $sheet->getCell('M'.$row);
+		        	// $tahun_akademik = $sheet->getCell('M'.$row);
 		        	$sks = $sheet->getCell('Q'.$row);
 		        	$semester = $sheet->getCell('N'.$row);
 
@@ -1126,6 +1167,7 @@ class JadwalController extends Controller
 		        		'kode_prodi' => $prodi,
 		        		'semester' => $semester
 		        	);
+
 		        	$mk = Mastermatakuliah::model()->findByAttributes($attr);
 		        	if(empty($mk))
 		        	{
@@ -1183,8 +1225,8 @@ class JadwalController extends Controller
 		        	
 		        	
 		        	$kampus = $sheet->getCell('O'.$row);
-		        	$id_kampus = Kampus::model()->findByAttributes(array('nama_kampus'=>$kampus));
-		        	$id_kampus = !empty($id_kampus) ? $id_kampus->id : '';
+		        	$id_kampus = $kampus;
+		        	// $id_kampus = !empty($id_kampus) ? $id_kampus->id : '';
 
 		        	if(empty($id_kampus))
 		        	{
@@ -1193,8 +1235,15 @@ class JadwalController extends Controller
 		        	}
 
 		        	// $sks = $sheet->getCell('P'.$row);
-		        	$kelas = $sheet->getCell('P'.$row);
-		        	$id_kelas = Masterkelas::model()->findByAttributes(array('nama_kelas'=>$kelas));
+		        	$kelas = $sheet->getCell('P'.$row)->getValue();
+
+		        	if(empty($list_kelas[$kelas]))
+		        	{
+		        		$m->addError('error','Baris ke-'.($index).' : Kode kelas Salah atau data tidak ada');
+						throw new Exception();
+		        	}
+
+		        	$id_kelas = $list_kelas[$kelas];
 		        	$id_kelas = !empty($id_kelas) ? $id_kelas->id : '';
 
 		        	if(empty($id_kelas))

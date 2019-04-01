@@ -89,12 +89,14 @@ foreach($kampuses as $kampus)
 		
 		$semesters = Jadwal::model()->findSemester($kode_prodi, $kampus->id, $kelas->id);
 
-		foreach($semesters as $semester)
+		foreach($semesters as $key => $semester)
 		{
 
 
-		
+			$i = 0; 
+		$model = Jadwal::model()->findRekapJadwalPerkelas($kode_prodi, $kampus->id, $kelas->id, $semester);
 
+		if(!empty($model)){
  ?> 
   <thead>
     <tr>
@@ -121,9 +123,8 @@ foreach($kampuses as $kampus)
  <?php
 
 
-
-		$i = 0; 
-		$model = Jadwal::model()->findRekapJadwalPerkelas($kode_prodi, $kampus->id, $kelas->id, $semester->semester);
+		}
+		
 		foreach($model as $m)
 		{
 
@@ -131,26 +132,27 @@ foreach($kampuses as $kampus)
 
 			// $d1 = strtotime($m->created);
 			// $d2 = strtotime($m->modified);
-			$datetime1 = new DateTime($m->created);
-			$datetime2 = new DateTime($m->modified);
-			$interval = $datetime1->diff($datetime2);
-			$durasi = $interval->format('%d');
+			// $datetime1 = new DateTime($m->created);
+			// $datetime2 = new DateTime($m->modified);
+			// $interval = $datetime1->diff($datetime2);
+			// $durasi = $interval->format('%d');
 
-			// print_r($durasi.' '.$m->kode_mk);
+			// // print_r($durasi.' '.$m->kode_mk);
 
-			$updated = '';
-			if($durasi <=7 && $m->created != $m->modified)
-				$updated = 'class="updated"';
-			else if($m->bentrok == 1)
+			// $updated = '';
+			// if($durasi <=7 && $m->created != $m->modified)
+				$updated = '';
+			if($m->bentrok == 1)
 				$updated = 'class="bentrok"';
 			
 			
+			// $mk = Mastermatakuliah::model()->findByAttributes(['tahun_akademik'=>$m->tahun_akademik,'kode_mata_kuliah'=>$m->kode_mk]);
 		  $i++;
 		?>
 		<tr <?php echo $updated;?>>
 		<td width="3%"><?=$m->idjadwal;?></td>
 		<td width="5%"><?php echo $m->hari;?></td>
-		<td><?php echo $m->nama_jam;?></td>
+		<td><?php echo $m->jam;?></td>
 		<td><?php echo substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3);?></td>
 		<td><?php echo $m->kode_mk;?></td>
 		<td width="15%"><?php echo $m->nama_mk;?></td>
@@ -158,11 +160,11 @@ foreach($kampuses as $kampus)
 
 		<td width="15%"><?php echo $m->nama_dosen;?></td>
 
-		<td width="5%"><?php echo $m->sks;?></td>
+		<td width="5%"><?php echo !empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : 0;?></td>
 		<td width="5%"><?php echo $m->nama_fakultas;?></td>
 		<td width="15%">
 			<?php
-			 $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
+			 
 			 echo !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
 			 // echo $m->pRODI->singkatan;
 			 ?>
@@ -172,10 +174,10 @@ foreach($kampuses as $kampus)
 		<td><?php 
 		// echo $kode_prodi.' '.$kampus->id.' '.$kelas->id.' '. $semester->semester.'<br>';
 		
-		echo $semester->semester;?></td>
+		echo $semester;?></td>
 
-		<td><?php echo $m->nama_kampus;?></td>
-		<td width="5%"><?php echo $m->nama_kelas;?></td>
+		<td><?php echo $list_kampus[$m->kampus];?></td>
+		<td width="5%"><?php echo !empty($list_kelas[$m->kelas]) ? $list_kelas[$m->kelas] : '';?></td>
 
 
 		</tr>
