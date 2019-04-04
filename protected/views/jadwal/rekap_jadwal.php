@@ -91,7 +91,6 @@ foreach($kampuses as $kampus)
 
 		foreach($semesters as $key => $semester)
 		{
-			echo $kelas->id;
 
 			$i = 0; 
 		$model = Jadwal::model()->findRekapJadwalPerkelas($kode_prodi, $kampus->id, $kelas->id, $semester);
