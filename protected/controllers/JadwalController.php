@@ -893,7 +893,7 @@ class JadwalController extends Controller
 			$listprodi[$p->kode_prodi] = $p;
 		}
 
-		$total_bentrok = 0;//Jadwal::model()->countBentrok();
+		$total_bentrok = Jadwal::model()->countBentrok();
 
 		$this->render('rekap_jadwal_all',array(
 			// 'jadwal_prodi' => $jadwal_prodi,

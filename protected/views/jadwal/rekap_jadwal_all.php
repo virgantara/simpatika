@@ -17,21 +17,24 @@ $this->menu=array(
 		border: 1px solid #999 !important;
 	}
 
+
 	caption.status{
 		<?php 
 			if($total_bentrok > 5)
 			{
-				echo 'background: #ec4a4a';
+				echo 'background: #ec4a4a;';
+				echo 'color:white;';
 			}
 
 			else if($total_bentrok >= 1 && $total_bentrok < 5)
 			{
-				echo 'background: #ecbc4a';
+				echo 'background: #ecbc4a;';
+				echo 'color:white;';
 			}
 
 			else
 			{
-				echo 'background: #4aec5d';
+				echo 'background: #4aec5d;';
 			}
 		?>
 	}
