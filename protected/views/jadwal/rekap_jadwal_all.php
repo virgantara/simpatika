@@ -71,19 +71,20 @@ $this->menu=array(
 	
 		$i = 0; 
 
-		
-		foreach($jadwal_prodi as $jd)
+		// print_r(count($jadwal_prodi));exit;
+		foreach($listdosen as $jd)
 		{
 		  
-		  $jd = (object)$jd;
-		  if(empty($jd->kode_dosen)) continue;
+		  // $jd = (object)$jd;
+		  
 
-		 
 		  $sks_dosen = 0;
-		  $jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($jd->kode_dosen);
+		  $jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($jd->nidn);
 
 		  // print_r(count($jadwal_perdosen));
 
+		  if(empty($jadwal_perdosen)) continue;
+		
 		  foreach($jadwal_perdosen as $m)
 		  {	
 		  	$m = (object)$m;
@@ -113,8 +114,8 @@ $this->menu=array(
 		<td width="5%"><?php echo $m->nama_fakultas;?></td>
 		<td width="15%">
 			<?php
-			 $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
-			 echo !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
+			 // $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
+			 echo !empty($listprodi[$m->prodi]) ? $listprodi[$m->prodi]->singkatan : $m->nama_prodi;
 			 // echo $m->pRODI->singkatan;
 			 ?>
 				
@@ -130,8 +131,21 @@ $this->menu=array(
 	<?php 
 		}
 
+		$bg_color = '#57d54c';
+		$font_color = 'black';
+	  	if($sks_dosen >= 20)
+	  	{
+	  		$bg_color = '#f50c0c';
+	  		$font_color = 'white';
+	  	} 
+
+	  	else if($sks_dosen <= 15)
+	  	{
+	  		$bg_color = '#ff8c00';
+	  		$font_color = 'white';
+	  	}
 		?>
-		<tr>
+		<tr style="background-color: <?=$bg_color;?>;color:<?=$font_color;?>">
 		<td width="3%"></td>
 		<td></td>
 		<td width="5%"></td>
@@ -150,12 +164,14 @@ $this->menu=array(
 		
 
 		<td></td>
+		<td></td>
+		<td></td>
 		<!-- <td width="5%"></td> -->
 
 
 		</tr>
 		<?php
-	}
+		}
 	?>
 	  </tbody>
 

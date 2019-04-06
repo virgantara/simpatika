@@ -488,7 +488,7 @@ class JadwalController extends Controller
 	public function actionRekapJadwalAllXls()
 	{
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-		$jadwal_prodi = Jadwal::model()->findRekapJadwalAll($tahun_akademik->tahun_id);
+		$jadwal_prodi = Masterdosen::model()->findAll();//Jadwal::model()->findRekapJadwalAll($tahun_akademik->tahun_id);
 		Yii::import('ext.PHPExcel.PHPExcel');
 		$objPHPExcel = new PHPExcel();
 		$styleArray = array(
@@ -562,10 +562,10 @@ class JadwalController extends Controller
 	    $sheet->getColumnDimension('D')->setWidth(12);
 	    $sheet->getColumnDimension('E')->setWidth(12);
 	    $sheet->getColumnDimension('F')->setWidth(52);
-	    $sheet->getColumnDimension('G')->setWidth(8);
+	    $sheet->getColumnDimension('G')->setWidth(15);
 	    $sheet->getColumnDimension('H')->setWidth(42);
 	    $sheet->getColumnDimension('I')->setWidth(6);
-	    $sheet->getColumnDimension('J')->setWidth(15);
+	    $sheet->getColumnDimension('J')->setWidth(25);
 	    $sheet->getColumnDimension('K')->setWidth(7);
 	    $sheet->getColumnDimension('L')->setWidth(6);
 	    $sheet->getColumnDimension('M')->setWidth(12);
@@ -597,20 +597,35 @@ class JadwalController extends Controller
 	    	);
 	    }
 
+	    $prodis = Masterprogramstudi::model()->findAll();
+
+		$listprodi = [];
+
+		foreach ($prodis as $p) {
+			$listprodi[$p->kode_prodi] = $p;
+		}
+
 	   	$i = 0; 
 
 		$row = $rowStart;
 		foreach($jadwal_prodi as $jd)
 		{
-			$jd = (object)$jd;
-			if(empty($jd->kode_dosen)) continue;
+			// $jd = (object)$jd;
+			// if(empty($jd->kode_dosen)) continue;
 
 			$sks_dosen = 0;
-			$jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($jd->kode_dosen);
+			$jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($jd->nidn);
+			
+			if(empty($jadwal_perdosen)) continue;
+
 			foreach($jadwal_perdosen as $m)
 			{	
 				$m = (object)$m;
 		  		$sks_dosen += $m->sks;
+
+		  		
+		  		$nm_prodi = !empty($listprodi[$m->prodi]) ? $listprodi[$m->prodi]->singkatan : $m->nama_prodi;
+				
 
 				$i++;
 				$sheet->getRowDimension($row+1)->setRowHeight(15);
@@ -624,9 +639,8 @@ class JadwalController extends Controller
 				$sheet->setCellValueByColumnAndRow(7,$row+1, $m->nama_dosen);
 				$sheet->setCellValueByColumnAndRow(8,$row+1, $m->sks);
 				$sheet->setCellValueByColumnAndRow(9,$row+1, $m->nama_fakultas);
-				$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
-	 			$nm_prodi = !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
-				$sheet->setCellValueByColumnAndRow(10,$row+1, $nm_prodi);
+				// $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
+	 			$sheet->setCellValueByColumnAndRow(10,$row+1, $nm_prodi);
 				$sheet->setCellValueByColumnAndRow(11,$row+1, $m->semester);
 				$sheet->setCellValueByColumnAndRow(12,$row+1, $m->nama_kampus);
 				$sheet->setCellValueByColumnAndRow(13,$row+1, $m->nama_kelas);
@@ -868,15 +882,25 @@ class JadwalController extends Controller
 	{
 		
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-		$jadwal_prodi = Jadwal::model()->findRekapJadwalAll();
+		$listdosen = Masterdosen::model()->findAll();
+		// $jadwal_prodi = Jadwal::model()->findRekapJadwalAll();
+
+		$prodis = Masterprogramstudi::model()->findAll();
+
+		$listprodi = [];
+
+		foreach ($prodis as $p) {
+			$listprodi[$p->kode_prodi] = $p;
+		}
 
 		$total_bentrok = 0;//Jadwal::model()->countBentrok();
 
 		$this->render('rekap_jadwal_all',array(
-			'jadwal_prodi' => $jadwal_prodi,
+			// 'jadwal_prodi' => $jadwal_prodi,
 			'tahun_akademik' => $tahun_akademik,
-			'total_bentrok' => $total_bentrok
-
+			'total_bentrok' => $total_bentrok,
+			'listprodi' =>$listprodi,
+			'listdosen' => $listdosen
 		));
 	}
 

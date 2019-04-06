@@ -455,15 +455,19 @@ class Jadwal extends CActiveRecord
 		// $model = Jadwal::model()->findAll($criteria);	
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$model = Yii::app()->db->createCommand()
-	    ->select('*, t.id as idjadwal')
+	    ->select('DISTINCT(t.id) as idjadwal,t.*,m.sks,j.nama_jam,km.nama_kampus,kls.nama_kelas')
 	    ->from('simak_jadwal_temp t')
 	    ->join('m_hari h', 'h.nama_hari=t.hari')
 	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
 	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-	    ->where('kode_dosen=:p1 AND t.tahun_akademik=:p2', array(':p1'=>$kode_dosen,':p2'=>$tahun_akademik->tahun_id))
-	    ->group('idjadwal')
+	    ->where('kode_dosen=:p1 AND t.tahun_akademik=:p2 AND m.tahun_akademik =:p3', [
+	    	':p1'=>$kode_dosen,
+	    	':p2'=>$tahun_akademik->tahun_id,
+	    	':p3'=>$tahun_akademik->tahun_id
+	    ])
+	    // ->group('idjadwal')
 	    ->order('t.kode_dosen ASC')
 	    ->queryAll();
 
@@ -494,15 +498,15 @@ class Jadwal extends CActiveRecord
 		// $model = Jadwal::model()->findAll($criteria);	
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$model = Yii::app()->db->createCommand()
-	    ->select('*')
+	    ->select('t.*')
 	    ->from('simak_jadwal_temp t')
-	    ->join('m_hari h', 'h.nama_hari=t.hari')
-	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
-	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
-	    ->join('simak_kampus km', 'km.id=t.kampus')
-	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-	    ->where('t.tahun_akademik=:p1', array(':p1'=>$tahun_akademik->tahun_id))
-	    ->group('t.kode_dosen')
+	    // ->join('m_hari h', 'h.nama_hari=t.hari')
+	    // ->join('m_jam j', 'j.id_jam=t.jam_ke')
+	    // ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+	    // ->join('simak_kampus km', 'km.id=t.kampus')
+	    // ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+	    ->where('t.tahun_akademik=:p1', [':p1'=>$tahun_akademik->tahun_id])
+	    // ->group('t.kode_dosen')
 	    ->order('t.kode_dosen ASC')
 	    ->queryAll();
 
