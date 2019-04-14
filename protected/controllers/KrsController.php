@@ -53,13 +53,14 @@ class KrsController extends Controller
 		    ->select('t.*, m.nama_mahasiswa,d.nama_dosen, p.nama_prodi, p.singkatan')
 		    ->from('simak_datakrs t')
 		    ->join('simak_mastermahasiswa m', 't.mahasiswa=m.nim_mhs')
-		    ->join('simak_masterdosen d', 'd.nidn=t.kode_dosen')
-		    ->join('simak_masterprogramstudi p', 'p.kode_prodi=t.kode_prodi')
-		    ->where('t.kode_prodi = :p1 AND tahun_akademik = :p2 AND (nilai_angka IS NULL OR nilai_huruf IS NULL)', [
+		    ->join('simak_masterprogramstudi p', 'p.kode_prodi=m.kode_prodi')
+		    ->join('simak_jadwal j', 'j.id=t.kode_jadwal')
+		    ->join('simak_masterdosen d', 'd.nidn=j.kode_dosen')
+		    ->where('m.kode_prodi = :p1 AND t.tahun_akademik = :p2 AND (nilai_angka IS NULL OR nilai_huruf IS NULL)', [
 				':p1' => $prodi,
 				':p2' => $tahun_akademik
 			])
-			->order('t.semester')
+			->order('d.nama_dosen')
 		    ->queryAll();
 	
 		}
