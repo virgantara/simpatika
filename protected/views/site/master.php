@@ -40,7 +40,8 @@ $('.search-form form').submit(function(){
 
     
 echo '<ul>';
-
+echo '<li>'.CHtml::link('Sync Jadwal ke SIAKAD',array('jadwal/syncJadwal')).'</li>';
+echo '<li>'.CHtml::link('Laporan Input Nilai',array('krs/nilai')).'</li>';
 echo '<li>'.CHtml::link('Lampiran SK Jadwal',array('JadwalLampiranSk/admin')).'</li>';
 echo '<li>'.CHtml::link('Mata Kuliah',array('Mastermatakuliah/index')).'</li>';
 echo '<li>'.CHtml::link('Kelas',array('MasterKelas/admin')).'</li>';

@@ -520,14 +520,14 @@ class Jadwal extends CActiveRecord
 		$user = Yii::app()->db->createCommand()
 	    ->select('t.*,t.id as idjadwal')
 	    ->from('simak_jadwal_temp t')
-	    // ->join('m_hari h', 'h.nama_hari=t.hari')
+	    ->join('m_hari h', 'h.nama_hari=t.hari')
 	    // ->join('m_jam j', 'j.id_jam=t.jam_ke')
 	    // ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    // ->join('simak_kampus km', 'km.id=t.kampus')
 	    // ->join('simak_masterkelas kls', 'kls.id=t.kelas')
 	    ->where('t.prodi=:p1 AND t.kampus=:p2 AND t.kelas=:p3 AND t.semester =:p4 AND t.tahun_akademik=:p5 ', array(':p1'=>$id,':p2'=>$kampus,':p3'=>$kelas,':p4'=>$semester,':p5'=>$tahun_akademik->tahun_id))
 	    // ->group('t.id')
-	    // ->order('h.urutan ASC')
+	    ->order('h.urutan ASC, t.jam_ke ASC')
 	    ->queryAll();
 
 		// $criteria=new CDbCriteria;

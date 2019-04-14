@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete','cetakJurnal','paralel','refdosen'),
+				,'uploadJadwal','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete','cetakJurnal','paralel','refdosen','syncJadwal'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,6 +44,16 @@ class JadwalController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionSyncJadwal()
+	{
+		if(!empty($_GET['tahun_akademik'])){
+			$command = Yii::app()->db->createCommand('call proc_sync_jadwal('.$_GET['tahun_akademik'].');');
+
+			$command->execute();
+		}
+		$this->render('sync_jadwal');
 	}
 
 	public function actionRefdosen()
