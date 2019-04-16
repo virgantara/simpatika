@@ -43,7 +43,7 @@ foreach($model as $m)
 <tr>
 <td width="3%"><?=$i;?></td>
 <td width="5%"><?php echo $m->hari;?></td>
-<td><?php echo $m->jAM->nama_jam;?></td>
+<td><?php echo $m->jam_ke;?></td>
 <td><?php echo substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3);?></td>
 <td><?php echo $m->kode_mk;?></td>
 <td width="15%"><?php echo $m->nama_mk;?></td>

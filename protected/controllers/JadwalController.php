@@ -811,6 +811,30 @@ class JadwalController extends Controller
 	    $sheet->getColumnDimension('Q')->setWidth(6);
 		$row = 1;
 	    
+	    $tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+	
+		$tahun_akademik = $tahun_akademik->tahun_id;	
+		$models = Kampus::model()->findAll();
+		$list_kampus = [];
+		foreach($models as $m){
+			$list_kampus[$m->kode_kampus] = $m->nama_kampus;
+		}
+
+		$mks = Mastermatakuliah::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik,'kode_prodi'=>$id]);
+
+		$list_mk = [];
+		foreach($mks as $mk){
+			$list_mk[$mk->kode_mata_kuliah] = $mk;
+		}
+
+		$kelas = Masterkelas::model()->findAll();
+		
+		$list_kelas = [];
+		foreach($kelas as $k){
+			$list_kelas[$k->id] = $k->nama_kelas;
+		}
+		
+
 		$kampuses = Jadwal::model()->findKampus($id);
 
 		foreach($kampuses as $kampus)
@@ -821,34 +845,40 @@ class JadwalController extends Controller
 				$semesters = Jadwal::model()->findSemester($id, $kampus->id, $kelas->id);
 				foreach($semesters as $semester)
 				{
-				    foreach($headers as $q => $v)
-				    {
-				    	$sheet->setCellValueByColumnAndRow($q,$row, strtoupper($v));
-				    	$cell = $sheet->getCellByColumnAndRow($q,$row);
-				    	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
-				    		array(
-				    			'fill' => array(
-						            'type' => PHPExcel_Style_Fill::FILL_SOLID,
-						            'color' => array('rgb' => '000000')
-						        ),
-						        'font' => array(
-						        	'color' => array('rgb'=> 'ffffff')
-						        ),
-				    		)
-				    	);
-				    	
-				    }
+				    
 
 				    $row++;
-				    $models = Jadwal::model()->findRekapJadwalPerkelas($id, $kampus->id, $kelas->id, $semester->semester);
+				    $models = Jadwal::model()->findRekapJadwalPerkelas($id, $kampus->id, $kelas->id, $semester);
 				    $i = 0; 
+
+				    if(!empty($models))
+				    {
+				    	foreach($headers as $q => $v)
+					    {
+					    	$sheet->setCellValueByColumnAndRow($q,$row, strtoupper($v));
+					    	$cell = $sheet->getCellByColumnAndRow($q,$row);
+					    	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
+					    		array(
+					    			'fill' => array(
+							            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+							            'color' => array('rgb' => '000000')
+							        ),
+							        'font' => array(
+							        	'color' => array('rgb'=> 'ffffff')
+							        ),
+					    		)
+					    	);
+					    	
+					    }
+				    }
+				    
 				    foreach($models as $m)
 					{
 						$m = (object)$m;
 						$i++;
 						// $sheet->setCellValueByColumnAndRow(0,$row, $i);
 						$sheet->setCellValueByColumnAndRow(0,$row, $m->hari);
-						$sheet->setCellValueByColumnAndRow(1,$row, $m->nama_jam);
+						$sheet->setCellValueByColumnAndRow(1,$row, $m->jam_ke);
 						$sheet->setCellValueByColumnAndRow(2,$row, substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3));
 						$sheet->setCellValueByColumnAndRow(3,$row, $m->kode_mk);
 						$sheet->setCellValueByColumnAndRow(4,$row, $m->nama_mk);
@@ -858,14 +888,13 @@ class JadwalController extends Controller
 						$sheet->setCellValueByColumnAndRow(8,$row, $m->fakultas);
 						$sheet->setCellValueByColumnAndRow(9,$row, $m->nama_fakultas);
 						$sheet->setCellValueByColumnAndRow(10,$row, $m->prodi);
-						$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
 			 			$nm_prodi = !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
 						$sheet->setCellValueByColumnAndRow(11,$row, $nm_prodi);
 						$sheet->setCellValueByColumnAndRow(12,$row, $m->tahun_akademik);
-						$sheet->setCellValueByColumnAndRow(13,$row, $semester->semester);
-						$sheet->setCellValueByColumnAndRow(14,$row, $m->nama_kampus);
-						$sheet->setCellValueByColumnAndRow(15,$row, $m->nama_kelas);
-						$sheet->setCellValueByColumnAndRow(16,$row, $m->sks);
+						$sheet->setCellValueByColumnAndRow(13,$row, $semester);
+						$sheet->setCellValueByColumnAndRow(14,$row, $list_kampus[$m->kampus]);
+						$sheet->setCellValueByColumnAndRow(15,$row, !empty($list_kelas[$m->kelas]) ? $list_kelas[$m->kelas] : '');
+						$sheet->setCellValueByColumnAndRow(16,$row, !empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : 0);
 					  	$row++;
 					}
 
@@ -924,6 +953,7 @@ class JadwalController extends Controller
 
 		$tahun_akademik = $tahun_akademik->tahun_id;	
 		$models = Kampus::model()->findAll();
+		$list_kampus = [];
 		foreach($models as $m){
 			$list_kampus[$m->kode_kampus] = $m->nama_kampus;
 		}
