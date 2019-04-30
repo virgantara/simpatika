@@ -70,7 +70,7 @@
 		<?php echo CHtml::submitButton('Cari KRS'); ?>
 		<?php 
 		if(!empty($_GET['prodi'])){
-			echo CHtml::link('Export XLS',['krs/nilai','prodi'=>$_GET['prodi'],'tahun_akademik'=>$_GET['tahun_akademik'],'xls' =>1]);
+			echo CHtml::link('Export XLS',['krs/nilai','prodi'=>$_GET['prodi'],'tahun_akademik'=>$_GET['tahun_akademik'],'kampus'=>$_GET['kampus'],'xls' =>1]);
 		}
 		?>
 	</div>
