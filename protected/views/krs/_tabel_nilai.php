@@ -12,31 +12,24 @@
 		<th>No</th>
 		<th>Prodi</th>
 		<th>Nama Dosen</th>
-		<th>Kode MK</th>
-		<th>Nama MK</th>
-		<th>Semester</th>
-		<th>NIM</th>
-		<th>Nama Mahasiswa</th>
+		
 	</tr>
 </thead>
 <tbody>
 	<?php 
 	$i=0;
-	if(!empty($model)){
-	foreach($model as $q => $m)
+	if(!empty($result)){
+	foreach($result as $m)
 	{
 		$m = (object) $m;
+		if($m->count == 0) continue;
 		$i++;
 	?>
 	<tr>
 		<td><?=($i);?></td>
-		<td><?=$m->singkatan;?></td>
-		<td><?=$m->nama_dosen;?></td>
-		<td><?=$m->kode_mk;?></td>
-		<td><?=$m->nama_mk;?></td>
-		<td><?=$m->semester;?></td>
-		<td><?=$m->mahasiswa;?></td>
-		<td><?=$m->nama_mahasiswa;?></td>
+		<td><?=$m->prodi;?></td>
+		<td><?=$m->nama;?></td>
+		
 	</tr>
 	<?php 
 }

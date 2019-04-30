@@ -73,7 +73,7 @@
 
 <?php 
 	$this->renderPartial('_tabel_nilai',[
-		'model' =>$model,
+		'result' =>$result,
 		'xls' => $xls
 	]);
 ?>

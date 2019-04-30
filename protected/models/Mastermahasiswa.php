@@ -199,6 +199,7 @@ class Mastermahasiswa extends CActiveRecord
 			'tgl_sk_yudisium' => 'Tgl Sk Yudisium',
 			'status_mahasiswa' => 'Status Mahasiswa',
 			'kampus' => 'Kampus',
+			'prodi.singkatan' => 'Prodi'
 		);
 	}
 

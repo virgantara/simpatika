@@ -45,11 +45,13 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'kode_fakultas',
-		'kode_prodi',
+		// 'kode_fakultas',
+		
 		'nim_mhs',
 		'nama_mahasiswa',
-		'nip_promotor',
+		'prodi.singkatan',
+		'semester',
+		'va_code',
 		'status_aktivitas',
 		/*
 		'nama_mahasiswa',

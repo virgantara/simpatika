@@ -48,33 +48,48 @@ class KrsController extends Controller
 	public function actionNilai($prodi = '', $tahun_akademik = '', $xls = 0){
 		$model = null;
 
+		$result = [];
 		if(!empty($prodi)){
 			$model = Yii::app()->db->createCommand()
-		    ->select('t.*, m.nama_mahasiswa,d.nama_dosen, p.nama_prodi, p.singkatan')
-		    ->from('simak_datakrs t')
-		    ->join('simak_mastermahasiswa m', 't.mahasiswa=m.nim_mhs')
-		    ->join('simak_masterprogramstudi p', 'p.kode_prodi=m.kode_prodi')
-		    ->join('simak_jadwal j', 'j.id=t.kode_jadwal')
-		    ->join('simak_masterdosen d', 'd.nidn=j.kode_dosen')
-		    ->where('m.kode_prodi = :p1 AND t.tahun_akademik = :p2 AND (nilai_angka IS NULL OR nilai_huruf IS NULL)', [
+		    ->select('d.nama_dosen, d.nidn, p.nama_prodi, p.singkatan')
+		    ->from('simak_masterdosen d')
+		    ->join('simak_masterprogramstudi p', 'p.kode_prodi=d.kode_prodi')
+		    ->where('d.kode_prodi = :p1;', [
 				':p1' => $prodi,
-				':p2' => $tahun_akademik
+				// ':p2' => $tahun_akademik
 			])
 			->order('d.nama_dosen')
 		    ->queryAll();
+
+		    foreach($model as $q => $m)
+			{
+				$m = (object) $m;
+
+
+				$sql = 'SELECT func_count_input_nilai('.$tahun_akademik.',"'.$m->nidn.'") as hasil;';
+				$tmp = Yii::app()->db->createCommand($sql)->queryRow();
+			    
+			    $result[] = [
+					'nama' => $m->nama_dosen,
+					'nidn' => $m->nidn,
+					'prodi' => $m->singkatan,
+					'count' => $tmp['hasil']
+				];
+
+			}
 	
 		}
 
 		if($xls){
 			$this->renderPartial('_tabel_nilai',array(
-				'model'=>$model,
+				'result'=>$result,
 				'xls' => $xls
 			));
 		}
 
 		else{
 			$this->render('nilai',array(
-				'model'=>$model,
+				'result'=>$result,
 				'xls' => $xls
 			));
 		}
