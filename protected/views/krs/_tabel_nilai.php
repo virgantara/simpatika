@@ -12,7 +12,8 @@
 		<th>No</th>
 		<th>Prodi</th>
 		<th>Nama Dosen</th>
-		
+		<th>Kelas</th>
+		<th>Semester></th>
 	</tr>
 </thead>
 <tbody>
@@ -29,7 +30,8 @@
 		<td><?=($i);?></td>
 		<td><?=$m->prodi;?></td>
 		<td><?=$m->nama;?></td>
-		
+		<td><?=$m->kelas;?></td>
+		<td><?=$m->semester;?></td>
 	</tr>
 	<?php 
 }

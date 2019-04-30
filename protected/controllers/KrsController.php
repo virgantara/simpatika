@@ -45,18 +45,20 @@ class KrsController extends Controller
 		);
 	}
 
-	public function actionNilai($prodi = '', $tahun_akademik = '', $xls = 0){
+	public function actionNilai($prodi = '', $tahun_akademik = '', $kampus='', $xls = 0){
 		$model = null;
 
 		$result = [];
 		if(!empty($prodi)){
 			$model = Yii::app()->db->createCommand()
-		    ->select('d.nama_dosen, d.nidn, p.nama_prodi, p.singkatan')
+		    ->select('d.nama_dosen, d.nidn, p.nama_prodi, p.singkatan, j.kelas, j.semester')
 		    ->from('simak_masterdosen d')
+		    ->join('simak_jadwal j', 'j.kode_dosen=d.nidn')
 		    ->join('simak_masterprogramstudi p', 'p.kode_prodi=d.kode_prodi')
-		    ->where('d.kode_prodi = :p1;', [
+		    ->where('d.kode_prodi = :p1 AND j.tahun_akademik = :p2 AND j.kampus = :p3;', [
 				':p1' => $prodi,
-				// ':p2' => $tahun_akademik
+				':p2' => $tahun_akademik,
+				':p3' => $kampus
 			])
 			->order('d.nama_dosen')
 		    ->queryAll();
@@ -71,6 +73,8 @@ class KrsController extends Controller
 			    
 			    $result[] = [
 					'nama' => $m->nama_dosen,
+					'semester' => $m->semester,
+					'kelas' => $m->kelas,
 					'nidn' => $m->nidn,
 					'prodi' => $m->singkatan,
 					'count' => $tmp['hasil']

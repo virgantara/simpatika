@@ -20,7 +20,15 @@
 	'action' => $this->createUrl('krs/nilai'),
 )); 
 ?>
-	
+	<div class="row">
+		<label>Kampus</label>
+		<?php 
+		$list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus', 'nama_kampus');
+		echo CHtml::dropDownList('kampus',!empty($_GET['kampus']) ? $_GET['kampus'] : '',$list,array('empty' => '(Pilih Kampus)')); 
+		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
+		?>
+		
+	</div>	
 	<div class="row">
 		<label>Fakultas</label>
 		<?php 
@@ -38,7 +46,7 @@
 		<?php 
 		$prodis = array();
 
-		echo CHtml::dropDownList('prodi',!empty($_GET['prodi']) ? $_GET['prodi'] : '',$prodis,array('empty' => '(Select a prodi)')); 
+		echo CHtml::dropDownList('prodi',!empty($_GET['prodi']) ? $_GET['prodi'] : '',$prodis,array('empty' => '(Pilih  prodi)')); 
 		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
 		?>
 		
