@@ -12,6 +12,8 @@
 		<th>No</th>
 		<th>Prodi</th>
 		<th>Nama Dosen</th>
+		<th>Kode MK</th>
+		<th>Nama MK</th>
 		<th>Kelas</th>
 		<th>Semester></th>
 	</tr>
@@ -30,6 +32,8 @@
 		<td><?=($i);?></td>
 		<td><?=$m->prodi;?></td>
 		<td><?=$m->nama;?></td>
+		<td><?=$m->kode_mk;?></td>
+		<td><?=$m->nama_mk;?></td>
 		<td><?=$m->kelas;?></td>
 		<td><?=$m->semester;?></td>
 	</tr>

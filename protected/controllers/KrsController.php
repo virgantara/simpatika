@@ -51,11 +51,12 @@ class KrsController extends Controller
 		$result = [];
 		if(!empty($prodi)){
 			$model = Yii::app()->db->createCommand()
-		    ->select('d.nama_dosen, d.nidn, p.nama_prodi, p.singkatan, j.kelas, j.semester')
+		    ->select('d.nama_dosen, d.nidn, p.nama_prodi, p.singkatan, j.kelas, j.semester, j.kode_mk, mk.nama_mata_kuliah as nama_mk')
 		    ->from('simak_masterdosen d')
 		    ->join('simak_jadwal j', 'j.kode_dosen=d.nidn')
 		    ->join('simak_masterprogramstudi p', 'p.kode_prodi=d.kode_prodi')
-		    ->where('d.kode_prodi = :p1 AND j.tahun_akademik = :p2 AND j.kampus = :p3;', [
+		    ->join('simak_mastermatakuliah mk','mk.kode_mata_kuliah = j.kode_mk')
+		    ->where('d.kode_prodi = :p1 AND j.tahun_akademik = :p2 AND j.kampus = :p3 AND mk.tahun_akademik = :p2;', [
 				':p1' => $prodi,
 				':p2' => $tahun_akademik,
 				':p3' => $kampus
@@ -75,6 +76,8 @@ class KrsController extends Controller
 					'nama' => $m->nama_dosen,
 					'semester' => $m->semester,
 					'kelas' => $m->kelas,
+					'kode_mk' => $m->kode_mk,
+					'nama_mk' => $m->nama_mk,
 					'nidn' => $m->nidn,
 					'prodi' => $m->singkatan,
 					'count' => $tmp['hasil']
