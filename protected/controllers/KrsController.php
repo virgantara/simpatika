@@ -69,7 +69,7 @@ class KrsController extends Controller
 				$m = (object) $m;
 
 
-				$sql = 'SELECT func_count_input_nilai('.$tahun_akademik.',"'.$m->nidn.'",'.$kampus.') as hasil;';
+				$sql = 'SELECT func_count_input_nilai('.$tahun_akademik.',"'.$m->nidn.'",'.$kampus.',"'.$m->kode_mk.'") as hasil;';
 				$tmp = Yii::app()->db->createCommand($sql)->queryRow();
 			    
 			    $result[] = [
