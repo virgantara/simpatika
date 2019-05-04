@@ -50,40 +50,42 @@ class KrsController extends Controller
 
 		$result = [];
 		if(!empty($prodi)){
-			$model = Yii::app()->db->createCommand()
-		    ->select('j.id as jadwalid, d.nama_dosen, d.nidn, p.nama_prodi, p.singkatan, j.kelas, j.semester, j.kode_mk, mk.nama_mata_kuliah as nama_mk')
-		    ->from('simak_masterdosen d')
-		    ->join('simak_jadwal j', 'j.kode_dosen=d.nidn')
-		    ->join('simak_masterprogramstudi p', 'p.kode_prodi=d.kode_prodi')
-		    ->join('simak_mastermatakuliah mk','mk.kode_mata_kuliah = j.kode_mk')
-		    ->where('d.kode_prodi = :p1 AND j.tahun_akademik = :p2 AND j.kampus = :p3 AND mk.tahun_akademik = :p2;', [
-				':p1' => $prodi,
-				':p2' => $tahun_akademik,
-				':p3' => $kampus
-			])
-			->order('d.nama_dosen')
-		    ->queryAll();
+			$params = [
+				'prodi' => $prodi,
+				'tahun' => $tahun_akademik,
+				'kampus' => $kampus
+			];
 
-		    foreach($model as $q => $m)
+			$hasil = Yii::app()->rest->getListDosenJadwal($params);
+			// if(!empty($result->values))
+			// 	echo CJSON::encode($result->values);
+			// else{
+			// 	$data[] = [
+			// 		'id' => 0,
+			// 		'nama' => 'Data Empty',
+			// 		'jenis' => 'Data Empty'
+			// 	];
+			// 	echo CJSON::encode($data);
+			// }
+
+			// $model = Yii::app()->db->createCommand()
+		 //    ->select('j.id as jadwalid, d.nama_dosen, d.nidn, p.nama_prodi, p.singkatan, j.kelas, j.semester, j.kode_mk, mk.nama_mata_kuliah as nama_mk')
+		 //    ->from('simak_masterdosen d')
+		 //    ->join('simak_jadwal j', 'j.kode_dosen=d.nidn')
+		 //    ->join('simak_masterprogramstudi p', 'p.kode_prodi=d.kode_prodi')
+		 //    ->join('simak_mastermatakuliah mk','mk.kode_mata_kuliah = j.kode_mk')
+		 //    ->where('d.kode_prodi = :p1 AND j.tahun_akademik = :p2 AND j.kampus = :p3 AND mk.tahun_akademik = :p2;', [
+			// 	':p1' => $prodi,
+			// 	':p2' => $tahun_akademik,
+			// 	':p3' => $kampus
+			// ])
+			// ->order('d.nama_dosen')
+		 //    ->queryAll();
+			if(!empty($hasil->values))
 			{
-				$m = (object) $m;
-
-
-				$sql = 'SELECT func_count_input_nilai('.$m->jadwalid.') as hasil;';
-				$tmp = Yii::app()->db->createCommand($sql)->queryRow();
-			    
-			    $result[] = [
-					'nama' => $m->nama_dosen,
-					'semester' => $m->semester,
-					'kelas' => $m->kelas,
-					'kode_mk' => $m->kode_mk,
-					'nama_mk' => $m->nama_mk,
-					'nidn' => $m->nidn,
-					'prodi' => $m->singkatan,
-					'count' => $tmp['hasil']
-				];
-
+				$result = $hasil->values;
 			}
+		    
 	
 		}
 

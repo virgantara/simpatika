@@ -44,7 +44,7 @@
 				array('label'=>'Catatan Revisi', 'url'=>array('/jadwalLog/admin'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Rekap Jadwal Semua Dosen', 'url'=>array('/jadwal/rekapJadwalAll'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Rekap Jadwal Bentrok', 'url'=>array('/jadwal/rekapJadwalBentrok'),'visible'=>!Yii::app()->user->isGuest),
-				
+				array('label'=>'Data Belum Input Nilai', 'url'=>array('/krs/nilai'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Master', 'url'=>array('/site/master'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Laporan Data Ortu', 'url'=>array('/site/dataortu'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Log', 'url'=>array('/logs/admin'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
