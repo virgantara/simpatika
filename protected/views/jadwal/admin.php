@@ -99,9 +99,12 @@ echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 		'jam_ke',
 		'jam_mulai',
 		'jam_selesai',
+
 		array(
 			'header' => 'Kampus',
-			'value' => '$data->kAMPUS->nama_kampus'
+			'value' => function($data){
+				return !empty($data->kAMPUS) ? $data->kAMPUS->nama_kampus : 'Data kampus kosong';
+			}
 		),
 		'prodi',
 		'nama_prodi',

@@ -324,8 +324,16 @@ class JadwalController extends Controller
 			
 			$listdosenprodi = Masterdosen::model()->findAllByAttributes(array(
 				'kode_prodi'=>$kode_prodi,
-				'nidn' => '160573'
+				'nidn' => 'GN160589'
 			));
+
+			$tmp = Masterkelas::model()->findAll();
+
+			$listkelas = [];
+			foreach($tmp as $t)
+			{
+				$listkelas[$t->id] = $t->nama_kelas;
+			}
 
 			$setting_sk = JadwalLampiranSk::model()->find();
 
@@ -346,18 +354,18 @@ class JadwalController extends Controller
 
 
 				$model = Yii::app()->db->createCommand()
-			    ->select('*, t.id as idjadwal')
+			    ->select('t.kode_dosen, t.nama_dosen, t.nama_mk, t.kode_mk, t.semester, t.kelas, m.sks, t.nama_prodi, t.id as idjadwal')
 			    ->from('simak_jadwal_temp t')
-			    ->join('m_hari h', 'h.nama_hari=t.hari')
-			    ->join('m_jam j', 'j.id_jam=t.jam_ke')
+			    // ->join('m_hari h', 'h.nama_hari=t.hari')
+			    // ->join('m_jam j', 'j.id_jam=t.jam_ke')
 			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
-			    ->join('simak_kampus km', 'km.id=t.kampus')
-			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-			    ->where('kode_dosen=:p1 and t.tahun_akademik=:p2', array(
+			    // ->join('simak_kampus km', 'km.id=t.kampus')
+			    // ->join('simak_masterkelas kls', 'kls.id=t.kelas')
+			    ->where('t.kode_dosen=:p1 and t.tahun_akademik=:p2 and m.tahun_akademik=:p2 ', array(
 			    	':p1' => $id,
 			    	':p2' => $tahun_akademik->tahun_id
 			    ))
-			    ->group('idjadwal')
+			    // ->group('idjadwal')
 			    ->queryAll();
 
 			    $size = count($model);
@@ -372,6 +380,7 @@ class JadwalController extends Controller
 				ob_start();	
 				echo $this->renderPartial('print_lampiran_sk',array(
 					'model'=>$model,
+					'listkelas' => $listkelas,
 					// 'dosen' => $dosen,
 					'setting_sk' => $setting_sk
 				));

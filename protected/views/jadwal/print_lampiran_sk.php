@@ -68,7 +68,7 @@
       <td width="35%"  style="text-align: center;"><?=$m->nama_mk;?></td>
     <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
-    <td width="10%"  style="text-align: center;"><?=$m->nama_kelas;?></td>
+    <td width="10%"  style="text-align: center;"><?=!empty($listkelas[$m->kelas]) ? $listkelas[$m->kelas] : $m->kelas;?></td>
     <td width="5%"  style="text-align: center;"><?=$m->sks;?></td>
      
    </tr>
@@ -81,7 +81,7 @@
       <td width="35%"  style="text-align: center;"><?=$m->nama_mk;?></td>
     <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
-    <td width="10%"  style="text-align: center;"><?=$m->nama_kelas;?></td>
+    <td width="10%"  style="text-align: center;"><?=!empty($listkelas[$m->kelas]) ? $listkelas[$m->kelas] : $m->kelas;?></td>
     <td width="5%"  style="text-align: center;"><?=$m->sks;?></td>
      
    </tr>
@@ -104,9 +104,11 @@
       <br>
       <br>
       <br>
-      <!-- <img width="210px" src="<?php echo Yii::app()->baseUrl;?>/images/ttd.jpg"/> -->
-      <p><strong><u>Prof. Dr. Amal Fathullah Zarkasyi, M.A.</u></strong><br>NIY. 780043</p>
-
+      <br>
+      <br>
+      <br>
+      <img width="210px" src="<?php echo Yii::app()->baseUrl;?>/images/ttd.jpg"/>
+     
 
     </td>
   </tr>
