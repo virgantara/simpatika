@@ -116,7 +116,7 @@ $this->menu=array(
 
 		<td><?php echo $m->semester;?></td>
 
-		<td><?php echo $m->kAMPUS->nama_kampus;?></td>
+		<td><?php echo !empty($m->kAMPUS) ? $m->kAMPUS->nama_kampus : 'ID Kampus tidak dikenali';?></td>
 		<td width="5%"><?php echo $m->kELAS->nama_kelas;?></td>
 		<td>
 		 <?php 
