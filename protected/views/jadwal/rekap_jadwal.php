@@ -159,7 +159,7 @@ foreach($kampuses as $kampus)
 
 		<td width="15%"><?php echo $m->nama_dosen;?></td>
 
-		<td width="5%"><?php echo !empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : 0;?></td>
+		<td width="5%"><?php echo !empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : '-';?></td>
 		<td width="5%"><?php echo $m->nama_fakultas;?></td>
 		<td width="15%">
 			<?php
