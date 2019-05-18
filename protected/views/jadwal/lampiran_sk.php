@@ -65,9 +65,9 @@ $(document).ready(function(){
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
-  'htmlOptions' => array(
-    'target' => '_blank'
-  )
+  // 'htmlOptions' => array(
+  //   'target' => '_blank'
+  // )
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
