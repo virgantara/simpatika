@@ -51,13 +51,15 @@
  <tbody>
   <?php 
   $counter = 1;
+  $total_sks = 0;
   foreach($model as $m)
   {
     $m= (object)$m;
 
 
     
-
+    $sks = !empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : 0;
+    $total_sks += $sks;
 
     if($counter==1)
     {
@@ -69,7 +71,7 @@
     <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
     <td width="10%"  style="text-align: center;"><?=!empty($listkelas[$m->kelas]) ? $listkelas[$m->kelas] : $m->kelas;?></td>
-    <td width="5%"  style="text-align: center;"><?=!empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : '';?></td>
+    <td width="5%"  style="text-align: center;"><?=$sks;?></td>
      
    </tr>
       <?php     
@@ -82,7 +84,7 @@
     <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
     <td width="10%"  style="text-align: center;"><?=!empty($listkelas[$m->kelas]) ? $listkelas[$m->kelas] : $m->kelas;?></td>
-    <td width="5%"  style="text-align: center;"><?=!empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : '';?></td>
+    <td width="5%"  style="text-align: center;"><?=$sks;?></td>
      
    </tr>
    <?php 
@@ -90,6 +92,11 @@
    $counter++;
  }
    ?>
+   <tr>
+    <td style="text-align: right;" colspan="4">Total SKS</td>
+    <td width="5%"  style="text-align: center;"><?=$total_sks;?></td>
+     
+   </tr>
  </tbody>
 </table>
 <table width="100%" style="font-size: 10;font-family: 'Times';">
