@@ -334,6 +334,13 @@ class JadwalController extends Controller
 			{
 				$listkelas[$t->id] = $t->nama_kelas;
 			}
+			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+			$mks = Mastermatakuliah::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik->tahun_id,'kode_prodi'=>$kode_prodi]);
+
+			$list_mk = [];
+			foreach($mks as $mk){
+				$list_mk[$mk->kode_mata_kuliah] = $mk;
+			}
 
 			$setting_sk = JadwalLampiranSk::model()->find();
 
@@ -344,7 +351,7 @@ class JadwalController extends Controller
 			$pdf->SetAutoPageBreak(TRUE,10);
 			$this->layout = '';
 			
-			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+			
 			foreach($listdosenprodi as $p)
 			{
 
@@ -354,14 +361,14 @@ class JadwalController extends Controller
 
 
 				$model = Yii::app()->db->createCommand()
-			    ->select('t.kode_dosen, t.nama_dosen, t.nama_mk, t.kode_mk, t.semester, t.kelas, m.sks, t.nama_prodi, t.id as idjadwal')
+			    ->select('t.kode_dosen, t.nama_dosen, t.nama_mk, t.kode_mk, t.semester, t.kelas, t.nama_prodi, t.id as idjadwal')
 			    ->from('simak_jadwal_temp t')
 			    // ->join('m_hari h', 'h.nama_hari=t.hari')
 			    // ->join('m_jam j', 'j.id_jam=t.jam_ke')
-			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+			    // ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 			    // ->join('simak_kampus km', 'km.id=t.kampus')
 			    // ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-			    ->where('t.kode_dosen=:p1 and t.tahun_akademik=:p2 and m.tahun_akademik=:p2 ', array(
+			    ->where('t.kode_dosen=:p1 and t.tahun_akademik=:p2 ', array(
 			    	':p1' => $id,
 			    	':p2' => $tahun_akademik->tahun_id
 			    ))
@@ -382,6 +389,7 @@ class JadwalController extends Controller
 					'model'=>$model,
 					'listkelas' => $listkelas,
 					// 'dosen' => $dosen,
+					'list_mk' => $list_mk,
 					'setting_sk' => $setting_sk
 				));
 

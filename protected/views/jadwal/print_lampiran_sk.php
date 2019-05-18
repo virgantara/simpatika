@@ -65,11 +65,11 @@
         <tr>
      <td width="15%" rowspan="<?=count($model)+1;?>" style="text-align: center;"><?=$m->kode_dosen;?></td>
       <td width="20%" rowspan="<?=count($model)+1;?>" style="text-align: center;"><?=$m->nama_dosen;?></td>
-      <td width="35%"  style="text-align: center;"><?=$m->nama_mk;?></td>
+      <td width="35%"  style="text-align: center;"><?=$m->kode_mk.' - '.$m->nama_mk;?></td>
     <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
     <td width="10%"  style="text-align: center;"><?=!empty($listkelas[$m->kelas]) ? $listkelas[$m->kelas] : $m->kelas;?></td>
-    <td width="5%"  style="text-align: center;"><?=$m->sks;?></td>
+    <td width="5%"  style="text-align: center;"><?=!empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : '';?></td>
      
    </tr>
       <?php     
@@ -78,11 +78,11 @@
     else{
   ?>
    <tr>
-      <td width="35%"  style="text-align: center;"><?=$m->nama_mk;?></td>
+      <td width="35%"  style="text-align: center;"><?=$m->kode_mk.' - '.$m->nama_mk;?></td>
     <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
     <td width="10%"  style="text-align: center;"><?=!empty($listkelas[$m->kelas]) ? $listkelas[$m->kelas] : $m->kelas;?></td>
-    <td width="5%"  style="text-align: center;"><?=$m->sks;?></td>
+    <td width="5%"  style="text-align: center;"><?=!empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : '';?></td>
      
    </tr>
    <?php 
