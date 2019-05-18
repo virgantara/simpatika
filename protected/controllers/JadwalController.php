@@ -335,7 +335,7 @@ class JadwalController extends Controller
 				$listkelas[$t->id] = $t->nama_kelas;
 			}
 			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-			$mks = Mastermatakuliah::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik->tahun_id);
+			$mks = Mastermatakuliah::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik->tahun_id]);
 
 			$list_mk = [];
 			foreach($mks as $mk){
