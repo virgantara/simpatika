@@ -324,7 +324,7 @@ class JadwalController extends Controller
 			
 			$listdosenprodi = Masterdosen::model()->findAllByAttributes(array(
 				'kode_prodi'=>$kode_prodi,
-				'nidn' => 'GN160589'
+				// 'nidn' => 'GN160589'
 			));
 
 			$tmp = Masterkelas::model()->findAll();
