@@ -99,7 +99,7 @@ $(document).ready(function(){
 	</div>
  -->
 	<div class="row buttons">
-		<?php echo CHtml::submitButton('Cetak',array('name'=>'cetak')); ?>
+		<?php echo CHtml::submitButton('Download',array('name'=>'cetak')); ?>
 		
 		<?php 
     // echo !empty($model) ? CHtml::link('Cetak',array('jadwal/cetakPersonal','id'=>$kode_dosen),array('target'=>'_blank')) : ''; ?>

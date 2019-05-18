@@ -402,7 +402,7 @@ class JadwalController extends Controller
 			ob_end_clean();
 			
 			// $prodi = Masterprogramstudi::model()->findByPk($kode_prodi);
-			$pdf->Output('sk_'.$kode_prodi.'.pdf');
+			$pdf->Output('sk_'.$kode_prodi.'.pdf','D');
 			
 		}
 
