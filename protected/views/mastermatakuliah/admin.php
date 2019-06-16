@@ -57,6 +57,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'kode_mata_kuliah',
 		'nama_mata_kuliah',
 		'sks',
+		'semester',
 		/*
 		'sks_tatap_muka',
 		'sks_praktikum',
