@@ -51,8 +51,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		),
 		'tahun_akademik',
 		
-		// 'kode_fakultas',
-		// 'kode_prodi',
+		'kode_fakultas',
+		'kode_prodi',
 		
 		'kode_mata_kuliah',
 		'nama_mata_kuliah',
