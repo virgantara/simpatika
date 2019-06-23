@@ -59,6 +59,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'tahun_akademik',
 		'kode_jadwal',
 		'kelas',
+		'sks',
 		/*
 		'harian',
 		'normatif',
