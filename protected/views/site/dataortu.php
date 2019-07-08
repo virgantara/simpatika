@@ -37,15 +37,25 @@ $this->menu=array(
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+	'method' => 'get',
+	'action' => $this->createUrl('site/dataortu'),
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
+	<div class="row">
+		<label>Kampus</label>
+		<?php 
+		$list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus', 'nama_kampus');
+		echo CHtml::dropDownList('kampus',!empty($_GET['kampus']) ? $_GET['kampus'] : '',$list,array('empty' => '(Pilih Kampus)')); 
+		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
+		?>
+		
+	</div>	
 
 	<div class="row">
 		<label>Prodi</label>
 		<?php
-		$kode_prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
+		$kode_prodi = !empty($_GET['kode_prodi']) ? $_GET['kode_prodi'] : '';
     
     $list = CHtml::listData(Masterprogramstudi::model()->findAll(), 'kode_prodi','nama_prodi');
     
@@ -76,7 +86,8 @@ if(!empty($kode_prodi))
 		'mahasiswas' => $mahasiswas,
 		'kdprodi' => $kdprodi,
 		'xls' => $xls,
-		'mprodi' => $mprodi
+		'mprodi' => $mprodi,
+		'list_agama' => $list_agama
 	]);
 ?>
 <?php 

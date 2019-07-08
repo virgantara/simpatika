@@ -40,6 +40,7 @@ $('.search-form form').submit(function(){
 
     
 echo '<ul>';
+echo '<li>'.CHtml::link('Mahasiswa Belum Melengkapi Data Ortu',array('site/dataortu')).'</li>';
 echo '<li>'.CHtml::link('Sync Jadwal ke SIAKAD',array('jadwal/syncJadwal')).'</li>';
 echo '<li>'.CHtml::link('Laporan Input Nilai',array('krs/nilai')).'</li>';
 echo '<li>'.CHtml::link('Lampiran SK Jadwal',array('JadwalLampiranSk/admin')).'</li>';

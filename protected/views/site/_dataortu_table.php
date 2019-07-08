@@ -39,10 +39,8 @@ header("Content-Transfer-Encoding: BINARY");
 $i = 0;
 foreach($mahasiswas as $m)
 {
-	$agama = Pilihan::model()->findByAttributes([
-		'kode' => 51,
-		'value' => $m->agama
-	]);
+	$q = $m->agama ?: 'I';
+	$agama = $list_agama[$q];
 ?>
 <tr>
 <td width="3%"><?=($i+1);?></td>
@@ -59,7 +57,7 @@ foreach($mahasiswas as $m)
 <td><?=$m->prodi->fakultas->nama_fakultas;?></td>
 
 <td><?=substr($m->nim_mhs, 2,4)?></td>
-<td width="15%"><?php echo !empty($agama) ? $agama->label : 'ISLAM';?></td>
+<td width="15%"><?$agama ?: 'ISLAM';?></td>
 
 
 
@@ -75,7 +73,7 @@ foreach($mahasiswas as $m)
 ?>
 <tr>
 	<td colspan="11">
-	<table>
+	<table >
 	<tr>
 		<th></th>
       <th width="5%">Data Ortu</th>
@@ -93,10 +91,11 @@ foreach($mahasiswas as $m)
 <?php
 	foreach($m->ortus as $ortu)
 	{
-		$agama = Pilihan::model()->findByAttributes([
-			'kode' => 51,
-			'value' => $ortu->agama
-		]);
+		$agama = $list_agama[$ortu->agama];
+		// $agama = Pilihan::model()->findByAttributes([
+		// 	'kode' => 51,
+		// 	'value' => $ortu->agama
+		// ]);
 
 		$pendidikan = Pilihan::model()->findByAttributes([
 			'kode' => '01',
@@ -125,7 +124,7 @@ foreach($mahasiswas as $m)
       <td><?=ucwords($ortu->nama);?></td>
       <td ><?=$ortu->fullalamat;?></td>
       
-      <td><?=!empty($agama) ? $agama->label : '-';?></td>
+      <td><?=!empty($agama) ? $agama : '-';?></td>
       <td><?=!empty($pendidikan) ? $pendidikan->label : '-';?></td>
       <td><?=!empty($pekerjaan) ? $pekerjaan->label : '-';?></td>
       <td ><?=!empty($penghasilan) ? $penghasilan->label : '-';?></td>
