@@ -95,12 +95,10 @@
 
 	<?php echo $content; ?>
 
-
 	<footer>
 		Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
 Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id
 	</footer><!-- footer -->
-
 </div>
 </body>
 </html>

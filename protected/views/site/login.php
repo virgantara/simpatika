@@ -63,6 +63,8 @@ $this->breadcrumbs=array(
 <?php $this->endWidget(); ?>
 
 	<div class="row">
+		<div class="col-xs-12  col-lg-4"></div>
+		<div class="col-xs-12  col-lg-4" style="text-align: center;">
 	<ul class="list-group">
 		<li class="list-group-item">
 
@@ -76,5 +78,5 @@ $this->breadcrumbs=array(
 	</li>
 </ul>
 </div>
-
+<div class="col-xs-12 col-lg-4"></div>
 </div><!-- form -->
