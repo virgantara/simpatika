@@ -43,6 +43,7 @@
 				[
 					'label' => 'Cetak <span class="caret"></span>',
 					'url' => '#',
+					'visible'=>!Yii::app()->user->isGuest,
 					'itemOptions' => ['class'=>'dropdown-toggle'],
 					'linkOptions' => ['class'=>'dropdown-toggle','data-toggle'=>"dropdown",'role' =>'button'],
 					'items' => [
@@ -56,6 +57,7 @@
 				[
 					'label' => 'Rekap <span class="caret"></span>',
 					'url' => '#',
+					'visible'=>!Yii::app()->user->isGuest,
 					'itemOptions' => ['class'=>'dropdown-toggle'],
 					'linkOptions' => ['class'=>'dropdown-toggle','data-toggle'=>"dropdown",'role' =>'button'],
 					'items' => [

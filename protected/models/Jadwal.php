@@ -121,7 +121,7 @@ class Jadwal extends CActiveRecord
 			':p6' => $tahunaktif,
 			':p7' => $semester,
 			':p8'=> $nama_mk))
-	    ->group('idjadwal')
+	    // ->group('idjadwal')
 	    ->queryAll();
 
 		// $criteria=new CDbCriteria;
@@ -327,7 +327,7 @@ class Jadwal extends CActiveRecord
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
 	    ->where('kode_dosen=:p1 AND t.tahun_akademik=:p2', array(':p1'=>$id,':p2'=>$tahunaktif))
-	    ->group('t.kode_dosen')
+	    // ->group('t.kode_dosen')
 	    ->order('d.nama_dosen')
 	    ->queryAll();
 

@@ -5,17 +5,7 @@
 $this->breadcrumbs=array(
 	'Jadwals'=>array('index'),
 );
-
-$this->menu=array(
-	array('label'=>'List Jadwal', 'url'=>array('index')),
-	array('label'=>'Manage Jadwal', 'url'=>array('admin')),
-);
 ?>
-
-<script src="<?php echo Yii::app()->baseUrl;?>/js/jquery.min.js"></script>
-<script src="<?php echo Yii::app()->baseUrl;?>/js/jquery-ui.min.js"></script>
-
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl;?>/css/jquery-ui.css"> 
 <h1>Cetak Jadwal Per Dosen</h1>
 
 <script type="text/javascript">
@@ -66,14 +56,16 @@ $(document).ready(function(){
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
   'htmlOptions' => array(
-    'target' => '_blank'
+    'target' => '_blank',
+    'class' => 'form-horizontal'
   )
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
-  <div class="row">
-    <label>Prodi</label>
+  <div class="form-group">
+    <label  class="col-sm-3 control-label no-padding-right">Prodi</label>
+    <div class="col-sm-9">
     <?php
     $kode_prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
     $list = CHtml::listData(Masterprogramstudi::model()->findAll(), 'kode_prodi','nama_prodi');
@@ -84,7 +76,7 @@ $(document).ready(function(){
     // echo CHtml::hiddenField('kode_p/rodi',$kode_prodi);
     
     ?>
-
+  </div>
   </div>
 <!-- 
 	<div class="row">
@@ -99,21 +91,14 @@ $(document).ready(function(){
 <!-- 
 	</div>
  -->
-	<div class="row buttons">
-    <?php echo CHtml::submitButton('Lihat',array('name'=>'lihat')); ?>
-		<?php echo CHtml::submitButton('Cetak',array('name'=>'cetak')); ?>
-		
-		<?php 
-    // echo !empty($model) ? CHtml::link('Cetak',array('jadwal/cetakPersonal','id'=>$kode_dosen),array('target'=>'_blank')) : ''; ?>
-	</div>
-
-<?php $this->endWidget(); ?>
+  <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+          <?php echo CHtml::submitButton('Lihat',array('name'=>'lihat','class'=>'btn btn-info')); ?>
+    <?php echo CHtml::submitButton('Cetak',array('name'=>'cetak','class'=>'btn btn-success')); ?>
+        </div>
+	
 
 </div><!-- form -->
 
 
-<div style="font-size: 9px;text-align: center;">
-<br><br><br>
-Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
-Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id</div>
-
+<?php $this->endWidget(); ?>

@@ -61,13 +61,17 @@ $(document).ready(function(){
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+	'htmlOptions'=>array(
+		'class' => 'form-horizontal'
+	),
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 
-	<div class="row">
-		<label>Nama Dosen</label>
+	<div class="form-group">
+		<label class='col-sm-3 control-label no-padding-right'>Nama Dosen</label>
+		<div class="col-sm-9">
 		<?php
 
 		
@@ -75,7 +79,7 @@ $(document).ready(function(){
 		echo CHtml::hiddenField('kode_dosen',!empty($_POST['kode_dosen']) ? $_POST['kode_dosen'] : '');
 		
 		?>
-
+		</div>
 	</div>
 
 	<div class="row buttons">
