@@ -24,11 +24,11 @@
  *
  * The followings are the available model relations:
  * @property Mastermahasiswa $nim0
+ * @property Pilihan $agama0
  */
 class MahasiswaOrtu extends CActiveRecord
 {
-
-	public $fullalamat; 
+	public $fullalamat;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -45,13 +45,12 @@ class MahasiswaOrtu extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('pekerjaan, penghasilan, nama, agama, pendidikan, hidup', 'required'),
+			array('pekerjaan, penghasilan', 'required'),
 			array('nim, kota, propinsi, negara, telepon, hp, email', 'length', 'max'=>20),
 			array('hubungan', 'length', 'max'=>4),
 			array('nama', 'length', 'max'=>50),
-			array('agama, pendidikan, pekerjaan, penghasilan, hidup', 'length', 'max'=>1),
+			array('agama, pendidikan, pekerjaan, penghasilan, hidup, pos', 'length', 'max'=>10),
 			array('alamat', 'length', 'max'=>255),
-			array('pos', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, nim, hubungan, nama, agama, pendidikan, pekerjaan, penghasilan, hidup, alamat, kota, propinsi, negara, pos, telepon, hp, email', 'safe', 'on'=>'search'),
@@ -67,6 +66,7 @@ class MahasiswaOrtu extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'nim0' => array(self::BELONGS_TO, 'Mastermahasiswa', 'nim'),
+			'agama0' => array(self::BELONGS_TO, 'Pilihan', 'agama','condition'=>'kode = 51'),
 		);
 	}
 

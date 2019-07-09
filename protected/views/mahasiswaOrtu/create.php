@@ -21,5 +21,8 @@ $this->menu=array(
 	'list_pendidikan' => $list_pendidikan,
 	'list_pekerjaan'=>$list_pekerjaan,
 	'list_penghasilan' => $list_penghasilan,
-	'list_keadaan' => $list_keadaan
+	'list_keadaan' => $list_keadaan,
+	'kampus' => $kampus,
+	'kode_prodi' => $kode_prodi,
+	'tahun_angkatan' => $tahun_angkatan
 )); ?>

@@ -26,10 +26,12 @@ foreach(Yii::app()->user->getFlashes() as $key => $message) {
     ?>
 <table class="table table-striped table-bordered">
 <?php 
-
-echo CHtml::hiddenField('kampus',$_GET['kampus'] ?: '');
-echo CHtml::hiddenField('kode_prodi',$_GET['kode_prodi'] ?: '');
-echo CHtml::hiddenField('tahun_angkatan',$_GET['tahun_angkatan'] ?: '');
+$kampus = $_GET['kampus'] ?: '';
+$kode_prodi = $_GET['kode_prodi'] ?: '';
+$tahun_angkatan = $_GET['tahun_angkatan'] ?: '';
+echo CHtml::hiddenField('kampus',$kampus);
+echo CHtml::hiddenField('kode_prodi',$kode_prodi);
+echo CHtml::hiddenField('tahun_angkatan',$tahun_angkatan);
  ?> 
   <thead>
     <tr>
@@ -101,8 +103,13 @@ foreach($mahasiswas as $m)
 <td width="15%"><?=$agama;?></td>
 
 <td>
-	<a href="<?=Yii::app()->createUrl('mahasiswaOrtu/create',['nim'=>$m->nim_mhs]);?>">Input</a>
-	<a href="<?=Yii::app()->createUrl('mahasiswaOrtu/admin',['nim'=>$m->nim_mhs]);?>">List</a>
+	<a class="btn btn-info btn-xs btn-block" href="<?=Yii::app()->createUrl('mahasiswaOrtu/create',[
+	'kode_prodi'=>$kode_prodi,
+	'kampus'=>$kampus,
+	'tahun_angkatan'=>$tahun_angkatan,
+	'nim'=>$m->nim_mhs
+	]);?>"><i class="glyphicon glyphicon-plus"></i> Input</a>
+	<a class="btn btn-success btn-xs btn-block list-ortu" href="<?=Yii::app()->createUrl('mahasiswaOrtu/admin',['nim'=>$m->nim_mhs]);?>"><i class="glyphicon glyphicon-list"></i>  List</a>
 </td>
 </tr>
 		
@@ -119,9 +126,24 @@ foreach($mahasiswas as $m)
 
 
 <script type="text/javascript">
+function popitup(url,label) {
+    var w = screen.width * 0.8;
+    var h = 800;
+    var left = (screen.width - w) / 2;
+    var top = (screen.height - h) / 2;
+    
+    window.open(url,label,'height='+h+',width='+w+',top='+top+',left='+left);
+    
+}
 	$(document).ready(function(){
 		$( ".datepicker" ).datepicker({
 			'dateFormat' : 'yy-mm-dd'
+		});
+
+		$('.list-ortu').click(function(e){
+			e.preventDefault();
+			var url = $(this).attr('href');
+	        popitup(url,'List Ortu');
 		});
 	});
 </script>

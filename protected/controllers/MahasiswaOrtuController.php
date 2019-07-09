@@ -60,7 +60,7 @@ class MahasiswaOrtuController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate($nim)
+	public function actionCreate($kode_prodi, $kampus, $tahun_angkatan, $nim)
 	{
 		$model=new MahasiswaOrtu;
 
@@ -72,8 +72,15 @@ class MahasiswaOrtuController extends Controller
 		if(isset($_POST['MahasiswaOrtu']))
 		{
 			$model->attributes=$_POST['MahasiswaOrtu'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				Yii::app()->user->setFlash('success', "Data Saved.");
+				$this->redirect([
+					'mastermahasiswa/dataortu',
+					'kode_prodi'=>$_POST['kode_prodi'],
+					'kampus' => $_POST['kampus'],
+					'tahun_angkatan' => $_POST['tahun_angkatan']
+				]);
+			}
 		}
 
 		$tmp = Pilihan::model()->findAllByAttributes(['kode' => 51],['order'=>'kode_feeder']);
@@ -122,7 +129,10 @@ class MahasiswaOrtuController extends Controller
 			'list_pendidikan' => $list_pendidikan,
 			'list_pekerjaan'=>$list_pekerjaan,
 			'list_penghasilan' => $list_penghasilan,
-			'list_keadaan' => $list_keadaan
+			'list_keadaan' => $list_keadaan,
+			'kampus' => $kampus,
+			'kode_prodi' => $kode_prodi,
+			'tahun_angkatan' => $tahun_angkatan
 		));
 	}
 
@@ -181,6 +191,9 @@ class MahasiswaOrtuController extends Controller
 	 */
 	public function actionAdmin($nim)
 	{
+
+		$this->layout = '//layouts/lite';
+
 		$model=new MahasiswaOrtu('search');
 		
 		$model->unsetAttributes();  // clear any default values
