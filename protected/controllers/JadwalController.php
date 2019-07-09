@@ -318,7 +318,7 @@ class JadwalController extends Controller
 	{
 		$model = null;
 		$dosen = null;
-		if(!empty($_POST['cetak']))
+		if(!empty($_POST['kode_prodi']))
 		{
 			$kode_prodi = $_POST['kode_prodi'];
 			

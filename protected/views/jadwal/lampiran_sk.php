@@ -68,12 +68,16 @@ $(document).ready(function(){
   // 'htmlOptions' => array(
   //   'target' => '_blank'
   // )
+  'htmlOptions' => array(
+    'class' => 'form-horizontal'
+  )
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
-  <div class="row">
-    <label>Prodi</label>
+   <div class="form-group">
+    <label  class="col-sm-3 control-label no-padding-right">Prodi</label>
+    <div class="col-sm-9">
     <?php
     $kode_prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
     $list = CHtml::listData(Masterprogramstudi::model()->findAll(), 'kode_prodi','nama_prodi');
@@ -83,7 +87,7 @@ $(document).ready(function(){
     // echo CHtml::hiddenField('kode_p/rodi',$kode_prodi);
     
     ?>
-
+</div>
   </div>
 <!-- 
 	<div class="row">
@@ -98,13 +102,20 @@ $(document).ready(function(){
 <!-- 
 	</div>
  -->
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Download',array('name'=>'cetak')); ?>
-		
-		<?php 
-    // echo !empty($model) ? CHtml::link('Cetak',array('jadwal/cetakPersonal','id'=>$kode_dosen),array('target'=>'_blank')) : ''; ?>
-	</div>
+<div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+    <?php 
+     echo CHtml::tag('button', array(
+        'name'=>'cetak',
+        'type'=>'submit',
+        'class'=>'btn btn-success',
+      ), '<i class="glyphicon glyphicon-download"></i> Download');
 
+    ?>
+        </div>
+  
+
+</div><!-- form -->
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->

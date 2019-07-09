@@ -39,16 +39,19 @@ $this->menu=array(
 		?>
 	}
 </style>
-<div class="form">
-	<div class="row">
-<?php echo CHtml::link('Export ke XLS',array('jadwal/rekapJadwalAllXls')); ?>
+<div class="row">
+	<div class="col-xs-12">
+
+<?php echo CHtml::link('<i class="glyphicon glyphicon-download"></i> Export ke XLS',array('jadwal/rekapJadwalAllXls'),['class'=>'btn btn-success']); ?>
 </div>
-<table border="1" cellpadding="4" style="width: 100%">
+
+	<div class="col-xs-12">
+
+<table class="table table-hovered table-striped">
 	 <caption class="status">Ada <?php echo $total_bentrok;?> jadwal bentrok</caption>
 <thead>
     <tr>
       <th width="3%">No</th>
-       <th>ID Jadwal</th>
       <th width="5%">Hari</th>
       <th>Jam</th>
       <th>Waktu</th>
@@ -99,11 +102,7 @@ $this->menu=array(
 		?>
 		<tr <?php echo $m->bentrok == 1 ? 'style="background-color:orange"' : '';?>>
 		<td width="3%"><?=$i;?></td>
-		<td>
-		 <?php 
-		 	echo $m->idjadwal;//CHtml::link('Update',array('jadwal/update','id'=>$m->idjadwal),array('target'=>'_blank'));
-		 ?>
-		</td>
+		
 		<td width="5%"><?php echo $m->hari;?></td>
 		<td><?php echo $m->nama_jam;?></td>
 		<td><?php echo substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3);?></td>
@@ -179,3 +178,5 @@ $this->menu=array(
 	  </tbody>
 
 	</table>
+</div>
+</div>

@@ -37,13 +37,17 @@ $this->menu=array(
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+	 'htmlOptions' => array(
+    'class' => 'form-horizontal'
+  )
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 
-	<div class="row">
-		<label>Prodi</label>
+	 <div class="form-group">
+    <label  class="col-sm-3 control-label no-padding-right">Prodi</label>
+    <div class="col-sm-9">
 		<?php
 		$kode_prodi = !empty($_POST['kode_prodi']) ? $_POST['kode_prodi'] : '';
     
@@ -52,15 +56,23 @@ $this->menu=array(
 		echo CHtml::dropDownList('kode_prodi',$kode_prodi,$list);
 		
 		?>
-
+</div>
 	</div>
+	<div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+    <?php 
+     echo CHtml::tag('button', array(
+        'name'=>'cetak',
+        'type'=>'submit',
+        'class'=>'btn btn-info',
+      ), '<i class="glyphicon glyphicon-eye-open"></i> Lihat');
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Lihat'); ?>
+    ?>&nbsp;<?php echo !empty($kode_prodi) ? CHtml::link('<i class="glyphicon glyphicon-download"></i> Export ke XLS',array('jadwal/rekapJadwalXls','id'=>$kode_prodi),['class'=>'btn btn-success']) : ''; ?>
+        </div>
+  
 
-		
-		<?php echo !empty($kode_prodi) ? CHtml::link('Export ke XLS',array('jadwal/rekapJadwalXls','id'=>$kode_prodi)) : ''; ?>
-	</div>
+</div><!-- form -->
+	
 
 <?php $this->endWidget(); ?>
 
@@ -72,7 +84,7 @@ if(!empty($kode_prodi))
 {
 ?>
 
-<table border="1" cellpadding="4" style="width: 100%">
+<table class="table table-striped table-hovered">
 <?php 
 
 	
