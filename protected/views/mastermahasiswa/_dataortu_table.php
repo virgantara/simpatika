@@ -64,13 +64,13 @@ foreach($mahasiswas as $m)
 
 	switch ($jml_ortu) {
 		case 1:
-			$bg = 'background-color: orange';
+			$bg = 'background-color: orange;color:white';
 			break;
 		case 2:
-			$bg = 'background-color: green';
+			$bg = 'background-color: green;color:white';
 			break;
 		default:
-			$bg = 'background-color: red';
+			$bg = 'background-color: red;color:white';
 			break;
 	}
 ?>
@@ -98,15 +98,17 @@ foreach($mahasiswas as $m)
 <td><?=substr($m->nim_mhs, 2,4)?></td>
 <td width="15%"><?=$agama;?></td>
 <td style="<?=$bg;?>">
-	<?php 
-	foreach($m->ortus as $o)
-		echo $o->nama;
-	?>
+	<ul style="margin:0">
+		<?php 
+		foreach($m->ortus as $o)
+			echo '<li>'.$o->hubungan.'</li>';
+		?>
+	</ul>
 </td>
 
 <td>
 	<a href="<?=Yii::app()->createUrl('mahasiswaOrtu/create',['nim'=>$m->nim_mhs]);?>">Input</a>
-	<a href="<?=Yii::app()->createUrl('mastermahasiswa/listortu');?>">List</a>
+	<a href="<?=Yii::app()->createUrl('mahasiswaOrtu/admin',['nim'=>$m->nim_mhs]);?>">List</a>
 </td>
 </tr>
 

@@ -167,9 +167,10 @@ class MahasiswaOrtuController extends Controller
 	/**
 	 * Lists all models.
 	 */
-	public function actionIndex()
+	public function actionIndex($nim)
 	{
 		$dataProvider=new CActiveDataProvider('MahasiswaOrtu');
+
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -178,13 +179,15 @@ class MahasiswaOrtuController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionAdmin()
+	public function actionAdmin($nim)
 	{
 		$model=new MahasiswaOrtu('search');
+		
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['MahasiswaOrtu']))
 			$model->attributes=$_GET['MahasiswaOrtu'];
 
+		$model->nim = $nim;
 		$this->render('admin',array(
 			'model'=>$model,
 		));

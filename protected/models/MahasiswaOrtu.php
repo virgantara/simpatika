@@ -27,6 +27,8 @@
  */
 class MahasiswaOrtu extends CActiveRecord
 {
+
+	public $fullalamat; 
 	/**
 	 * @return string the associated database table name
 	 */
@@ -133,7 +135,7 @@ class MahasiswaOrtu extends CActiveRecord
 		$criteria->compare('hp',$this->hp,true);
 		$criteria->compare('email',$this->email,true);
 
-		$criteria->compare('nim',$this->nim);
+		$criteria->condition = 'nim = '.$this->nim;
 		
 
 		return new CActiveDataProvider($this, array(
