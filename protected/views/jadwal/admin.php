@@ -60,13 +60,18 @@ $('.search-form form').submit(function(){
  foreach(Yii::app()->user->getFlashes() as $key => $message) {
         echo '<div style="color:green">' . $message . "</div>\n";
     }
-    
+  ?>
+<div class="row">
+	<div class="col-xs-12">
+  <?php
 echo '<ul>';
 echo '<li>'.CHtml::link('Cetak Jadwal Personal',array('jadwal/cetakPerDosen'),array('target'=>'_blank')).'</li>';
 echo '<li>'.CHtml::link('Rekap Jadwal Per Prodi',array('jadwal/rekapJadwal'),array('target'=>'_blank')).'</li>';
 echo '<li>'.CHtml::link('Rekap Jadwal Semua Dosen',array('jadwal/rekapJadwalAll'),array('target'=>'_blank')).'</li>';
 echo '</ul>';
 ?>
+</div>
+</div>
  <div class="pull-right">
 Data per halaman
 <?php echo CHtml::dropDownList('Jadwal[PAGESIZE]',isset($_GET['size'])?$_GET['size']:'',array(10=>10,50=>50,100=>100,200=>200),array('id'=>'size','size'=>1)); ?>
@@ -84,6 +89,7 @@ echo CHtml::button("Cari",array("id"=>"pencarian"));
 <?php
 echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 ?>
+<div class="row">
 <?php $this->widget('application.components.ComplexGridView', array(
 	'id'=>'jadwal-grid',
 	'dataProvider'=>$model->search(),
@@ -136,24 +142,34 @@ echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 			'class'=>'CButtonColumn',
 		),
 	),
+	'htmlOptions'=>array(
+	    'class'=>'col-xs-12'
+	  ),
+	'itemsCssClass'=>'table table-bordered table-hover table-striped',
+                'summaryCssClass'=>'table-message-info',
+                'filterCssClass'=>'filter',
+                'summaryText'=>'showing {start} - {end} from {count} data',
+                'template'=>'{items}{summary}{pager}',
+                'emptyText'=>'Data tidak ditemukan',
+                'pagerCssClass'=>'pagination',
 	'pager'=>array(
 
                 'firstPageLabel'=>'First',
                 'prevPageLabel'=>'Prev',
                 'nextPageLabel'=>'Next',        
                 'lastPageLabel'=>'Last',  
-   				'firstPageCssClass'=>'btn',
-                'previousPageCssClass'=>'btn',
-                'nextPageCssClass'=>'btn',        
-                'lastPageCssClass'=>'btn',
+   				'firstPageCssClass'=>'',
+                'previousPageCssClass'=>'',
+                'nextPageCssClass'=>'',        
+                'lastPageCssClass'=>'',
 			    'hiddenPageCssClass'=>'disabled',
-			    'internalPageCssClass'=>'btn',
+			    'internalPageCssClass'=>'',
 			    'selectedPageCssClass'=>'selected',
 			    'maxButtonCount'=>5,
         ),
 
 )); ?>
-
+</div>
 
 <?php
 Yii::app()->clientScript->registerScript('delete','

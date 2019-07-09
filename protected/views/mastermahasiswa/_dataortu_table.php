@@ -7,6 +7,9 @@ header('Content-Disposition: attachment; filename='.$filename);
 header("Content-Transfer-Encoding: BINARY");
 	}
 ?>
+
+
+
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'jam-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
@@ -21,7 +24,7 @@ foreach(Yii::app()->user->getFlashes() as $key => $message) {
         echo '<div style="color:white;width:100%;background-color:green;padding:10px">' . $message . "</div>\n";
 }
     ?>
-<table border="1" cellpadding="4" style="width: 100%">
+<table class="table table-striped table-bordered">
 <?php 
 
 echo CHtml::hiddenField('kampus',$_GET['kampus'] ?: '');
@@ -45,7 +48,6 @@ echo CHtml::hiddenField('tahun_angkatan',$_GET['tahun_angkatan'] ?: '');
       
       <th>Tahun Masuk</th>	
       <th>Agama</th>
-      <th>Data Ortu<br>Yg sudah</th>
       <th>Opsi</th>
     </tr>
   </thead>
@@ -97,35 +99,24 @@ foreach($mahasiswas as $m)
 
 <td><?=substr($m->nim_mhs, 2,4)?></td>
 <td width="15%"><?=$agama;?></td>
-<td style="<?=$bg;?>">
-	<ul style="margin:0">
-		<?php 
-		foreach($m->ortus as $o)
-			echo '<li>'.$o->hubungan.'</li>';
-		?>
-	</ul>
-</td>
 
 <td>
 	<a href="<?=Yii::app()->createUrl('mahasiswaOrtu/create',['nim'=>$m->nim_mhs]);?>">Input</a>
 	<a href="<?=Yii::app()->createUrl('mahasiswaOrtu/admin',['nim'=>$m->nim_mhs]);?>">List</a>
 </td>
 </tr>
-
 		
 	<?php
 	$i++;
 }			
 ?>
+
   </tbody>
 
 </table>
 <?php echo CHtml::submitButton('Update'); ?>
 <?php $this->endWidget(); ?>
-<script src="<?php echo Yii::app()->baseUrl;?>/js/jquery.min.js"></script>
-<script src="<?php echo Yii::app()->baseUrl;?>/js/jquery-ui.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl;?>/css/jquery-ui.css"> 
 
 <script type="text/javascript">
 	$(document).ready(function(){

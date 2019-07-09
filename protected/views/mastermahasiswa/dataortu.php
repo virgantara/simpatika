@@ -13,9 +13,6 @@ $this->menu=array(
 ?>
 
 <style type="text/css">
-	table.grid tr td{
-		border: 1px solid #999 !important;
-	}
 
 
 	.bentrok { 
@@ -27,12 +24,8 @@ $this->menu=array(
 		color:white;
 	}
 
-	.span-24{
-		width: 100%;
-	}
+	
 </style>
-<div class="form">
-
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'jam-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
@@ -41,23 +34,28 @@ $this->menu=array(
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
 	'method' => 'get',
+	'htmlOptions'=>array(
+		'class' => 'form-horizontal'
+	),
 	'action' => $this->createUrl('mastermahasiswa/dataortu'),
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
-	<div class="row">
-		<label>Kampus</label>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right">Kampus</label>
+		<div class="col-sm-9">
 		<?php 
 		$kampus = !empty($_GET['kampus']) ? $_GET['kampus'] : '';
 		$list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus', 'nama_kampus');
-		echo CHtml::dropDownList('kampus',$kampus,$list,array('empty' => '(Pilih Kampus)')); 
+		echo CHtml::dropDownList('kampus',$kampus,$list,array('empty' => '(Pilih Kampus)','class'=>'input')); 
 		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
 		?>
-		
-	</div>	
+		</div>
+	</div>		
 
-	<div class="row">
-		<label>Prodi</label>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right">Prodi</label>
+		<div class="col-sm-9">
 		<?php
 		$kode_prodi = !empty($_GET['kode_prodi']) ? $_GET['kode_prodi'] : '';
     
@@ -66,11 +64,12 @@ $this->menu=array(
 		echo CHtml::dropDownList('kode_prodi',$kode_prodi,$list);
 		
 		?>
-
+		</div>
 	</div>
 
-	<div class="row">
-		<label>Tahun Hijriyah Angkatan</label>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right">Tahun Angkatan</label>
+		<div class="col-sm-9">
 		<?php
 		$tahun_angkatan = !empty($_GET['tahun_angkatan']) ? $_GET['tahun_angkatan'] : '2019';
     
@@ -78,19 +77,21 @@ $this->menu=array(
 		echo CHtml::textField('tahun_angkatan',$tahun_angkatan);
 		
 		?>
-
+		</div>
 	</div>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Lihat'); ?>
+	 <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
 
-		
-		<?php echo !empty($kode_prodi) ? CHtml::link('Export ke XLS',array('mastermahasiswa/dataortu','kode_prodi'=>$kode_prodi,'kampus'=>$kampus,'tahun_angkatan'=>$tahun_angkatan,'xls'=>'y')) : ''; ?>
-	</div>
-
+          <button class="btn btn-info" type="submit">
+            <i class="ace-icon glyphicon glyphicon-check bigger-110"></i>
+            Lihat
+          </button>
+          <?php echo !empty($kode_prodi) ? CHtml::link('<i class="glyphicon glyphicon-download"></i> Export ke XLS',array('mastermahasiswa/dataortu','kode_prodi'=>$kode_prodi,'kampus'=>$kampus,'tahun_angkatan'=>$tahun_angkatan,'xls'=>'y'),['class'=>'btn btn-success']) : ''; ?>
+        
+        </div>
+      </div>
 <?php $this->endWidget(); ?>
-
-</div><!-- form -->
 
 <?php 
 
