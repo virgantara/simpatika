@@ -8,52 +8,73 @@ $this->breadcrumbs=array(
 	'Login',
 );
 ?>
-
+<style type="text/css">
+	.login-form {
+		width: 340px;
+    	margin: 50px auto;
+	}
+    .login-form form {
+    	margin-bottom: 15px;
+        background: #f7f7f7;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+    .login-form h2 {
+        margin: 0 0 15px;
+    }
+    .form-control, .btn {
+        min-height: 38px;
+        border-radius: 2px;
+    }
+    .btn {        
+        font-size: 15px;
+        font-weight: bold;
+    }
+</style>
 <h1>Login</h1>
-
-<p>Please fill out the following form with your login credentials:</p>
-
-<div class="form">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'login-form',
 	'enableClientValidation'=>true,
 	'clientOptions'=>array(
 		'validateOnSubmit'=>true,
 	),
+	'htmlOptions'=>array(
+		'class' => 'form-horizontal'
+	),
 )); ?>
+<div class="login-form">
+    <form action="/examples/actions/confirmation.php" method="post">
+        <h2 class="text-center">Log in</h2>       
+        <div class="form-group">
+            <?php echo $form->textField($model,'username',['class'=>'form-control','placeholder'=>'Username']); ?>
+			<?php echo $form->error($model,'username'); ?>
+        </div>
+        <div class="form-group">
+            <?php echo $form->passwordField($model,'password',['class'=>'form-control','placeholder'=>'Password']); ?>
+			<?php echo $form->error($model,'password'); ?>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+        </div>
+           
+    </form>
+</div>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+<?php $this->endWidget(); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'username'); ?>
-		<?php echo $form->textField($model,'username'); ?>
-		<?php echo $form->error($model,'username'); ?>
-	</div>
+	<ul class="list-group">
+		<li class="list-group-item">
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'password'); ?>
-		<?php echo $form->passwordField($model,'password'); ?>
-		<?php echo $form->error($model,'password'); ?>
-		
-	</div>
-
-
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Login'); ?>
-	</div>
-	<ul>
-		<li>
-	<div class="row">
 		Template Jadwal silakan unduh di 
 		<?php echo CHtml::link('sini',array('jadwal/template'));?>
-	</div>
+	
 </li>
-<li>
-	<div class="row">
+<li  class="list-group-item">
 		Petunjuk Unggah Jadwal silakan lihat di 
 		<?php echo CHtml::link('sini',array('jadwal/petunjuk'));?>
-	</div></li>
+	</li>
 </ul>
-<?php $this->endWidget(); ?>
+</div>
+
 </div><!-- form -->
