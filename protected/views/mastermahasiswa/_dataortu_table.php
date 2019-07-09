@@ -106,9 +106,24 @@ foreach($mahasiswas as $m)
 <td>
 	<?php 
 
+	if(count($m->ortus) > 1)
+	{
+		echo '<div class="alert alert-success">';
+		foreach($m->ortus as $ortu)
+			echo $ortu->hubungan.'<br>';
 
-	foreach($m->ortus as $ortu)
-		echo $ortu->hubungan.'<br>';
+		echo '</div>';
+	}
+	else if(count($m->ortus) > 0)
+	{
+		echo '<div class="alert alert-warning">';
+		foreach($m->ortus as $ortu)
+			echo $ortu->hubungan;
+		echo '</div>';
+	}
+	else{
+		echo '<div class="alert alert-danger">BELUM LENGKAP</div>';
+	}
 	?>
 </td>
 <td>
