@@ -1,0 +1,115 @@
+<?php
+/* @var $this JadwalController */
+/* @var $model Jadwal */
+
+$this->breadcrumbs=array(
+	'Dataortu'=>array('index'),
+);
+
+$this->menu=array(
+	// array('label'=>'List Jadwal', 'url'=>array('index')),
+	// array('label'=>'Manage Jadwal', 'url'=>array('admin')),
+);
+?>
+
+<style type="text/css">
+	table.grid tr td{
+		border: 1px solid #999 !important;
+	}
+
+
+	.bentrok { 
+	    background-color: orange; 
+	}
+
+	.updated{
+		background-color: blue;
+		color:white;
+	}
+
+	.span-24{
+		width: 100%;
+	}
+</style>
+<div class="form">
+
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'jam-form',
+	// Please note: When you enable ajax validation, make sure the corresponding
+	// controller action is handling ajax validation correctly.
+	// There is a call to performAjaxValidation() commented in generated controller code.
+	// See class documentation of CActiveForm for details on this.
+	'enableAjaxValidation'=>false,
+	'method' => 'get',
+	'action' => $this->createUrl('mastermahasiswa/dataortu'),
+)); ?>
+
+	<p class="note">Fields with <span class="required">*</span> are required.</p>
+	<div class="row">
+		<label>Kampus</label>
+		<?php 
+		$kampus = !empty($_GET['kampus']) ? $_GET['kampus'] : '';
+		$list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus', 'nama_kampus');
+		echo CHtml::dropDownList('kampus',$kampus,$list,array('empty' => '(Pilih Kampus)')); 
+		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
+		?>
+		
+	</div>	
+
+	<div class="row">
+		<label>Prodi</label>
+		<?php
+		$kode_prodi = !empty($_GET['kode_prodi']) ? $_GET['kode_prodi'] : '';
+    
+    $list = CHtml::listData(Masterprogramstudi::model()->findAll(), 'kode_prodi','nama_prodi');
+    
+		echo CHtml::dropDownList('kode_prodi',$kode_prodi,$list);
+		
+		?>
+
+	</div>
+
+	<div class="row">
+		<label>Tahun Hijriyah Angkatan</label>
+		<?php
+		$tahun_angkatan = !empty($_GET['tahun_angkatan']) ? $_GET['tahun_angkatan'] : '2019';
+    
+  
+		echo CHtml::textField('tahun_angkatan',$tahun_angkatan);
+		
+		?>
+
+	</div>
+
+	<div class="row buttons">
+		<?php echo CHtml::submitButton('Lihat'); ?>
+
+		
+		<?php echo !empty($kode_prodi) ? CHtml::link('Export ke XLS',array('mastermahasiswa/dataortu','kode_prodi'=>$kode_prodi,'kampus'=>$kampus,'tahun_angkatan'=>$tahun_angkatan,'xls'=>'y')) : ''; ?>
+	</div>
+
+<?php $this->endWidget(); ?>
+
+</div><!-- form -->
+
+<?php 
+
+if(!empty($kode_prodi))
+{
+?>
+<?php 
+	$this->renderPartial('_dataortu_table',[
+		'mahasiswas' => $mahasiswas,
+		'kdprodi' => $kdprodi,
+		'xls' => $xls,
+		'mprodi' => $mprodi,
+		'list_agama' => $list_agama,
+		'list_pendidikan' => $list_pendidikan,
+		'list_pekerjaan'=>$list_pekerjaan,
+		'list_penghasilan' => $list_penghasilan,
+		'list_keadaan' => $list_keadaan
+	]);
+?>
+<?php 
+}
+?>

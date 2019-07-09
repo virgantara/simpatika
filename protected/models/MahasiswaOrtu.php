@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "simak_mahasiswa_ortu".
+ * This is the model class for table "{{mahasiswa_ortu}}".
  *
- * The followings are the available columns in table 'simak_mahasiswa_ortu':
+ * The followings are the available columns in table '{{mahasiswa_ortu}}':
  * @property integer $id
  * @property string $nim
  * @property string $hubungan
@@ -21,17 +21,18 @@
  * @property string $telepon
  * @property string $hp
  * @property string $email
+ *
+ * The followings are the available model relations:
+ * @property Mastermahasiswa $nim0
  */
 class MahasiswaOrtu extends CActiveRecord
 {
-
-	public $fullalamat;
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'simak_mahasiswa_ortu';
+		return '{{mahasiswa_ortu}}';
 	}
 
 	/**
@@ -42,7 +43,7 @@ class MahasiswaOrtu extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('pekerjaan, penghasilan', 'required'),
+			array('pekerjaan, penghasilan, nama, agama, pendidikan, hidup', 'required'),
 			array('nim, kota, propinsi, negara, telepon, hp, email', 'length', 'max'=>20),
 			array('hubungan', 'length', 'max'=>4),
 			array('nama', 'length', 'max'=>50),
@@ -63,7 +64,7 @@ class MahasiswaOrtu extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'mahasiswa' => array(self::BELONGS_TO, 'Mastermahasiswa', 'nim'),
+			'nim0' => array(self::BELONGS_TO, 'Mastermahasiswa', 'nim'),
 		);
 	}
 
@@ -98,7 +99,6 @@ class MahasiswaOrtu extends CActiveRecord
 		return parent::afterFind();
 	}
 
-
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
@@ -117,8 +117,6 @@ class MahasiswaOrtu extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('nim',$this->nim,true);
 		$criteria->compare('hubungan',$this->hubungan,true);
 		$criteria->compare('nama',$this->nama,true);
 		$criteria->compare('agama',$this->agama,true);
@@ -134,6 +132,9 @@ class MahasiswaOrtu extends CActiveRecord
 		$criteria->compare('telepon',$this->telepon,true);
 		$criteria->compare('hp',$this->hp,true);
 		$criteria->compare('email',$this->email,true);
+
+		$criteria->compare('nim',$this->nim);
+		
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
