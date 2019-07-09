@@ -50,6 +50,8 @@ echo CHtml::hiddenField('tahun_angkatan',$tahun_angkatan);
       
       <th>Tahun Masuk</th>	
       <th>Agama</th>
+      <th>Data Ortu<br>
+      Yg Sudah</th>
       <th>Opsi</th>
     </tr>
   </thead>
@@ -101,7 +103,14 @@ foreach($mahasiswas as $m)
 
 <td><?=substr($m->nim_mhs, 2,4)?></td>
 <td width="15%"><?=$agama;?></td>
+<td>
+	<?php 
 
+
+	foreach($m->ortus as $ortu)
+		echo $ortu->hubungan.'<br>';
+	?>
+</td>
 <td>
 	<a class="btn btn-info btn-xs btn-block" href="<?=Yii::app()->createUrl('mahasiswaOrtu/create',[
 	'kode_prodi'=>$kode_prodi,

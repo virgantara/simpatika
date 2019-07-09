@@ -25,10 +25,12 @@
  * The followings are the available model relations:
  * @property Mastermahasiswa $nim0
  * @property Pilihan $agama0
+ * @property Pilihan $pendidikan0
+ * @property Pilihan $pekerjaan0
+ * @property Pilihan $penghasilan0
  */
 class MahasiswaOrtu extends CActiveRecord
 {
-	public $fullalamat;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -45,7 +47,6 @@ class MahasiswaOrtu extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('pekerjaan, penghasilan', 'required'),
 			array('nim, kota, propinsi, negara, telepon, hp, email', 'length', 'max'=>20),
 			array('hubungan', 'length', 'max'=>4),
 			array('nama', 'length', 'max'=>50),
@@ -67,6 +68,9 @@ class MahasiswaOrtu extends CActiveRecord
 		return array(
 			'nim0' => array(self::BELONGS_TO, 'Mastermahasiswa', 'nim'),
 			'agama0' => array(self::BELONGS_TO, 'Pilihan', 'agama','condition'=>'kode = 51'),
+			'pendidikan0' => array(self::BELONGS_TO, 'Pilihan', 'pendidikan','condition'=>'kode = "01"'),
+			'pekerjaan0' => array(self::BELONGS_TO, 'Pilihan', 'pekerjaan','condition'=>'kode = 55'),
+			'penghasilan0' => array(self::BELONGS_TO, 'Pilihan', 'penghasilan','condition'=>'kode = 69'),
 		);
 	}
 
@@ -96,11 +100,6 @@ class MahasiswaOrtu extends CActiveRecord
 		);
 	}
 
-	protected function afterFind(){
-		$this->fullalamat = $this->alamat.' '.$this->kota.' '.$this->propinsi.' '.$this->negara;
-		return parent::afterFind();
-	}
-
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
@@ -119,6 +118,8 @@ class MahasiswaOrtu extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->compare('id',$this->id);
+		$criteria->compare('nim',$this->nim,true);
 		$criteria->compare('hubungan',$this->hubungan,true);
 		$criteria->compare('nama',$this->nama,true);
 		$criteria->compare('agama',$this->agama,true);
@@ -134,9 +135,6 @@ class MahasiswaOrtu extends CActiveRecord
 		$criteria->compare('telepon',$this->telepon,true);
 		$criteria->compare('hp',$this->hp,true);
 		$criteria->compare('email',$this->email,true);
-
-		$criteria->condition = 'nim = '.$this->nim;
-		
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

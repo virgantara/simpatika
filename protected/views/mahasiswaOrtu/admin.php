@@ -37,21 +37,47 @@ $('.search-form form').submit(function(){
 		'nim',
 		'hubungan',
 		'nama',
-		'agama',
-		'pendidikan',
-		'pekerjaan',
-		'penghasilan',
-		'hidup',
+		[
+			'header' => 'Agama',
+			'value' => function($data){
+				return $data->agama0->label ?: '';
+			}
+		],
+		[
+			'header' => 'Pendidikan',
+			'value' => function($data){
+				return $data->pendidikan0->label ?: '';
+			}
+		],
+		[
+			'header' => 'Pekerjaan',
+			'value' => function($data){
+				return $data->pekerjaan0->label ?: '';
+			}
+		],
+		[
+			'header' => 'Penghasilan',
+			'value' => function($data){
+				return $data->penghasilan0->label ?: '';
+			}
+		],
+		// [
+		// 	'header' => 'Status',
+		// 	'value' => function($data){
+		// 		return $data->hidup0->label ?: '';
+		// 	}
+		// ],
 		'alamat',
-		'kota',
-		'propinsi',
-		'negara',
+		// 'kota',
+		// 'propinsi',
+		// 'negara',
 		'telepon',
 		'hp',
 		'email',
 		
 		array(
 			'class'=>'CButtonColumn',
+			'template' => '{delete}'
 		),
 	),
 	'itemsCssClass'=>'table table-bordered table-hover table-striped',
