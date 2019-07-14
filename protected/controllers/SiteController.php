@@ -62,6 +62,7 @@ class SiteController extends Controller
 	{
 	
 		$model=new User;
+		$this->layout = '//layouts/main_login';
 
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')

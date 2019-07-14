@@ -13,7 +13,106 @@ class MyRest extends CApplicationComponent
 	public $baseurlVClaim = '';
 	public $baseurlAplicare = '';
 
-	
+	public static function getListNegara($params){
+		$host = Yii::app()->rest->baseurl_apigateway;
+
+		$url = $host."/feeder/negara/list";
+		$q = $params['key'];
+		$params['filter'] = "nm_negara ilike '%".$q."%' ";
+		$params['limit'] = 10;
+
+		$hasil = null;
+
+		$api = new RestClient;
+		$headers = [
+			'Content-Type' => 'application/x-www-form-urlencoded'
+		];
+		$result = $api->post($url, $params, $headers);
+		
+		try{
+			
+			$hasil = $result->decode_response();
+
+		}
+
+		catch(RestClientException  $e){
+			print_r($e->getMessage());
+			exit;
+			// throw new RestClientException;
+			$hasil = null;
+		}
+
+
+		
+		return $hasil;
+	}
+
+	public static function getListWilayahOne($params){
+		$host = Yii::app()->rest->baseurl_apigateway;
+
+		$url = $host."/feeder/wil/get";
+		$q = $params['key'];
+		$params['filter'] = "id_wil = '".$q."'";
+
+		$hasil = null;
+
+		$api = new RestClient;
+		$headers = [
+			'Content-Type' => 'application/x-www-form-urlencoded'
+		];
+		$result = $api->post($url, $params, $headers);
+		
+		try{
+			
+			$hasil = $result->decode_response();
+			
+		}
+
+		catch(RestClientException  $e){
+			print_r($e->getMessage());
+			exit;
+			// throw new RestClientException;
+			$hasil = null;
+		}
+
+
+		
+		return $hasil;
+	}
+
+	public static function getListWilayah($params){
+		$host = Yii::app()->rest->baseurl_apigateway;
+
+		$url = $host."/feeder/wil/list";
+		$q = $params['key'];
+		$params['filter'] = "nm_wil ilike '%".$q."%' ";
+		$params['limit'] = 10;
+
+		$hasil = null;
+
+		$api = new RestClient;
+		$headers = [
+			'Content-Type' => 'application/x-www-form-urlencoded'
+		];
+		$result = $api->post($url, $params, $headers);
+		
+		try{
+			
+			$hasil = $result->decode_response();
+
+		}
+
+		catch(RestClientException  $e){
+			print_r($e->getMessage());
+			exit;
+			// throw new RestClientException;
+			$hasil = null;
+		}
+
+
+		
+		return $hasil;
+	}
 
 	public static function getListDosenJadwal($params){
 		$host = Yii::app()->rest->baseurl_apigateway;

@@ -43,12 +43,11 @@ echo CHtml::hiddenField('tahun_angkatan',$tahun_angkatan);
       <th>Tmpt Lhr</th>
       <th>Tgl Lhr</th>
       <th>JK</th>
-      <th width="15%">ALAMAT</th>
+      <th width="15%">Kecamatan</th>
+      <th width="15%">Kota</th>
+      <th width="15%">Propinsi</th>
       <th width="5%">KTP</th>
-      <th width="5%">Prodi</th>
-      <th width="15%">Fakultas</th>
-      
-      <th>Tahun Masuk</th>	
+      <th width="5%">Negara</th>
       <th>Agama</th>
       <th>Data Ortu<br>
       Yg Sudah</th>
@@ -93,15 +92,24 @@ foreach($mahasiswas as $m)
 </td>
 <td><?php echo $m->jenis_kelamin;?></td>
 
-<td width="15%"><?= $m->alamat.' '.$m->rt.' '.$m->rw.' '.$m->dusun.' '.$m->desa.' '.$m->kecamatan.' '.$m->kabupaten.' '.$m->provinsi;?></td>
-
+<td width="15%">
+	<input type="text" class="input kecamatan"/>
+	<input type="text" class="input id_kecamatan" value="<?=$m->kecamatan_feeder ?: '';?>" name="id_kecamatan_<?=$m->nim_mhs;?>" />
+	<input type="hidden" class="input id_induk"/>
+</td>
+<td width="15%">
+	<input type="text" readonly class="input kota"/>
+	<input type="hidden" class="input id_induk_kota"/>
+</td>
+<td width="15%"><input readonly type="text" class="input propinsi"/></td>
 <td width="5%">
 <input type="text" size="10" name="ktp_<?=$m->nim_mhs;?>" value="<?=$m->ktp ?: '';?>" />
 </td>
-<td><?=$m->prodi->nama_prodi;?></td>
-<td><?=$m->prodi->fakultas->nama_fakultas;?></td>
+<td>
+	<input type="text" size="10" class="negara input" />
+<input type="hidden" size="10" name="id_negara_<?=$m->nim_mhs;?>" value="<?=$m->ktp ?: '';?>" />
+</td>
 
-<td><?=substr($m->nim_mhs, 2,4)?></td>
 <td width="15%"><?=$agama;?></td>
 <td>
 	<?php 
@@ -169,5 +177,97 @@ function popitup(url,label) {
 			var url = $(this).attr('href');
 	        popitup(url,'List Ortu');
 		});
+
+		$('.negara').autocomplete({
+	      minLength:1,
+	      select:function(event, ui){
+	      	var obj = $(this);
+	        obj.next().val(ui.item.id);
+	        
+	      },
+	      
+	      focus: function (event, ui) {
+	      	$(this).next().val(ui.item.id);
+	       //  $('#kode_dosen').val(ui.item.id);
+	       // $('#nama_dosen').val(ui.item.value);
+	      },
+	      source:function(request, response) {
+	        $.ajax({
+	                url: "<?php echo Yii::app()->createUrl('mastermahasiswa/AjaxFindNegara');?>",
+	                dataType: "json",
+	                data: {
+	                    term: request.term,
+	                },
+	                success: function (data) {
+	                    response(data);
+	                }
+	            })
+	        },
+	       
+	  	}); 
+
+		$('.kecamatan').autocomplete({
+	      minLength:1,
+	      select:function(event, ui){
+	      	var obj = $(this);
+	        obj.next().val(ui.item.id);
+	        obj.next().val(ui.item.id_induk_wilayah);
+	        
+	        $.ajax({
+                url: "<?php echo Yii::app()->createUrl('mastermahasiswa/AjaxFindWilayahOne');?>",
+                dataType: "json",
+                data: {
+                    term: ui.item.id_induk_wilayah,
+                },
+                beforeSend : function(){
+                	var kota = obj.parent().next().find('.kota');
+                    kota.val('');
+                },
+                success: function (data) {
+                	var kota = obj.parent().next().find('.kota');
+                    kota.val(data[0].value);
+                    var induk_kota = kota.next();
+                    induk_kota.val(data[0].id_induk_wilayah)
+
+                    $.ajax({
+		                url: "<?php echo Yii::app()->createUrl('mastermahasiswa/AjaxFindWilayahOne');?>",
+		                dataType: "json",
+		                data: {
+		                    term: induk_kota.val(),
+		                },
+		                beforeSend : function(){
+		                	var prop = obj.parent().next().next().find('.propinsi');
+		                    prop.val('');
+		                },
+		                success: function (data) {
+		                	var prop = obj.parent().next().next().find('.propinsi');
+		                    prop.val(data[0].value);
+		                }
+		            });
+                }
+            });
+	        
+	      },
+	      
+	      focus: function (event, ui) {
+	      	$(this).next().val(ui.item.id);
+	      	$(this).next().val(ui.item.id_induk_wilayah);
+	       //  $('#kode_dosen').val(ui.item.id);
+	       // $('#nama_dosen').val(ui.item.value);
+	      },
+	      source:function(request, response) {
+	        $.ajax({
+	                url: "<?php echo Yii::app()->createUrl('mastermahasiswa/AjaxFindWilayah');?>",
+	                dataType: "json",
+	                data: {
+	                    term: request.term,
+	                },
+	                success: function (data) {
+	                    response(data);
+	                }
+	            })
+	        },
+	       
+	  	}); 
 	});
 </script>

@@ -1,82 +1,101 @@
-<?php
-/* @var $this SiteController */
-/* @var $model LoginForm */
-/* @var $form CActiveForm  */
+    <div class="main-content">
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="login-container">
+                            <div class="center">
+                                <h1>
+                                    <i class="ace-icon fa fa-leaf green"></i>
+                                    <span class="red">Simpatika</span>
+                                    <span class="white" id="id-text2">Application</span>
+                                </h1>
+                                <h4 class="light-blue" id="id-company-text">&copy; Universitas Darussalam Gontor</h4>
+                            </div>
 
-$this->pageTitle=Yii::app()->name . ' - Login';
-$this->breadcrumbs=array(
-	'Login',
-);
-?>
-<style type="text/css">
-	.login-form {
-		width: 340px;
-    	margin: 50px auto;
-	}
-    .login-form form {
-    	margin-bottom: 15px;
-        background: #f7f7f7;
-        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-        padding: 30px;
-    }
-    .login-form h2 {
-        margin: 0 0 15px;
-    }
-    .form-control, .btn {
-        min-height: 38px;
-        border-radius: 2px;
-    }
-    .btn {        
-        font-size: 15px;
-        font-weight: bold;
-    }
-</style>
-<h1>Login</h1>
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'login-form',
-	'enableClientValidation'=>true,
-	'clientOptions'=>array(
-		'validateOnSubmit'=>true,
-	),
-	'htmlOptions'=>array(
-		'class' => 'form-horizontal'
-	),
+                            <div class="space-6"></div>
+
+                            <div class="position-relative">
+                                <div id="login-box" class="login-box visible widget-box no-border">
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <h4 class="header blue lighter bigger">
+                                                <i class="ace-icon fa fa-coffee green"></i>
+                                                Please Enter Your Information
+                                            </h4>
+
+                                            <div class="space-6"></div>
+
+                                           <?php $form=$this->beginWidget('CActiveForm', array(
+    'id'=>'login-form',
+    'enableClientValidation'=>true,
+    'clientOptions'=>array(
+        'validateOnSubmit'=>true,
+    ),
+    'htmlOptions'=>array(
+        'class' => 'form-horizontal'
+    ),
 )); ?>
-<div class="login-form">
-    <form action="/examples/actions/confirmation.php" method="post">
-        <h2 class="text-center">Log in</h2>       
-        <div class="form-group">
-            <?php echo $form->textField($model,'username',['class'=>'form-control','placeholder'=>'Username']); ?>
-			<?php echo $form->error($model,'username'); ?>
-        </div>
-        <div class="form-group">
-            <?php echo $form->passwordField($model,'password',['class'=>'form-control','placeholder'=>'Password']); ?>
-			<?php echo $form->error($model,'password'); ?>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-block">Log in</button>
-        </div>
-           
-    </form>
-</div>
+                                                <fieldset>
+                                                    <label class="block clearfix">
+                                                        <span class="block input-icon input-icon-right">
+                                                           <?php echo $form->textField($model,'username',['class'=>'form-control','placeholder'=>'Username']); ?>
+            <?php echo $form->error($model,'username'); ?>
+                                                            <i class="ace-icon fa fa-user"></i>
+                                                        </span>
+                                                    </label>
 
+                                                    <label class="block clearfix">
+                                                        <span class="block input-icon input-icon-right">
+                                                          <?php echo $form->passwordField($model,'password',['class'=>'form-control','placeholder'=>'Password']); ?>
+            <?php echo $form->error($model,'password'); ?>
+                                                            <i class="ace-icon fa fa-lock"></i>
+                                                        </span>
+                                                    </label>
+
+                                                    <div class="space"></div>
+
+                                                    <div class="clearfix">
+                                                        
+                                                        <button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
+                                                            <i class="ace-icon fa fa-key"></i>
+                                                            <span class="bigger-110">Login</span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="space-4"></div>
+                                                </fieldset>
+                                           
 <?php $this->endWidget(); ?>
+                                            <div class="social-or-login center">
+                                                <span class="bigger-110">Or Login Using</span>
+                                            </div>
 
-	<div class="row">
-		<div class="col-xs-12  col-lg-4"></div>
-		<div class="col-xs-12  col-lg-4" style="text-align: center;">
-	<ul class="list-group">
-		<li class="list-group-item">
+                                            <div class="space-6"></div>
 
-		Template Jadwal silakan unduh di 
-		<?php echo CHtml::link('sini',array('jadwal/template'));?>
-	
-</li>
-<li  class="list-group-item">
-		Petunjuk Unggah Jadwal silakan lihat di 
-		<?php echo CHtml::link('sini',array('jadwal/petunjuk'));?>
-	</li>
-</ul>
-</div>
-<div class="col-xs-12 col-lg-4"></div>
-</div><!-- form -->
+                                            <div class="social-login center">
+                                                <a class="btn btn-primary">
+                                                    <i class="ace-icon fa fa-facebook"></i>
+                                                </a>
+
+                                                <a class="btn btn-info">
+                                                    <i class="ace-icon fa fa-twitter"></i>
+                                                </a>
+
+                                                <a class="btn btn-danger">
+                                                    <i class="ace-icon fa fa-google-plus"></i>
+                                                </a>
+                                            </div>
+                                        </div><!-- /.widget-main -->
+
+                                        
+                                    </div><!-- /.widget-body -->
+                                </div><!-- /.login-box -->
+
+                            
+                                
+                            </div><!-- /.position-relative -->
+
+                          
+                        </div>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.main-content -->

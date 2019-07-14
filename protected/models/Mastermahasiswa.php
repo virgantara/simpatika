@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "simak_mastermahasiswa".
+ * This is the model class for table "{{mastermahasiswa}}".
  *
- * The followings are the available columns in table 'simak_mastermahasiswa':
+ * The followings are the available columns in table '{{mastermahasiswa}}':
  * @property integer $id
  * @property string $kode_pt
  * @property string $kode_fakultas
@@ -55,12 +55,15 @@
  * @property string $kode_pos
  * @property string $desa
  * @property string $kecamatan
+ * @property string $kecamatan_feeder
  * @property string $jenis_tinggal
  * @property string $penerima_kps
  * @property string $no_kps
  * @property string $provinsi
  * @property string $kabupaten
+ * @property string $status_warga
  * @property string $warga_negara
+ * @property string $warga_negara_feeder
  * @property string $status_sipil
  * @property string $agama
  * @property string $gol_darah
@@ -68,17 +71,25 @@
  * @property string $tgl_sk_yudisium
  * @property integer $status_mahasiswa
  * @property string $kampus
+ * @property string $jur_thn_smta
+ * @property integer $is_synced
+ * @property string $kode_pd
+ * @property string $va_code
+ * @property string $created_at
+ * @property string $updated_at
+ *
+ * The followings are the available model relations:
+ * @property MahasiswaOrtu[] $mahasiswaOrtus
+ * @property Masterprogramstudi $kodeProdi
  */
 class Mastermahasiswa extends CActiveRecord
 {
-
-	public $uploadedFile;
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'simak_mastermahasiswa';
+		return '{{mastermahasiswa}}';
 	}
 
 	/**
@@ -90,11 +101,11 @@ class Mastermahasiswa extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nim_mhs, nama_mahasiswa', 'required'),
-			array('status_bayar, status_mahasiswa', 'numerical', 'integerOnly'=>true),
+			array('status_bayar, status_mahasiswa, is_synced', 'numerical', 'integerOnly'=>true),
 			array('kode_pt, asal_prodi, kode_pos', 'length', 'max'=>6),
 			array('kode_fakultas, kode_prodi, kode_jenjang_studi, jenis_kelamin, semester_awal, batas_studi, status_awal, asal_jenjang_studi, semester, rt, rw, kabupaten', 'length', 'max'=>5),
 			array('nim_mhs, nama_asal_pt, telepon, hp', 'length', 'max'=>25),
-			array('nama_mahasiswa, tempat_lahir, asal_propinsi, status_aktivitas, email', 'length', 'max'=>50),
+			array('nama_mahasiswa, tempat_lahir, asal_propinsi, status_aktivitas, email, status_warga', 'length', 'max'=>50),
 			array('tahun_masuk', 'length', 'max'=>4),
 			array('jml_sks_diakui', 'length', 'max'=>45),
 			array('nim_asal, kode_biaya_studi, kode_pekerjaan, tempat_kerja, kode_pt_kerja', 'length', 'max'=>55),
@@ -105,14 +116,15 @@ class Mastermahasiswa extends CActiveRecord
 			array('nip_co_promotor3', 'length', 'max'=>33),
 			array('photo_mahasiswa, alamat', 'length', 'max'=>255),
 			array('berat, tinggi', 'length', 'max'=>3),
-			array('desa, kecamatan, warga_negara, status_sipil', 'length', 'max'=>100),
-			array('jenis_tinggal, no_kps, agama', 'length', 'max'=>20),
+			array('desa, kecamatan, warga_negara, warga_negara_feeder, status_sipil, jur_thn_smta, kode_pd', 'length', 'max'=>100),
+			array('kecamatan_feeder', 'length', 'max'=>10),
+			array('jenis_tinggal, no_kps, agama, va_code', 'length', 'max'=>20),
 			array('penerima_kps, masuk_kelas', 'length', 'max'=>1),
 			array('provinsi, gol_darah, kampus', 'length', 'max'=>2),
-			array('tgl_lahir, tgl_masuk, tgl_lulus, keterangan, tgl_sk_yudisium', 'safe'),
+			array('tgl_lahir, tgl_masuk, tgl_lulus, keterangan, tgl_sk_yudisium, created_at, updated_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, nim_mhs, nama_mahasiswa, tempat_lahir, tgl_lahir, jenis_kelamin, tahun_masuk, semester_awal, batas_studi, asal_propinsi, tgl_masuk, tgl_lulus, status_aktivitas, status_awal, jml_sks_diakui, nim_asal, asal_pt, nama_asal_pt, asal_jenjang_studi, asal_prodi, kode_biaya_studi, kode_pekerjaan, tempat_kerja, kode_pt_kerja, kode_ps_kerja, nip_promotor, nip_co_promotor1, nip_co_promotor2, nip_co_promotor3, nip_co_promotor4, photo_mahasiswa, semester, keterangan, status_bayar, telepon, hp, email, alamat, berat, tinggi, ktp, rt, rw, dusun, kode_pos, desa, kecamatan, jenis_tinggal, penerima_kps, no_kps, provinsi, kabupaten, warga_negara, status_sipil, agama, gol_darah, masuk_kelas, tgl_sk_yudisium, status_mahasiswa, kampus', 'safe', 'on'=>'search'),
+			array('id, kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, nim_mhs, nama_mahasiswa, tempat_lahir, tgl_lahir, jenis_kelamin, tahun_masuk, semester_awal, batas_studi, asal_propinsi, tgl_masuk, tgl_lulus, status_aktivitas, status_awal, jml_sks_diakui, nim_asal, asal_pt, nama_asal_pt, asal_jenjang_studi, asal_prodi, kode_biaya_studi, kode_pekerjaan, tempat_kerja, kode_pt_kerja, kode_ps_kerja, nip_promotor, nip_co_promotor1, nip_co_promotor2, nip_co_promotor3, nip_co_promotor4, photo_mahasiswa, semester, keterangan, status_bayar, telepon, hp, email, alamat, berat, tinggi, ktp, rt, rw, dusun, kode_pos, desa, kecamatan, kecamatan_feeder, jenis_tinggal, penerima_kps, no_kps, provinsi, kabupaten, status_warga, warga_negara, warga_negara_feeder, status_sipil, agama, gol_darah, masuk_kelas, tgl_sk_yudisium, status_mahasiswa, kampus, jur_thn_smta, is_synced, kode_pd, va_code, created_at, updated_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -125,7 +137,7 @@ class Mastermahasiswa extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'ortus' => array(self::HAS_MANY, 'MahasiswaOrtu', 'nim'),
-			'prodi' => array(self::BELONGS_TO, 'Masterprogramstudi', 'kode_prodi'),
+			'kodeProdi' => array(self::BELONGS_TO, 'Masterprogramstudi', 'kode_prodi'),
 		);
 	}
 
@@ -186,12 +198,15 @@ class Mastermahasiswa extends CActiveRecord
 			'kode_pos' => 'Kode Pos',
 			'desa' => 'Desa',
 			'kecamatan' => 'Kecamatan',
+			'kecamatan_feeder' => 'Kecamatan Feeder',
 			'jenis_tinggal' => 'Jenis Tinggal',
 			'penerima_kps' => 'Penerima Kps',
 			'no_kps' => 'No Kps',
 			'provinsi' => 'Provinsi',
 			'kabupaten' => 'Kabupaten',
+			'status_warga' => 'Status Warga',
 			'warga_negara' => 'Warga Negara',
+			'warga_negara_feeder' => 'Warga Negara Feeder',
 			'status_sipil' => 'Status Sipil',
 			'agama' => 'Agama',
 			'gol_darah' => 'Gol Darah',
@@ -199,7 +214,12 @@ class Mastermahasiswa extends CActiveRecord
 			'tgl_sk_yudisium' => 'Tgl Sk Yudisium',
 			'status_mahasiswa' => 'Status Mahasiswa',
 			'kampus' => 'Kampus',
-			'prodi.singkatan' => 'Prodi'
+			'jur_thn_smta' => 'Jur Thn Smta',
+			'is_synced' => 'Is Synced',
+			'kode_pd' => 'Kode Pd',
+			'va_code' => 'Va Code',
+			'created_at' => 'Created At',
+			'updated_at' => 'Updated At',
 		);
 	}
 
@@ -272,12 +292,15 @@ class Mastermahasiswa extends CActiveRecord
 		$criteria->compare('kode_pos',$this->kode_pos,true);
 		$criteria->compare('desa',$this->desa,true);
 		$criteria->compare('kecamatan',$this->kecamatan,true);
+		$criteria->compare('kecamatan_feeder',$this->kecamatan_feeder,true);
 		$criteria->compare('jenis_tinggal',$this->jenis_tinggal,true);
 		$criteria->compare('penerima_kps',$this->penerima_kps,true);
 		$criteria->compare('no_kps',$this->no_kps,true);
 		$criteria->compare('provinsi',$this->provinsi,true);
 		$criteria->compare('kabupaten',$this->kabupaten,true);
+		$criteria->compare('status_warga',$this->status_warga,true);
 		$criteria->compare('warga_negara',$this->warga_negara,true);
+		$criteria->compare('warga_negara_feeder',$this->warga_negara_feeder,true);
 		$criteria->compare('status_sipil',$this->status_sipil,true);
 		$criteria->compare('agama',$this->agama,true);
 		$criteria->compare('gol_darah',$this->gol_darah,true);
@@ -285,7 +308,12 @@ class Mastermahasiswa extends CActiveRecord
 		$criteria->compare('tgl_sk_yudisium',$this->tgl_sk_yudisium,true);
 		$criteria->compare('status_mahasiswa',$this->status_mahasiswa);
 		$criteria->compare('kampus',$this->kampus,true);
-		$criteria->order = 'nim_mhs DESC';
+		$criteria->compare('jur_thn_smta',$this->jur_thn_smta,true);
+		$criteria->compare('is_synced',$this->is_synced);
+		$criteria->compare('kode_pd',$this->kode_pd,true);
+		$criteria->compare('va_code',$this->va_code,true);
+		$criteria->compare('created_at',$this->created_at,true);
+		$criteria->compare('updated_at',$this->updated_at,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

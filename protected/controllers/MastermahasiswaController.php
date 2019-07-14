@@ -32,7 +32,7 @@ class MastermahasiswaController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','uploadPA','ortu','dataortu','updatebio'),
+				'actions'=>array('create','update','uploadPA','ortu','dataortu','updatebio','ajaxFindWilayah','ajaxFindWilayahOne','ajaxFindNegara'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,6 +43,74 @@ class MastermahasiswaController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionAjaxFindNegara()
+	{
+
+		$params = ['key' => $_GET['term']];
+		$hasil = Yii::app()->rest->getListNegara($params);
+			
+
+
+		$result = [];
+		if(!empty($hasil->values))
+		{
+			foreach($hasil->values as $item)
+			{
+				$result[] = [
+					'id' => $item->id_negara,
+					'value' => $item->id_negara.' - '.$item->nm_negara,
+				];
+			}
+		}
+
+		echo CJSON::encode($result);
+	}
+
+	public function actionAjaxFindWilayahOne()
+	{
+
+		$params = ['key' => $_GET['term']];
+		$hasil = Yii::app()->rest->getListWilayahOne($params);
+
+
+		$result = [];
+		if(!empty($hasil->values))
+		{
+			$item = $hasil->values;
+			$result[] = [
+				'id' => $item->id_wil,
+				'value' => $item->nm_wil,
+				'id_induk_wilayah' => $item->id_induk_wilayah
+			];
+		}
+
+		echo CJSON::encode($result);
+	}
+
+	public function actionAjaxFindWilayah()
+	{
+
+		$params = ['key' => $_GET['term']];
+		$hasil = Yii::app()->rest->getListWilayah($params);
+			
+
+
+		$result = [];
+		if(!empty($hasil->values))
+		{
+			foreach($hasil->values as $item)
+			{
+				$result[] = [
+					'id' => $item->id_wil,
+					'value' => $item->id_wil.' - '.$item->nm_wil,
+					'id_induk_wilayah' => $item->id_induk_wilayah
+				];
+			}
+		}
+
+		echo CJSON::encode($result);
 	}
 
 	public function actionUpdatebio()
@@ -72,7 +140,12 @@ class MastermahasiswaController extends Controller
 				if($m->tgl_lahir == '0000-00-00'){
 					$m->tgl_lahir = NULL;
 				}
-
+				if(!empty($_POST['id_kecamatan_'.$m->nim_mhs]))
+					$m->kecamatan_feeder = $_POST['id_kecamatan_'.$m->nim_mhs];
+				
+				if(!empty($_POST['id_negara_'.$m->nim_mhs]))
+					$m->warga_negara_feeder = $_POST['id_negara_'.$m->nim_mhs];
+				
 				$m->tempat_lahir = $_POST['tempat_lahir_'.$m->nim_mhs];
 				$m->ktp = $_POST['ktp_'.$m->nim_mhs];
 				$m->save();
