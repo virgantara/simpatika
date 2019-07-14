@@ -66,7 +66,7 @@ return array(
 			'secretkey' => '8uS2861A18',
 			// 'id' => '25946',
 			// 'secretkey' => '0kX4792E53',
-			'baseurl_apigateway' => 'http://localhost:1926',
+			'baseurl_apigateway' => 'http://117.53.46.102:1926',
 		),
 		// database settings are configured in database.php
 		'db'=>require(dirname(__FILE__).'/database.php'),

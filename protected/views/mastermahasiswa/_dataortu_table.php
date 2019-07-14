@@ -94,7 +94,7 @@ foreach($mahasiswas as $m)
 
 <td width="15%">
 	<input type="text" class="input kecamatan"/>
-	<input type="text" class="input id_kecamatan" value="<?=$m->kecamatan_feeder ?: '';?>" name="id_kecamatan_<?=$m->nim_mhs;?>" />
+	<input type="hidden" class="input id_kecamatan" value="<?=$m->kecamatan_feeder ?: '';?>" name="id_kecamatan_<?=$m->nim_mhs;?>" />
 	<input type="hidden" class="input id_induk"/>
 </td>
 <td width="15%">
