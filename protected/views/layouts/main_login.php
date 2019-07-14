@@ -33,7 +33,7 @@
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
-<body class="login-layout blur-login" style="background:url('<?=Yii::app()->baseUrl;?>/images/bg.jpg');background-repeat: no-repeat;background-size: cover">
+<body class="login-layout blur-login"  style="background:url('<?=Yii::app()->baseUrl;?>/images/bg.jpg');background-repeat: no-repeat;background-size: cover">
 		
 
 		<!-- basic scripts -->
