@@ -10,7 +10,7 @@
       -ms-flex-direction: column;
           flex-direction: column;
   font-size: 10px;
-  width: 100%;
+  width: 500px;
   height: 400px;
   max-width: 700px;
   max-height: 460px;
@@ -123,6 +123,8 @@ var signaturePad = new SignaturePad(canvas, {
   backgroundColor: 'rgb(255, 255, 255)'
 });
 
+
+
 // Adjust canvas coordinate space taking into account pixel ratio,
 // to make it look crisp on mobile devices.
 // This also causes canvas to be cleared.
@@ -130,8 +132,8 @@ function resizeCanvas() {
   // When zoomed out to less than 100%, for some very strange reason,
   // some browsers report devicePixelRatio as less than 1
   // and only part of the canvas is cleared then.
-  var ratio =  Math.max(window.devicePixelRatio || 1, 1);
-
+  var ratio =  1;//Math.max(window.devicePixelRatio || 1, 1);
+  // console.log(ratio);
   // This part causes the canvas to be cleared
   canvas.width = canvas.offsetWidth * ratio;
   canvas.height = canvas.offsetHeight * ratio;
@@ -194,7 +196,7 @@ savePNGButton.addEventListener("click", function (event) {
   if (signaturePad.isEmpty()) {
     alert("Please provide a signature first.");
   } else {
-    var dataURL = signaturePad.toDataURL();
+    var dataURL = signaturePad;
     
     var obj = new Object;
     obj.signature = dataURL;
@@ -214,4 +216,5 @@ savePNGButton.addEventListener("click", function (event) {
     // download(dataURL, "signature.png");
   }
 });
+
   </script>
