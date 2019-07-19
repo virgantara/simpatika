@@ -1,0 +1,23 @@
+{
+  "name": "simpatika",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.php",
+  "dependencies": {
+    "signature_pad": "^3.0.0-beta.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/virgantara/simpatika.git"
+  },
+  "author": "Oddy Virgantara Putra",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/virgantara/simpatika/issues"
+  },
+  "homepage": "https://github.com/virgantara/simpatika#readme"
+}

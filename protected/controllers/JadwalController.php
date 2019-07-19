@@ -321,7 +321,14 @@ class JadwalController extends Controller
 		if(!empty($_POST['kode_prodi']))
 		{
 			$kode_prodi = $_POST['kode_prodi'];
-			
+			$ttd = Settings::model()->findByAttributes(['name'=>'site.ttd']);
+			if(empty($ttd))
+			{
+				$ttd = new Settings;
+				$ttd->module = 'core';
+				$ttd->name = 'site.ttd';
+
+			}
 			$listdosenprodi = Masterdosen::model()->findAllByAttributes(array(
 				'kode_prodi'=>$kode_prodi,
 				// 'nidn' => 'GN160589'
@@ -389,6 +396,7 @@ class JadwalController extends Controller
 					'model'=>$model,
 					'listkelas' => $listkelas,
 					// 'dosen' => $dosen,
+					'ttd' => $ttd,
 					'list_mk' => $list_mk,
 					'setting_sk' => $setting_sk
 				));
@@ -402,7 +410,7 @@ class JadwalController extends Controller
 			ob_end_clean();
 			
 			// $prodi = Masterprogramstudi::model()->findByPk($kode_prodi);
-			$pdf->Output('sk_'.$kode_prodi.'.pdf','D');
+			$pdf->Output('sk_'.$kode_prodi.'.pdf','I');
 			
 		}
 

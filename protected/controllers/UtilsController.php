@@ -32,7 +32,7 @@ class UtilsController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('foto','test'),
+				'actions'=>array('foto','test','ttd','ajaxSaveTtd'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,6 +43,39 @@ class UtilsController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionAjaxSaveTtd()
+	{
+		$setting = Settings::model()->findByAttributes(['name'=>'site.ttd']);
+		
+		$data = $_POST['dataItem'];
+		$data_uri = $data['signature'];
+		$encoded_image = explode(",", $data_uri)[1];
+		$setting->value = $encoded_image;
+		
+		if(!$setting->save()){
+			print_r($setting->getErrors());exit;
+		}
+
+		
+	}
+
+	public function actionTtd()
+	{
+		$setting = Settings::model()->findByAttributes(['name'=>'site.ttd']);
+		if(empty($setting))
+		{
+			$setting = new Settings;
+			$setting->module = 'core';
+			$setting->name = 'site.ttd';
+
+		}
+
+
+		$this->render('ttd',[
+			'model' => $setting
+		]);
 	}
 
 	public function actionTest(){

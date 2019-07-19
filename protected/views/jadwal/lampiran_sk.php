@@ -69,7 +69,8 @@ $(document).ready(function(){
   //   'target' => '_blank'
   // )
   'htmlOptions' => array(
-    'class' => 'form-horizontal'
+    'class' => 'form-horizontal',
+    'target'=>'_blank'
   )
 )); ?>
 
