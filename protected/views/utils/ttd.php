@@ -196,7 +196,7 @@ savePNGButton.addEventListener("click", function (event) {
   if (signaturePad.isEmpty()) {
     alert("Please provide a signature first.");
   } else {
-    var dataURL = signaturePad;
+    var dataURL = signaturePad.toDataURL();
     
     var obj = new Object;
     obj.signature = dataURL;
