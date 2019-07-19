@@ -69,7 +69,7 @@ class UtilsController extends Controller
 			$setting = new Settings;
 			$setting->module = 'core';
 			$setting->name = 'site.ttd';
-
+			$setting->save();
 		}
 
 
