@@ -33,7 +33,7 @@ class Pilihan extends CActiveRecord
 			array('nama, label', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, kode, nama, value, label', 'safe', 'on'=>'search'),
+			array('id, kode, nama, value, label,kode_feeder', 'safe', 'on'=>'search'),
 		);
 	}
 

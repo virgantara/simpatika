@@ -14,18 +14,19 @@ $this->menu=array(
 
 <div class="form">
 	<h4>Catatan:</h4>
+<div class="row">
 <ul>
 	<li>
-<div class="row">
+
 	Template Jadwal silakan unduh di 
 	<?php echo CHtml::link('sini',array('jadwal/template'));?>
-</div>
+
 </li>
 <li>
-<div class="row">
 	Petunjuk Unggah Jadwal silakan lihat di 
 	<?php echo CHtml::link('sini',array('jadwal/petunjuk'));?>
-</div></li>
+</li>
+</div>
 </ul>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'jam-form',
@@ -35,28 +36,36 @@ $this->menu=array(
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
 
-	'htmlOptions'=>array('enctype'=>'multipart/form-data'),
+	'htmlOptions'=>array(
+		'enctype'=>'multipart/form-data',
+		'class' => 'form-horizontal'
+	),
 )); ?>
 
 	<?php
 
 echo $form->error($m, 'error');
 	 ?>
-	<div class="row">
-		<b>Masukkan Data Excel :</b>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right">Masukkan Data Excel :</label>
+		<div class="col-sm-9">
 		<?php 
 		
-echo $form->fileField($model, 'uploadedFile');
+echo $form->fileField($model, 'uploadedFile',['class'=>'form-control']); 
 echo $form->error($model, 'uploadedFile');
 
 		?>
-
+	</div>
 	</div>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Upload'); ?>
-		
+	<div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
 
+          <button class="btn btn-info" type="submit">
+            <i class="ace-icon glyphicon glyphicon-upload bigger-110"></i>
+            Upload
+          </button>
+		</div>
 	</div>
 
 <?php $this->endWidget(); ?>

@@ -84,6 +84,8 @@
  */
 class Mastermahasiswa extends CActiveRecord
 {
+
+	public $uploadedFile;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -101,9 +103,10 @@ class Mastermahasiswa extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nim_mhs, nama_mahasiswa', 'required'),
+			array('nim_mhs', 'unique'),
 			array('status_bayar, status_mahasiswa, is_synced', 'numerical', 'integerOnly'=>true),
 			array('kode_pt, asal_prodi, kode_pos', 'length', 'max'=>6),
-			array('kode_fakultas, kode_prodi, kode_jenjang_studi, jenis_kelamin, semester_awal, batas_studi, status_awal, asal_jenjang_studi, semester, rt, rw, kabupaten', 'length', 'max'=>5),
+			array('kode_fakultas, kode_prodi, kode_jenjang_studi, jenis_kelamin, semester_awal, batas_studi, status_awal, asal_jenjang_studi, semester, rt, rw', 'length', 'max'=>5),
 			array('nim_mhs, nama_asal_pt, telepon, hp', 'length', 'max'=>25),
 			array('nama_mahasiswa, tempat_lahir, asal_propinsi, status_aktivitas, email, status_warga', 'length', 'max'=>50),
 			array('tahun_masuk', 'length', 'max'=>4),
@@ -120,7 +123,7 @@ class Mastermahasiswa extends CActiveRecord
 			array('kecamatan_feeder', 'length', 'max'=>10),
 			array('jenis_tinggal, no_kps, agama, va_code', 'length', 'max'=>20),
 			array('penerima_kps, masuk_kelas', 'length', 'max'=>1),
-			array('provinsi, gol_darah, kampus', 'length', 'max'=>2),
+			array('gol_darah, kampus', 'length', 'max'=>2),
 			array('tgl_lahir, tgl_masuk, tgl_lulus, keterangan, tgl_sk_yudisium, created_at, updated_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -330,4 +333,6 @@ class Mastermahasiswa extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+
 }

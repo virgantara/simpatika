@@ -32,7 +32,7 @@ class MastermahasiswaController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','uploadPA','ortu','dataortu','updatebio','ajaxFindWilayah','ajaxFindWilayahOne','ajaxFindNegara'),
+				'actions'=>array('create','update','uploadPA','ortu','dataortu','updatebio','ajaxFindWilayah','ajaxFindWilayahOne','ajaxFindNegara','uploadMhs'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,6 +43,241 @@ class MastermahasiswaController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	private function readSheetOrtu($uploadedFile, $sheetNum, $hubungan)
+	{
+
+		Yii::import('ext.PHPExcel.PHPExcel.**', true); 
+
+        $fileName = $uploadedFile->getTempName();
+
+        $objPHPExcel = PHPExcel_IOFactory::load($fileName);
+        $sheet = $objPHPExcel->getSheet($sheetNum); 
+        $highestRow = $sheet->getHighestRow(); 
+        // $highestColumn = $sheet->getHighestColumn();
+        // $highestColumn++;
+        // print_r($highestColumn);
+        //Loop through each row of the worksheet in turn
+        $message = '';
+
+        $list_pendidikan = [];
+      	$pendidikans = Pilihan::model()->findAllByAttributes(['kode'=>'01']);
+
+      	foreach($pendidikans as $p)
+      	{
+      		$list_pendidikan[$p->kode_feeder] = $p;
+      	}
+
+      	$list_pekerjaan = [];
+      	$pekerjaans = Pilihan::model()->findAllByAttributes(['kode'=>'55']);
+
+      	foreach($pekerjaans as $p)
+      	{
+      		$list_pekerjaan[$p->kode_feeder] = $p;
+      	}
+
+      	$list_penghasilan = [];
+      	$penghasilans = Pilihan::model()->findAllByAttributes(['kode'=>'69']);
+
+      	foreach($penghasilans as $p)
+      	{
+      		$list_penghasilan[$p->kode_feeder] = $p;
+      	}
+
+		$index = 1;
+        for ($row = 2; $row <= $highestRow; $row++)
+        {
+
+
+        	$index++;
+        	$nim = $sheet->getCell('B'.$row)->getValue();
+        	$nik = strtoupper($sheet->getCell('C'.$row)->getValue());
+        	$nama = strtoupper($sheet->getCell('D'.$row)->getValue());
+        	$tgl_lahir = strtoupper($sheet->getCell('E'.$row)->getValue());
+        	$pendidikan = strtoupper($sheet->getCell('F'.$row)->getValue());
+        	$pekerjaan = strtoupper($sheet->getCell('G'.$row)->getValue());
+        	$penghasilan = strtoupper($sheet->getCell('H'.$row)->getValue());
+        	
+        	$kd_feeder_pendidikan = !empty($pendidikan) ? explode(' - ', $pendidikan) : [0=>6];
+        	$kd_feeder_pekerjaan = !empty($pekerjaan) ? explode(' - ', $pekerjaan) : [0=>99];
+        	$kd_feeder_penghasilan = !empty($penghasilan) ? explode(' - ', $penghasilan) : [0=>12];
+        	
+    		$ortu = new MahasiswaOrtu;
+    		$ortu->hubungan = $hubungan;
+    		$ortu->nama = $nama;
+    		$ortu->nim = $nim;
+    		$ortu->agama = 'I';
+    		$ortu->pendidikan = $list_pendidikan[$kd_feeder_pendidikan[0]]->value;
+    		$ortu->pekerjaan = $list_pekerjaan[$kd_feeder_pekerjaan[0]]->value;
+    		$ortu->penghasilan = $list_penghasilan[$kd_feeder_penghasilan[0]]->value;
+
+    		if($ortu->validate()){
+
+    			$ortu->save();
+    		}
+
+    		else{
+
+    			$errors = 'Baris ke-';
+				$errors .= ($index + 1).' : ';
+					
+				foreach($ortu->getErrors() as $attribute){
+					foreach($attribute as $error){
+						$errors .= $error;
+					}
+				}
+				$model->addError('error',$errors);
+				throw new Exception();
+    		}
+
+			
+
+        }
+
+	        // $message .= '</ul>';
+	     
+	}
+
+
+	public function actionUploadMhs()
+	{
+
+		$model = new Mastermahasiswa;
+		$mhs = new Mastermahasiswa;
+		if(isset($_POST['Mastermahasiswa']))
+        {
+
+			$model->uploadedFile=CUploadedFile::getInstance($model,'uploadedFile');
+
+			Yii::import('ext.PHPExcel.PHPExcel.**', true); 
+
+	        $fileName = $model->uploadedFile->getTempName();
+
+	        $objPHPExcel = PHPExcel_IOFactory::load($fileName);
+	        $sheet = $objPHPExcel->getSheet(0); 
+	        $highestRow = $sheet->getHighestRow(); 
+	        // $highestColumn = $sheet->getHighestColumn();
+	        // $highestColumn++;
+	        // print_r($highestColumn);
+	        //Loop through each row of the worksheet in turn
+	        $message = '';
+
+	      
+	        $transaction=Yii::app()->db->beginTransaction();
+	        try
+			{
+				$index = 1;
+		        for ($row = 3; $row <= $highestRow; $row++)
+		        { 
+
+		        	$index++;
+		        	$nim = $sheet->getCell('B'.$row)->getValue();
+		        	$nama = strtoupper($sheet->getCell('C'.$row)->getValue());
+		        	$nama_ibu = strtoupper($sheet->getCell('D'.$row)->getValue());
+		        	$nik = strtoupper($sheet->getCell('E'.$row)->getValue());
+		        	$tmpt_lahir = strtoupper($sheet->getCell('F'.$row)->getValue());
+		        	$tgl_lahir = strtoupper($sheet->getCell('G'.$row)->getValue());
+		        	$jk = strtoupper($sheet->getCell('H'.$row)->getValue());
+		        	$jalan = strtoupper($sheet->getCell('I'.$row)->getValue());
+		        	$dusun = strtoupper($sheet->getCell('J'.$row)->getValue());
+		        	$rt = strtoupper($sheet->getCell('K'.$row)->getValue());
+		        	$rw = strtoupper($sheet->getCell('L'.$row)->getValue());
+		        	$desa = strtoupper($sheet->getCell('M'.$row)->getValue());
+		        	$kecamatan = strtoupper($sheet->getCell('N'.$row)->getValue());
+		        	$kota = strtoupper($sheet->getCell('O'.$row)->getValue());
+		        	$provinsi = strtoupper($sheet->getCell('P'.$row)->getValue());
+		        	$kodepos = strtoupper($sheet->getCell('Q'.$row)->getValue());
+		        	$telp = strtoupper($sheet->getCell('R'.$row)->getValue());
+		        	$hp = strtoupper($sheet->getCell('S'.$row)->getValue());
+		        	$email = strtoupper($sheet->getCell('T'.$row)->getValue());
+		        	$fakultas = strtoupper($sheet->getCell('U'.$row)->getValue());
+		        	$prodi = strtoupper($sheet->getCell('V'.$row)->getValue());
+		        	$kampus = strtoupper($sheet->getCell('W'.$row)->getValue());
+		        	$tahun_masuk = strtoupper($sheet->getCell('X'.$row)->getValue());
+		        	$semester_awal = strtoupper($sheet->getCell('Y'.$row)->getValue());
+		        	
+	        		$mhs = new Mastermahasiswa;
+	        		$mhs->nim_mhs = $nim;
+	        		$mhs->nama_mahasiswa = $nama;
+	        		$mhs->tempat_lahir = $tmpt_lahir;
+	        		$mhs->tgl_lahir = $tgl_lahir;
+	        		$mhs->jenis_kelamin = $jk;
+	        		$mhs->tahun_masuk = $tahun_masuk;
+	        		$mhs->semester_awal = $semester_awal;
+	        		$mhs->status_aktivitas = 'A';
+	        		$mhs->kode_prodi = $prodi;
+	        		$mhs->kode_fakultas = $fakultas;
+	        		$mhs->semester = '1';
+	        		$mhs->telepon = $telp;
+	        		$mhs->hp = $hp;
+	        		$mhs->email = $email;
+	        		$mhs->alamat = $jalan;
+	        		$mhs->ktp = $nik;
+	        		$mhs->rt = $rt;
+	        		$mhs->rw = $rw;
+	        		$mhs->dusun = $dusun;
+	        		$mhs->kode_pos = $kodepos;
+	        		$mhs->desa = $desa;
+	        		$mhs->kampus = 5;
+	        		$mhs->agama = 'I';
+	        		$mhs->provinsi = $provinsi;
+	        		$mhs->kabupaten = $kota;
+	        		$mhs->kode_pt = '073090';
+	        		$mhs->kode_jenjang_studi = 'C';
+	        		$mhs->is_synced = 0;
+
+	        		if($mhs->validate()){
+
+	        			$mhs->save();
+	        			
+	        		}
+
+	        		else{
+
+	        			$errors = 'Baris ke-';
+						$errors .= ($index + 1).' : ';
+							
+						foreach($mhs->getErrors() as $attribute){
+							foreach($attribute as $error){
+								$errors .= $error;
+							}
+						}
+						$model->addError('error',$errors);
+						throw new Exception();
+	        		}
+
+					
+
+		        }
+
+		        $this->readSheetOrtu($model->uploadedFile,1,'AYAH');
+		        $this->readSheetOrtu($model->uploadedFile,2,'IBU');
+
+		        // $message .= '</ul>';
+		        // $this->redirect(array('trRawatInap/lainnya','id'=>$id));
+		        $transaction->commit();
+
+		        if(!empty($message))
+		        	$message = '<strong style="color:red">Catatan</strong><div style="color:orange">Sebagian data sukses terunggah. Ada beberapa belum, yaitu:</div>'.$message;
+		        // $message = empty($message) ? ' Namun, '.$message : '';
+		        Yii::app()->user->setFlash('success', "Data Mahasiswa telah diunggah.".$message);
+				$this->redirect(['index']);
+	        }
+
+			catch(Exception $e){
+				// Yii::app()->user->setFlash('error', print_r($e->errorInfo));
+				$transaction->rollback();
+			}	
+	    }
+
+
+		$this->render('upload_mhs',array(
+			'model' => $model,
+			
+
+		));
+
 	}
 
 	public function actionAjaxFindNegara()

@@ -9,15 +9,262 @@
 
 ?>
 
-<script src="<?php echo Yii::app()->baseUrl;?>/js/jquery.min.js"></script>
-<script src="<?php echo Yii::app()->baseUrl;?>/js/jquery-ui.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl;?>/css/jquery-ui.css"> 
 
-<script src="<?php echo Yii::app()->baseUrl;?>/js/jquery-ui-timepicker-addon.min.js"></script>
-
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl;?>/css/jquery-ui-timepicker-addon.min.css"> 
 
+
+
+
+<div id="info" style="display:none;background-color: #FE9A2E;color:black;padding:5px 8px">
+	
+</div>
+
+<div class="form">
+
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'jadwal-form',
+	// Please note: When you enable ajax validation, make sure the corresponding
+	// controller action is handling ajax validation correctly.
+	// There is a call to performAjaxValidation() commented in generated controller code.
+	// See class documentation of CActiveForm for details on this.
+	'enableAjaxValidation'=>false,
+	'htmlOptions'=>array(
+		'class' => 'form-horizontal'
+	),
+)); 
+?>
+
+	<p class="note">Fields with <span class="required">*</span> are required.</p>
+
+	<?php echo $form->errorSummary($model); ?>
+	
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'kampus',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+			<?php 
+			$list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus','nama_kampus');
+			
+			echo $form->dropDownList($model,'kampus',$list,['class'=>'form-control']); 
+			// echo $form->textField($model,'kampus',array('size'=>2,'maxlength'=>2)); 
+			?>
+			<?php echo $form->error($model,'kampus'); ?>
+		</div>
+	</div>
+
+
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'hari',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		
+		<div class="col-sm-9">
+		<?php
+		$list_hari = array(
+			'SABTU'=>'SABTU',
+			'AHAD'=> 'AHAD',
+			'SENIN'=>'SENIN',
+			'SELASA'=>'SELASA',
+			'RABU'=> 'RABU',
+			'KAMIS'=>'KAMIS'
+		);
+
+		
+
+		// print_r($model->hari);
+		// CHtml::listData(ClassificationLevels::model()->findAll(), 'id', 'name')
+		echo $form->dropDownList($model,'hari',$list_hari,['class'=>'form-control']); 
+		?>
+		<?php echo $form->error($model,'hari'); ?>
+	</div>
+	</div>
+<div class="form-group">
+		<?php echo $form->labelEx($model,'jam_ke',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php 
+		$list = CHtml::listData(Jam::model()->findAll(), 'id_jam','nama_jam');
+		// $list[] = array('Lainnya');
+		
+		echo $form->dropDownList($model,'jam_ke',$list,['class'=>'form-control']); 
+
+		?>
+		<?php echo $form->error($model,'jam_ke'); ?>
+	</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'jam_mulai',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php
+
+		
+		echo $form->textField($model,'jam_mulai',['class'=>'form-control']);
+		?>
+		<?php echo $form->error($model,'jam_mulai'); ?>
+	</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'jam_selesai',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php
+
+		
+		echo $form->textField($model,'jam_selesai',['class'=>'form-control']);
+		?>
+		<?php echo $form->error($model,'jam_selesai'); ?>
+	</div>
+	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'fakultas',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php 
+		$list = CHtml::listData(Masterfakultas::model()->findAll(), 'kode_fakultas', function($dsn) {
+		    return ($dsn->nama_fakultas);
+		});
+		echo $form->dropDownList($model,'fakultas',$list,['class'=>'form-control']);
+		// echo $form->textField($model,'fakultas',array('size'=>7,'maxlength'=>7)); 
+		?>
+		<?php echo $form->error($model,'fakultas'); ?>
+	</div>
+	</div>
+
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'prodi',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php 
+		$prodis = array();
+
+		echo $form->dropDownList($model,'prodi',$prodis,['class'=>'form-control','empty' => '(Select a prodi)']); 
+		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
+		?>
+		<?php echo $form->error($model,'prodi'); ?>
+	</div>
+	</div>
+
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'kode_mk',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		
+		<div class="col-sm-9">
+		<?php 
+
+		
+
+		// $listmk = CHtml::listData(Mastermatakuliah::model()->findAllByAttributes(array('tahun_akademik'=>$tahunaktif)), 'nama_mata_kuliah', function($mk) {
+		//     return ($mk->kode_mata_kuliah . ' - '. $mk->nama_mata_kuliah);
+		// });
+
+		$listmk = array();
+
+		echo $form->dropDownList($model,'kode_mk',$listmk,['class'=>'form-control','empty' => '(Select a mk)']); 
+		// echo $form->dropDownList($model,'kode_mk',$listmk); 
+		?>
+		<?php echo $form->error($model,'kode_mk'); ?>
+	</div>
+	</div>
+
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'nama_dosen',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php
+
+		$nama_dosen = '';
+		if(!$model->isNewRecord)
+		{
+			$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$model->kode_dosen));
+			// echo $model->kode_dosen;
+			if(!empty($dosen))
+				$nama_dosen = $dosen->nama_dosen;
+		}
+		echo $form->hiddenField($model,'kode_dosen',array('size'=>20,'maxlength'=>20));
+		echo CHtml::textField('nama_dosen',$nama_dosen,['class'=>'form-control','size'=>20,'maxlength'=>20,'id'=>'nama_dosen']); 
+		?>
+		<?php echo $form->error($model,'kode_dosen'); ?>
+	</div>
+	</div>
+
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'semester',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php 
+		$list = array();
+		for($i=1;$i<=8;$i++)
+		{
+			$list[$i] = $i;
+		}
+		echo $form->dropDownList($model,'semester',$list,['class'=>'form-control']); 
+		?>
+		<?php echo $form->error($model,'semester'); ?>
+	</div>
+	</div>
+
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'kelas',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php 
+		// $list = CHtml::listData(MasterKelas::model()->findAll(), 'nama_kelas', function($dsn) {
+		//     return ($dsn->nama_kelas);
+		// });
+		$list = CHtml::listData(Masterkelas::model()->findAll(), 'id','nama_kelas');
+		echo $form->dropDownList($model,'kelas',$list,['class'=>'form-control']); 
+		?>
+		<?php echo $form->error($model,'kelas'); ?>
+	</div>
+	</div>
+
+
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'kd_ruangan',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php echo $form->textField($model,'kd_ruangan',['class'=>'form-control']);?>
+		<?php echo $form->error($model,'kd_ruangan'); ?>
+	</div>
+	</div>
+
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'tahun_akademik',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php 
+		$list = CHtml::listData(Tahunakademik::model()->findAll(array('order'=>'tahun_id DESC')), 'tahun_id', function($dsn) {
+		    return ($dsn->tahun_id);
+		})
+		;
+
+		echo $form->dropDownList($model,'tahun_akademik',$list,['class'=>'form-control']); 
+		// echo $form->textField($model,'tahun_akademik',array('size'=>10,'maxlength'=>10)); 
+		?>
+		<?php echo $form->error($model,'tahun_akademik'); ?>
+	</div>
+	</div>
+
+	<div class="form-group">
+		<?php echo CHtml::label('SKS','',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php echo CHtml::textField('sks',$model->SKS,['class'=>'form-control']); ?>
+	</div>
+	</div>
+
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'kuota_kelas',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php echo $form->textField($model,'kuota_kelas',['class'=>'form-control']); ?>
+		<?php echo $form->error($model,'kuota_kelas'); ?>
+		</div>
+	</div>
+
+	<div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+
+          <button class="btn btn-info" type="submit">
+            <i class="ace-icon glyphicon glyphicon-check bigger-110"></i>
+            Save
+          </button>
+		</div>
+	</div>
+
+<?php $this->endWidget(); ?>
+
+</div><!-- form -->
+<script src="<?php echo Yii::app()->baseUrl;?>/js/jquery.min.js"></script>
+<script src="<?php echo Yii::app()->baseUrl;?>/js/jquery-ui.min.js"></script>
+<script src="<?php echo Yii::app()->baseUrl;?>/js/jquery-ui-timepicker-addon.min.js"></script>
 
 <script type="text/javascript">
 
@@ -199,207 +446,3 @@ function findMk(prodi){
   }); 
 	});
 </script>
-
-<div id="info" style="display:none;background-color: #FE9A2E;color:black;padding:5px 8px">
-	
-</div>
-
-<div class="form">
-
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'jadwal-form',
-	// Please note: When you enable ajax validation, make sure the corresponding
-	// controller action is handling ajax validation correctly.
-	// There is a call to performAjaxValidation() commented in generated controller code.
-	// See class documentation of CActiveForm for details on this.
-	'enableAjaxValidation'=>false,
-)); 
-?>
-
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
-	<?php echo $form->errorSummary($model); ?>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'kampus'); ?>
-		<?php 
-		$list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus','nama_kampus');
-		
-		echo $form->dropDownList($model,'kampus',$list); 
-		// echo $form->textField($model,'kampus',array('size'=>2,'maxlength'=>2)); 
-		?>
-		<?php echo $form->error($model,'kampus'); ?>
-	</div>
-
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'hari'); 
-		$list_hari = array(
-			'SABTU'=>'SABTU',
-			'AHAD'=> 'AHAD',
-			'SENIN'=>'SENIN',
-			'SELASA'=>'SELASA',
-			'RABU'=> 'RABU',
-			'KAMIS'=>'KAMIS'
-		);
-
-		
-
-		// print_r($model->hari);
-		// CHtml::listData(ClassificationLevels::model()->findAll(), 'id', 'name')
-		echo $form->dropDownList($model,'hari',$list_hari); 
-		?>
-		<?php echo $form->error($model,'hari'); ?>
-	</div>
-	<div class="row">
-		<?php echo $form->labelEx($model,'jam_ke'); ?>
-
-		<?php 
-		$list = CHtml::listData(Jam::model()->findAll(), 'id_jam','nama_jam');
-		// $list[] = array('Lainnya');
-		
-		echo $form->dropDownList($model,'jam_ke',$list); 
-
-		?>
-		<?php echo $form->error($model,'jam_ke'); ?>
-	</div>
-	<div class="row">
-		<?php echo $form->labelEx($model,'jam_mulai'); ?>
-		<?php
-
-		
-		echo $form->textField($model,'jam_mulai',array('size'=>20,'maxlength'=>20)); 
-		?>
-		<?php echo $form->error($model,'jam_mulai'); ?>
-	</div>
-	<div class="row">
-		<?php echo $form->labelEx($model,'jam_selesai'); ?>
-		<?php
-
-		
-		echo $form->textField($model,'jam_selesai',array('size'=>20,'maxlength'=>20)); 
-		?>
-		<?php echo $form->error($model,'jam_selesai'); ?>
-	</div>
-	<div class="row">
-		<?php echo $form->labelEx($model,'fakultas'); ?>
-		<?php 
-		$list = CHtml::listData(Masterfakultas::model()->findAll(), 'kode_fakultas', function($dsn) {
-		    return ($dsn->nama_fakultas);
-		});
-		echo $form->dropDownList($model,'fakultas',$list); 
-		// echo $form->textField($model,'fakultas',array('size'=>7,'maxlength'=>7)); 
-		?>
-		<?php echo $form->error($model,'fakultas'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'prodi'); ?>
-		<?php 
-		$prodis = array();
-
-		echo $form->dropDownList($model,'prodi',$prodis,array('empty' => '(Select a prodi)')); 
-		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
-		?>
-		<?php echo $form->error($model,'prodi'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'kode_mk'); ?>
-		<?php 
-
-		
-
-		// $listmk = CHtml::listData(Mastermatakuliah::model()->findAllByAttributes(array('tahun_akademik'=>$tahunaktif)), 'nama_mata_kuliah', function($mk) {
-		//     return ($mk->kode_mata_kuliah . ' - '. $mk->nama_mata_kuliah);
-		// });
-
-		$listmk = array();
-
-		echo $form->dropDownList($model,'kode_mk',$listmk,array('empty' => '(Select a mk)')); 
-		// echo $form->dropDownList($model,'kode_mk',$listmk); 
-		?>
-		<?php echo $form->error($model,'kode_mk'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'nama_dosen'); ?>
-		<?php
-
-		$nama_dosen = '';
-		if(!$model->isNewRecord)
-		{
-			$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$model->kode_dosen));
-			// echo $model->kode_dosen;
-			if(!empty($dosen))
-				$nama_dosen = $dosen->nama_dosen;
-		}
-		echo $form->hiddenField($model,'kode_dosen',array('size'=>20,'maxlength'=>20));
-		echo CHtml::textField('nama_dosen',$nama_dosen,array('size'=>20,'maxlength'=>20,'id'=>'nama_dosen')); 
-		?>
-		<?php echo $form->error($model,'kode_dosen'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'semester'); ?>
-		<?php 
-		$list = array();
-		for($i=1;$i<=8;$i++)
-		{
-			$list[$i] = $i;
-		}
-		echo $form->dropDownList($model,'semester',$list); 
-		?>
-		<?php echo $form->error($model,'semester'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'kelas'); ?>
-		<?php 
-		// $list = CHtml::listData(MasterKelas::model()->findAll(), 'nama_kelas', function($dsn) {
-		//     return ($dsn->nama_kelas);
-		// });
-		$list = CHtml::listData(Masterkelas::model()->findAll(), 'id','nama_kelas');
-		echo $form->dropDownList($model,'kelas',$list); 
-		?>
-		<?php echo $form->error($model,'kelas'); ?>
-	</div>
-
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'kd_ruangan'); ?>
-		<?php echo $form->textField($model,'kd_ruangan',array('size'=>20,'maxlength'=>20)); ?>
-		<?php echo $form->error($model,'kd_ruangan'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'tahun_akademik'); ?>
-		<?php 
-		$list = CHtml::listData(Tahunakademik::model()->findAll(array('order'=>'tahun_id DESC')), 'tahun_id', function($dsn) {
-		    return ($dsn->tahun_id);
-		});
-		echo $form->dropDownList($model,'tahun_akademik',$list); 
-		// echo $form->textField($model,'tahun_akademik',array('size'=>10,'maxlength'=>10)); 
-		?>
-		<?php echo $form->error($model,'tahun_akademik'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo CHtml::label('SKS',''); ?>
-		<?php echo CHtml::textField('sks',$model->SKS); ?>
-
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'kuota_kelas'); ?>
-		<?php echo $form->textField($model,'kuota_kelas'); ?>
-		<?php echo $form->error($model,'kuota_kelas'); ?>
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-	</div>
-
-<?php $this->endWidget(); ?>
-
-</div><!-- form -->

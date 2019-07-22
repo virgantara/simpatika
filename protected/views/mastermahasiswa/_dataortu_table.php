@@ -48,7 +48,6 @@ echo CHtml::hiddenField('tahun_angkatan',$tahun_angkatan);
       <th width="15%">Propinsi</th>
       <th width="5%">KTP</th>
       <th width="5%">Negara</th>
-      <th>Agama</th>
       <th>Data Ortu<br>
       Yg Sudah</th>
       <th>Opsi</th>
@@ -110,7 +109,6 @@ foreach($mahasiswas as $m)
 <input type="hidden" size="10" name="id_negara_<?=$m->nim_mhs;?>" value="<?=$m->ktp ?: '';?>" />
 </td>
 
-<td width="15%"><?=$agama;?></td>
 <td>
 	<?php 
 
