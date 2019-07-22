@@ -159,7 +159,7 @@ class Mastermahasiswa extends CActiveRecord
 			'nama_mahasiswa' => 'Nama Mahasiswa',
 			'tempat_lahir' => 'Tempat Lahir',
 			'tgl_lahir' => 'Tgl Lahir',
-			'jenis_kelamin' => 'Jenis Kelamin',
+			'jenis_kelamin' => 'JK',
 			'tahun_masuk' => 'Tahun Masuk',
 			'semester_awal' => 'Semester Awal',
 			'batas_studi' => 'Batas Studi',

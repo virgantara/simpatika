@@ -14,7 +14,17 @@ $this->menu=array(
 
 <div class="form">
 	<h4>Upload DATA:</h4>
+<div class="row">
+<ul>
+	<li>
 
+	Template upload silakan unduh di 
+	<?php echo CHtml::link('sini',Yii::app()->baseUrl.'/asset/template/master_data_feeder.xlsx');?>
+
+</li>
+
+</ul>
+</div>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'jam-form',
 	// Please note: When you enable ajax validation, make sure the corresponding

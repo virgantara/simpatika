@@ -16,64 +16,78 @@
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+	'htmlOptions'=>array(
+		'class' => 'form-horizontal'
+	),
 	'method' => 'get',
 	'action' => $this->createUrl('krs/nilai'),
 )); 
 ?>
-	<div class="row">
-		<label>Kampus</label>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right">Kampus</label>
+			<div class="col-sm-9 col-lg-4">
 		<?php 
 		$list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus', 'nama_kampus');
-		echo CHtml::dropDownList('kampus',!empty($_GET['kampus']) ? $_GET['kampus'] : '',$list,array('empty' => '(Pilih Kampus)')); 
+		echo CHtml::dropDownList('kampus',!empty($_GET['kampus']) ? $_GET['kampus'] : '',$list,array('empty' => '(Pilih Kampus)','class'=>'form-control')); 
 		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
 		?>
-		
+		</div>
 	</div>	
-	<div class="row">
-		<label>Fakultas</label>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right">Fakultas</label>
+			<div class="col-sm-9 col-lg-4">
 		<?php 
 		$list = CHtml::listData(Masterfakultas::model()->findAll(), 'kode_fakultas', function($dsn) {
 		    return ($dsn->nama_fakultas);
 		});
-		echo CHtml::dropDownList('fakultas',!empty($_GET['fakultas']) ? $_GET['fakultas'] : '',$list); 
+		echo CHtml::dropDownList('fakultas',!empty($_GET['fakultas']) ? $_GET['fakultas'] : '',$list,['class'=>'form-control']); 
 		// echo $form->textField($model,'fakultas',array('size'=>7,'maxlength'=>7)); 
 		?>
-		
+		</div>
 	</div>
 
-	<div class="row">
-		<label>Prodi</label>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right">Prodi</label>
+			<div class="col-sm-9 col-lg-4">
 		<?php 
 		$prodis = array();
 
-		echo CHtml::dropDownList('prodi',!empty($_GET['prodi']) ? $_GET['prodi'] : '',$prodis,array('empty' => '(Pilih  prodi)')); 
+		echo CHtml::dropDownList('prodi',!empty($_GET['prodi']) ? $_GET['prodi'] : '',$prodis,array('empty' => '(Pilih  prodi)','class'=>'form-control')); 
 		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
 		?>
-		
+		</div>
 	</div>
 
 	
 
-	<div class="row">
-		<label>Tahun Akademik</label>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right">Tahun Akademik</label>
+			<div class="col-sm-9 col-lg-4">
 		<?php 
 		$list = CHtml::listData(Tahunakademik::model()->findAll(array('order'=>'tahun_id DESC')), 'tahun_id', function($dsn) {
 		    return ($dsn->tahun_id);
 		});
-		echo CHtml::dropDownList('tahun_akademik',!empty($_GET['tahun_akademik']) ? $_GET['tahun_akademik'] : '',$list); 
+		echo CHtml::dropDownList('tahun_akademik',!empty($_GET['tahun_akademik']) ? $_GET['tahun_akademik'] : '',$list,['class'=>'form-control']); 
 		// echo $form->textField($model,'tahun_akademik',array('size'=>10,'maxlength'=>10)); 
 		?>
 	</div>
+	</div>
 
+	<div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Cari KRS'); ?>
-		<?php 
+          <button class="btn btn-info" type="submit">
+            <i class="ace-icon glyphicon glyphicon-upload bigger-110"></i>
+            Cari KRS
+          </button>
+          <?php 
 		if(!empty($_GET['prodi'])){
 			echo CHtml::link('Export XLS',['krs/nilai','prodi'=>$_GET['prodi'],'tahun_akademik'=>$_GET['tahun_akademik'],'kampus'=>$_GET['kampus'],'xls' =>1]);
 		}
 		?>
+		</div>
 	</div>
+
 
 <?php $this->endWidget(); ?>
 

@@ -44,8 +44,11 @@ echo CHtml::hiddenField('tahun_angkatan',$tahun_angkatan);
       <th>Tgl Lhr</th>
       <th>JK</th>
       <th width="15%">Kecamatan</th>
+      <th width="15%">Kecamatan<br>SIAKAD</th>
       <th width="15%">Kota</th>
-      <th width="15%">Propinsi</th>
+      <th width="15%">Kota<br>SIAKAD</th>
+      <th width="15%">Provinsi</th>
+      <th width="15%">Prov<br>SIAKAD</th>
       <th width="5%">KTP</th>
       <th width="5%">Negara</th>
       <th>Data Ortu<br>
@@ -96,11 +99,14 @@ foreach($mahasiswas as $m)
 	<input type="hidden" class="input id_kecamatan" value="<?=$m->kecamatan_feeder ?: '';?>" name="id_kecamatan_<?=$m->nim_mhs;?>" />
 	<input type="hidden" class="input id_induk"/>
 </td>
+<td width="15%"><?=$m->alamat;?></td>
 <td width="15%">
 	<input type="text" readonly class="input kota"/>
 	<input type="hidden" class="input id_induk_kota"/>
 </td>
+<td width="15%"><?=$m->kabupaten;?></td>
 <td width="15%"><input readonly type="text" class="input propinsi"/></td>
+<td width="15%"><?=$m->provinsi;?></td>
 <td width="5%">
 <input type="text" size="10" name="ktp_<?=$m->nim_mhs;?>" value="<?=$m->ktp ?: '';?>" />
 </td>

@@ -70,8 +70,7 @@ echo '<li>'.CHtml::link('Rekap Jadwal Per Prodi',array('jadwal/rekapJadwal'),arr
 echo '<li>'.CHtml::link('Rekap Jadwal Semua Dosen',array('jadwal/rekapJadwalAll'),array('target'=>'_blank')).'</li>';
 echo '</ul>';
 ?>
-</div>
-</div>
+
  <div class="pull-right">
 Data per halaman
 <?php echo CHtml::dropDownList('Jadwal[PAGESIZE]',isset($_GET['size'])?$_GET['size']:'',array(10=>10,50=>50,100=>100,200=>200),array('id'=>'size','size'=>1)); ?>
@@ -89,6 +88,8 @@ echo CHtml::button("Cari",array("id"=>"pencarian"));
 <?php
 echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 ?>
+</div>
+</div>
 <div class="row">
 <?php $this->widget('application.components.ComplexGridView', array(
 	'id'=>'jadwal-grid',

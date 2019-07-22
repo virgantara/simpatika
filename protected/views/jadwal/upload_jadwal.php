@@ -26,8 +26,9 @@ $this->menu=array(
 	Petunjuk Unggah Jadwal silakan lihat di 
 	<?php echo CHtml::link('sini',array('jadwal/petunjuk'));?>
 </li>
-</div>
+
 </ul>
+</div>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'jam-form',
 	// Please note: When you enable ajax validation, make sure the corresponding

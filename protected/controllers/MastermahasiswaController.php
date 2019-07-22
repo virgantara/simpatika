@@ -253,6 +253,7 @@ class MastermahasiswaController extends Controller
 
 		        $this->readSheetOrtu($model->uploadedFile,1,'AYAH');
 		        $this->readSheetOrtu($model->uploadedFile,2,'IBU');
+		        $this->readSheetOrtu($model->uploadedFile,3,'WALI');
 
 		        // $message .= '</ul>';
 		        // $this->redirect(array('trRawatInap/lainnya','id'=>$id));
@@ -465,8 +466,10 @@ class MastermahasiswaController extends Controller
 		if($xls == 'y')
 		{
 			$mahasiswas = Mastermahasiswa::model()->findAllByAttributes([
-				'kode_prodi' => $kode_prodi
-			],['order' => 'nim_mhs DESC']);
+				'kode_prodi' => $kode_prodi,
+				'kampus' => $kampus,
+				'tahun_masuk' => $tahun_angkatan
+			],['order' => 'nama_mahasiswa ASC']);
 
 			$mprodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=> $kode_prodi]);
 
@@ -523,7 +526,7 @@ class MastermahasiswaController extends Controller
 			   'X' => 'Penghasilan',
 			   'Y' => 'Keadaan',
 			);
-			$row = 1;
+			
 			$idx = 1;
 			$sheet->mergeCells('L1:R1');
 			$sheet->setCellValue('L1', 'AYAH/WALI');
@@ -616,7 +619,7 @@ class MastermahasiswaController extends Controller
 
 			
 
-
+			 $row = 2;
 			foreach($mahasiswas as $m)
 			{
 				$row++;
@@ -629,42 +632,42 @@ class MastermahasiswaController extends Controller
 				$sheet->setCellValueByColumnAndRow(4,$row, $m->jenis_kelamin);
 				$sheet->setCellValueByColumnAndRow(5,$row, $m->alamat.' '.$m->rt.' '.$m->rw.' '.$m->dusun.' '.$m->desa.' '.$m->kecamatan.' '.$m->kabupaten.' '.$m->provinsi);
 				$sheet->setCellValueByColumnAndRow(6,$row, $m->ktp);
-				$sheet->setCellValueByColumnAndRow(7,$row, $m->prodi->nama_prodi);
-				$sheet->setCellValueByColumnAndRow(8,$row, $m->prodi->fakultas->nama_fakultas);
+				$sheet->setCellValueByColumnAndRow(7,$row, $m->kodeProdi->singkatan);
+				$sheet->setCellValueByColumnAndRow(8,$row, $m->kodeProdi->fakultas->nama_fakultas);
 				$sheet->setCellValueByColumnAndRow(9,$row, substr($m->nim_mhs, 2,4));
 				$sheet->setCellValueByColumnAndRow(10,$row, $agama ?: 'ISLAM');
 			
 				$i++;
 
-				// if(!empty($m->ortus))
-				// {
-				// 	foreach($m->ortus as $ortu)
-				// 	{
+				if(!empty($m->ortus))
+				{
+					foreach($m->ortus as $ortu)
+					{
 						
 
-				// 		if($ortu->hubungan == 'AYAH' || $ortu->hubungan == 'WALI')
-				// 		{
-				// 			$sheet->setCellValueByColumnAndRow(11,$row, ucwords($ortu->nama));
-				// 			$sheet->setCellValueByColumnAndRow(12,$row, $ortu->fullalamat);
-				// 			$sheet->setCellValueByColumnAndRow(13,$row, $agama ?: '-');
-				// 			$sheet->setCellValueByColumnAndRow(14,$row, $pendidikan ?: '-');
-				// 			$sheet->setCellValueByColumnAndRow(15,$row, $pekerjaan ?: '-');
-				// 			$sheet->setCellValueByColumnAndRow(16,$row, $penghasilan ?: '-');
-				// 			$sheet->setCellValueByColumnAndRow(17,$row, $keadaan ?: '-');
+						if($ortu->hubungan == 'AYAH' || $ortu->hubungan == 'WALI')
+						{
+							$sheet->setCellValueByColumnAndRow(11,$row, ucwords($ortu->nama));
+							// $sheet->setCellValueByColumnAndRow(12,$row, $ortu->fullalamat);
+							$sheet->setCellValueByColumnAndRow(12,$row, $ortu->agama ?: '-');
+							$sheet->setCellValueByColumnAndRow(13,$row, $ortu->pendidikan ?: '-');
+							$sheet->setCellValueByColumnAndRow(14,$row, $ortu->pekerjaan ?: '-');
+							$sheet->setCellValueByColumnAndRow(15,$row, $ortu->penghasilan ?: '-');
+							$sheet->setCellValueByColumnAndRow(16,$row, $ortu->hidup ?: '-');
 
-				// 		}
+						}
 
-				// 		else if($ortu->hubungan == 'IBU'){
-				// 			$sheet->setCellValueByColumnAndRow(18,$row, ucwords($ortu->nama));
-				// 			$sheet->setCellValueByColumnAndRow(19,$row, $ortu->fullalamat);
-				// 			$sheet->setCellValueByColumnAndRow(20,$row, $agama ?: '-');
-				// 			$sheet->setCellValueByColumnAndRow(21,$row, $pendidikan ?: '-');
-				// 			$sheet->setCellValueByColumnAndRow(22,$row, $pekerjaan ?: '-');
-				// 			$sheet->setCellValueByColumnAndRow(23,$row, $penghasilan ?: '-');
-				// 			$sheet->setCellValueByColumnAndRow(24,$row, $keadaan ?: '-');
-				// 		}
-				// 	}
-				// }
+						else if($ortu->hubungan == 'IBU'){
+							$sheet->setCellValueByColumnAndRow(17,$row, ucwords($ortu->nama));
+							// $sheet->setCellValueByColumnAndRow(19,$row, $ortu->fullalamat);
+							$sheet->setCellValueByColumnAndRow(18,$row, $ortu->agama ?: '-');
+							$sheet->setCellValueByColumnAndRow(19,$row, $ortu->pendidikan ?: '-');
+							$sheet->setCellValueByColumnAndRow(20,$row, $ortu->pekerjaan ?: '-');
+							$sheet->setCellValueByColumnAndRow(21,$row, $ortu->penghasilan ?: '-');
+							$sheet->setCellValueByColumnAndRow(22,$row, $ortu->hidup ?: '-');
+						}
+					}
+				}
 			}
 
 			$sheet->getStyle('F1:F'.$objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true);
@@ -882,10 +885,7 @@ class MastermahasiswaController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Mastermahasiswa');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+		$this->actionAdmin();
 	}
 
 	/**
