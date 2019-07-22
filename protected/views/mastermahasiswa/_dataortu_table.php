@@ -224,30 +224,32 @@ function popitup(url,label) {
                     term: ui.item.id_induk_wilayah,
                 },
                 beforeSend : function(){
-                	var kota = obj.parent().next().find('.kota');
+                	var kota = obj.parent().next().next().find('.kota');
                     kota.val('');
                 },
                 success: function (data) {
-                	var kota = obj.parent().next().find('.kota');
+                	var kota = obj.parent().next().next().find('.kota');
                     kota.val(data[0].value);
                     var induk_kota = kota.next();
-                    induk_kota.val(data[0].id_induk_wilayah)
-
-                    $.ajax({
-		                url: "<?php echo Yii::app()->createUrl('mastermahasiswa/AjaxFindWilayahOne');?>",
-		                dataType: "json",
-		                data: {
-		                    term: induk_kota.val(),
-		                },
-		                beforeSend : function(){
-		                	var prop = obj.parent().next().next().find('.propinsi');
-		                    prop.val('');
-		                },
-		                success: function (data) {
-		                	var prop = obj.parent().next().next().find('.propinsi');
-		                    prop.val(data[0].value);
-		                }
-		            });
+                    
+                    if(data[0].id_induk_wilayah != '000000')
+                    {
+	                    $.ajax({
+			                url: "<?php echo Yii::app()->createUrl('mastermahasiswa/AjaxFindWilayahOne');?>",
+			                dataType: "json",
+			                data: {
+			                    term: data[0].id_induk_wilayah,
+			                },
+			                beforeSend : function(){
+			                	var prop = obj.parent().next().next().next().next().find('.propinsi');
+			                    prop.val('');
+			                },
+			                success: function (data) {
+			                	var prop = obj.parent().next().next().next().next().find('.propinsi');
+			                    prop.val(data[0].value);
+			                }
+			            });
+		            }
                 }
             });
 	        
