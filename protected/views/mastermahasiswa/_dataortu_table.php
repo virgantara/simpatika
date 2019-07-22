@@ -21,7 +21,7 @@ header("Content-Transfer-Encoding: BINARY");
 )); ?>
 <?php 
 foreach(Yii::app()->user->getFlashes() as $key => $message) {
-        echo '<div style="color:white;width:100%;background-color:green;padding:10px">' . $message . "</div>\n";
+        echo '<div class="alert alert-success">' . $message . "</div>\n";
 }
     ?>
 <table class="table table-striped table-bordered">
@@ -44,7 +44,7 @@ echo CHtml::hiddenField('tahun_angkatan',$tahun_angkatan);
       <th>Tgl Lhr</th>
       <th>JK</th>
       <th width="15%">Kecamatan</th>
-      <th width="15%">Kecamatan<br>SIAKAD</th>
+      <th width="15%">Alamat<br>SIAKAD</th>
       <th width="15%">Kota</th>
       <th width="15%">Kota<br>SIAKAD</th>
       <th width="15%">Provinsi</th>
@@ -98,6 +98,7 @@ foreach($mahasiswas as $m)
 	<input type="text" class="input kecamatan"/>
 	<input type="hidden" class="input id_kecamatan" value="<?=$m->kecamatan_feeder ?: '';?>" name="id_kecamatan_<?=$m->nim_mhs;?>" />
 	<input type="hidden" class="input id_induk"/>
+	<input type="hidden" class="input nama_kecamatan" name="nama_kecamatan_<?=$m->nim_mhs;?>"/>
 </td>
 <td width="15%"><?=$m->alamat;?></td>
 <td width="15%">
@@ -157,7 +158,7 @@ foreach($mahasiswas as $m)
   </tbody>
 
 </table>
-<?php echo CHtml::submitButton('Update'); ?>
+<?= CHtml::submitButton('Update',['class'=>'btn btn-info']); ?>
 <?php $this->endWidget(); ?>
 
 
@@ -215,7 +216,9 @@ function popitup(url,label) {
 	      select:function(event, ui){
 	      	var obj = $(this);
 	        obj.next().val(ui.item.id);
-	        obj.next().val(ui.item.id_induk_wilayah);
+	        obj.next().next().val(ui.item.id_induk_wilayah);
+	        var kec = obj.next().next().next();
+	        kec.val(ui.item.value.split(" - ")[1]);
 	        
 	        $.ajax({
                 url: "<?php echo Yii::app()->createUrl('mastermahasiswa/AjaxFindWilayahOne');?>",

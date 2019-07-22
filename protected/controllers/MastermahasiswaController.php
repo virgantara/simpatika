@@ -379,6 +379,9 @@ class MastermahasiswaController extends Controller
 				}
 				if(!empty($_POST['id_kecamatan_'.$m->nim_mhs]))
 					$m->kecamatan_feeder = $_POST['id_kecamatan_'.$m->nim_mhs];
+
+				if(!empty($_POST['nama_kecamatan_'.$m->nim_mhs]))
+					$m->kecamatan = $_POST['nama_kecamatan_'.$m->nim_mhs];
 				
 				if(!empty($_POST['id_negara_'.$m->nim_mhs]))
 					$m->warga_negara_feeder = $_POST['id_negara_'.$m->nim_mhs];
