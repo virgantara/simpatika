@@ -63,7 +63,6 @@
  * @property string $kabupaten
  * @property string $status_warga
  * @property string $warga_negara
- * @property string $warga_negara_feeder
  * @property string $status_sipil
  * @property string $agama
  * @property string $gol_darah
@@ -103,7 +102,6 @@ class Mastermahasiswa extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nim_mhs, nama_mahasiswa', 'required'),
-			array('nim_mhs', 'unique'),
 			array('status_bayar, status_mahasiswa, is_synced', 'numerical', 'integerOnly'=>true),
 			array('kode_pt, asal_prodi, kode_pos', 'length', 'max'=>6),
 			array('kode_fakultas, kode_prodi, kode_jenjang_studi, jenis_kelamin, semester_awal, batas_studi, status_awal, asal_jenjang_studi, semester, rt, rw', 'length', 'max'=>5),
@@ -117,17 +115,16 @@ class Mastermahasiswa extends CActiveRecord
 			array('nip_co_promotor1', 'length', 'max'=>11),
 			array('nip_co_promotor2', 'length', 'max'=>12),
 			array('nip_co_promotor3', 'length', 'max'=>33),
-			array('photo_mahasiswa, alamat', 'length', 'max'=>255),
+			array('photo_mahasiswa, alamat, kecamatan_feeder, provinsi, kabupaten', 'length', 'max'=>255),
 			array('berat, tinggi', 'length', 'max'=>3),
-			array('desa, kecamatan, warga_negara, warga_negara_feeder, status_sipil, jur_thn_smta, kode_pd', 'length', 'max'=>100),
-			array('kecamatan_feeder', 'length', 'max'=>10),
+			array('desa, kecamatan, warga_negara, status_sipil, jur_thn_smta, kode_pd', 'length', 'max'=>100),
 			array('jenis_tinggal, no_kps, agama, va_code', 'length', 'max'=>20),
 			array('penerima_kps, masuk_kelas', 'length', 'max'=>1),
 			array('gol_darah, kampus', 'length', 'max'=>2),
 			array('tgl_lahir, tgl_masuk, tgl_lulus, keterangan, tgl_sk_yudisium, created_at, updated_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, nim_mhs, nama_mahasiswa, tempat_lahir, tgl_lahir, jenis_kelamin, tahun_masuk, semester_awal, batas_studi, asal_propinsi, tgl_masuk, tgl_lulus, status_aktivitas, status_awal, jml_sks_diakui, nim_asal, asal_pt, nama_asal_pt, asal_jenjang_studi, asal_prodi, kode_biaya_studi, kode_pekerjaan, tempat_kerja, kode_pt_kerja, kode_ps_kerja, nip_promotor, nip_co_promotor1, nip_co_promotor2, nip_co_promotor3, nip_co_promotor4, photo_mahasiswa, semester, keterangan, status_bayar, telepon, hp, email, alamat, berat, tinggi, ktp, rt, rw, dusun, kode_pos, desa, kecamatan, kecamatan_feeder, jenis_tinggal, penerima_kps, no_kps, provinsi, kabupaten, status_warga, warga_negara, warga_negara_feeder, status_sipil, agama, gol_darah, masuk_kelas, tgl_sk_yudisium, status_mahasiswa, kampus, jur_thn_smta, is_synced, kode_pd, va_code, created_at, updated_at', 'safe', 'on'=>'search'),
+			array('id, kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, nim_mhs, nama_mahasiswa, tempat_lahir, tgl_lahir, jenis_kelamin, tahun_masuk, semester_awal, batas_studi, asal_propinsi, tgl_masuk, tgl_lulus, status_aktivitas, status_awal, jml_sks_diakui, nim_asal, asal_pt, nama_asal_pt, asal_jenjang_studi, asal_prodi, kode_biaya_studi, kode_pekerjaan, tempat_kerja, kode_pt_kerja, kode_ps_kerja, nip_promotor, nip_co_promotor1, nip_co_promotor2, nip_co_promotor3, nip_co_promotor4, photo_mahasiswa, semester, keterangan, status_bayar, telepon, hp, email, alamat, berat, tinggi, ktp, rt, rw, dusun, kode_pos, desa, kecamatan, kecamatan_feeder, jenis_tinggal, penerima_kps, no_kps, provinsi, kabupaten, status_warga, warga_negara, status_sipil, agama, gol_darah, masuk_kelas, tgl_sk_yudisium, status_mahasiswa, kampus, jur_thn_smta, is_synced, kode_pd, va_code, created_at, updated_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -159,7 +156,7 @@ class Mastermahasiswa extends CActiveRecord
 			'nama_mahasiswa' => 'Nama Mahasiswa',
 			'tempat_lahir' => 'Tempat Lahir',
 			'tgl_lahir' => 'Tgl Lahir',
-			'jenis_kelamin' => 'JK',
+			'jenis_kelamin' => 'Jenis Kelamin',
 			'tahun_masuk' => 'Tahun Masuk',
 			'semester_awal' => 'Semester Awal',
 			'batas_studi' => 'Batas Studi',
@@ -209,7 +206,6 @@ class Mastermahasiswa extends CActiveRecord
 			'kabupaten' => 'Kabupaten',
 			'status_warga' => 'Status Warga',
 			'warga_negara' => 'Warga Negara',
-			'warga_negara_feeder' => 'Warga Negara Feeder',
 			'status_sipil' => 'Status Sipil',
 			'agama' => 'Agama',
 			'gol_darah' => 'Gol Darah',
@@ -303,7 +299,6 @@ class Mastermahasiswa extends CActiveRecord
 		$criteria->compare('kabupaten',$this->kabupaten,true);
 		$criteria->compare('status_warga',$this->status_warga,true);
 		$criteria->compare('warga_negara',$this->warga_negara,true);
-		$criteria->compare('warga_negara_feeder',$this->warga_negara_feeder,true);
 		$criteria->compare('status_sipil',$this->status_sipil,true);
 		$criteria->compare('agama',$this->agama,true);
 		$criteria->compare('gol_darah',$this->gol_darah,true);
@@ -333,6 +328,4 @@ class Mastermahasiswa extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-
-
 }

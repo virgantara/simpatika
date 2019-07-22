@@ -226,7 +226,7 @@ class MastermahasiswaController extends Controller
 	        		$mhs->kode_pt = '073090';
 	        		$mhs->kode_jenjang_studi = 'C';
 	        		$mhs->is_synced = 0;
-
+	        		
 	        		if($mhs->validate()){
 
 	        			$mhs->save();
@@ -234,7 +234,7 @@ class MastermahasiswaController extends Controller
 	        		}
 
 	        		else{
-
+	        			
 	        			$errors = 'Baris ke-';
 						$errors .= ($index + 1).' : ';
 							
@@ -250,8 +250,9 @@ class MastermahasiswaController extends Controller
 					
 
 		        }
-
+		        
 		        $this->readSheetOrtu($model->uploadedFile,1,'AYAH');
+		        
 		        $this->readSheetOrtu($model->uploadedFile,2,'IBU');
 		        $this->readSheetOrtu($model->uploadedFile,3,'WALI');
 
