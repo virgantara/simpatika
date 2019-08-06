@@ -49,7 +49,7 @@ class MahasiswaOrtu extends CActiveRecord
 		return array(
 			array('nim, kota, propinsi, negara, telepon, hp, email', 'length', 'max'=>20),
 			array('hubungan', 'length', 'max'=>4),
-			array('nama', 'length', 'max'=>50),
+			array('nama', 'length', 'max'=>100),
 			array('agama, pendidikan, pekerjaan, penghasilan, hidup, pos', 'length', 'max'=>10),
 			array('alamat', 'length', 'max'=>255),
 			// The following rule is used by search().

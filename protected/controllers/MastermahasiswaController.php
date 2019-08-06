@@ -45,8 +45,10 @@ class MastermahasiswaController extends Controller
 		);
 	}
 
-	private function readSheetOrtu($uploadedFile, $sheetNum, $hubungan)
+	private function readSheetOrtu($model, $sheetNum, $hubungan)
 	{
+
+		$uploadedFile = $model->uploadedFile;
 
 		Yii::import('ext.PHPExcel.PHPExcel.**', true); 
 
@@ -85,6 +87,7 @@ class MastermahasiswaController extends Controller
       		$list_penghasilan[$p->kode_feeder] = $p;
       	}
 
+
 		$index = 1;
         for ($row = 2; $row <= $highestRow; $row++)
         {
@@ -99,18 +102,30 @@ class MastermahasiswaController extends Controller
         	$pekerjaan = strtoupper($sheet->getCell('G'.$row)->getValue());
         	$penghasilan = strtoupper($sheet->getCell('H'.$row)->getValue());
         	
-        	$kd_feeder_pendidikan = !empty($pendidikan) ? explode(' - ', $pendidikan) : [0=>6];
-        	$kd_feeder_pekerjaan = !empty($pekerjaan) ? explode(' - ', $pekerjaan) : [0=>99];
-        	$kd_feeder_penghasilan = !empty($penghasilan) ? explode(' - ', $penghasilan) : [0=>12];
+        	$kd_feeder_pendidikan = !empty($pendidikan) ? explode(' - ', trim($pendidikan)) : [0=>6];
+        	$kd_feeder_pekerjaan = !empty($pekerjaan) ? explode(' - ', trim($pekerjaan)) : [0=>99];
+        	$kd_feeder_penghasilan = !empty($penghasilan) ? explode(' - ', trim($penghasilan)) : [0=>12];
         	
     		$ortu = new MahasiswaOrtu;
     		$ortu->hubungan = $hubungan;
     		$ortu->nama = $nama;
     		$ortu->nim = $nim;
     		$ortu->agama = 'I';
+    		
+   //  		try
+			// {
+
     		$ortu->pendidikan = $list_pendidikan[$kd_feeder_pendidikan[0]]->value;
     		$ortu->pekerjaan = $list_pekerjaan[$kd_feeder_pekerjaan[0]]->value;
     		$ortu->penghasilan = $list_penghasilan[$kd_feeder_penghasilan[0]]->value;
+    		// }
+
+			// catch(Exception $e){
+			// 	$model->addError('error',$e->getMessage());
+			// 	exit;
+			// 	throw new Exception();
+
+			// }	
 
     		if($ortu->validate()){
 
@@ -219,7 +234,7 @@ class MastermahasiswaController extends Controller
 	        		$mhs->dusun = $dusun;
 	        		$mhs->kode_pos = $kodepos;
 	        		$mhs->desa = $desa;
-	        		$mhs->kampus = 5;
+	        		$mhs->kampus = $kampus;
 	        		$mhs->agama = 'I';
 	        		$mhs->provinsi = $provinsi;
 	        		$mhs->kabupaten = $kota;
@@ -251,10 +266,10 @@ class MastermahasiswaController extends Controller
 
 		        }
 		        
-		        $this->readSheetOrtu($model->uploadedFile,1,'AYAH');
+		        $this->readSheetOrtu($model,1,'AYAH');
 		        
-		        $this->readSheetOrtu($model->uploadedFile,2,'IBU');
-		        $this->readSheetOrtu($model->uploadedFile,3,'WALI');
+		        $this->readSheetOrtu($model,2,'IBU');
+		        $this->readSheetOrtu($model,3,'WALI');
 
 		        // $message .= '</ul>';
 		        // $this->redirect(array('trRawatInap/lainnya','id'=>$id));
@@ -268,7 +283,7 @@ class MastermahasiswaController extends Controller
 	        }
 
 			catch(Exception $e){
-				// Yii::app()->user->setFlash('error', print_r($e->errorInfo));
+				Yii::app()->user->setFlash('error', print_r($e));
 				$transaction->rollback();
 			}	
 	    }
