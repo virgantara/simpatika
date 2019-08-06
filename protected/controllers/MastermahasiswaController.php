@@ -237,6 +237,7 @@ class MastermahasiswaController extends Controller
 	        		$mhs->kampus = $kampus;
 	        		$mhs->agama = 'I';
 	        		$mhs->provinsi = $provinsi;
+	        		$mhs->kecamatan = $kecamatan;
 	        		$mhs->kabupaten = $kota;
 	        		$mhs->kode_pt = '073090';
 	        		$mhs->kode_jenjang_studi = 'C';

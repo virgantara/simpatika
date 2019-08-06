@@ -44,7 +44,7 @@ echo CHtml::hiddenField('tahun_angkatan',$tahun_angkatan);
       <th>Tgl Lhr</th>
       <th>JK</th>
       <th width="15%">Kecamatan</th>
-      <th width="15%">Alamat<br>SIAKAD</th>
+      <th width="15%">Kecamatan<br>SIAKAD</th>
       <th width="15%">Kota</th>
       <th width="15%">Kota<br>SIAKAD</th>
       <th width="15%">Provinsi</th>
@@ -100,7 +100,7 @@ foreach($mahasiswas as $m)
 	<input type="hidden" class="input id_induk"/>
 	<input type="hidden" class="input nama_kecamatan" name="nama_kecamatan_<?=$m->nim_mhs;?>"/>
 </td>
-<td width="15%"><?=$m->alamat;?></td>
+<td width="15%"><?=$m->kecamatan;?></td>
 <td width="15%">
 	<input type="text" readonly class="input kota"/>
 	<input type="hidden" class="input id_induk_kota"/>
