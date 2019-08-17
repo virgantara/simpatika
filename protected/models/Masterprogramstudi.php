@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "simak_masterprogramstudi".
+ * This is the model class for table "{{masterprogramstudi}}".
  *
- * The followings are the available columns in table 'simak_masterprogramstudi':
+ * The followings are the available columns in table '{{masterprogramstudi}}':
  * @property integer $id
  * @property string $kode_fakultas
  * @property string $kode_jurusan
@@ -31,6 +31,12 @@
  * @property string $nama_operator
  * @property string $hp_operator
  * @property string $telepon_program_studi
+ * @property string $singkatan
+ * @property string $kode_feeder
+ *
+ * The followings are the available model relations:
+ * @property Mastermahasiswa[] $mastermahasiswas
+ * @property Masterfakultas $kodeFakultas
  */
 class Masterprogramstudi extends CActiveRecord
 {
@@ -39,7 +45,7 @@ class Masterprogramstudi extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'simak_masterprogramstudi';
+		return '{{masterprogramstudi}}';
 	}
 
 	/**
@@ -57,10 +63,11 @@ class Masterprogramstudi extends CActiveRecord
 			array('kode_status', 'length', 'max'=>1),
 			array('no_sk_akreditasi, nidn_ketua_prodi, telp_ketua_prodi, fax_prodi, hp_operator, telepon_program_studi', 'length', 'max'=>25),
 			array('frekuensi_kurikulum, pelaksanaan_kurikulum', 'length', 'max'=>10),
+			array('singkatan, kode_feeder', 'length', 'max'=>255),
 			array('tgl_sk_dikti, tgl_akhir_sk_dikti, tgl_pendirian_program_studi, tgl_sk_akreditasi, tgl_akhir_sk_akreditasi', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, kode_fakultas, kode_jurusan, kode_prodi, kode_jenjang_studi, nama_prodi, semester_awal, no_sk_dikti, tgl_sk_dikti, tgl_akhir_sk_dikti, jml_sks_lulus, kode_status, tahun_semester_mulai, email_prodi, tgl_pendirian_program_studi, no_sk_akreditasi, tgl_sk_akreditasi, tgl_akhir_sk_akreditasi, kode_status_akreditasi, frekuensi_kurikulum, pelaksanaan_kurikulum, nidn_ketua_prodi, telp_ketua_prodi, fax_prodi, nama_operator, hp_operator, telepon_program_studi, singkatan', 'safe', 'on'=>'search'),
+			array('id, kode_fakultas, kode_jurusan, kode_prodi, kode_jenjang_studi, nama_prodi, semester_awal, no_sk_dikti, tgl_sk_dikti, tgl_akhir_sk_dikti, jml_sks_lulus, kode_status, tahun_semester_mulai, email_prodi, tgl_pendirian_program_studi, no_sk_akreditasi, tgl_sk_akreditasi, tgl_akhir_sk_akreditasi, kode_status_akreditasi, frekuensi_kurikulum, pelaksanaan_kurikulum, nidn_ketua_prodi, telp_ketua_prodi, fax_prodi, nama_operator, hp_operator, telepon_program_studi, singkatan, kode_feeder', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,7 +79,8 @@ class Masterprogramstudi extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'fakultas' => array(self::BELONGS_TO, 'Masterfakultas', 'kode_fakultas'),
+			'mastermahasiswas' => array(self::HAS_MANY, 'Mastermahasiswa', 'kode_prodi'),
+			'kodeFakultas' => array(self::BELONGS_TO, 'Masterfakultas', 'kode_fakultas'),
 		);
 	}
 
@@ -109,6 +117,8 @@ class Masterprogramstudi extends CActiveRecord
 			'nama_operator' => 'Nama Operator',
 			'hp_operator' => 'Hp Operator',
 			'telepon_program_studi' => 'Telepon Program Studi',
+			'singkatan' => 'Singkatan',
+			'kode_feeder' => 'Kode Feeder',
 		);
 	}
 
@@ -157,6 +167,8 @@ class Masterprogramstudi extends CActiveRecord
 		$criteria->compare('nama_operator',$this->nama_operator,true);
 		$criteria->compare('hp_operator',$this->hp_operator,true);
 		$criteria->compare('telepon_program_studi',$this->telepon_program_studi,true);
+		$criteria->compare('singkatan',$this->singkatan,true);
+		$criteria->compare('kode_feeder',$this->kode_feeder,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

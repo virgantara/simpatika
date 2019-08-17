@@ -32,7 +32,7 @@ class MastermahasiswaController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','uploadPA','ortu','dataortu','updatebio','ajaxFindWilayah','ajaxFindWilayahOne','ajaxFindNegara','uploadMhs'),
+				'actions'=>array('create','update','uploadPA','ortu','dataortu','updatebio','ajaxFindWilayah','ajaxFindWilayahOne','ajaxFindNegara','uploadMhs','ajaxSync'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,6 +43,131 @@ class MastermahasiswaController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionAjaxSync()
+	{
+		$nim = $_POST['nim'];
+		$m = Mastermahasiswa::model()->findByAttributes(['nim_mhs'=>$nim]);
+		$ayah = MahasiswaOrtu::model()->findByAttributes([
+			'hubungan'=> 'AYAH',
+			'nim' => $nim
+		]);
+
+		$ibu = MahasiswaOrtu::model()->findByAttributes([
+			'hubungan'=> 'IBU',
+			'nim' => $nim
+		]);
+
+		$wali = MahasiswaOrtu::model()->findByAttributes([
+			'hubungan'=> 'WALI',
+			'nim' => $nim
+		]);
+
+		$params = [
+			'nm_pd'		=> ucwords(strtolower($m->nama_mahasiswa)),
+			'id_kk' 	=> '0',
+			'tmpt_lahir' 			=> ucwords(strtolower($m->tempat_lahir)),
+			'tgl_lahir' 		=> $m->tgl_lahir,
+			'jk'			=> $m->jenis_kelamin,
+			'id_agama' 				=> '1',
+			'nik'					=> $m->ktp,
+			'kewarganegaraan'		=> $m->warga_negara,
+			'jln'					=> $m->alamat,
+			'nm_dsn'					=> $m->dusun,
+			'rt'					=> $m->rt,
+			'rw'					=> $m->rw,
+			'ds_kel'				=> $m->desa,
+			'kode_pos'				=> $m->kode_pos,
+			'id_wil' 			=> $m->kecamatan_feeder,
+			'id_jns_tinggal'		=> 4, //asrama,
+			'id_alat_transport'	=> 1,//jalan kaki,
+			'no_tel_rmh' 				=> $m->telepon,
+			'no_hp'				=> $m->hp,
+			'email'					=> $m->email,
+			'a_terima_kps'		=> 0,
+			'nm_ayah'				=> ucwords(strtolower($ayah->nama)),
+			'id_pekerjaan_ayah'		=> $ayah->pekerjaan0->kode_feeder,
+			'id_jenjang_pendidikan_ayah'	=> $ayah->pendidikan0->kode_feeder,
+			'id_penghasilan_ayah'	=> $ayah->penghasilan0->kode_feeder,
+			'id_kebutuhan_khusus_ayah' 	=> '0', 
+			'nm_ibu_kandung'		=> ucwords(strtolower($ibu->nama)),
+			'id_pekerjaan_ibu'		=> $ibu->pekerjaan0->kode_feeder,
+			'id_jenjang_pendidikan_ibu'		=> $ibu->pendidikan0->kode_feeder,
+			'id_penghasilan_ibu'	=> $ibu->penghasilan0->kode_feeder,
+			'id_kebutuhan_khusus_ibu' 	=> '0',
+			'nm_wali'				=> ucwords(strtolower($wali->nama)),
+			'id_pekerjaan_wali'		=> $wali->pekerjaan0->kode_feeder,
+			'id_jenjang_pendidikan_wali'	=> $wali->pendidikan0->kode_feeder,
+			'id_penghasilan_wali'	=> $wali->penghasilan0->kode_feeder,
+			
+		];
+
+		$host = Yii::app()->rest->baseurl_apigateway;
+		
+
+		$url = $host."/feeder/m/insert";
+
+		$hasil = null;
+
+		$api = new RestClient;
+		$headers = [
+			'Content-Type' => 'application/x-www-form-urlencoded'
+		];
+
+
+		$result = $api->post($url, $params, $headers);
+		
+		try{
+			
+			$hasil = $result->decode_response();
+		}
+
+		catch(RestClientException  $e){
+			//print_r($e);
+			//throw new RestClientException;
+			$hasil = null;
+		}
+
+		if(!empty($hasil->values->output->result->id_pd)){
+			$hsl = (array) $hasil->values->output->result->id_pd;
+			$id_pd = $hsl['$value'];
+			$m->kode_pd = $id_pd;
+			$m->save();
+			$prodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=> $m->kode_prodi]);
+
+			$params = [
+				'id_pd'		=> $id_pd,
+				'id_sp' 	=> '715253d2-bafa-429a-9ff7-a85b34ff955d',
+				'nipd' 			=> $m->nim_mhs,
+				'tgl_masuk_sp' => '2019-07-15',
+				'id_jns_daftar' => 1,
+				'mulai_smt'	=> 20191,
+				'id_sms' => $prodi->kode_feeder,				
+			];
+
+			$url = $host."/feeder/m/insert/pt";
+
+			$hasil = null;
+
+			$api = new RestClient;
+
+			$result = $api->post($url, $params, $headers);
+			
+			try{
+				
+				$hasil = $result->decode_response();
+			}
+
+			catch(RestClientException  $e){
+				//print_r($e);
+				//throw new RestClientException;
+				$hasil = null;
+			}
+		}
+		
+		echo json_encode($hasil);
+
 	}
 
 	private function readSheetOrtu($model, $sheetNum, $hubungan)

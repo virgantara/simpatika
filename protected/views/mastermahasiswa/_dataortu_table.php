@@ -80,11 +80,17 @@ foreach($mahasiswas as $m)
 			$bg = 'background-color: red;color:white';
 			break;
 	}
+
+	$sudah_input = !empty($m->kecamatan_feeder) ? 'success' : 'danger';
 ?>
 <tr>
 <td width="3%"><?=($i+1);?></td>
 
-<td width="5%"><?php echo $m->nim_mhs;?></td>
+<td width="5%"><?php echo $m->nim_mhs;?>
+	
+	<a class="btn btn-success btn-xs btn-block sync" data-item="<?=$m->nim_mhs;?>" href="javascript:void(0)"><i class="glyphicon glyphicon-refresh"></i>  Sync to Feeder</a>
+	<span class="loading" style="display: none">Syncing...</span>
+</td>
 <td><?php echo $m->nama_mahasiswa;?></td>
 <td>
 <input type="text" size="10" name="tempat_lahir_<?=$m->nim_mhs;?>" value="<?=$m->tempat_lahir ?: '';?>" />
@@ -100,7 +106,11 @@ foreach($mahasiswas as $m)
 	<input type="hidden" class="input id_induk"/>
 	<input type="hidden" class="input nama_kecamatan" name="nama_kecamatan_<?=$m->nim_mhs;?>"/>
 </td>
-<td width="15%"><?=$m->kecamatan;?></td>
+<td width="15%" >
+	<div class="alert alert-<?=$sudah_input;?>">
+	<?=$m->kecamatan;?>
+		</div>
+	</td>
 <td width="15%">
 	<input type="text" readonly class="input kota"/>
 	<input type="hidden" class="input id_induk_kota"/>
@@ -147,6 +157,7 @@ foreach($mahasiswas as $m)
 	'nim'=>$m->nim_mhs
 	]);?>"><i class="glyphicon glyphicon-plus"></i> Input</a>
 	<a class="btn btn-success btn-xs btn-block list-ortu" href="<?=Yii::app()->createUrl('mahasiswaOrtu/admin',['nim'=>$m->nim_mhs]);?>"><i class="glyphicon glyphicon-list"></i>  List</a>
+	
 </td>
 </tr>
 		
@@ -177,6 +188,32 @@ function popitup(url,label) {
 			'dateFormat' : 'yy-mm-dd'
 		});
 
+		$('.sync').click(function(){
+			var nim = $(this).attr('data-item');
+			var stat = $(this).next();
+			$.ajax({
+				type : 'POST',
+                url: "<?php echo Yii::app()->createUrl('mastermahasiswa/ajaxSync');?>",
+                // dataType: "json",
+                data: 'nim='+nim,
+                beforeSend: function(){
+                	stat.show();
+                },
+                error : function(e){
+                	stat.hide();
+                },
+                success: function (data) {
+                    stat.hide();
+                    var hsl = $.parseJSON(data);
+                    if(hsl.status == 200)
+                    	alert(JSON.stringify(hsl.values.output.result));
+                    else{
+                    	alert(hsl);
+                    }
+                }
+	        });
+		});
+
 		$('.list-ortu').click(function(e){
 			e.preventDefault();
 			var url = $(this).attr('href');
@@ -197,7 +234,7 @@ function popitup(url,label) {
 	       // $('#nama_dosen').val(ui.item.value);
 	      },
 	      source:function(request, response) {
-	        $.ajax({
+	        	$.ajax({
 	                url: "<?php echo Yii::app()->createUrl('mastermahasiswa/AjaxFindNegara');?>",
 	                dataType: "json",
 	                data: {
