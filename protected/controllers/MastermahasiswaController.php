@@ -140,9 +140,9 @@ class MastermahasiswaController extends Controller
 				'id_pd'		=> $id_pd,
 				'id_sp' 	=> '715253d2-bafa-429a-9ff7-a85b34ff955d',
 				'nipd' 			=> $m->nim_mhs,
-				'tgl_masuk_sp' => '2019-07-15',
+				'tgl_masuk_sp' => $_POST['tgl_masuk'],
 				'id_jns_daftar' => 1,
-				'mulai_smt'	=> 20191,
+				'mulai_smt'	=> $_POST['ta_masuk'],
 				'id_sms' => $prodi->kode_feeder,				
 			];
 

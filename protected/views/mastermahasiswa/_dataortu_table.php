@@ -194,11 +194,12 @@ function popitup(url,label) {
 		$('.sync').click(function(){
 			var nim = $(this).attr('data-item');
 			var stat = $(this).next();
+
 			$.ajax({
 				type : 'POST',
                 url: "<?php echo Yii::app()->createUrl('mastermahasiswa/ajaxSync');?>",
                 // dataType: "json",
-                data: 'nim='+nim,
+                data: 'nim='+nim+'&ta_masuk=<?=$ta_masuk;?>&tgl_masuk=<?=$tgl_masuk;?>',
                 beforeSend: function(){
                 	stat.show();
                 },
