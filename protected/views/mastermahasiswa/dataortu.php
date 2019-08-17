@@ -83,7 +83,7 @@ $this->menu=array(
 		<label class="col-sm-3 control-label no-padding-right">Tgl Masuk</label>
 		<div class="col-sm-9">
 		<?php
-		$tgl_masuk = $_GET['tgl_masuk'] ?: date('Y-m-d');
+		$tgl_masuk = !empty($_GET['tgl_masuk']) ? $_GET['tgl_masuk'] : date('Y-m-d');
     	echo CHtml::textField('tgl_masuk', $tgl_masuk);
 		?>
 		</div>
