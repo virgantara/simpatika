@@ -68,18 +68,26 @@ $this->menu=array(
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-3 control-label no-padding-right">Tahun Angkatan</label>
+		<label class="col-sm-3 control-label no-padding-right">Tahun Ajaran Masuk</label>
 		<div class="col-sm-9">
 		<?php
-		$tahun_angkatan = !empty($_GET['tahun_angkatan']) ? $_GET['tahun_angkatan'] : '2019';
+		$ta_masuk = !empty($_GET['ta_masuk']) ? $_GET['ta_masuk'] : date('Y').'1';
     
   
-		echo CHtml::textField('tahun_angkatan',$tahun_angkatan);
+		echo CHtml::textField('ta_masuk',$ta_masuk);
 		
 		?>
 		</div>
 	</div>
-
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right">Tgl Masuk</label>
+		<div class="col-sm-9">
+		<?php
+		$tgl_masuk = $_GET['tgl_masuk'] ?: date('Y-m-d');
+    	echo CHtml::textField('tgl_masuk', $tgl_masuk);
+		?>
+		</div>
+	</div>
 	 <div class="clearfix form-actions">
         <div class="col-md-offset-3 col-md-9">
 
@@ -87,10 +95,11 @@ $this->menu=array(
             <i class="ace-icon glyphicon glyphicon-check bigger-110"></i>
             Lihat
           </button>
-          <?php echo !empty($kode_prodi) ? CHtml::link('<i class="glyphicon glyphicon-download"></i> Export ke XLS',array('mastermahasiswa/dataortu','kode_prodi'=>$kode_prodi,'kampus'=>$kampus,'tahun_angkatan'=>$tahun_angkatan,'xls'=>'y'),['class'=>'btn btn-success']) : ''; ?>
+          <?php echo !empty($kode_prodi) ? CHtml::link('<i class="glyphicon glyphicon-download"></i> Export ke XLS',array('mastermahasiswa/dataortu','kode_prodi'=>$kode_prodi,'kampus'=>$kampus,'ta_masuk'=>$ta_masuk,'tgl_masuk'=>$tgl_masuk,'xls'=>'y'),['class'=>'btn btn-success']) : ''; ?>
         
         </div>
       </div>
+
 <?php $this->endWidget(); ?>
 
 <?php 
@@ -114,3 +123,15 @@ if(!empty($kode_prodi))
 <?php 
 }
 ?>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#tgl_masuk').datepicker({
+			showAnim: "fold",
+  			dateFormat: "yy-mm-dd",
+  			changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+		});
+	});
+</script>

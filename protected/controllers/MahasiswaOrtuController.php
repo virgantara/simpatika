@@ -60,7 +60,7 @@ class MahasiswaOrtuController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate($kode_prodi, $kampus, $tahun_angkatan, $nim)
+	public function actionCreate($kode_prodi, $kampus, $ta_masuk,$tgl_masuk, $nim)
 	{
 		$model=new MahasiswaOrtu;
 
@@ -78,7 +78,8 @@ class MahasiswaOrtuController extends Controller
 					'mastermahasiswa/dataortu',
 					'kode_prodi'=>$_POST['kode_prodi'],
 					'kampus' => $_POST['kampus'],
-					'tahun_angkatan' => $_POST['tahun_angkatan']
+					'ta_masuk' => $_POST['ta_masuk'],
+					'tgl_masuk' => $_POST['tgl_masuk']
 				]);
 			}
 		}

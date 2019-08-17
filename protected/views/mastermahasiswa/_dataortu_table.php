@@ -28,10 +28,12 @@ foreach(Yii::app()->user->getFlashes() as $key => $message) {
 <?php 
 $kampus = $_GET['kampus'] ?: '';
 $kode_prodi = $_GET['kode_prodi'] ?: '';
-$tahun_angkatan = $_GET['tahun_angkatan'] ?: '';
+$ta_masuk = $_GET['ta_masuk'] ?: '';
+$tgl_masuk = $_GET['tgl_masuk'] ?: '';
 echo CHtml::hiddenField('kampus',$kampus);
 echo CHtml::hiddenField('kode_prodi',$kode_prodi);
-echo CHtml::hiddenField('tahun_angkatan',$tahun_angkatan);
+echo CHtml::hiddenField('ta_masuk',$ta_masuk);
+echo CHtml::hiddenField('tgl_masuk',$tgl_masuk);
  ?> 
   <thead>
     <tr>
@@ -153,7 +155,8 @@ foreach($mahasiswas as $m)
 	<a class="btn btn-info btn-xs btn-block" href="<?=Yii::app()->createUrl('mahasiswaOrtu/create',[
 	'kode_prodi'=>$kode_prodi,
 	'kampus'=>$kampus,
-	'tahun_angkatan'=>$tahun_angkatan,
+	'ta_masuk'=>$ta_masuk,
+	'tgl_masuk' => $tgl_masuk,
 	'nim'=>$m->nim_mhs
 	]);?>"><i class="glyphicon glyphicon-plus"></i> Input</a>
 	<a class="btn btn-success btn-xs btn-block list-ortu" href="<?=Yii::app()->createUrl('mahasiswaOrtu/admin',['nim'=>$m->nim_mhs]);?>"><i class="glyphicon glyphicon-list"></i>  List</a>

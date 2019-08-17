@@ -541,7 +541,7 @@ class MastermahasiswaController extends Controller
 		}
 	}
 
-	public function actionDataortu($kode_prodi='',$kampus='', $tahun_angkatan='', $xls='')
+	public function actionDataortu($kode_prodi='',$kampus='', $ta_masuk='',$tgl_masuk='', $xls='')
 	{
 
 		$mahasiswas = new Mastermahasiswa;
@@ -549,11 +549,11 @@ class MastermahasiswaController extends Controller
 		if(!empty($_GET['kode_prodi']))
 		{
 			$c = new CDbCriteria;
-			$c->condition = 'kode_prodi = :p1 AND kampus = :p2 AND tahun_masuk= :p3 ';
+			$c->condition = 'kode_prodi = :p1 AND kampus = :p2 AND semester_awal= :p3 ';
 			$c->params = [
 				':p1' => $_GET['kode_prodi'],
 				':p2' => $_GET['kampus'],
-				':p3' => $_GET['tahun_angkatan']
+				':p3' => $_GET['ta_masuk']
 			];
 			$c->order = 'nim_mhs ASC';
 			$mahasiswas = Mastermahasiswa::model()->findAll($c);
@@ -613,7 +613,7 @@ class MastermahasiswaController extends Controller
 			$mahasiswas = Mastermahasiswa::model()->findAllByAttributes([
 				'kode_prodi' => $kode_prodi,
 				'kampus' => $kampus,
-				'tahun_masuk' => $tahun_angkatan
+				'semester_awal' => $ta_masuk
 			],['order' => 'nama_mahasiswa ASC']);
 
 			$mprodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=> $kode_prodi]);
