@@ -133,7 +133,8 @@ class MahasiswaOrtuController extends Controller
 			'list_keadaan' => $list_keadaan,
 			'kampus' => $kampus,
 			'kode_prodi' => $kode_prodi,
-			'tahun_angkatan' => $tahun_angkatan
+			'ta_masuk' => $ta_masuk,
+			'tgl_masuk' => $tgl_masuk
 		));
 	}
 

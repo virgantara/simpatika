@@ -496,11 +496,11 @@ class MastermahasiswaController extends Controller
 		if(!empty($_POST['kode_prodi']))
 		{
 			$c = new CDbCriteria;
-			$c->condition = 'kode_prodi = :p1 AND kampus = :p2 AND tahun_masuk= :p3 ';
+			$c->condition = 'kode_prodi = :p1 AND kampus = :p2 AND semester_awal= :p3 ';
 			$c->params = [
 				':p1' => $_POST['kode_prodi'],
 				':p2' => $_POST['kampus'],
-				':p3' => $_POST['tahun_angkatan']
+				':p3' => $_POST['ta_masuk']
 			];
 			$c->order = 'nim_mhs ASC';
 			$mahasiswas = Mastermahasiswa::model()->findAll($c);
@@ -536,7 +536,8 @@ class MastermahasiswaController extends Controller
 				'mastermahasiswa/dataortu',
 				'kode_prodi'=>$_POST['kode_prodi'],
 				'kampus' => $_POST['kampus'],
-				'tahun_angkatan' => $_POST['tahun_angkatan']
+				'ta_masuk' => $_POST['ta_masuk'],
+				'tgl_masuk' => $_POST['tgl_masuk']
 			]);
 		}
 	}
