@@ -21,7 +21,8 @@
 
 echo CHtml::hiddenField('kampus',$kampus ?: '');
 echo CHtml::hiddenField('kode_prodi',$kode_prodi ?: '');
-echo CHtml::hiddenField('tahun_angkatan',$tahun_angkatan ?: '');
+echo CHtml::hiddenField('ta_masuk',$ta_masuk ?: '');
+echo CHtml::hiddenField('tgl_masuk',$tgl_masuk ?: '');
  ?> 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
