@@ -158,7 +158,6 @@ foreach($list_matkul as $m)
   </tbody>
 
 </table>
-<?= CHtml::submitButton('Update',['class'=>'btn btn-info']); ?>
 <?php $this->endWidget(); ?>
 <?php 
 }
@@ -195,10 +194,10 @@ foreach($list_matkul as $m)
                     		syncBtn.prev().val(hsl.value);
                     	}
                     	else
-                    		alert(JSON.stringify(hsl));
+                    		console.log(JSON.stringify(hsl));
                     }
                     else{
-                    	alert(JSON.stringif(hsl));
+                    	console.log(JSON.stringif(hsl));
                     }
                 }
 	        });
