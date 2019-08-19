@@ -64,50 +64,9 @@ class MastermahasiswaController extends Controller
 			'nim' => $nim
 		]);
 
-		$params = [
-			'nm_pd'		=> ucwords(strtolower($m->nama_mahasiswa)),
-			'id_kk' 	=> '0',
-			'tmpt_lahir' 			=> ucwords(strtolower($m->tempat_lahir)),
-			'tgl_lahir' 		=> $m->tgl_lahir,
-			'jk'			=> $m->jenis_kelamin,
-			'id_agama' 				=> '1',
-			'nik'					=> $m->ktp,
-			'kewarganegaraan'		=> $m->warga_negara,
-			'jln'					=> $m->alamat,
-			'nm_dsn'					=> $m->dusun,
-			'rt'					=> $m->rt,
-			'rw'					=> $m->rw,
-			'ds_kel'				=> $m->desa,
-			'kode_pos'				=> $m->kode_pos,
-			'id_wil' 			=> $m->kecamatan_feeder,
-			'id_jns_tinggal'		=> 4, //asrama,
-			'id_alat_transport'	=> 1,//jalan kaki,
-			'no_tel_rmh' 				=> $m->telepon,
-			'no_hp'				=> $m->hp,
-			'email'					=> $m->email,
-			'a_terima_kps'		=> 0,
-			'nm_ayah'				=> ucwords(strtolower($ayah->nama)),
-			'id_pekerjaan_ayah'		=> $ayah->pekerjaan0->kode_feeder,
-			'id_jenjang_pendidikan_ayah'	=> $ayah->pendidikan0->kode_feeder,
-			'id_penghasilan_ayah'	=> $ayah->penghasilan0->kode_feeder,
-			'id_kebutuhan_khusus_ayah' 	=> '0', 
-			'nm_ibu_kandung'		=> ucwords(strtolower($ibu->nama)),
-			'id_pekerjaan_ibu'		=> $ibu->pekerjaan0->kode_feeder,
-			'id_jenjang_pendidikan_ibu'		=> $ibu->pendidikan0->kode_feeder,
-			'id_penghasilan_ibu'	=> $ibu->penghasilan0->kode_feeder,
-			'id_kebutuhan_khusus_ibu' 	=> '0',
-			'nm_wali'				=> ucwords(strtolower($wali->nama)),
-			'id_pekerjaan_wali'		=> $wali->pekerjaan0->kode_feeder,
-			'id_jenjang_pendidikan_wali'	=> $wali->pendidikan0->kode_feeder,
-			'id_penghasilan_wali'	=> $wali->penghasilan0->kode_feeder,
-			
-		];
-
+		
 		$host = Yii::app()->rest->baseurl_apigateway;
 		
-
-		
-
 		$hasil = null;
 
 		$api = new RestClient;
@@ -128,6 +87,8 @@ class MastermahasiswaController extends Controller
 			'table'		=> 'mahasiswa_pt',
 			'filter' 	=> 'nipd = \''.$nim.'\'',
 		];
+
+		
 		$result = $api->post($url, $params, $headers);
 		
 		try
@@ -136,7 +97,47 @@ class MastermahasiswaController extends Controller
 			$hasil = $result->decode_response();
 			if(empty($hasil->values->output->result->id_pd))
 			{
+				
 				$url = $host."/feeder/m/insert";
+				$params = [
+					'nm_pd'		=> ucwords(strtolower($m->nama_mahasiswa)),
+					'id_kk' 	=> '0',
+					'tmpt_lahir' 			=> ucwords(strtolower($m->tempat_lahir)),
+					'tgl_lahir' 		=> $m->tgl_lahir,
+					'jk'			=> $m->jenis_kelamin,
+					'id_agama' 				=> '1',
+					'nik'					=> $m->ktp,
+					'kewarganegaraan'		=> $m->warga_negara,
+					'jln'					=> $m->alamat,
+					'nm_dsn'					=> $m->dusun,
+					'rt'					=> $m->rt,
+					'rw'					=> $m->rw,
+					'ds_kel'				=> $m->desa,
+					'kode_pos'				=> $m->kode_pos,
+					'id_wil' 			=> $m->kecamatan_feeder,
+					'id_jns_tinggal'		=> 4, //asrama,
+					'id_alat_transport'	=> 1,//jalan kaki,
+					'no_tel_rmh' 				=> $m->telepon,
+					'no_hp'				=> $m->hp,
+					'email'					=> $m->email,
+					'a_terima_kps'		=> 0,
+					'nm_ayah'				=> ucwords(strtolower($ayah->nama)),
+					'id_pekerjaan_ayah'		=> $ayah->pekerjaan0->kode_feeder,
+					'id_jenjang_pendidikan_ayah'	=> $ayah->pendidikan0->kode_feeder,
+					'id_penghasilan_ayah'	=> $ayah->penghasilan0->kode_feeder,
+					'id_kebutuhan_khusus_ayah' 	=> '0', 
+					'nm_ibu_kandung'		=> ucwords(strtolower($ibu->nama)),
+					'id_pekerjaan_ibu'		=> $ibu->pekerjaan0->kode_feeder,
+					'id_jenjang_pendidikan_ibu'		=> $ibu->pendidikan0->kode_feeder,
+					'id_penghasilan_ibu'	=> $ibu->penghasilan0->kode_feeder,
+					'id_kebutuhan_khusus_ibu' 	=> '0',
+					'nm_wali'				=> ucwords(strtolower($wali->nama)),
+					'id_pekerjaan_wali'		=> $wali->pekerjaan0->kode_feeder,
+					'id_jenjang_pendidikan_wali'	=> $wali->pendidikan0->kode_feeder,
+					'id_penghasilan_wali'	=> $wali->penghasilan0->kode_feeder,
+					
+				];
+
 				$result = $api->post($url, $params, $headers);
 				
 				try{
@@ -202,6 +203,8 @@ class MastermahasiswaController extends Controller
 			//print_r($e);
 			//throw new RestClientException;
 			$hasil = null;
+
+
 		}
 
 		
