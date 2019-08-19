@@ -1,18 +1,20 @@
-<?php
-/* @var $this DatakrsController */
-/* @var $model Datakrs */
-
+ <?php
 $this->breadcrumbs=array(
-	'Datakrs'=>array('index'),
-	'Create',
+	array('name'=>'Datakrs','url'=>array('index')),
+	array('name'=>'Create'),
 );
 
-$this->menu=array(
-	array('label'=>'List Datakrs', 'url'=>array('index')),
-	array('label'=>'Manage Datakrs', 'url'=>array('admin')),
-);
 ?>
 
-<h1>Create Datakrs</h1>
-
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<style>
+	.errorMessage, .errorSummary{
+		color:red;
+	}
+</style>
+<div class="row">
+	<div class="col-xs-12">
+<?php $this->renderPartial('_form', [
+	'model'=>$model
+]); ?>
+	</div>
+</div>

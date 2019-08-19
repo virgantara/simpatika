@@ -166,6 +166,31 @@
 		<?php echo $form->textField($model,'pindahan',array('size'=>2,'maxlength'=>2)); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->label($model,'created'); ?>
+		<?php echo $form->textField($model,'created'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'is_approved'); ?>
+		<?php echo $form->textField($model,'is_approved'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'sudah_ekd'); ?>
+		<?php echo $form->textField($model,'sudah_ekd'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'score_ekd'); ?>
+		<?php echo $form->textField($model,'score_ekd'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'updated_at'); ?>
+		<?php echo $form->textField($model,'updated_at'); ?>
+	</div>
+
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Search'); ?>
 	</div>

@@ -63,6 +63,7 @@
  * @property string $kabupaten
  * @property string $status_warga
  * @property string $warga_negara
+ * @property string $warga_negara_feeder
  * @property string $status_sipil
  * @property string $agama
  * @property string $gol_darah
@@ -84,7 +85,10 @@
 class Mastermahasiswa extends CActiveRecord
 {
 
+	public $SEARCH;
+	public $PAGE_SIZE = 10;
 	public $uploadedFile;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -106,25 +110,25 @@ class Mastermahasiswa extends CActiveRecord
 			array('kode_pt, asal_prodi, kode_pos', 'length', 'max'=>6),
 			array('kode_fakultas, kode_prodi, kode_jenjang_studi, jenis_kelamin, semester_awal, batas_studi, status_awal, asal_jenjang_studi, semester, rt, rw', 'length', 'max'=>5),
 			array('nim_mhs, nama_asal_pt, telepon, hp', 'length', 'max'=>25),
-			array('nama_mahasiswa, tempat_lahir, asal_propinsi, status_aktivitas, email, status_warga', 'length', 'max'=>100),
+			array('nama_mahasiswa, dusun, desa, kecamatan, warga_negara, status_sipil, jur_thn_smta, kode_pd', 'length', 'max'=>100),
+			array('tempat_lahir, asal_propinsi, status_aktivitas, email, status_warga', 'length', 'max'=>50),
 			array('tahun_masuk', 'length', 'max'=>4),
 			array('jml_sks_diakui', 'length', 'max'=>45),
 			array('nim_asal, kode_biaya_studi, kode_pekerjaan, tempat_kerja, kode_pt_kerja', 'length', 'max'=>55),
-			array('asal_pt, ktp, dusun', 'length', 'max'=>100),
+			array('asal_pt, ktp', 'length', 'max'=>30),
 			array('kode_ps_kerja, nip_promotor, nip_co_promotor4', 'length', 'max'=>44),
 			array('nip_co_promotor1', 'length', 'max'=>11),
 			array('nip_co_promotor2', 'length', 'max'=>12),
 			array('nip_co_promotor3', 'length', 'max'=>33),
-			array('photo_mahasiswa, alamat, kecamatan_feeder, provinsi, kabupaten', 'length', 'max'=>255),
+			array('photo_mahasiswa, alamat, kecamatan_feeder, provinsi, kabupaten, warga_negara_feeder', 'length', 'max'=>255),
 			array('berat, tinggi', 'length', 'max'=>3),
-			array('desa, kecamatan, warga_negara, status_sipil, jur_thn_smta, kode_pd', 'length', 'max'=>100),
 			array('jenis_tinggal, no_kps, agama, va_code', 'length', 'max'=>20),
 			array('penerima_kps, masuk_kelas', 'length', 'max'=>1),
 			array('gol_darah, kampus', 'length', 'max'=>2),
 			array('tgl_lahir, tgl_masuk, tgl_lulus, keterangan, tgl_sk_yudisium, created_at, updated_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, nim_mhs, nama_mahasiswa, tempat_lahir, tgl_lahir, jenis_kelamin, tahun_masuk, semester_awal, batas_studi, asal_propinsi, tgl_masuk, tgl_lulus, status_aktivitas, status_awal, jml_sks_diakui, nim_asal, asal_pt, nama_asal_pt, asal_jenjang_studi, asal_prodi, kode_biaya_studi, kode_pekerjaan, tempat_kerja, kode_pt_kerja, kode_ps_kerja, nip_promotor, nip_co_promotor1, nip_co_promotor2, nip_co_promotor3, nip_co_promotor4, photo_mahasiswa, semester, keterangan, status_bayar, telepon, hp, email, alamat, berat, tinggi, ktp, rt, rw, dusun, kode_pos, desa, kecamatan, kecamatan_feeder, jenis_tinggal, penerima_kps, no_kps, provinsi, kabupaten, status_warga, warga_negara, status_sipil, agama, gol_darah, masuk_kelas, tgl_sk_yudisium, status_mahasiswa, kampus, jur_thn_smta, is_synced, kode_pd, va_code, created_at, updated_at', 'safe', 'on'=>'search'),
+			array('id, kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, nim_mhs, nama_mahasiswa, tempat_lahir, tgl_lahir, jenis_kelamin, tahun_masuk, semester_awal, batas_studi, asal_propinsi, tgl_masuk, tgl_lulus, status_aktivitas, status_awal, jml_sks_diakui, nim_asal, asal_pt, nama_asal_pt, asal_jenjang_studi, asal_prodi, kode_biaya_studi, kode_pekerjaan, tempat_kerja, kode_pt_kerja, kode_ps_kerja, nip_promotor, nip_co_promotor1, nip_co_promotor2, nip_co_promotor3, nip_co_promotor4, photo_mahasiswa, semester, keterangan, status_bayar, telepon, hp, email, alamat, berat, tinggi, ktp, rt, rw, dusun, kode_pos, desa, kecamatan, kecamatan_feeder, jenis_tinggal, penerima_kps, no_kps, provinsi, kabupaten, status_warga, warga_negara, warga_negara_feeder, status_sipil, agama, gol_darah, masuk_kelas, tgl_sk_yudisium, status_mahasiswa, kampus, jur_thn_smta, is_synced, kode_pd, va_code, created_at, updated_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -206,6 +210,7 @@ class Mastermahasiswa extends CActiveRecord
 			'kabupaten' => 'Kabupaten',
 			'status_warga' => 'Status Warga',
 			'warga_negara' => 'Warga Negara',
+			'warga_negara_feeder' => 'Warga Negara Feeder',
 			'status_sipil' => 'Status Sipil',
 			'agama' => 'Agama',
 			'gol_darah' => 'Gol Darah',
@@ -239,82 +244,89 @@ class Mastermahasiswa extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$sort = new CSort;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('kode_pt',$this->kode_pt,true);
-		$criteria->compare('kode_fakultas',$this->kode_fakultas,true);
-		$criteria->compare('kode_prodi',$this->kode_prodi,true);
-		$criteria->compare('kode_jenjang_studi',$this->kode_jenjang_studi,true);
-		$criteria->compare('nim_mhs',$this->nim_mhs,true);
-		$criteria->compare('nama_mahasiswa',$this->nama_mahasiswa,true);
-		$criteria->compare('tempat_lahir',$this->tempat_lahir,true);
-		$criteria->compare('tgl_lahir',$this->tgl_lahir,true);
-		$criteria->compare('jenis_kelamin',$this->jenis_kelamin,true);
-		$criteria->compare('tahun_masuk',$this->tahun_masuk,true);
-		$criteria->compare('semester_awal',$this->semester_awal,true);
-		$criteria->compare('batas_studi',$this->batas_studi,true);
-		$criteria->compare('asal_propinsi',$this->asal_propinsi,true);
-		$criteria->compare('tgl_masuk',$this->tgl_masuk,true);
-		$criteria->compare('tgl_lulus',$this->tgl_lulus,true);
-		$criteria->compare('status_aktivitas',$this->status_aktivitas,true);
-		$criteria->compare('status_awal',$this->status_awal,true);
-		$criteria->compare('jml_sks_diakui',$this->jml_sks_diakui,true);
-		$criteria->compare('nim_asal',$this->nim_asal,true);
-		$criteria->compare('asal_pt',$this->asal_pt,true);
-		$criteria->compare('nama_asal_pt',$this->nama_asal_pt,true);
-		$criteria->compare('asal_jenjang_studi',$this->asal_jenjang_studi,true);
-		$criteria->compare('asal_prodi',$this->asal_prodi,true);
-		$criteria->compare('kode_biaya_studi',$this->kode_biaya_studi,true);
-		$criteria->compare('kode_pekerjaan',$this->kode_pekerjaan,true);
-		$criteria->compare('tempat_kerja',$this->tempat_kerja,true);
-		$criteria->compare('kode_pt_kerja',$this->kode_pt_kerja,true);
-		$criteria->compare('kode_ps_kerja',$this->kode_ps_kerja,true);
-		$criteria->compare('nip_promotor',$this->nip_promotor,true);
-		$criteria->compare('nip_co_promotor1',$this->nip_co_promotor1,true);
-		$criteria->compare('nip_co_promotor2',$this->nip_co_promotor2,true);
-		$criteria->compare('nip_co_promotor3',$this->nip_co_promotor3,true);
-		$criteria->compare('nip_co_promotor4',$this->nip_co_promotor4,true);
-		$criteria->compare('photo_mahasiswa',$this->photo_mahasiswa,true);
-		$criteria->compare('semester',$this->semester,true);
-		$criteria->compare('keterangan',$this->keterangan,true);
-		$criteria->compare('status_bayar',$this->status_bayar);
-		$criteria->compare('telepon',$this->telepon,true);
-		$criteria->compare('hp',$this->hp,true);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('alamat',$this->alamat,true);
-		$criteria->compare('berat',$this->berat,true);
-		$criteria->compare('tinggi',$this->tinggi,true);
-		$criteria->compare('ktp',$this->ktp,true);
-		$criteria->compare('rt',$this->rt,true);
-		$criteria->compare('rw',$this->rw,true);
-		$criteria->compare('dusun',$this->dusun,true);
-		$criteria->compare('kode_pos',$this->kode_pos,true);
-		$criteria->compare('desa',$this->desa,true);
-		$criteria->compare('kecamatan',$this->kecamatan,true);
-		$criteria->compare('kecamatan_feeder',$this->kecamatan_feeder,true);
-		$criteria->compare('jenis_tinggal',$this->jenis_tinggal,true);
-		$criteria->compare('penerima_kps',$this->penerima_kps,true);
-		$criteria->compare('no_kps',$this->no_kps,true);
-		$criteria->compare('provinsi',$this->provinsi,true);
-		$criteria->compare('kabupaten',$this->kabupaten,true);
-		$criteria->compare('status_warga',$this->status_warga,true);
-		$criteria->compare('warga_negara',$this->warga_negara,true);
-		$criteria->compare('status_sipil',$this->status_sipil,true);
-		$criteria->compare('agama',$this->agama,true);
-		$criteria->compare('gol_darah',$this->gol_darah,true);
-		$criteria->compare('masuk_kelas',$this->masuk_kelas,true);
-		$criteria->compare('tgl_sk_yudisium',$this->tgl_sk_yudisium,true);
-		$criteria->compare('status_mahasiswa',$this->status_mahasiswa);
-		$criteria->compare('kampus',$this->kampus,true);
-		$criteria->compare('jur_thn_smta',$this->jur_thn_smta,true);
-		$criteria->compare('is_synced',$this->is_synced);
-		$criteria->compare('kode_pd',$this->kode_pd,true);
-		$criteria->compare('va_code',$this->va_code,true);
-		$criteria->compare('created_at',$this->created_at,true);
-		$criteria->compare('updated_at',$this->updated_at,true);
+		$criteria->addSearchCondition('id',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_pt',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_fakultas',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_jenjang_studi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nim_mhs',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_mahasiswa',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tempat_lahir',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tgl_lahir',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jenis_kelamin',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tahun_masuk',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('semester_awal',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('batas_studi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('asal_propinsi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tgl_masuk',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tgl_lulus',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status_aktivitas',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status_awal',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jml_sks_diakui',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nim_asal',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('asal_pt',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_asal_pt',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('asal_jenjang_studi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('asal_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_biaya_studi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_pekerjaan',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tempat_kerja',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_pt_kerja',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_ps_kerja',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nip_promotor',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nip_co_promotor1',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nip_co_promotor2',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nip_co_promotor3',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nip_co_promotor4',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('photo_mahasiswa',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('semester',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('keterangan',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status_bayar',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('telepon',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('hp',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('email',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('alamat',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('berat',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tinggi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('ktp',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('rt',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('rw',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('dusun',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_pos',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('desa',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kecamatan',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kecamatan_feeder',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jenis_tinggal',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('penerima_kps',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('no_kps',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('provinsi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kabupaten',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status_warga',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('warga_negara',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('warga_negara_feeder',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status_sipil',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('agama',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('gol_darah',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('masuk_kelas',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tgl_sk_yudisium',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status_mahasiswa',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kampus',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jur_thn_smta',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('is_synced',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_pd',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('va_code',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('created_at',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('updated_at',$this->SEARCH,true,'OR');
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>$sort,
+			'pagination'=>array(
+				'pageSize'=>$this->PAGE_SIZE,
+
+			),
 		));
 	}
 

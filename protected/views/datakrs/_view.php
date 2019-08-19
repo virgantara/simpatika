@@ -130,6 +130,26 @@
 	<?php echo CHtml::encode($data->pindahan); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('created')); ?>:</b>
+	<?php echo CHtml::encode($data->created); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('is_approved')); ?>:</b>
+	<?php echo CHtml::encode($data->is_approved); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('sudah_ekd')); ?>:</b>
+	<?php echo CHtml::encode($data->sudah_ekd); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('score_ekd')); ?>:</b>
+	<?php echo CHtml::encode($data->score_ekd); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('updated_at')); ?>:</b>
+	<?php echo CHtml::encode($data->updated_at); ?>
+	<br />
+
 	*/ ?>
 
 </div>

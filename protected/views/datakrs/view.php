@@ -3,8 +3,8 @@
 /* @var $model Datakrs */
 
 $this->breadcrumbs=array(
-	'Datakrs'=>array('index'),
-	$model->id,
+	array('name'=>'Datakrs','url'=>array('admin')),
+	array('name'=>'Datakrs'),
 );
 
 $this->menu=array(
@@ -17,7 +17,13 @@ $this->menu=array(
 ?>
 
 <h1>View Datakrs #<?php echo $model->id; ?></h1>
-
+ <?php    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+    }
+?>
+<div class="row">
+	<div class="col-xs-12">
+		
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
@@ -52,5 +58,12 @@ $this->menu=array(
 		'status_krs',
 		'lulus',
 		'pindahan',
+		'created',
+		'is_approved',
+		'sudah_ekd',
+		'score_ekd',
+		'updated_at',
 	),
 )); ?>
+	</div>
+</div>

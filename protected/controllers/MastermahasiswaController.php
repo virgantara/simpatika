@@ -1041,6 +1041,13 @@ class MastermahasiswaController extends Controller
 	{
 		$model=new Mastermahasiswa('search');
 		$model->unsetAttributes();  // clear any default values
+
+		if(isset($_GET['filter']))
+			$model->SEARCH=$_GET['filter'];
+
+		if(isset($_GET['size']))
+			$model->PAGE_SIZE=$_GET['size'];
+
 		if(isset($_GET['Mastermahasiswa']))
 			$model->attributes=$_GET['Mastermahasiswa'];
 

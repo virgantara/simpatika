@@ -13,10 +13,10 @@ class DatakrsController extends Controller
 	 */
 	public function filters()
 	{
-		return array(
+		return [
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
-		);
+		];
 	}
 
 	/**
@@ -26,23 +26,23 @@ class DatakrsController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
+		return [
+			['allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+			],
+			['allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','admin','delete'),
 				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+			],
+			['allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array(),
 				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
+			],
+			['deny',  // deny all users
 				'users'=>array('*'),
-			),
-		);
+			],
+		];
 	}
 
 	/**
@@ -51,9 +51,9 @@ class DatakrsController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
+		$this->render('view',[
 			'model'=>$this->loadModel($id),
-		));
+		]);
 	}
 
 	/**
@@ -70,13 +70,15 @@ class DatakrsController extends Controller
 		if(isset($_POST['Datakrs']))
 		{
 			$model->attributes=$_POST['Datakrs'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				Yii::app()->user->setFlash('success', "Data telah tersimpan.");
+				$this->redirect(['index']);
+			}
 		}
 
-		$this->render('create',array(
+		$this->render('create',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**
@@ -94,13 +96,15 @@ class DatakrsController extends Controller
 		if(isset($_POST['Datakrs']))
 		{
 			$model->attributes=$_POST['Datakrs'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				Yii::app()->user->setFlash('success', "Data telah tersimpan.");
+				$this->redirect(['index']);
+			}
 		}
 
-		$this->render('update',array(
+		$this->render('update',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**
@@ -110,23 +114,8 @@ class DatakrsController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$model = $this->loadModel($id);
+		$this->loadModel($id)->delete();
 
-		$ekd = EkdJawaban::model()->findAllByAttributes(['simak_datakrs_id'=>$model->id]);
-		// print_r($ekd);exit;
-		if(!empty($ekd))
-		{
-			foreach($ekd as $m)
-			{
-				$m->delete();	
-			}
-			
-			
-		}
-
-		$model->delete();
-
- 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
@@ -137,7 +126,21 @@ class DatakrsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$this->actionAdmin();
+		$model=new Datakrs('search');
+		$model->unsetAttributes();  // clear any default values
+
+		if(isset($_GET['filter']))
+			$model->SEARCH=$_GET['filter'];
+
+		if(isset($_GET['size']))
+			$model->PAGE_SIZE=$_GET['size'];
+		
+		if(isset($_GET['Datakrs']))
+			$model->attributes=$_GET['Datakrs'];
+
+		$this->render('index',[
+			'model'=>$model,
+		]);
 	}
 
 	/**
@@ -147,12 +150,19 @@ class DatakrsController extends Controller
 	{
 		$model=new Datakrs('search');
 		$model->unsetAttributes();  // clear any default values
+
+		if(isset($_GET['filter']))
+			$model->SEARCH=$_GET['filter'];
+
+		if(isset($_GET['size']))
+			$model->PAGE_SIZE=$_GET['size'];
+		
 		if(isset($_GET['Datakrs']))
 			$model->attributes=$_GET['Datakrs'];
 
-		$this->render('admin',array(
+		$this->render('admin',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**

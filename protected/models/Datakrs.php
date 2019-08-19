@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "simak_datakrs".
+ * This is the model class for table "{{datakrs}}".
  *
- * The followings are the available columns in table 'simak_datakrs':
+ * The followings are the available columns in table '{{datakrs}}':
  * @property integer $id
  * @property string $kode_pt
  * @property string $kode_fak
@@ -35,15 +35,27 @@
  * @property string $status_krs
  * @property string $lulus
  * @property string $pindahan
+ * @property string $created
+ * @property integer $is_approved
+ * @property integer $sudah_ekd
+ * @property double $score_ekd
+ * @property string $updated_at
+ *
+ * The followings are the available model relations:
+ * @property EkdJawaban[] $ekdJawabans
  */
 class Datakrs extends CActiveRecord
 {
+
+	public $SEARCH;
+	public $PAGE_SIZE = 10;
+
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'simak_datakrs';
+		return '{{datakrs}}';
 	}
 
 	/**
@@ -54,8 +66,9 @@ class Datakrs extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('kode_mk, sks, mahasiswa, semester', 'required'),
-			array('semester, status_publis', 'numerical', 'integerOnly'=>true),
+			array('kode_mk, sks, mahasiswa, semester, created', 'required'),
+			array('semester, status_publis, is_approved, sudah_ekd', 'numerical', 'integerOnly'=>true),
+			array('score_ekd', 'numerical'),
 			array('kode_pt, kode_fak, kode_jurusan, kode_prodi, kode_jadwal, uas, bobot_nilai, jumlah_nilai, status_krs', 'length', 'max'=>10),
 			array('kode_jenjang, lulus', 'length', 'max'=>3),
 			array('kode_mk, mahasiswa, kode_dosen, kelas', 'length', 'max'=>20),
@@ -65,10 +78,10 @@ class Datakrs extends CActiveRecord
 			array('nilai_angka', 'length', 'max'=>15),
 			array('tahun_akademik', 'length', 'max'=>6),
 			array('status, pindahan', 'length', 'max'=>2),
-			array('created_date', 'safe'),
+			array('created_date, updated_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, kode_pt, kode_fak, kode_jenjang, kode_jurusan, kode_prodi, kode_mk, nama_mk, sks, mahasiswa, kode_dosen, namadosen, semester, kode_jadwal, kelas, harian, normatif, uts, uas, nilai_angka, nilai_huruf, bobot_nilai, created_date, tahun_akademik, status, semester_matakuliah, status_publis, jumlah_nilai, status_krs, lulus, pindahan', 'safe', 'on'=>'search'),
+			array('id, kode_pt, kode_fak, kode_jenjang, kode_jurusan, kode_prodi, kode_mk, nama_mk, sks, mahasiswa, kode_dosen, namadosen, semester, kode_jadwal, kelas, harian, normatif, uts, uas, nilai_angka, nilai_huruf, bobot_nilai, created_date, tahun_akademik, status, semester_matakuliah, status_publis, jumlah_nilai, status_krs, lulus, pindahan, created, is_approved, sudah_ekd, score_ekd, updated_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,6 +93,7 @@ class Datakrs extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'ekdJawabans' => array(self::HAS_MANY, 'EkdJawaban', 'simak_datakrs_id'),
 		);
 	}
 
@@ -120,6 +134,11 @@ class Datakrs extends CActiveRecord
 			'status_krs' => 'Status Krs',
 			'lulus' => 'Lulus',
 			'pindahan' => 'Pindahan',
+			'created' => 'Created',
+			'is_approved' => 'Is Approved',
+			'sudah_ekd' => 'Sudah Ekd',
+			'score_ekd' => 'Score Ekd',
+			'updated_at' => 'Updated At',
 		);
 	}
 
@@ -140,46 +159,51 @@ class Datakrs extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		$sort = new CSort();
+		$sort = new CSort;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('kode_pt',$this->kode_pt,true);
-		$criteria->compare('kode_fak',$this->kode_fak,true);
-		$criteria->compare('kode_jenjang',$this->kode_jenjang,true);
-		$criteria->compare('kode_jurusan',$this->kode_jurusan,true);
-		$criteria->compare('kode_prodi',$this->kode_prodi,true);
-		$criteria->compare('kode_mk',$this->kode_mk,true);
-		$criteria->compare('nama_mk',$this->nama_mk,true);
-		$criteria->compare('sks',$this->sks,true);
-		$criteria->compare('mahasiswa',$this->mahasiswa,true);
-		$criteria->compare('kode_dosen',$this->kode_dosen,true);
-		$criteria->compare('namadosen',$this->namadosen,true);
-		$criteria->compare('semester',$this->semester);
-		$criteria->compare('kode_jadwal',$this->kode_jadwal,true);
-		$criteria->compare('kelas',$this->kelas,true);
-		$criteria->compare('harian',$this->harian,true);
-		$criteria->compare('normatif',$this->normatif,true);
-		$criteria->compare('uts',$this->uts,true);
-		$criteria->compare('uas',$this->uas,true);
-		$criteria->compare('nilai_angka',$this->nilai_angka,true);
-		$criteria->compare('nilai_huruf',$this->nilai_huruf,true);
-		$criteria->compare('bobot_nilai',$this->bobot_nilai,true);
-		$criteria->compare('created_date',$this->created_date,true);
-		$criteria->compare('tahun_akademik',$this->tahun_akademik,true);
-		$criteria->compare('status',$this->status,true);
-		$criteria->compare('semester_matakuliah',$this->semester_matakuliah,true);
-		$criteria->compare('status_publis',$this->status_publis);
-		$criteria->compare('jumlah_nilai',$this->jumlah_nilai,true);
-		$criteria->compare('status_krs',$this->status_krs,true);
-		$criteria->compare('lulus',$this->lulus,true);
-		$criteria->compare('pindahan',$this->pindahan,true);
+		$criteria->addSearchCondition('id',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_pt',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_fak',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_jenjang',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_jurusan',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_mk',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_mk',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('sks',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('mahasiswa',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_dosen',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('namadosen',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('semester',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_jadwal',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kelas',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('harian',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('normatif',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('uts',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('uas',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nilai_angka',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nilai_huruf',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('bobot_nilai',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('created_date',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tahun_akademik',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('semester_matakuliah',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status_publis',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jumlah_nilai',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status_krs',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('lulus',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('pindahan',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('created',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('is_approved',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('sudah_ekd',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('score_ekd',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('updated_at',$this->SEARCH,true,'OR');
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'sort'=>$sort,
 			'pagination'=>array(
-				'pageSize'=>100,
-				
+				'pageSize'=>$this->PAGE_SIZE,
+
 			),
 		));
 	}

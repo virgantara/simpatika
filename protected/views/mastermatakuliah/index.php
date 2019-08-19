@@ -174,7 +174,7 @@ foreach($list_matkul as $m)
 		$('.sync').click(function(){
 			var kode_mk = $(this).attr('data-item');
 			var stat = $(this).next();
-
+			var syncBtn = $(this);
 			$.ajax({
 				type : 'POST',
                 url: "<?php echo Yii::app()->createUrl('mastermatakuliah/ajaxSync');?>",
@@ -189,12 +189,16 @@ foreach($list_matkul as $m)
                 success: function (data) {
                     stat.hide();
                     var hsl = $.parseJSON(data);
-                    if(hsl.status == 200){
-                    	location.reload();
+
+                    if(hsl.hasil.status == 200){
+                    	if(hsl.value){
+                    		syncBtn.prev().val(hsl.value);
+                    	}
+                    	else
+                    		alert(JSON.stringify(hsl));
                     }
-                    	
                     else{
-                    	alert(hsl);
+                    	alert(JSON.stringif(hsl));
                     }
                 }
 	        });

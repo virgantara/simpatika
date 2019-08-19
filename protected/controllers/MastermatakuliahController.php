@@ -49,7 +49,7 @@ class MastermatakuliahController extends Controller
 	{
 		$kode_mk = $_POST['kode_mk'];
 		
-
+		$results = [];
 		$params = [
 			'table'		=> 'mata_kuliah',
 			'filter' 	=> 'kode_mk = \''.$kode_mk.'\'',
@@ -80,6 +80,8 @@ class MastermatakuliahController extends Controller
 			//throw new RestClientException;
 			$hasil = null;
 		}
+
+		$results['hasil'] = $hasil;
 		
 		if(!empty($hasil->values->output->result->id_mk)){
 			$hsl = (array) $hasil->values->output->result->id_mk;
@@ -91,7 +93,7 @@ class MastermatakuliahController extends Controller
 				$m->save();
 			}
 			
-			
+			$results['value'] = $hsl['$value'];
 
 			// $m->kode_pd = $id_pd;
 			// $m->save();
@@ -126,8 +128,8 @@ class MastermatakuliahController extends Controller
 			// 	$hasil = null;
 			// }
 		}
-		
-		echo json_encode($hasil);
+
+		echo json_encode($results);
 	}
 
 	/**
