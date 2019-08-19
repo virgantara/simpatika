@@ -89,8 +89,14 @@ foreach($mahasiswas as $m)
 <td width="3%"><?=($i+1);?></td>
 
 <td width="5%"><?php echo $m->nim_mhs;?>
-	
+	<?php 
+	if(empty($m->kode_pd))
+	{
+	?>
 	<a class="btn btn-success btn-xs btn-block sync" data-item="<?=$m->nim_mhs;?>" href="javascript:void(0)"><i class="glyphicon glyphicon-refresh"></i>  Sync to Feeder</a>
+	<?php 
+}
+	?>
 	<span class="loading" style="display: none">Syncing...</span>
 </td>
 <td><?php echo $m->nama_mahasiswa;?></td>

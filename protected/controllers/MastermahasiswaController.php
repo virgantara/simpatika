@@ -106,7 +106,7 @@ class MastermahasiswaController extends Controller
 		$host = Yii::app()->rest->baseurl_apigateway;
 		
 
-		$url = $host."/feeder/m/insert";
+		
 
 		$hasil = null;
 
@@ -115,12 +115,87 @@ class MastermahasiswaController extends Controller
 			'Content-Type' => 'application/x-www-form-urlencoded'
 		];
 
+		$url = $host."/feeder/record";
 
+		$hasil = null;
+
+		$api = new RestClient;
+		$headers = [
+			'Content-Type' => 'application/x-www-form-urlencoded'
+		];
+
+		$params = [
+			'table'		=> 'mahasiswa_pt',
+			'filter' 	=> 'nipd = \''.$nim.'\'',
+		];
 		$result = $api->post($url, $params, $headers);
 		
-		try{
+		try
+		{
 			
 			$hasil = $result->decode_response();
+			if(empty($hasil->values->output->result->id_pd))
+			{
+				$url = $host."/feeder/m/insert";
+				$result = $api->post($url, $params, $headers);
+				
+				try{
+					
+					$hasil = $result->decode_response();
+				}
+
+				catch(RestClientException  $e){
+					//print_r($e);
+					//throw new RestClientException;
+					$hasil = null;
+				}
+
+				if(!empty($hasil->values->output->result->id_pd))
+				{
+					$hsl = (array) $hasil->values->output->result->id_pd;
+					$id_pd = $hsl['$value'];
+					$m->kode_pd = $id_pd;
+					$m->save();
+					$prodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=> $m->kode_prodi]);
+
+					$params = [
+						'id_pd'		=> $id_pd,
+						'id_sp' 	=> '715253d2-bafa-429a-9ff7-a85b34ff955d',
+						'nipd' 			=> $m->nim_mhs,
+						'tgl_masuk_sp' => $_POST['tgl_masuk'],
+						'id_jns_daftar' => 1,
+						'mulai_smt'	=> $_POST['ta_masuk'],
+						'id_sms' => $prodi->kode_feeder,				
+					];
+
+					$url = $host."/feeder/m/insert/pt";
+
+					$hasil = null;
+
+					$api = new RestClient;
+
+					$result = $api->post($url, $params, $headers);
+					
+					try{
+						
+						$hasil = $result->decode_response();
+					}
+
+					catch(RestClientException  $e){
+						//print_r($e);
+						//throw new RestClientException;
+						$hasil = null;
+					}
+				}
+			}
+
+			else
+			{
+				$hsl = (array) $hasil->values->output->result->id_pd;
+				$id_pd = $hsl['$value'];
+				$m->kode_pd = $id_pd;
+				$m->save();
+			}
 		}
 
 		catch(RestClientException  $e){
@@ -129,42 +204,7 @@ class MastermahasiswaController extends Controller
 			$hasil = null;
 		}
 
-		if(!empty($hasil->values->output->result->id_pd)){
-			$hsl = (array) $hasil->values->output->result->id_pd;
-			$id_pd = $hsl['$value'];
-			$m->kode_pd = $id_pd;
-			$m->save();
-			$prodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=> $m->kode_prodi]);
-
-			$params = [
-				'id_pd'		=> $id_pd,
-				'id_sp' 	=> '715253d2-bafa-429a-9ff7-a85b34ff955d',
-				'nipd' 			=> $m->nim_mhs,
-				'tgl_masuk_sp' => $_POST['tgl_masuk'],
-				'id_jns_daftar' => 1,
-				'mulai_smt'	=> $_POST['ta_masuk'],
-				'id_sms' => $prodi->kode_feeder,				
-			];
-
-			$url = $host."/feeder/m/insert/pt";
-
-			$hasil = null;
-
-			$api = new RestClient;
-
-			$result = $api->post($url, $params, $headers);
-			
-			try{
-				
-				$hasil = $result->decode_response();
-			}
-
-			catch(RestClientException  $e){
-				//print_r($e);
-				//throw new RestClientException;
-				$hasil = null;
-			}
-		}
+		
 		
 		echo json_encode($hasil);
 

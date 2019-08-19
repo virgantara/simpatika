@@ -6,7 +6,7 @@
 	    header('Cache-Control: max-age=0');
 	}
 ?>
-<table>
+<table class="table table-bordered table-hovered table-striped">
 	<thead>
 	<tr>
 		<th>No</th>
