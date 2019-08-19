@@ -17,6 +17,11 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'kode_feeder'); ?>
+		<?php echo $form->textField($model,'kode_feeder',array('size'=>60,'maxlength'=>255)); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'tahun_akademik'); ?>
 		<?php echo $form->textField($model,'tahun_akademik',array('size'=>5,'maxlength'=>5)); ?>
 	</div>
@@ -139,6 +144,16 @@
 	<div class="row">
 		<?php echo $form->label($model,'sms'); ?>
 		<?php echo $form->textField($model,'sms',array('size'=>1,'maxlength'=>1)); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'created_at'); ?>
+		<?php echo $form->textField($model,'created_at'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'updated_at'); ?>
+		<?php echo $form->textField($model,'updated_at'); ?>
 	</div>
 
 	<div class="row buttons">

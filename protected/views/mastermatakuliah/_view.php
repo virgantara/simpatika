@@ -9,6 +9,10 @@
 	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('kode_feeder')); ?>:</b>
+	<?php echo CHtml::encode($data->kode_feeder); ?>
+	<br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('tahun_akademik')); ?>:</b>
 	<?php echo CHtml::encode($data->tahun_akademik); ?>
 	<br />
@@ -29,11 +33,11 @@
 	<?php echo CHtml::encode($data->kode_jenjang_studi); ?>
 	<br />
 
+	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('kode_mata_kuliah')); ?>:</b>
 	<?php echo CHtml::encode($data->kode_mata_kuliah); ?>
 	<br />
 
-	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('nama_mata_kuliah')); ?>:</b>
 	<?php echo CHtml::encode($data->nama_mata_kuliah); ?>
 	<br />
@@ -108,6 +112,14 @@
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('sms')); ?>:</b>
 	<?php echo CHtml::encode($data->sms); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('created_at')); ?>:</b>
+	<?php echo CHtml::encode($data->created_at); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('updated_at')); ?>:</b>
+	<?php echo CHtml::encode($data->updated_at); ?>
 	<br />
 
 	*/ ?>

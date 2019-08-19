@@ -21,5 +21,9 @@
 	<?php echo CHtml::encode($data->jam_selesai); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('prefix')); ?>:</b>
+	<?php echo CHtml::encode($data->prefix); ?>
+	<br />
+
 
 </div>

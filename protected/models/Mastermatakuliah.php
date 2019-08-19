@@ -1,10 +1,11 @@
 <?php
 
 /**
- * This is the model class for table "simak_mastermatakuliah".
+ * This is the model class for table "{{mastermatakuliah}}".
  *
- * The followings are the available columns in table 'simak_mastermatakuliah':
+ * The followings are the available columns in table '{{mastermatakuliah}}':
  * @property integer $id
+ * @property string $kode_feeder
  * @property string $tahun_akademik
  * @property string $kode_pt
  * @property string $kode_fakultas
@@ -30,15 +31,21 @@
  * @property string $diktat
  * @property string $status_wajib
  * @property string $sms
+ * @property string $created_at
+ * @property string $updated_at
  */
 class Mastermatakuliah extends CActiveRecord
 {
+
+	public $SEARCH;
+	public $PAGE_SIZE = 10;
+
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'simak_mastermatakuliah';
+		return '{{mastermatakuliah}}';
 	}
 
 	/**
@@ -49,18 +56,19 @@ class Mastermatakuliah extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tahun_akademik, kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, kode_mata_kuliah, nama_mata_kuliah, sks, diktat', 'required'),
+			array('tahun_akademik, kode_pt, kode_fakultas, kode_prodi, kode_mata_kuliah, nama_mata_kuliah, sks, diktat', 'required'),
+			array('kode_feeder', 'length', 'max'=>255),
 			array('tahun_akademik, kode_fakultas, kode_jenjang_studi, sks, sks_tatap_muka, sks_praktikum, sks_praktek_lap, semester, kode_kelompok, kode_matkul, jenjang_prodi, status_mata_kuliah, silabus, sap, bahan_ajar, diktat', 'length', 'max'=>5),
 			array('kode_pt', 'length', 'max'=>6),
-			array('nama_mata_kuliah','length','max'=>255),
 			array('kode_prodi, kode_mata_kuliah', 'length', 'max'=>15),
-			array('kode_kurikulum, prodi_pengampu', 'length', 'max'=>50),
+			array('nama_mata_kuliah, kode_kurikulum, prodi_pengampu', 'length', 'max'=>50),
 			array('nidn', 'length', 'max'=>25),
 			array('status_wajib', 'length', 'max'=>10),
 			array('sms', 'length', 'max'=>1),
+			array('created_at, updated_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, tahun_akademik, kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, kode_mata_kuliah, nama_mata_kuliah, sks, sks_tatap_muka, sks_praktikum, sks_praktek_lap, semester, kode_kelompok, kode_kurikulum, kode_matkul, nidn, jenjang_prodi, prodi_pengampu, status_mata_kuliah, silabus, sap, bahan_ajar, diktat, status_wajib, sms', 'safe', 'on'=>'search'),
+			array('id, kode_feeder, tahun_akademik, kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, kode_mata_kuliah, nama_mata_kuliah, sks, sks_tatap_muka, sks_praktikum, sks_praktek_lap, semester, kode_kelompok, kode_kurikulum, kode_matkul, nidn, jenjang_prodi, prodi_pengampu, status_mata_kuliah, silabus, sap, bahan_ajar, diktat, status_wajib, sms, created_at, updated_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -82,6 +90,7 @@ class Mastermatakuliah extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'kode_feeder' => 'Kode Feeder',
 			'tahun_akademik' => 'Tahun Akademik',
 			'kode_pt' => 'Kode Pt',
 			'kode_fakultas' => 'Kode Fakultas',
@@ -107,7 +116,79 @@ class Mastermatakuliah extends CActiveRecord
 			'diktat' => 'Diktat',
 			'status_wajib' => 'Status Wajib',
 			'sms' => 'Sms',
+			'created_at' => 'Created At',
+			'updated_at' => 'Updated At',
 		);
+	}
+
+	/**
+	 * Retrieves a list of models based on the current search/filter conditions.
+	 *
+	 * Typical usecase:
+	 * - Initialize the model fields with values from filter form.
+	 * - Execute this method to get CActiveDataProvider instance which will filter
+	 * models according to data in model fields.
+	 * - Pass data provider to CGridView, CListView or any similar widget.
+	 *
+	 * @return CActiveDataProvider the data provider that can return the models
+	 * based on the search/filter conditions.
+	 */
+	public function search()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria=new CDbCriteria;
+		$sort = new CSort;
+
+		$criteria->addSearchCondition('id',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_feeder',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tahun_akademik',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_pt',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_fakultas',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_jenjang_studi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_mata_kuliah',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_mata_kuliah',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('sks',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('sks_tatap_muka',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('sks_praktikum',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('sks_praktek_lap',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('semester',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_kelompok',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_kurikulum',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_matkul',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nidn',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jenjang_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('prodi_pengampu',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status_mata_kuliah',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('silabus',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('sap',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('bahan_ajar',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('diktat',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status_wajib',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('sms',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('created_at',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('updated_at',$this->SEARCH,true,'OR');
+
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+			'sort'=>$sort,
+			'pagination'=>array(
+				'pageSize'=>$this->PAGE_SIZE,
+
+			),
+		));
+	}
+
+	/**
+	 * Returns the static model of the specified AR class.
+	 * Please note that you should have this exact method in all your CActiveRecord descendants!
+	 * @param string $className active record class name.
+	 * @return Mastermatakuliah the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
 	}
 
 	public function quickCreate($tahun_akademik, $fakultas, $prodi, $kode_mk, $nama_mk,$nidn, $sks, $semester )
@@ -156,66 +237,5 @@ class Mastermatakuliah extends CActiveRecord
 			return $msg;
 		}
 
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('id',$this->id);
-		$criteria->compare('tahun_akademik',$this->tahun_akademik,true);
-		$criteria->compare('kode_pt',$this->kode_pt,true);
-		$criteria->compare('kode_fakultas',$this->kode_fakultas,true);
-		$criteria->compare('kode_prodi',$this->kode_prodi,true);
-		$criteria->compare('kode_jenjang_studi',$this->kode_jenjang_studi,true);
-		$criteria->compare('kode_mata_kuliah',$this->kode_mata_kuliah,true);
-		$criteria->compare('nama_mata_kuliah',$this->nama_mata_kuliah,true);
-		$criteria->compare('sks',$this->sks,true);
-		$criteria->compare('sks_tatap_muka',$this->sks_tatap_muka,true);
-		$criteria->compare('sks_praktikum',$this->sks_praktikum,true);
-		$criteria->compare('sks_praktek_lap',$this->sks_praktek_lap,true);
-		$criteria->compare('semester',$this->semester,true);
-		$criteria->compare('kode_kelompok',$this->kode_kelompok,true);
-		$criteria->compare('kode_kurikulum',$this->kode_kurikulum,true);
-		$criteria->compare('kode_matkul',$this->kode_matkul,true);
-		$criteria->compare('nidn',$this->nidn,true);
-		$criteria->compare('jenjang_prodi',$this->jenjang_prodi,true);
-		$criteria->compare('prodi_pengampu',$this->prodi_pengampu,true);
-		$criteria->compare('status_mata_kuliah',$this->status_mata_kuliah,true);
-		$criteria->compare('silabus',$this->silabus,true);
-		$criteria->compare('sap',$this->sap,true);
-		$criteria->compare('bahan_ajar',$this->bahan_ajar,true);
-		$criteria->compare('diktat',$this->diktat,true);
-		$criteria->compare('status_wajib',$this->status_wajib,true);
-		$criteria->compare('sms',$this->sms,true);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
-
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Mastermatakuliah the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
 	}
 }

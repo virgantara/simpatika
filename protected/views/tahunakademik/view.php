@@ -3,8 +3,8 @@
 /* @var $model Tahunakademik */
 
 $this->breadcrumbs=array(
-	'Tahunakademiks'=>array('index'),
-	$model->id,
+	array('name'=>'Tahunakademik','url'=>array('admin')),
+	array('name'=>'Tahunakademik'),
 );
 
 $this->menu=array(
@@ -17,7 +17,13 @@ $this->menu=array(
 ?>
 
 <h1>View Tahunakademik #<?php echo $model->id; ?></h1>
-
+ <?php    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+    }
+?>
+<div class="row">
+	<div class="col-xs-12">
+		
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
@@ -29,3 +35,5 @@ $this->menu=array(
 		'buka',
 	),
 )); ?>
+	</div>
+</div>

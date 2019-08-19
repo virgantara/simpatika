@@ -3,8 +3,8 @@
 /* @var $model Jam */
 
 $this->breadcrumbs=array(
-	'Jams'=>array('index'),
-	$model->id_jam,
+	array('name'=>'Jam','url'=>array('admin')),
+	array('name'=>'Jam'),
 );
 
 $this->menu=array(
@@ -17,7 +17,13 @@ $this->menu=array(
 ?>
 
 <h1>View Jam #<?php echo $model->id_jam; ?></h1>
-
+ <?php    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+    }
+?>
+<div class="row">
+	<div class="col-xs-12">
+		
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
@@ -25,5 +31,8 @@ $this->menu=array(
 		'jam_mulai',
 		'jam_selesai',
 		'id_jam',
+		'prefix',
 	),
 )); ?>
+	</div>
+</div>

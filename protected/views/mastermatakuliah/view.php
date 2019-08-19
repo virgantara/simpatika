@@ -3,8 +3,8 @@
 /* @var $model Mastermatakuliah */
 
 $this->breadcrumbs=array(
-	'Mastermatakuliahs'=>array('index'),
-	$model->id,
+	array('name'=>'Mastermatakuliah','url'=>array('admin')),
+	array('name'=>'Mastermatakuliah'),
 );
 
 $this->menu=array(
@@ -17,11 +17,18 @@ $this->menu=array(
 ?>
 
 <h1>View Mastermatakuliah #<?php echo $model->id; ?></h1>
-
+ <?php    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+    }
+?>
+<div class="row">
+	<div class="col-xs-12">
+		
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
+		'kode_feeder',
 		'tahun_akademik',
 		'kode_pt',
 		'kode_fakultas',
@@ -47,5 +54,9 @@ $this->menu=array(
 		'diktat',
 		'status_wajib',
 		'sms',
+		'created_at',
+		'updated_at',
 	),
 )); ?>
+	</div>
+</div>

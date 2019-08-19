@@ -1,18 +1,20 @@
-<?php
-/* @var $this TahunakademikController */
-/* @var $model Tahunakademik */
-
+ <?php
 $this->breadcrumbs=array(
-	'Tahunakademiks'=>array('index'),
-	'Create',
+	array('name'=>'Tahunakademik','url'=>array('index')),
+	array('name'=>'Create'),
 );
 
-$this->menu=array(
-	array('label'=>'List Tahunakademik', 'url'=>array('index')),
-	array('label'=>'Manage Tahunakademik', 'url'=>array('admin')),
-);
 ?>
 
-<h1>Create Tahunakademik</h1>
-
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<style>
+	.errorMessage, .errorSummary{
+		color:red;
+	}
+</style>
+<div class="row">
+	<div class="col-xs-12">
+<?php $this->renderPartial('_form', [
+	'model'=>$model
+]); ?>
+	</div>
+</div>

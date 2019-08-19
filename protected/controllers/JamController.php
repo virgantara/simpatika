@@ -142,10 +142,21 @@ class JamController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Jam');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
+		$model=new Jam('search');
+        $model->unsetAttributes();  // clear any default values
+
+        if(isset($_GET['filter']))
+            $model->SEARCH=$_GET['filter'];
+
+        if(isset($_GET['size']))
+            $model->PAGE_SIZE=$_GET['size'];
+        
+        if(isset($_GET['Jam']))
+            $model->attributes=$_GET['Jam'];
+
+        $this->render('index',[
+            'model'=>$model,
+        ]); 
 	}
 
 	/**
@@ -153,14 +164,21 @@ class JamController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Jam('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Jam']))
-			$model->attributes=$_GET['Jam'];
+		 $model=new Jam('search');
+        $model->unsetAttributes();  // clear any default values
 
-		$this->render('admin',array(
-			'model'=>$model,
-		));
+        if(isset($_GET['filter']))
+            $model->SEARCH=$_GET['filter'];
+
+        if(isset($_GET['size']))
+            $model->PAGE_SIZE=$_GET['size'];
+        
+        if(isset($_GET['Jam']))
+            $model->attributes=$_GET['Jam'];
+
+        $this->render('admin',[
+            'model'=>$model,
+        ]); 
 	}
 
 	/**

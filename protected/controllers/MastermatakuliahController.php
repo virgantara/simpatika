@@ -13,10 +13,10 @@ class MastermatakuliahController extends Controller
 	 */
 	public function filters()
 	{
-		return array(
+		return [
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
-		);
+		];
 	}
 
 	/**
@@ -26,23 +26,108 @@ class MastermatakuliahController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
+		return [
+			['allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+			],
+			['allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update','ajaxSync'),
 				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+			],
+			['allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
+			],
+			['deny',  // deny all users
 				'users'=>array('*'),
-			),
-		);
+			],
+		];
+	}
+
+	public function actionAjaxSync()
+	{
+		$kode_mk = $_POST['kode_mk'];
+		
+
+		$params = [
+			'table'		=> 'mata_kuliah',
+			'filter' 	=> 'kode_mk = \''.$kode_mk.'\'',
+		];
+
+		$host = Yii::app()->rest->baseurl_apigateway;
+		
+
+		$url = $host."/feeder/record";
+
+		$hasil = null;
+
+		$api = new RestClient;
+		$headers = [
+			'Content-Type' => 'application/x-www-form-urlencoded'
+		];
+
+
+		$result = $api->post($url, $params, $headers);
+		
+		try{
+			
+			$hasil = $result->decode_response();
+		}
+
+		catch(RestClientException  $e){
+			//print_r($e);
+			//throw new RestClientException;
+			$hasil = null;
+		}
+		
+		if(!empty($hasil->values->output->result->id_mk)){
+			$hsl = (array) $hasil->values->output->result->id_mk;
+			$id_mk = $hsl['$value'];
+			$list_mk = Mastermatakuliah::model()->findAllByAttributes(['kode_mata_kuliah'=>$kode_mk]);
+			foreach($list_mk as $m)
+			{
+				$m->kode_feeder = $id_mk;
+				$m->save();
+			}
+			
+			
+
+			// $m->kode_pd = $id_pd;
+			// $m->save();
+			// $prodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=> $m->kode_prodi]);
+
+			// $params = [
+			// 	'id_pd'		=> $id_pd,
+			// 	'id_sp' 	=> '715253d2-bafa-429a-9ff7-a85b34ff955d',
+			// 	'nipd' 			=> $m->nim_mhs,
+			// 	'tgl_masuk_sp' => $_POST['tgl_masuk'],
+			// 	'id_jns_daftar' => 1,
+			// 	'mulai_smt'	=> $_POST['ta_masuk'],
+			// 	'id_sms' => $prodi->kode_feeder,				
+			// ];
+
+			// $url = $host."/feeder/m/insert/pt";
+
+			// $hasil = null;
+
+			// $api = new RestClient;
+
+			// $result = $api->post($url, $params, $headers);
+			
+			// try{
+				
+			// 	$hasil = $result->decode_response();
+			// }
+
+			// catch(RestClientException  $e){
+			// 	//print_r($e);
+			// 	//throw new RestClientException;
+			// 	$hasil = null;
+			// }
+		}
+		
+		echo json_encode($hasil);
 	}
 
 	/**
@@ -51,9 +136,9 @@ class MastermatakuliahController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
+		$this->render('view',[
 			'model'=>$this->loadModel($id),
-		));
+		]);
 	}
 
 	/**
@@ -70,13 +155,15 @@ class MastermatakuliahController extends Controller
 		if(isset($_POST['Mastermatakuliah']))
 		{
 			$model->attributes=$_POST['Mastermatakuliah'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				Yii::app()->user->setFlash('success', "Data telah tersimpan.");
+				$this->redirect(['index']);
+			}
 		}
 
-		$this->render('create',array(
+		$this->render('create',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**
@@ -94,13 +181,15 @@ class MastermatakuliahController extends Controller
 		if(isset($_POST['Mastermatakuliah']))
 		{
 			$model->attributes=$_POST['Mastermatakuliah'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				Yii::app()->user->setFlash('success', "Data telah tersimpan.");
+				$this->redirect(['index']);
+			}
 		}
 
-		$this->render('update',array(
+		$this->render('update',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**
@@ -120,16 +209,35 @@ class MastermatakuliahController extends Controller
 	/**
 	 * Lists all models.
 	 */
-	public function actionIndex()
+	public function actionIndex($kode_prodi='', $tahun_akademik = '')
 	{
-		$model=new Mastermatakuliah('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Mastermatakuliah']))
-			$model->attributes=$_GET['Mastermatakuliah'];
 
-		$this->render('admin',array(
+		$model = new Mastermatakuliah;
+		$list_matkul = [];
+		if(!empty($_GET['kode_prodi']) && !empty($_GET['tahun_akademik']))
+		{
+			$c = new CDbCriteria;
+			$c->condition = 'kode_prodi = :p1 AND tahun_akademik = :p2';
+			$c->params = [
+				':p1' => $_GET['kode_prodi'],
+				':p2' => $_GET['tahun_akademik'],
+			
+			];
+			$c->order = 'nama_mata_kuliah ASC';
+			$list_matkul = Mastermatakuliah::model()->findAll($c);
+			// $mahasiswas = Mastermahasiswa::model()->findAllByAttributes([
+			// 	'kode_prodi' => $_GET['kode_prodi'],
+			// 	'kampus' => $_GET['kampus']
+			// ],['order' => 'nim_mhs DESC']);
+
+			
+		}
+
+
+		$this->render('index',[
 			'model'=>$model,
-		));
+			'list_matkul' => $list_matkul
+		]);
 	}
 
 	/**
@@ -139,12 +247,19 @@ class MastermatakuliahController extends Controller
 	{
 		$model=new Mastermatakuliah('search');
 		$model->unsetAttributes();  // clear any default values
+
+		if(isset($_GET['filter']))
+			$model->SEARCH=$_GET['filter'];
+
+		if(isset($_GET['size']))
+			$model->PAGE_SIZE=$_GET['size'];
+		
 		if(isset($_GET['Mastermatakuliah']))
 			$model->attributes=$_GET['Mastermatakuliah'];
 
-		$this->render('admin',array(
+		$this->render('admin',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**

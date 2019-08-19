@@ -8,9 +8,14 @@
  * @property string $jam_mulai
  * @property string $jam_selesai
  * @property integer $id_jam
+ * @property string $prefix
  */
 class Jam extends CActiveRecord
 {
+
+	public $SEARCH;
+	public $PAGE_SIZE = 10;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -28,8 +33,8 @@ class Jam extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('nama_jam', 'length', 'max'=>50),
+			array('prefix', 'length', 'max'=>20),
 			array('jam_mulai, jam_selesai', 'safe'),
-			array('jam_selesai', 'validatorCompareDateTime', 'compareAttribute' => 'jam_mulai', 'condition' => '>'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('nama_jam, jam_mulai, jam_selesai, id_jam, prefix', 'safe', 'on'=>'search'),
@@ -57,7 +62,43 @@ class Jam extends CActiveRecord
 			'jam_mulai' => 'Jam Mulai',
 			'jam_selesai' => 'Jam Selesai',
 			'id_jam' => 'Id Jam',
+			'prefix' => 'Prefix',
 		);
+	}
+
+	/**
+	 * Retrieves a list of models based on the current search/filter conditions.
+	 *
+	 * Typical usecase:
+	 * - Initialize the model fields with values from filter form.
+	 * - Execute this method to get CActiveDataProvider instance which will filter
+	 * models according to data in model fields.
+	 * - Pass data provider to CGridView, CListView or any similar widget.
+	 *
+	 * @return CActiveDataProvider the data provider that can return the models
+	 * based on the search/filter conditions.
+	 */
+	public function search()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria=new CDbCriteria;
+		$sort = new CSort;
+
+		$criteria->addSearchCondition('nama_jam',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jam_mulai',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jam_selesai',$this->SEARCH,true,'OR');
+		// $criteria->addSearchCondition('id_jam',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('prefix',$this->SEARCH,true,'OR');
+
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+			'sort'=>$sort,
+			'pagination'=>array(
+				'pageSize'=>$this->PAGE_SIZE,
+
+			),
+		));
 	}
 
 	protected function beforeSave()
@@ -91,34 +132,6 @@ class Jam extends CActiveRecord
                 break;
         }
     }
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('nama_jam',$this->nama_jam,true);
-		$criteria->compare('jam_mulai',$this->jam_mulai,true);
-		$criteria->compare('jam_selesai',$this->jam_selesai,true);
-		$criteria->compare('id_jam',$this->id_jam);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
 
 	/**
 	 * Returns the static model of the specified AR class.

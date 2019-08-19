@@ -1,18 +1,20 @@
-<?php
-/* @var $this JamController */
-/* @var $model Jam */
-
+ <?php
 $this->breadcrumbs=array(
-	'Jams'=>array('index'),
-	'Create',
+	array('name'=>'Jam','url'=>array('index')),
+	array('name'=>'Create'),
 );
 
-$this->menu=array(
-	array('label'=>'List Jam', 'url'=>array('index')),
-	array('label'=>'Manage Jam', 'url'=>array('admin')),
-);
 ?>
 
-<h1>Create Jam</h1>
-
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<style>
+	.errorMessage, .errorSummary{
+		color:red;
+	}
+</style>
+<div class="row">
+	<div class="col-xs-12">
+<?php $this->renderPartial('_form', [
+	'model'=>$model
+]); ?>
+	</div>
+</div>
