@@ -67,7 +67,6 @@ class MastermahasiswaController extends Controller
 		
 		$host = Yii::app()->rest->baseurl_apigateway;
 		
-		$hasil = null;
 
 		$api = new RestClient;
 		$headers = [
@@ -198,7 +197,7 @@ class MastermahasiswaController extends Controller
 		}
 
 		catch(RestClientException  $e){
-			//print_r($e);
+			print_r($e);
 			//throw new RestClientException;
 			$hasil = null;
 
