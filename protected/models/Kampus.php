@@ -1,21 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "simak_kampus".
+ * This is the model class for table "{{kampus}}".
  *
- * The followings are the available columns in table 'simak_kampus':
+ * The followings are the available columns in table '{{kampus}}':
  * @property integer $id
  * @property string $kode_kampus
  * @property string $nama_kampus
  */
 class Kampus extends CActiveRecord
 {
+
+	public $SEARCH;
+	public $PAGE_SIZE = 10;
+
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'simak_kampus';
+		return '{{kampus}}';
 	}
 
 	/**
@@ -43,7 +47,6 @@ class Kampus extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'kelases' => array(self::HAS_MANY, 'Masterkelas', 'id_kampus'),
 		);
 	}
 
@@ -76,13 +79,19 @@ class Kampus extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$sort = new CSort;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('kode_kampus',$this->kode_kampus,true);
-		$criteria->compare('nama_kampus',$this->nama_kampus,true);
+		$criteria->addSearchCondition('id',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_kampus',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_kampus',$this->SEARCH,true,'OR');
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>$sort,
+			'pagination'=>array(
+				'pageSize'=>$this->PAGE_SIZE,
+
+			),
 		));
 	}
 

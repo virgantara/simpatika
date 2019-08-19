@@ -1,24 +1,29 @@
 <?php
 
 /**
- * This is the model class for table "simak_masterkelas".
+ * This is the model class for table "{{masterkelas}}".
  *
- * The followings are the available columns in table 'simak_masterkelas':
+ * The followings are the available columns in table '{{masterkelas}}':
  * @property integer $id
  * @property string $tahun_akademik
  * @property string $kd_kelas
  * @property string $nama_kelas
  * @property string $kuota
  * @property string $keterangan
+ * @property integer $id_kampus
  */
 class Masterkelas extends CActiveRecord
 {
+
+	public $SEARCH;
+	public $PAGE_SIZE = 10;
+
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'simak_masterkelas';
+		return '{{masterkelas}}';
 	}
 
 	/**
@@ -30,6 +35,7 @@ class Masterkelas extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('tahun_akademik, kd_kelas, nama_kelas, kuota, keterangan', 'required'),
+			array('id_kampus', 'numerical', 'integerOnly'=>true),
 			array('tahun_akademik', 'length', 'max'=>5),
 			array('kd_kelas, nama_kelas, kuota', 'length', 'max'=>10),
 			array('keterangan', 'length', 'max'=>255),
@@ -47,7 +53,6 @@ class Masterkelas extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'kAMPUS' => array(self::BELONGS_TO, 'Kampus', 'id_kampus'),
 		);
 	}
 
@@ -63,6 +68,7 @@ class Masterkelas extends CActiveRecord
 			'nama_kelas' => 'Nama Kelas',
 			'kuota' => 'Kuota',
 			'keterangan' => 'Keterangan',
+			'id_kampus' => 'Id Kampus',
 		);
 	}
 
@@ -83,16 +89,23 @@ class Masterkelas extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$sort = new CSort;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('tahun_akademik',$this->tahun_akademik,true);
-		$criteria->compare('kd_kelas',$this->kd_kelas,true);
-		$criteria->compare('nama_kelas',$this->nama_kelas,true);
-		$criteria->compare('kuota',$this->kuota,true);
-		$criteria->compare('keterangan',$this->keterangan,true);
+		$criteria->addSearchCondition('id',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tahun_akademik',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kd_kelas',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_kelas',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kuota',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('keterangan',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('id_kampus',$this->SEARCH,true,'OR');
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>$sort,
+			'pagination'=>array(
+				'pageSize'=>$this->PAGE_SIZE,
+
+			),
 		));
 	}
 

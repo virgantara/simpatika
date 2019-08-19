@@ -3,8 +3,8 @@
 /* @var $model Kampus */
 
 $this->breadcrumbs=array(
-	'Kampuses'=>array('index'),
-	$model->id,
+	array('name'=>'Kampus','url'=>array('admin')),
+	array('name'=>'Kampus'),
 );
 
 $this->menu=array(
@@ -17,7 +17,13 @@ $this->menu=array(
 ?>
 
 <h1>View Kampus #<?php echo $model->id; ?></h1>
-
+ <?php    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+    }
+?>
+<div class="row">
+	<div class="col-xs-12">
+		
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
@@ -26,3 +32,5 @@ $this->menu=array(
 		'nama_kampus',
 	),
 )); ?>
+	</div>
+</div>

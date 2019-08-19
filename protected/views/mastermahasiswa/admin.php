@@ -1,140 +1,100 @@
-<?php
-/* @var $this MastermahasiswaController */
-/* @var $model Mastermahasiswa */
-
+ <?php
 $this->breadcrumbs=array(
-	'Mastermahasiswas'=>array('index'),
-	'Manage',
+	array('name'=>'Mastermahasiswa','url'=>array('admin')),
+	array('name'=>'Manage'),
 );
 
-$this->menu=array(
-	array('label'=>'List Mastermahasiswa', 'url'=>array('index')),
-	array('label'=>'Create Mastermahasiswa', 'url'=>array('create')),
-);
-
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$('#mastermahasiswa-grid').yiiGridView('update', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
 ?>
+<h1>Manage Mastermahasiswa</h1>
 
-<h1>Manage Mahasiswa</h1>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#search,#size').change(function(){
+			$('#mastermahasiswa-grid').yiiGridView.update('mastermahasiswa-grid', {
+			    url:'<?php echo Yii::app()->createUrl("Mastermahasiswa/admin"); ?>&filter='+$('#search').val()+'&size='+$('#size').val()
+			});
+		});
+		
+	});
+</script>
+<div class="row">
+    <div class="col-xs-12">
+        
+<?php    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+    }
+?>
+<div class="pull-left"> <?php	echo CHtml::link('Tambah Baru',['Mastermahasiswa/create'],['class'=>'btn btn-success']);
+?></div>
 
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+                         <div class="pull-right">Data per halaman
+                              <?php                            echo CHtml::dropDownList('Mastermahasiswa[PAGE_SIZE]',isset($_GET['size'])?$_GET['size']:'',[10=>10,50=>50,100=>100],['id'=>'size']); 
+                            ?> 
+                             <?php        echo CHtml::textField('Mastermahasiswa[SEARCH]','',['placeholder'=>'Cari','id'=>'search']);
+        ?> 	 </div>
+                    
+<?php $this->widget('application.components.ComplexGridView', array(
 	'id'=>'mastermahasiswa-grid',
 	'dataProvider'=>$model->search(),
-	'filter'=>$model,
+	
 	'columns'=>array(
-		// 'kode_fakultas',
-		
+	array(
+		'header'=>'No',
+		'value'=>'$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)'
+		),
+		'kode_prodi',
+		'kode_jenjang_studi',
 		'nim_mhs',
-		'nama_mahasiswa',
-		'tempat_lahir',
-		'tgl_lahir',
-		'jenis_kelamin',
-		'prodi.singkatan',
-		'semester',
 		
-		'hp',
-		'email',
-		/*
 		'nama_mahasiswa',
 		'tempat_lahir',
 		'tgl_lahir',
 		'jenis_kelamin',
 		'tahun_masuk',
-		'semester_awal',
-		'batas_studi',
-		'asal_propinsi',
-		'tgl_masuk',
-		'tgl_lulus',
-		'status_aktivitas',
-		'status_awal',
-		'jml_sks_diakui',
-		'nim_asal',
-		'asal_pt',
-		'nama_asal_pt',
-		'asal_jenjang_studi',
-		'asal_prodi',
-		'kode_biaya_studi',
-		'kode_pekerjaan',
-		'tempat_kerja',
-		'kode_pt_kerja',
-		'kode_ps_kerja',
-		'nip_promotor',
-		'nip_co_promotor1',
-		'nip_co_promotor2',
-		'nip_co_promotor3',
-		'nip_co_promotor4',
-		'photo_mahasiswa',
-		'semester',
-		'keterangan',
-		'status_bayar',
-		'telepon',
 		'hp',
 		'email',
 		'alamat',
-		'berat',
-		'tinggi',
-		'ktp',
-		'rt',
-		'rw',
-		'dusun',
-		'kode_pos',
-		'desa',
 		'kecamatan',
-		'jenis_tinggal',
-		'penerima_kps',
-		'no_kps',
+		'kecamatan_feeder',
 		'provinsi',
 		'kabupaten',
 		'warga_negara',
-		'status_sipil',
-		'agama',
-		'gol_darah',
-		'masuk_kelas',
-		'tgl_sk_yudisium',
-		'status_mahasiswa',
-		'kampus',
-		*/
+		'va_code',
+		'updated_at',
 		array(
 			'class'=>'CButtonColumn',
 		),
-
 	),
 	'htmlOptions'=>array(
-	    'class'=>'col-xs-12'
-	  ),
-	'itemsCssClass'=>'table table-bordered table-hover table-striped',
-                'summaryCssClass'=>'table-message-info',
-                'filterCssClass'=>'filter',
-                'summaryText'=>'showing {start} - {end} from {count} data',
-                'template'=>'{items}{summary}{pager}',
-                'emptyText'=>'Data tidak ditemukan',
-                'pagerCssClass'=>'pagination',
+		'class'=>'table'
+	),
 	'pager'=>array(
-
-                'firstPageLabel'=>'First',
-                'prevPageLabel'=>'Prev',
-                'nextPageLabel'=>'Next',        
-                'lastPageLabel'=>'Last',  
-   				'firstPageCssClass'=>'btn btn-info btn-sm',
-                'previousPageCssClass'=>'btn btn-info btn-sm',
-                'nextPageCssClass'=>'btn btn-info btn-sm',        
-                'lastPageCssClass'=>'btn btn-info btn-sm',
-			    'hiddenPageCssClass'=>'disabled btn btn-info btn-sm',
-			    'internalPageCssClass'=>'btn btn-default btn-sm',
-			    'selectedPageCssClass'=>'selected btn btn-default btn-sm',
-			    'maxButtonCount'=>5,
-        ),
-
+		'class'=>'SimplePager',
+		'header'=>'',
+		'firstPageLabel'=>'Pertama',
+		'prevPageLabel'=>'Sebelumnya',
+		'nextPageLabel'=>'Selanjutnya',
+		'lastPageLabel'=>'Terakhir',
+		'firstPageCssClass'=>'btn btn-info btn-sm',
+		'previousPageCssClass'=>'btn btn-info btn-sm',
+		'nextPageCssClass'=>'btn btn-info btn-sm',
+		'lastPageCssClass'=>'btn btn-info btn-sm',
+		'hiddenPageCssClass'=>'disabled',
+		'internalPageCssClass'=>'btn btn-info btn-sm',
+		'selectedPageCssClass'=>'btn btn-sky btn-sm',
+		'maxButtonCount'=>5
+	),
+	'itemsCssClass'=>'table  table-bordered table-hover',
+	'summaryCssClass'=>'table-message-info',
+	'filterCssClass'=>'filter',
+	'summaryText'=>'menampilkan {start} - {end} dari {count} data',
+	'template'=>'{items}{summary}{pager}',
+	'emptyText'=>'Data tidak ditemukan',
+	'pagerCssClass'=>'pagination pull-right no-margin',
 )); ?>
+
+
+	</div>
+</div>
+
