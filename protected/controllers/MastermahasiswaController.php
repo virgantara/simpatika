@@ -146,7 +146,7 @@ class MastermahasiswaController extends Controller
 				}
 
 				catch(RestClientException  $e){
-					//print_r($e);
+					print_r($e);
 					//throw new RestClientException;
 					$hasil = null;
 				}
@@ -181,7 +181,7 @@ class MastermahasiswaController extends Controller
 					}
 
 					catch(RestClientException  $e){
-						//print_r($e);
+						print_r($e);
 						//throw new RestClientException;
 						$hasil = null;
 					}
