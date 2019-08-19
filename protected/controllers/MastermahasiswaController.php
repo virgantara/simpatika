@@ -171,8 +171,6 @@ class MastermahasiswaController extends Controller
 
 					$url = $host."/feeder/m/insert/pt";
 
-					$hasil = null;
-
 					$api = new RestClient;
 
 					$result = $api->post($url, $params, $headers);
