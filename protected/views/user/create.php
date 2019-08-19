@@ -1,18 +1,20 @@
-<?php
-/* @var $this UserController */
-/* @var $model User */
-
+ <?php
 $this->breadcrumbs=array(
-	'Users'=>array('index'),
-	'Create',
+	array('name'=>'User','url'=>array('index')),
+	array('name'=>'Create'),
 );
 
-$this->menu=array(
-	array('label'=>'List User', 'url'=>array('index')),
-	array('label'=>'Manage User', 'url'=>array('admin')),
-);
 ?>
 
-<h1>Create User</h1>
-
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<style>
+	.errorMessage, .errorSummary{
+		color:red;
+	}
+</style>
+<div class="row">
+	<div class="col-xs-12">
+<?php $this->renderPartial('_form', [
+	'model'=>$model
+]); ?>
+	</div>
+</div>

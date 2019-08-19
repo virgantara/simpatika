@@ -4,7 +4,6 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'user-form',
@@ -13,79 +12,82 @@
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+	'htmlOptions'=>array(
+		'class'=>'form-horizontal'
+	)
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
-	<?php echo $form->errorSummary($model); ?>
+	<?php echo $form->errorSummary($model,'<div class="alert alert-danger">Silakan perbaiki beberapa kesalahan berikut:','</div>'); ?>
 
-
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'level'); ?>
+	
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'level', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'4')); ?>
+		<div class="col-sm-9">
 		<?php 
 		// echo $form->textField($model,'LEVEL'); 
- 		echo $form->radioButtonList($model, 
+ 		echo $form->dropDownList($model, 
  			'level', 
- 			array('1'=> 'Super Admin','2'=>'BAAK', '3'=>'Prodi'),
- 			array(
-    'labelOptions'=>array('style'=>'display:inline'), // add this code
-    'separator'=>'  ',
-
- 			)); 
+ 			['1'=> 'Super Admin','2'=>'BAAK', '3'=>'Prodi']); 
 		?>
 		<?php echo $form->error($model,'level'); ?>
+		</div>
 	</div>
 
-	<div class="row">
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'status', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'5')); ?>
+		<div class="col-sm-9">
+		<?php echo $form->radioButtonList($model,'status',['1'=>'Aktif','0'=>'Non Aktif']); ?>
+		<?php echo $form->error($model,'status'); ?>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'kode_prodi', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'6')); ?>
+		<div class="col-sm-9">
 		<?php 
-		 echo $form->labelEx($model,'kode_prodi'); 
+		 // echo $form->labelEx($model,'kode_prodi'); 
 		 $list = CHtml::listData(Masterprogramstudi::model()->findAll(),'kode_prodi','nama_prodi');
 
        echo $form->dropDownList($model, 'kode_prodi',$list,array('empty'=> 'Pilih Prodi'));
-       echo $form->error($model,'kode_prodi'); 
+       // echo $form->error($model,'kode_prodi'); 
 		?>
+		<?php echo $form->error($model,'kode_prodi'); ?>
+		</div>
 	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'status'); ?>
-		<?php
-		echo $form->radioButtonList($model, 
- 			'status', 
- 			array('1'=> 'AKTIF','0'=>'NON-AKTIF'),
- 			array(
-    'labelOptions'=>array('style'=>'display:inline'), // add this code
-    'separator'=>'  ',
-
- 			));  
-		// echo $form->textField($model,'STATUS'); 
-
-		?>
-		<?php echo $form->error($model,'STATUS'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'username'); ?>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'username', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'2')); ?>
+		<div class="col-sm-9">
 		<?php echo $form->textField($model,'username',array('size'=>60,'maxlength'=>100)); ?>
 		<?php echo $form->error($model,'username'); ?>
+		</div>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'password'); ?>
-		<?php echo $form->passwordField($model,'password',array('size'=>60,'maxlength'=>100)); ?>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'password', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'3')); ?>
+		<div class="col-sm-9">
+		<?php echo $form->passwordField($model,'password',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'password'); ?>
+		</div>
 	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'repeat_password'); ?>
-		<?php echo $form->passwordField($model,'repeat_password',array('size'=>60,'maxlength'=>100)); ?>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'repeat_password', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'3')); ?>
+		<div class="col-sm-9">
+		<?php echo $form->passwordField($model,'repeat_password',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'repeat_password'); ?>
+		</div>
 	</div>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-	</div>
+	
+	<div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+		<button class="btn btn-info" type="submit">
+            <i class="ace-icon fa fa-check bigger-110"></i>
+            Simpan
+          </button>
+	  </div>
+      </div>
+             
 
 <?php $this->endWidget(); ?>
-
-</div><!-- form -->

@@ -13,10 +13,10 @@ class UserController extends Controller
 	 */
 	public function filters()
 	{
-		return array(
+		return [
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
-		);
+		];
 	}
 
 	/**
@@ -26,23 +26,23 @@ class UserController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
+		return [
+			['allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+			],
+			['allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
 				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+			],
+			['allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
+			],
+			['deny',  // deny all users
 				'users'=>array('*'),
-			),
-		);
+			],
+		];
 	}
 
 	/**
@@ -51,9 +51,9 @@ class UserController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
+		$this->render('view',[
 			'model'=>$this->loadModel($id),
-		));
+		]);
 	}
 
 	/**
@@ -63,22 +63,22 @@ class UserController extends Controller
 	public function actionCreate()
 	{
 		$model=new User;
-		$model->setScenario('repeatPwd');
+
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-			// print_r($_POST);exit;
 			if($model->save()){
-				$this->redirect(array('view','id'=>$model->username));
+				Yii::app()->user->setFlash('success', "Data telah tersimpan.");
+				$this->redirect(['index']);
 			}
 		}
 
-		$this->render('create',array(
+		$this->render('create',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**
@@ -89,7 +89,7 @@ class UserController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-		$model->setScenario('repeatPwd');
+
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -97,13 +97,14 @@ class UserController extends Controller
 		{
 			$model->attributes=$_POST['User'];
 			if($model->save()){
-				$this->redirect(array('view','id'=>$model->username));
+				Yii::app()->user->setFlash('success', "Data telah tersimpan.");
+				$this->redirect(['index']);
 			}
 		}
 
-		$this->render('update',array(
+		$this->render('update',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**
@@ -127,12 +128,19 @@ class UserController extends Controller
 	{
 		$model=new User('search');
 		$model->unsetAttributes();  // clear any default values
+
+		if(isset($_GET['filter']))
+			$model->SEARCH=$_GET['filter'];
+
+		if(isset($_GET['size']))
+			$model->PAGE_SIZE=$_GET['size'];
+		
 		if(isset($_GET['User']))
 			$model->attributes=$_GET['User'];
 
-		$this->render('admin',array(
+		$this->render('index',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**
@@ -142,12 +150,19 @@ class UserController extends Controller
 	{
 		$model=new User('search');
 		$model->unsetAttributes();  // clear any default values
+
+		if(isset($_GET['filter']))
+			$model->SEARCH=$_GET['filter'];
+
+		if(isset($_GET['size']))
+			$model->PAGE_SIZE=$_GET['size'];
+		
 		if(isset($_GET['User']))
 			$model->attributes=$_GET['User'];
 
-		$this->render('admin',array(
+		$this->render('admin',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**

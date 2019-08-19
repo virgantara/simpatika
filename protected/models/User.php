@@ -119,15 +119,21 @@ class User extends MyActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$sort = new CSort;
 
-		$criteria->compare('username',$this->username,true);
-		$criteria->compare('password',$this->password,true);
-		$criteria->compare('level',$this->level);
-		$criteria->compare('status',$this->status);
+        $criteria->addSearchCondition('username',$this->SEARCH,true,'OR');
+        $criteria->addSearchCondition('level',$this->SEARCH,true,'OR');
+        $criteria->addSearchCondition('status',$this->SEARCH,true,'OR');
+        $criteria->addSearchCondition('kode_prodi',$this->SEARCH,true,'OR');
+        
+        return new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+            'sort'=>$sort,
+            'pagination'=>array(
+                'pageSize'=>$this->PAGE_SIZE,
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
+            ),
+        )); 
 	}
 
 	/**

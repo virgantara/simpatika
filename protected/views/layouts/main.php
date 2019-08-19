@@ -101,7 +101,7 @@
 						['label'=>'Tahun Akademik', 'url'=>['/tahunakademik/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Jam Mengajar', 'url'=>['/jam/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Mahasiswa', 'url'=>['/mastermahasiswa/admin'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
-						['label'=>'Dosen', 'url'=>['/masterdosen/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
+						['label'=>'Dosen', 'url'=>['/masterdosen/admin'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'User di SIAKAD', 'url'=>['/users/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'User SIMPATIKA', 'url'=>['/user/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Data KRS di SIAKAD', 'url'=>['/datakrs/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],

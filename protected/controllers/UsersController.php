@@ -13,10 +13,10 @@ class UsersController extends Controller
 	 */
 	public function filters()
 	{
-		return array(
+		return [
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
-		);
+		];
 	}
 
 	/**
@@ -26,23 +26,23 @@ class UsersController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
+		return [
+			['allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','admin','delete'),
+			],
+			['allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array('create','update'),
 				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array(),
+			],
+			['allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
+			],
+			['deny',  // deny all users
 				'users'=>array('*'),
-			),
-		);
+			],
+		];
 	}
 
 	/**
@@ -51,9 +51,9 @@ class UsersController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
+		$this->render('view',[
 			'model'=>$this->loadModel($id),
-		));
+		]);
 	}
 
 	/**
@@ -70,13 +70,15 @@ class UsersController extends Controller
 		if(isset($_POST['Users']))
 		{
 			$model->attributes=$_POST['Users'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				Yii::app()->user->setFlash('success', "Data telah tersimpan.");
+				$this->redirect(['index']);
+			}
 		}
 
-		$this->render('create',array(
+		$this->render('create',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**
@@ -94,13 +96,15 @@ class UsersController extends Controller
 		if(isset($_POST['Users']))
 		{
 			$model->attributes=$_POST['Users'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if($model->save()){
+				Yii::app()->user->setFlash('success', "Data telah tersimpan.");
+				$this->redirect(['index']);
+			}
 		}
 
-		$this->render('update',array(
+		$this->render('update',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**
@@ -122,7 +126,21 @@ class UsersController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$this->actionAdmin();
+		$model=new Users('search');
+		$model->unsetAttributes();  // clear any default values
+
+		if(isset($_GET['filter']))
+			$model->SEARCH=$_GET['filter'];
+
+		if(isset($_GET['size']))
+			$model->PAGE_SIZE=$_GET['size'];
+		
+		if(isset($_GET['Users']))
+			$model->attributes=$_GET['Users'];
+
+		$this->render('index',[
+			'model'=>$model,
+		]);
 	}
 
 	/**
@@ -132,12 +150,19 @@ class UsersController extends Controller
 	{
 		$model=new Users('search');
 		$model->unsetAttributes();  // clear any default values
+
+		if(isset($_GET['filter']))
+			$model->SEARCH=$_GET['filter'];
+
+		if(isset($_GET['size']))
+			$model->PAGE_SIZE=$_GET['size'];
+		
 		if(isset($_GET['Users']))
 			$model->attributes=$_GET['Users'];
 
-		$this->render('admin',array(
+		$this->render('admin',[
 			'model'=>$model,
-		));
+		]);
 	}
 
 	/**

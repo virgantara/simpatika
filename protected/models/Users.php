@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "simak_users".
+ * This is the model class for table "{{users}}".
  *
- * The followings are the available columns in table 'simak_users':
+ * The followings are the available columns in table '{{users}}':
  * @property string $id
  * @property integer $role_id
  * @property string $email
@@ -33,12 +33,16 @@
  */
 class Users extends CActiveRecord
 {
+
+	public $SEARCH;
+	public $PAGE_SIZE = 10;
+
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'simak_users';
+		return '{{users}}';
 	}
 
 	/**
@@ -129,36 +133,42 @@ class Users extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$sort = new CSort;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('role_id',$this->role_id);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('username',$this->username,true);
-		$criteria->compare('password_hash',$this->password_hash,true);
-		$criteria->compare('reset_hash',$this->reset_hash,true);
-		$criteria->compare('last_login',$this->last_login,true);
-		$criteria->compare('last_ip',$this->last_ip,true);
-		$criteria->compare('created_on',$this->created_on,true);
-		$criteria->compare('deleted',$this->deleted);
-		$criteria->compare('reset_by',$this->reset_by);
-		$criteria->compare('banned',$this->banned);
-		$criteria->compare('ban_message',$this->ban_message,true);
-		$criteria->compare('display_name',$this->display_name,true);
-		$criteria->compare('display_name_changed',$this->display_name_changed,true);
-		$criteria->compare('timezone',$this->timezone,true);
-		$criteria->compare('language',$this->language,true);
-		$criteria->compare('active',$this->active);
-		$criteria->compare('activate_hash',$this->activate_hash,true);
-		$criteria->compare('password_iterations',$this->password_iterations);
-		$criteria->compare('force_password_reset',$this->force_password_reset);
-		$criteria->compare('nim',$this->nim,true);
-		$criteria->compare('status_data',$this->status_data);
-		$criteria->compare('kampus',$this->kampus,true);
-		$criteria->compare('fakultas',$this->fakultas,true);
-		$criteria->compare('prodi',$this->prodi,true);
+		$criteria->addSearchCondition('id',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('role_id',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('email',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('username',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('password_hash',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('reset_hash',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('last_login',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('last_ip',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('created_on',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('deleted',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('reset_by',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('banned',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('ban_message',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('display_name',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('display_name_changed',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('timezone',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('language',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('active',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('activate_hash',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('password_iterations',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('force_password_reset',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nim',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('status_data',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kampus',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('fakultas',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('prodi',$this->SEARCH,true,'OR');
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>$sort,
+			'pagination'=>array(
+				'pageSize'=>$this->PAGE_SIZE,
+
+			),
 		));
 	}
 
