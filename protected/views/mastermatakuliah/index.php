@@ -47,8 +47,17 @@ $this->menu=array(
 		<div class="col-sm-9">
 		<?php
 		$kode_prodi = !empty($_GET['kode_prodi']) ? $_GET['kode_prodi'] : '';
-    
-    $list = CHtml::listData(Masterprogramstudi::model()->findAll(), 'kode_prodi','nama_prodi');
+    	
+    	$results = null;
+    	if(Yii::app()->user->checkAccess([WebUser::R_SA])){
+    		$results = Masterprogramstudi::model()->findAll();
+    	}
+
+    	else if(!Yii::app()->user->isGuest){
+    		$results = Masterprogramstudi::model()->findAllByAttributes(['kode_prodi'=>Yii::app()->user->getState('prodi')]);
+
+    	}
+    	$list = CHtml::listData($results, 'kode_prodi','nama_prodi');
     
 		echo CHtml::dropDownList('kode_prodi',$kode_prodi,$list);
 		
