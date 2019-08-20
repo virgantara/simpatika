@@ -130,10 +130,10 @@ class MastermahasiswaController extends Controller
 					'id_jenjang_pendidikan_ibu'		=> $ibu->pendidikan0->kode_feeder,
 					'id_penghasilan_ibu'	=> $ibu->penghasilan0->kode_feeder,
 					'id_kebutuhan_khusus_ibu' 	=> '0',
-					'nm_wali'				=> ucwords(strtolower($wali->nama)),
-					'id_pekerjaan_wali'		=> $wali->pekerjaan0->kode_feeder,
-					'id_jenjang_pendidikan_wali'	=> $wali->pendidikan0->kode_feeder,
-					'id_penghasilan_wali'	=> $wali->penghasilan0->kode_feeder,
+					'nm_wali'				=> !empty($wali) ? ucwords(strtolower($wali->nama)) : '',
+					'id_pekerjaan_wali'		=> !empty($wali) ? $wali->pekerjaan0->kode_feeder : '',
+					'id_jenjang_pendidikan_wali'	=> !empty($wali) ? $wali->pendidikan0->kode_feeder: '',
+					'id_penghasilan_wali'	=> !empty($wali) ? $wali->penghasilan0->kode_feeder : '',
 					
 				];
 
