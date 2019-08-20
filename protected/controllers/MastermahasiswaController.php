@@ -97,8 +97,9 @@ class MastermahasiswaController extends Controller
 			if(empty($hasil->values->output->result->id_pd))
 			{
 				
-				$url = $host."/feeder/m/insert";
+				$url = $host."/feeder/record/insert";
 				$params = [
+					'table' => 'mahasiswa',
 					'nm_pd'		=> ucwords(strtolower($m->nama_mahasiswa)),
 					'id_kk' 	=> '0',
 					'tmpt_lahir' 			=> ucwords(strtolower($m->tempat_lahir)),
@@ -165,10 +166,11 @@ class MastermahasiswaController extends Controller
 						'tgl_masuk_sp' => $_POST['tgl_masuk'],
 						'id_jns_daftar' => 1,
 						'mulai_smt'	=> $_POST['ta_masuk'],
-						'id_sms' => $prodi->kode_feeder,				
+						'id_sms' => $prodi->kode_feeder,
+						'table' => 'mahasiswa_pt',				
 					];
 
-					$url = $host."/feeder/m/insert/pt";
+					$url = $host."/feeder/record/insert";
 
 					$api = new RestClient;
 
