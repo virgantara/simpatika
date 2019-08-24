@@ -864,7 +864,7 @@ class JadwalController extends Controller
 
 		foreach($kampuses as $kampus)
 		{	
-			foreach($kampus->kelases as $kelas)
+			foreach($kampus->masterkelases as $kelas)
 			{
 
 				$semesters = Jadwal::model()->findSemester($id, $kampus->id, $kelas->id);

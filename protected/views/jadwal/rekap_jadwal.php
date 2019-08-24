@@ -96,7 +96,7 @@ $kampuses = Jadwal::model()->findKampus($kode_prodi);
 foreach($kampuses as $kampus)
 {	
 
-	foreach($kampus->kelases as $kelas)
+	foreach($kampus->masterkelases as $kelas)
 	{
 		
 		$semesters = Jadwal::model()->findSemester($kode_prodi, $kampus->id, $kelas->id);
@@ -161,7 +161,7 @@ foreach($kampuses as $kampus)
 		  $i++;
 		?>
 		<tr <?php echo $updated;?>>
-		<td width="3%"><?=$m->idjadwal;?></td>
+		<td width="3%"><?=$i;?></td>
 		<td width="5%"><?php echo $m->hari;?></td>
 		<td><?php echo $m->jam_ke;?></td>
 		<td><?php echo substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3);?></td>

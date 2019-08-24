@@ -7,6 +7,9 @@
  * @property integer $id
  * @property string $kode_kampus
  * @property string $nama_kampus
+ *
+ * The followings are the available model relations:
+ * @property Masterkelas[] $masterkelases
  */
 class Kampus extends CActiveRecord
 {
@@ -47,6 +50,7 @@ class Kampus extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'masterkelases' => array(self::HAS_MANY, 'Masterkelas', 'id_kampus'),
 		);
 	}
 
