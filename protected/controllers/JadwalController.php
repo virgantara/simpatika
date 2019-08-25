@@ -817,7 +817,7 @@ class JadwalController extends Controller
 		);
     
 	    $sheet = $objPHPExcel->setActiveSheetIndex(0);
-	     $sheet->getColumnDimension('A')->setWidth(8);
+	    $sheet->getColumnDimension('A')->setWidth(8);
 	    $sheet->getColumnDimension('B')->setWidth(4);
 	    $sheet->getColumnDimension('C')->setWidth(12);
 	    $sheet->getColumnDimension('D')->setWidth(12);
