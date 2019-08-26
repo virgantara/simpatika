@@ -35,7 +35,7 @@
  * Include the the TCPDF class. IMPORTANT: Don't forget to customize its configuration
  * if needed.
  */
-require_once(dirname(__FILE__).'/tcpdf/tcpdf.php');
+require_once(dirname(__FILE__).'/tcpdf/mytcpdf.php');
 
 /**
  * ETcPdf is a simple wrapper for the TCPDF library.
@@ -81,7 +81,7 @@ class ETcPdf
       if (!is_bool($unicode))
          throw new CException(Yii::t('ETcPdf', '"unicode" must be a boolean value'));
 
-		$this->myTCPDF = new TCPDF($orientation, $unit, $format, $unicode, $encoding);
+		$this->myTCPDF = new MyTCPDF($orientation, $unit, $format, $unicode, $encoding);
    //	define ("K_PATH_CACHE", Yii::app()->getRuntimePath());
    }
 
@@ -91,19 +91,19 @@ class ETcPdf
     */
 	public function __call($method, $params)
 	{
-		if (is_object($this->myTCPDF) && get_class($this->myTCPDF)==='TCPDF') return call_user_func_array(array($this->myTCPDF, $method), $params);
+		if (is_object($this->myTCPDF) && get_class($this->myTCPDF)==='MyTCPDF') return call_user_func_array(array($this->myTCPDF, $method), $params);
 		else throw new CException(Yii::t('ETcPdf', 'Can not call a method of a non existent object'));
 	}
 
 	public function __set($name, $value)
 	{
-	   if (is_object($this->myTCPDF) && get_class($this->myTCPDF)==='TCPDF') $this->myTCPDF->$name = $value;
+	   if (is_object($this->myTCPDF) && get_class($this->myTCPDF)==='MyTCPDF') $this->myTCPDF->$name = $value;
 	   else throw new CException(Yii::t('ETcPdf', 'Can not set a property of a non existent object'));
 	}
 
 	public function __get($name)
 	{
-	   if (is_object($this->myTCPDF) && get_class($this->myTCPDF)==='TCPDF') return $this->myTCPDF->$name;
+	   if (is_object($this->myTCPDF) && get_class($this->myTCPDF)==='MyTCPDF') return $this->myTCPDF->$name;
 	   else throw new CException(Yii::t('ETcPdf', 'Can not access a property of a non existent object'));
 	}
 

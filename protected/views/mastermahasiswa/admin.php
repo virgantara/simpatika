@@ -65,22 +65,7 @@ $this->breadcrumbs=array(
 		'status_aktivitas',
 		array(
 			'class'=>'CButtonColumn',
-			'template' => '{view} {update} {delete} {skpi}',
-			'buttons' => array(
-				
-				// 'printPengantar' => array(
-				// 	'url'=>'Yii::app()->createUrl("labRequest/cetakHasil/", array("id"=>$data->id))',   
-				// 	'label'=>'<i class="fa fa-print"></i>',
-				// 	'options' => array('title'=>'Cetak Hasil','class'=>'print'),      
-	   //          ),
-				'skpi' => array(
-					'url'=>'Yii::app()->createUrl("mastermahasiswa/skpi/", ["id"=>$data->id])',   
-					// 'label'=>'<i class="fa fa-magnifier"></i>',
-					'options' => array('title'=>'View','class'=>'view'),      
-	            ),
-				
-
-			),
+			
 		),
 	),
 	'htmlOptions'=>array(
