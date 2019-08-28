@@ -16,6 +16,7 @@
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
+<link rel="stylesheet" href="<?=Yii::app()->baseUrl;?>/css/main.css">   
 <body>
 
 	<nav class="navbar navbar-default navbar-inverse">
@@ -37,7 +38,25 @@
 	        // 'itemCssClass'=>'hover',
 	        'encodeLabel'=>false,
 			'items'=>array(
-				array('label'=>'Home', 'url'=>array('/site/home'),'visible'=>!Yii::app()->user->isGuest),
+				['label'=>'Home', 'url'=>array('/site/index#slider-area')],
+				[
+					'label' => 'Petunjuk & Unduhan <span class="caret"></span>',
+					'url' => '#',
+
+					'itemOptions' => ['class'=>'dropdown-toggle'],
+					'linkOptions' => ['class'=>'dropdown-toggle','data-toggle'=>"dropdown",'role' =>'button'],
+					'items' => [
+						array('label'=>'Penggunaan SIMPATIKA', 'url'=>'#'),
+						array('label'=>'Alur SIMPATIKA', 'url'=>['site/index#flow']),
+						array('label'=>'Unduh Template', 'url'=>['site/unduh']),
+					]
+				],
+				['label'=>'Important Dates', 'url'=>array('/site/index#dates')],
+				[
+					'label' => 'Tentang SIMPATIKA',
+					'url' => ['/site/about'],
+					
+				],
 				array('label'=>'Jadwal', 'url'=>array('/jadwal/index'),'visible'=>!Yii::app()->user->isGuest),
 				[
 					'label' => 'Cetak <span class="caret"></span>',

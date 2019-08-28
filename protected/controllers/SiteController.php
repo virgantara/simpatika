@@ -21,7 +21,15 @@ class SiteController extends Controller
 		);
 	}
 
-	
+	public function actionAbout()
+	{
+		$this->render('pages/about');
+	}
+
+	public function actionUnduh()
+	{
+		$this->render('unduh');
+	}
 
 	public function actionMaster()
 	{
@@ -34,9 +42,10 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
+		$this->render('home');	
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->actionLogin();
+		// $this->actionLogin();
 	}
 
 	public function actionHome()
