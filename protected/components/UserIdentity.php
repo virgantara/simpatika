@@ -33,7 +33,7 @@ class UserIdentity extends CUserIdentity
 			$this->errorCode=self::ERROR_PASSWORD_INVALID;
 
 		}
-		else if($user->status != 1){
+		else if($user->status != 10){
 
 			$this->errorCode=self::ERROR_USER_INACTIVE;
 			

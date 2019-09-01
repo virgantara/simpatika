@@ -38,7 +38,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'status', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'5')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->radioButtonList($model,'status',['1'=>'Aktif','0'=>'Non Aktif']); ?>
+		<?php echo $form->radioButtonList($model,'status',['10'=>'Aktif','0'=>'Non Aktif']); ?>
 		<?php echo $form->error($model,'status'); ?>
 		</div>
 	</div>
