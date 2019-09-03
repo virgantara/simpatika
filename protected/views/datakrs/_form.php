@@ -24,7 +24,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'kode_pt', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'2')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'kode_pt',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->textField($model,'kode_pt',array('size'=>10,'maxlength'=>10,'disabled'=>'disabled')); ?>
 		<?php echo $form->error($model,'kode_pt'); ?>
 		</div>
 	</div>
@@ -136,7 +136,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'harian', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'16')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'harian',array('size'=>4,'maxlength'=>4)); ?>
+		<?php echo $form->textField($model,'harian',array('size'=>4,'maxlength'=>4,'disabled'=>'disabled')); ?>
 		<?php echo $form->error($model,'harian'); ?>
 		</div>
 	</div>
@@ -144,7 +144,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'normatif', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'17')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'normatif',array('size'=>5,'maxlength'=>5)); ?>
+		<?php echo $form->textField($model,'normatif',array('size'=>5,'maxlength'=>5,'disabled'=>'disabled')); ?>
 		<?php echo $form->error($model,'normatif'); ?>
 		</div>
 	</div>
@@ -152,7 +152,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'uts', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'18')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'uts',array('size'=>5,'maxlength'=>5)); ?>
+		<?php echo $form->textField($model,'uts',array('size'=>5,'maxlength'=>5,'disabled'=>'disabled')); ?>
 		<?php echo $form->error($model,'uts'); ?>
 		</div>
 	</div>
@@ -160,7 +160,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'uas', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'19')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'uas',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->textField($model,'uas',array('size'=>10,'maxlength'=>10,'disabled'=>'disabled')); ?>
 		<?php echo $form->error($model,'uas'); ?>
 		</div>
 	</div>
@@ -168,7 +168,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'nilai_angka', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'20')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'nilai_angka',array('size'=>15,'maxlength'=>15)); ?>
+		<?php echo $form->textField($model,'nilai_angka',array('size'=>15,'maxlength'=>15,'disabled'=>'disabled')); ?>
 		<?php echo $form->error($model,'nilai_angka'); ?>
 		</div>
 	</div>
@@ -176,7 +176,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'nilai_huruf', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'21')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'nilai_huruf',array('size'=>5,'maxlength'=>5)); ?>
+		<?php echo $form->textField($model,'nilai_huruf',array('size'=>5,'maxlength'=>5,'disabled'=>'disabled')); ?>
 		<?php echo $form->error($model,'nilai_huruf'); ?>
 		</div>
 	</div>
@@ -184,18 +184,11 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'bobot_nilai', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'22')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'bobot_nilai',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->textField($model,'bobot_nilai',array('size'=>10,'maxlength'=>10,'disabled'=>'disabled')); ?>
 		<?php echo $form->error($model,'bobot_nilai'); ?>
 		</div>
 	</div>
 
-	<div class="form-group">
-		<?php echo $form->labelEx($model,'created_date', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'23')); ?>
-		<div class="col-sm-9">
-		<?php echo $form->textField($model,'created_date'); ?>
-		<?php echo $form->error($model,'created_date'); ?>
-		</div>
-	</div>
 
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'tahun_akademik', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'24')); ?>
@@ -256,23 +249,15 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'pindahan', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'31')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'pindahan',array('size'=>2,'maxlength'=>2)); ?>
+		<?php echo $form->dropDownList($model,'pindahan',['Y'=>'Y','N'=>'N']); ?>
 		<?php echo $form->error($model,'pindahan'); ?>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<?php echo $form->labelEx($model,'created', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'32')); ?>
-		<div class="col-sm-9">
-		<?php echo $form->textField($model,'created'); ?>
-		<?php echo $form->error($model,'created'); ?>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'is_approved', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'33')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'is_approved'); ?>
+		<?php echo $form->checkBox($model,'is_approved'); ?>
 		<?php echo $form->error($model,'is_approved'); ?>
 		</div>
 	</div>
@@ -280,7 +265,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'sudah_ekd', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'34')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'sudah_ekd'); ?>
+		<?php echo $form->checkBox($model,'sudah_ekd'); ?>
 		<?php echo $form->error($model,'sudah_ekd'); ?>
 		</div>
 	</div>
@@ -288,7 +273,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'score_ekd', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'35')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'score_ekd'); ?>
+		<?php echo $form->textField($model,'score_ekd',['disabled'=>'disabled']); ?>
 		<?php echo $form->error($model,'score_ekd'); ?>
 		</div>
 	</div>
