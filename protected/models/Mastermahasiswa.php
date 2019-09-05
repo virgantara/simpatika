@@ -69,6 +69,7 @@
  * @property string $gol_darah
  * @property string $masuk_kelas
  * @property string $tgl_sk_yudisium
+ * @property string $no_ijazah
  * @property integer $status_mahasiswa
  * @property string $kampus
  * @property string $jur_thn_smta
@@ -81,13 +82,14 @@
  * The followings are the available model relations:
  * @property MahasiswaOrtu[] $mahasiswaOrtus
  * @property Masterprogramstudi $kodeProdi
+ * @property TahfidzKelompokAnggota[] $tahfidzKelompokAnggotas
+ * @property TahfidzNilai[] $tahfidzNilais
  */
 class Mastermahasiswa extends CActiveRecord
 {
 
 	public $SEARCH;
 	public $PAGE_SIZE = 10;
-	public $uploadedFile;
 
 	/**
 	 * @return string the associated database table name
@@ -120,7 +122,7 @@ class Mastermahasiswa extends CActiveRecord
 			array('nip_co_promotor1', 'length', 'max'=>11),
 			array('nip_co_promotor2', 'length', 'max'=>12),
 			array('nip_co_promotor3', 'length', 'max'=>33),
-			array('photo_mahasiswa, alamat, kecamatan_feeder, provinsi, kabupaten, warga_negara_feeder', 'length', 'max'=>255),
+			array('photo_mahasiswa, alamat, kecamatan_feeder, provinsi, kabupaten, warga_negara_feeder, no_ijazah', 'length', 'max'=>255),
 			array('berat, tinggi', 'length', 'max'=>3),
 			array('jenis_tinggal, no_kps, agama, va_code', 'length', 'max'=>20),
 			array('penerima_kps, masuk_kelas', 'length', 'max'=>1),
@@ -128,7 +130,7 @@ class Mastermahasiswa extends CActiveRecord
 			array('tgl_lahir, tgl_masuk, tgl_lulus, keterangan, tgl_sk_yudisium, created_at, updated_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, nim_mhs, nama_mahasiswa, tempat_lahir, tgl_lahir, jenis_kelamin, tahun_masuk, semester_awal, batas_studi, asal_propinsi, tgl_masuk, tgl_lulus, status_aktivitas, status_awal, jml_sks_diakui, nim_asal, asal_pt, nama_asal_pt, asal_jenjang_studi, asal_prodi, kode_biaya_studi, kode_pekerjaan, tempat_kerja, kode_pt_kerja, kode_ps_kerja, nip_promotor, nip_co_promotor1, nip_co_promotor2, nip_co_promotor3, nip_co_promotor4, photo_mahasiswa, semester, keterangan, status_bayar, telepon, hp, email, alamat, berat, tinggi, ktp, rt, rw, dusun, kode_pos, desa, kecamatan, kecamatan_feeder, jenis_tinggal, penerima_kps, no_kps, provinsi, kabupaten, status_warga, warga_negara, warga_negara_feeder, status_sipil, agama, gol_darah, masuk_kelas, tgl_sk_yudisium, status_mahasiswa, kampus, jur_thn_smta, is_synced, kode_pd, va_code, created_at, updated_at', 'safe', 'on'=>'search'),
+			array('id, kode_pt, kode_fakultas, kode_prodi, kode_jenjang_studi, nim_mhs, nama_mahasiswa, tempat_lahir, tgl_lahir, jenis_kelamin, tahun_masuk, semester_awal, batas_studi, asal_propinsi, tgl_masuk, tgl_lulus, status_aktivitas, status_awal, jml_sks_diakui, nim_asal, asal_pt, nama_asal_pt, asal_jenjang_studi, asal_prodi, kode_biaya_studi, kode_pekerjaan, tempat_kerja, kode_pt_kerja, kode_ps_kerja, nip_promotor, nip_co_promotor1, nip_co_promotor2, nip_co_promotor3, nip_co_promotor4, photo_mahasiswa, semester, keterangan, status_bayar, telepon, hp, email, alamat, berat, tinggi, ktp, rt, rw, dusun, kode_pos, desa, kecamatan, kecamatan_feeder, jenis_tinggal, penerima_kps, no_kps, provinsi, kabupaten, status_warga, warga_negara, warga_negara_feeder, status_sipil, agama, gol_darah, masuk_kelas, tgl_sk_yudisium, no_ijazah, status_mahasiswa, kampus, jur_thn_smta, is_synced, kode_pd, va_code, created_at, updated_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -140,8 +142,10 @@ class Mastermahasiswa extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'ortus' => array(self::HAS_MANY, 'MahasiswaOrtu', 'nim'),
+			'mahasiswaOrtus' => array(self::HAS_MANY, 'MahasiswaOrtu', 'nim'),
 			'kodeProdi' => array(self::BELONGS_TO, 'Masterprogramstudi', 'kode_prodi'),
+			'tahfidzKelompokAnggotas' => array(self::HAS_MANY, 'TahfidzKelompokAnggota', 'nim'),
+			'tahfidzNilais' => array(self::HAS_MANY, 'TahfidzNilai', 'nim'),
 		);
 	}
 
@@ -216,6 +220,7 @@ class Mastermahasiswa extends CActiveRecord
 			'gol_darah' => 'Gol Darah',
 			'masuk_kelas' => 'Masuk Kelas',
 			'tgl_sk_yudisium' => 'Tgl Sk Yudisium',
+			'no_ijazah' => 'No Ijazah',
 			'status_mahasiswa' => 'Status Mahasiswa',
 			'kampus' => 'Kampus',
 			'jur_thn_smta' => 'Jur Thn Smta',
@@ -311,6 +316,7 @@ class Mastermahasiswa extends CActiveRecord
 		$criteria->addSearchCondition('gol_darah',$this->SEARCH,true,'OR');
 		$criteria->addSearchCondition('masuk_kelas',$this->SEARCH,true,'OR');
 		$criteria->addSearchCondition('tgl_sk_yudisium',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('no_ijazah',$this->SEARCH,true,'OR');
 		$criteria->addSearchCondition('status_mahasiswa',$this->SEARCH,true,'OR');
 		$criteria->addSearchCondition('kampus',$this->SEARCH,true,'OR');
 		$criteria->addSearchCondition('jur_thn_smta',$this->SEARCH,true,'OR');

@@ -21,9 +21,6 @@ $this->menu=array(
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'id',
-		'kode_pt',
-		'kode_fakultas',
 		'kode_prodi',
 		'kode_jenjang_studi',
 		'nim_mhs',
@@ -82,6 +79,7 @@ $this->menu=array(
 		'agama',
 		'gol_darah',
 		'masuk_kelas',
+		'no_ijazah',
 		'tgl_sk_yudisium',
 		'status_mahasiswa',
 		'kampus',

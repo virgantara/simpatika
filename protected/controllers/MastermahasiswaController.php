@@ -1050,8 +1050,11 @@ class MastermahasiswaController extends Controller
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
+		$listKampus = Kampus::model()->findAll();
+
 		$this->render('update',array(
 			'model'=>$model,
+			'listKampus' => $listKampus
 		));
 	}
 

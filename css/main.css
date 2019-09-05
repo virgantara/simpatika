@@ -1948,7 +1948,7 @@ button:focus {
 .form-control {
   width: 100%;
   margin-bottom: 20px;
-  padding: 15px 30px;
+  padding: 5px 10px;
   font-size: 14px;
   border-radius: 30px;
   border: 1px solid transparent;

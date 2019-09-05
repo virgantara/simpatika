@@ -9,7 +9,11 @@
  * @property string $kode_jurusan
  * @property string $kode_prodi
  * @property string $kode_jenjang_studi
+ * @property string $gelar_lulusan
+ * @property string $gelar_lulusan_en
+ * @property string $gelar_lulusan_short
  * @property string $nama_prodi
+ * @property string $nama_prodi_en
  * @property string $semester_awal
  * @property string $no_sk_dikti
  * @property string $tgl_sk_dikti
@@ -37,9 +41,14 @@
  * The followings are the available model relations:
  * @property Mastermahasiswa[] $mastermahasiswas
  * @property Masterfakultas $kodeFakultas
+ * @property ProdiCapem[] $prodiCapems
  */
 class Masterprogramstudi extends CActiveRecord
 {
+
+	public $SEARCH;
+	public $PAGE_SIZE = 10;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -59,15 +68,16 @@ class Masterprogramstudi extends CActiveRecord
 			array('kode_fakultas, kode_prodi, kode_jenjang_studi, nama_prodi, semester_awal, no_sk_dikti, jml_sks_lulus, kode_status, tahun_semester_mulai, email_prodi, no_sk_akreditasi, kode_status_akreditasi, frekuensi_kurikulum, pelaksanaan_kurikulum, nidn_ketua_prodi, telp_ketua_prodi, fax_prodi, nama_operator, hp_operator, telepon_program_studi', 'required'),
 			array('kode_fakultas, kode_jurusan, kode_jenjang_studi, semester_awal, jml_sks_lulus, tahun_semester_mulai, kode_status_akreditasi', 'length', 'max'=>5),
 			array('kode_prodi', 'length', 'max'=>15),
+			array('gelar_lulusan, gelar_lulusan_en, gelar_lulusan_short, nama_prodi_en, singkatan, kode_feeder', 'length', 'max'=>255),
 			array('nama_prodi, no_sk_dikti, email_prodi, nama_operator', 'length', 'max'=>50),
 			array('kode_status', 'length', 'max'=>1),
-			array('no_sk_akreditasi, nidn_ketua_prodi, telp_ketua_prodi, fax_prodi, hp_operator, telepon_program_studi', 'length', 'max'=>25),
+			array('no_sk_akreditasi, telp_ketua_prodi, fax_prodi, hp_operator, telepon_program_studi', 'length', 'max'=>25),
 			array('frekuensi_kurikulum, pelaksanaan_kurikulum', 'length', 'max'=>10),
-			array('singkatan, kode_feeder', 'length', 'max'=>255),
+			array('nidn_ketua_prodi', 'length', 'max'=>30),
 			array('tgl_sk_dikti, tgl_akhir_sk_dikti, tgl_pendirian_program_studi, tgl_sk_akreditasi, tgl_akhir_sk_akreditasi', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, kode_fakultas, kode_jurusan, kode_prodi, kode_jenjang_studi, nama_prodi, semester_awal, no_sk_dikti, tgl_sk_dikti, tgl_akhir_sk_dikti, jml_sks_lulus, kode_status, tahun_semester_mulai, email_prodi, tgl_pendirian_program_studi, no_sk_akreditasi, tgl_sk_akreditasi, tgl_akhir_sk_akreditasi, kode_status_akreditasi, frekuensi_kurikulum, pelaksanaan_kurikulum, nidn_ketua_prodi, telp_ketua_prodi, fax_prodi, nama_operator, hp_operator, telepon_program_studi, singkatan, kode_feeder', 'safe', 'on'=>'search'),
+			array('id, kode_fakultas, kode_jurusan, kode_prodi, kode_jenjang_studi, gelar_lulusan, gelar_lulusan_en, gelar_lulusan_short, nama_prodi, nama_prodi_en, semester_awal, no_sk_dikti, tgl_sk_dikti, tgl_akhir_sk_dikti, jml_sks_lulus, kode_status, tahun_semester_mulai, email_prodi, tgl_pendirian_program_studi, no_sk_akreditasi, tgl_sk_akreditasi, tgl_akhir_sk_akreditasi, kode_status_akreditasi, frekuensi_kurikulum, pelaksanaan_kurikulum, nidn_ketua_prodi, telp_ketua_prodi, fax_prodi, nama_operator, hp_operator, telepon_program_studi, singkatan, kode_feeder', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,6 +91,7 @@ class Masterprogramstudi extends CActiveRecord
 		return array(
 			'mastermahasiswas' => array(self::HAS_MANY, 'Mastermahasiswa', 'kode_prodi'),
 			'kodeFakultas' => array(self::BELONGS_TO, 'Masterfakultas', 'kode_fakultas'),
+			'prodiCapems' => array(self::HAS_MANY, 'ProdiCapem', 'prodi_id'),
 		);
 	}
 
@@ -95,7 +106,11 @@ class Masterprogramstudi extends CActiveRecord
 			'kode_jurusan' => 'Kode Jurusan',
 			'kode_prodi' => 'Kode Prodi',
 			'kode_jenjang_studi' => 'Kode Jenjang Studi',
+			'gelar_lulusan' => 'Gelar Lulusan',
+			'gelar_lulusan_en' => 'Gelar Lulusan En',
+			'gelar_lulusan_short' => 'Gelar Lulusan Short',
 			'nama_prodi' => 'Nama Prodi',
+			'nama_prodi_en' => 'Nama Prodi En',
 			'semester_awal' => 'Semester Awal',
 			'no_sk_dikti' => 'No Sk Dikti',
 			'tgl_sk_dikti' => 'Tgl Sk Dikti',
@@ -139,39 +154,49 @@ class Masterprogramstudi extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		$sort = new CSort;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('kode_fakultas',$this->kode_fakultas,true);
-		$criteria->compare('kode_jurusan',$this->kode_jurusan,true);
-		$criteria->compare('kode_prodi',$this->kode_prodi,true);
-		$criteria->compare('kode_jenjang_studi',$this->kode_jenjang_studi,true);
-		$criteria->compare('nama_prodi',$this->nama_prodi,true);
-		$criteria->compare('semester_awal',$this->semester_awal,true);
-		$criteria->compare('no_sk_dikti',$this->no_sk_dikti,true);
-		$criteria->compare('tgl_sk_dikti',$this->tgl_sk_dikti,true);
-		$criteria->compare('tgl_akhir_sk_dikti',$this->tgl_akhir_sk_dikti,true);
-		$criteria->compare('jml_sks_lulus',$this->jml_sks_lulus,true);
-		$criteria->compare('kode_status',$this->kode_status,true);
-		$criteria->compare('tahun_semester_mulai',$this->tahun_semester_mulai,true);
-		$criteria->compare('email_prodi',$this->email_prodi,true);
-		$criteria->compare('tgl_pendirian_program_studi',$this->tgl_pendirian_program_studi,true);
-		$criteria->compare('no_sk_akreditasi',$this->no_sk_akreditasi,true);
-		$criteria->compare('tgl_sk_akreditasi',$this->tgl_sk_akreditasi,true);
-		$criteria->compare('tgl_akhir_sk_akreditasi',$this->tgl_akhir_sk_akreditasi,true);
-		$criteria->compare('kode_status_akreditasi',$this->kode_status_akreditasi,true);
-		$criteria->compare('frekuensi_kurikulum',$this->frekuensi_kurikulum,true);
-		$criteria->compare('pelaksanaan_kurikulum',$this->pelaksanaan_kurikulum,true);
-		$criteria->compare('nidn_ketua_prodi',$this->nidn_ketua_prodi,true);
-		$criteria->compare('telp_ketua_prodi',$this->telp_ketua_prodi,true);
-		$criteria->compare('fax_prodi',$this->fax_prodi,true);
-		$criteria->compare('nama_operator',$this->nama_operator,true);
-		$criteria->compare('hp_operator',$this->hp_operator,true);
-		$criteria->compare('telepon_program_studi',$this->telepon_program_studi,true);
-		$criteria->compare('singkatan',$this->singkatan,true);
-		$criteria->compare('kode_feeder',$this->kode_feeder,true);
+		$criteria->addSearchCondition('id',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_fakultas',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_jurusan',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_jenjang_studi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('gelar_lulusan',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('gelar_lulusan_en',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('gelar_lulusan_short',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_prodi_en',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('semester_awal',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('no_sk_dikti',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tgl_sk_dikti',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tgl_akhir_sk_dikti',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('jml_sks_lulus',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_status',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tahun_semester_mulai',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('email_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tgl_pendirian_program_studi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('no_sk_akreditasi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tgl_sk_akreditasi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('tgl_akhir_sk_akreditasi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_status_akreditasi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('frekuensi_kurikulum',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('pelaksanaan_kurikulum',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nidn_ketua_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('telp_ketua_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('fax_prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('nama_operator',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('hp_operator',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('telepon_program_studi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('singkatan',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('kode_feeder',$this->SEARCH,true,'OR');
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>$sort,
+			'pagination'=>array(
+				'pageSize'=>$this->PAGE_SIZE,
+
+			),
 		));
 	}
 

@@ -525,6 +525,15 @@
 		</div>
 	</div>
 
+
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'no_ijazah', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'65')); ?>
+		<div class="col-sm-9">
+		<?php echo $form->textField($model,'no_ijazah'); ?>
+		<?php echo $form->error($model,'no_ijazah'); ?>
+		</div>
+	</div>
+
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'tgl_sk_yudisium', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'65')); ?>
 		<div class="col-sm-9">
@@ -536,7 +545,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'status_mahasiswa', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'66')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'status_mahasiswa'); ?>
+		<?php echo $form->radioButtonList($model,'status_mahasiswa',['1'=>'Reguler',2=>'Intensif']); ?>
 		<?php echo $form->error($model,'status_mahasiswa'); ?>
 		</div>
 	</div>
@@ -544,7 +553,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'kampus', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'67')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'kampus',array('size'=>2,'maxlength'=>2)); ?>
+		<?php echo $form->dropDownList($model,'kampus',CHtml::listData($listKampus,'id','nama_kampus')); ?>
 		<?php echo $form->error($model,'kampus'); ?>
 		</div>
 	</div>
@@ -560,7 +569,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'is_synced', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'69')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'is_synced'); ?>
+		<?php echo $form->checkBox($model,'is_synced'); ?>
 		<?php echo $form->error($model,'is_synced'); ?>
 		</div>
 	</div>
@@ -576,7 +585,7 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'va_code', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'71')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'va_code',array('size'=>20,'maxlength'=>20)); ?>
+		<?php echo $form->textField($model,'va_code',array('size'=>20,'maxlength'=>20,'readonly'=>'readonly')); ?>
 		<?php echo $form->error($model,'va_code'); ?>
 		</div>
 	</div>
