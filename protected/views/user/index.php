@@ -43,9 +43,9 @@ $this->breadcrumbs=array(
 		'header'=>'No',
 		'value'=>'$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)'
 	],
-		'id',
+		// 'id',
 		'username',
-		'password',
+		'email',
 		'level',
 		'status',
 		'kode_prodi',
