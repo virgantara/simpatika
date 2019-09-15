@@ -28,11 +28,11 @@ class MasterdosenController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','unduhDataDosen'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','unduhDataDosen'),
+				'actions'=>array('create','update'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -92,7 +92,7 @@ class MasterdosenController extends Controller
 	    $sheet->getColumnDimension('D')->setWidth(42);
 
 
-	    $dosen = Masterdosen::model()->findAll();
+	    $dosen = Masterdosen::model()->findAll(['order'=>'nama_dosen ASC']);
 	    
 
 	    foreach($headers as $q => $v)
@@ -122,7 +122,7 @@ class MasterdosenController extends Controller
 	    	$sheet->setCellValueByColumnAndRow(0,$row, $i);
 			$sheet->setCellValueByColumnAndRow(1,$row, $d->nidn);
 			$sheet->setCellValueByColumnAndRow(2,$row, $d->niy);
-			$sheet->setCellValueByColumnAndRow(3,$row, strtoupper($d->nama_dosen));
+			$sheet->setCellValueByColumnAndRow(3,$row, ($d->nama_dosen));
 	    	
 	    	for($j = 0;$j<4;$j++)
 	    	{
@@ -141,11 +141,11 @@ class MasterdosenController extends Controller
 	    ob_start();
 	    
 	    header('Content-Type: application/vnd.ms-excel');
-	    header('Content-Disposition: attachment;filename="templatePA.xls"');
+	    header('Content-Disposition: attachment;filename="data_dosen.xls"');
 	    header('Cache-Control: max-age=0');
 	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 	    $objWriter->save('php://output');
-	    
+	    die();
 	}
 	/**
 	 * Displays a particular model.

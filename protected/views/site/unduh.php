@@ -31,6 +31,11 @@ $this->breadcrumbs=array(
 	Petunjuk Unggah Jadwal silakan lihat di 
 	<?php echo CHtml::link('sini',array('jadwal/petunjuk'));?>
 </li>
+<li class="list-group-item">
+
+	Data Dosen 
+	<?php echo CHtml::link('sini',array('masterdosen/unduhDataDosen'));?>
+</li>
 </ul>
 </div>
 </div>
