@@ -42,8 +42,6 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-
-
 		$this->render('home');	
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
@@ -69,59 +67,6 @@ class SiteController extends Controller
 		}
 	}
 
-	public function actionLoginGoogle()
-	{
-		if(Yii::app()->request->isAjaxRequest)
-		{
-
-			$hasil = [];
-			$model=new User;
-			$model->loginMode = 2;
-			$model->email=$_POST['email'];
-			$model->username = $model->email;
-			$result = $model->loginGoogle();
-			// print_r($result)
-			// validate user input and redirect to the previous page if valid
-			switch($result)
-			{
-				case UserIdentity::ERROR_NONE:
-					
-					$time_expiration = time()+60*60*24*7; 
-					$tahunaktif = Tahunakademik::model()->findByAttributes(array('buka'=> 'Y'));	
-					$cookie = new CHttpCookie('tahunaktif', $tahunaktif->tahun_id);
-					$cookie->expire = $time_expiration; 
-					Yii::app()->request->cookies['tahunaktif'] = $cookie;	
-					$hasil = [
-						'code' => 200,
-						'short' => 'success',
-						'message' => 'Sukses'
-					];
-					break;
-				case UserIdentity::ERROR_EMAIL_NOT_EXIST:
-				case UserIdentity::ERROR_EMAIL_INVALID:
-					
-					$hasil = [
-						'code' => 500,
-						'short' => 'danger',
-						'message' => 'Your email is invalid or not exist in our system.'
-					];
-					break;
-				
-				case UserIdentity::ERROR_USER_INACTIVE:
-
-					$hasil = [
-						'code' => 500,
-						'short' => 'warning',
-						'message' => 'Akun Anda belum aktif. Silakan menghubungi Administrator.'
-					];
-					break;
-			}
-
-			echo CJSON::encode($hasil);
-		}
-		
-	}
-
 	public function actionLogin()
 	{
 	
@@ -141,7 +86,6 @@ class SiteController extends Controller
 		
 			
 			$model->attributes=$_POST['User'];
-			$model->loginMode = 1;
 			$result = $model->login();
 			// validate user input and redirect to the previous page if valid
 			switch($result)

@@ -23,7 +23,7 @@ class User extends MyActiveRecord
 	public $old_password;
     public $new_password;
     public $repeat_password;
-	public $loginMode = 1;
+	
 
 	/**
 	 * @return string the associated database table name
@@ -160,34 +160,8 @@ class User extends MyActiveRecord
 		{
 
 
-			$this->_identity=new UserIdentity($this->username,md5($this->password), $this->loginMode);
+			$this->_identity=new UserIdentity($this->username,md5($this->password));
 			$this->_identity->authenticate();
-		}
-
-		$errCode = $this->_identity->errorCode;
-
-
-		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
-		{
-			$duration=$this->rememberMe ? 3600*24*1 : 0; // 1 day
-			Yii::app()->user->login($this->_identity,$duration);
-			
-			
-		}
-
-
-		return $errCode;
-	}
-
-	public function loginGoogle()
-	{
-		if($this->_identity===null)
-		{
-
-
-			$this->_identity=new UserIdentity($this->username,md5($this->password), $this->loginMode,$this->email);
-			$this->_identity->authenticate();
-
 		}
 
 		$errCode = $this->_identity->errorCode;
