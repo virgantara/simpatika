@@ -57,6 +57,13 @@
 		</div>
 	</div>
 	<div class="form-group">
+		<?php echo $form->labelEx($model,'email', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'2')); ?>
+		<div class="col-sm-9">
+		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->error($model,'email'); ?>
+		</div>
+	</div>
+	<div class="form-group">
 		<?php echo $form->labelEx($model,'username', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'2')); ?>
 		<div class="col-sm-9">
 		<?php echo $form->textField($model,'username',array('size'=>60,'maxlength'=>100)); ?>

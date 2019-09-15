@@ -41,7 +41,7 @@ class User extends MyActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password,level,status', 'required','message' => Yii::t('yii', '{attribute} harus diisi')),
+			array('username, password,level,status,email', 'required','message' => Yii::t('yii', '{attribute} harus diisi')),
 			array('level, status', 'numerical', 'integerOnly'=>true,'on'=>'form','message' => Yii::t('yii', '{attribute} harus diisi')),
 			array('username', 'length', 'max'=>255),
 			array('kode_prodi', 'checkKode'),
