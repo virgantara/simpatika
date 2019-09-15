@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="<?=Yii::app()->baseUrl;?>/asset/assets/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="<?=Yii::app()->baseUrl;?>asset/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
-		<meta name="google-signin-client_id" content="668363583558-roc29ghfv67444rmi9sp1fvovpe68kn5.apps.googleusercontent.com">
+		<meta name="google-signin-client_id" content="668363583558-r1pp6okdumpn0k8h5lmqrn7noutbu2lp.apps.googleusercontent.com">
 		
 		
 		<!-- text fonts -->
