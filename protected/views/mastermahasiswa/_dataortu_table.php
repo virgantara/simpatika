@@ -42,15 +42,14 @@ echo CHtml::hiddenField('tgl_masuk',$tgl_masuk);
       
      
       <th width="30%">Nama</th>
-      <th>Tmpt Lhr</th>
-      <th>Tgl Lhr</th>
+      <th width="20%">Tmpt Lhr &<br>Tgl Lhr</th>
+      
       <th>JK</th>
-      <th width="15%">Kecamatan</th>
-      <th width="15%">Kecamatan<br>SIAKAD</th>
-      <th width="15%">Kota</th>
-      <th width="15%">Kota<br>SIAKAD</th>
-      <th width="15%">Provinsi</th>
-      <th width="15%">Prov<br>SIAKAD</th>
+      <th width="15%">Kecamatan & <br>Kecamatan<br>SIAKAD</th>
+      
+      <th width="15%">Kota & <br>Kota<br>SIAKAD</th>
+      <th width="15%">Provinsi & <br>Prov<br>SIAKAD</th>
+      
       <th width="5%">KTP</th>
       <th width="5%">Negara</th>
       <th>Data Ortu<br>
@@ -68,7 +67,7 @@ foreach($mahasiswas as $m)
 	$q = $m->agama ?: 'I';
 	$agama = $list_agama[$q];
 
-	$jml_ortu = count($m->ortus);
+	$jml_ortu = count($m->mahasiswaOrtus);
 	$bg = '';
 
 	switch ($jml_ortu) {
@@ -101,10 +100,9 @@ foreach($mahasiswas as $m)
 </td>
 <td><?php echo $m->nama_mahasiswa;?></td>
 <td>
-<input type="text" size="10" name="tempat_lahir_<?=$m->nim_mhs;?>" value="<?=$m->tempat_lahir ?: '';?>" />
-</td>
-<td>
+<input type="text" size="20" name="tempat_lahir_<?=$m->nim_mhs;?>" value="<?=$m->tempat_lahir ?: '';?>" />
 <input type="text" size="10"  class="datepicker" name="tgl_lahir_<?=$m->nim_mhs;?>" value="<?=$m->tgl_lahir ?: '';?>" />
+
 </td>
 <td><?php echo $m->jenis_kelamin;?></td>
 
@@ -113,19 +111,18 @@ foreach($mahasiswas as $m)
 	<input type="hidden" class="input id_kecamatan" value="<?=$m->kecamatan_feeder ?: '';?>" name="id_kecamatan_<?=$m->nim_mhs;?>" />
 	<input type="hidden" class="input id_induk"/>
 	<input type="hidden" class="input nama_kecamatan" name="nama_kecamatan_<?=$m->nim_mhs;?>"/>
-</td>
-<td width="15%" >
 	<div class="alert alert-<?=$sudah_input;?>">
 	<?=$m->kecamatan;?>
 		</div>
-	</td>
+</td>
 <td width="15%">
 	<input type="text" readonly class="input kota"/>
 	<input type="hidden" class="input id_induk_kota"/>
+	<br><?=$m->kabupaten;?>
 </td>
-<td width="15%"><?=$m->kabupaten;?></td>
-<td width="15%"><input readonly type="text" class="input propinsi"/></td>
-<td width="15%"><?=$m->provinsi;?></td>
+<td width="15%"><input readonly type="text" class="input propinsi"/>
+<br><?=$m->provinsi;?>
+</td>
 <td width="5%">
 <input type="text" size="10" name="ktp_<?=$m->nim_mhs;?>" value="<?=$m->ktp ?: '';?>" />
 </td>
@@ -137,18 +134,18 @@ foreach($mahasiswas as $m)
 <td>
 	<?php 
 
-	if(count($m->ortus) > 1)
+	if(count($m->mahasiswaOrtus) > 1)
 	{
 		echo '<div class="alert alert-success">';
-		foreach($m->ortus as $ortu)
+		foreach($m->mahasiswaOrtus as $ortu)
 			echo $ortu->hubungan.'<br>';
 
 		echo '</div>';
 	}
-	else if(count($m->ortus) > 0)
+	else if(count($m->mahasiswaOrtus) > 0)
 	{
 		echo '<div class="alert alert-warning">';
-		foreach($m->ortus as $ortu)
+		foreach($m->mahasiswaOrtus as $ortu)
 			echo $ortu->hubungan;
 		echo '</div>';
 	}
@@ -274,11 +271,11 @@ function popitup(url,label) {
                     term: ui.item.id_induk_wilayah,
                 },
                 beforeSend : function(){
-                	var kota = obj.parent().next().next().find('.kota');
+                	var kota = obj.parent().next().find('.kota');
                     kota.val('');
                 },
                 success: function (data) {
-                	var kota = obj.parent().next().next().find('.kota');
+                	var kota = obj.parent().next().find('.kota');
                     kota.val(data[0].value);
                     var induk_kota = kota.next();
                     
@@ -291,11 +288,11 @@ function popitup(url,label) {
 			                    term: data[0].id_induk_wilayah,
 			                },
 			                beforeSend : function(){
-			                	var prop = obj.parent().next().next().next().next().find('.propinsi');
+			                	var prop = obj.parent().next().next().find('.propinsi');
 			                    prop.val('');
 			                },
 			                success: function (data) {
-			                	var prop = obj.parent().next().next().next().next().find('.propinsi');
+			                	var prop = obj.parent().next().next().find('.propinsi');
 			                    prop.val(data[0].value);
 			                }
 			            });

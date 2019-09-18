@@ -129,7 +129,7 @@
 						['label'=>'Dosen', 'url'=>['/masterdosen/admin'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'User di SIAKAD', 'url'=>['/users/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'User SIMPATIKA', 'url'=>['/user/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
-						['label'=>'Data KRS di SIAKAD', 'url'=>['/datakrs/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
+						['label'=>'Data KRS di SIAKAD', 'url'=>['/datakrs/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA, WebUser::R_NILAI])],
 						['label'=>'TTD Rektor', 'url'=>['/utils/ttd'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 					]
 				],
@@ -162,7 +162,7 @@
 
 	<?php echo $content; ?>
 
-	<footer>
+	<footer class='footer-content' style="bottom: 0;">
 		Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
 Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id
 	</footer><!-- footer -->
