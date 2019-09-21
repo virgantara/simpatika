@@ -163,12 +163,12 @@ class Datakrs extends CActiveRecord
 
 		$criteria->compare('kode_fak',$this->kode_fak);
 		$criteria->compare('kode_prodi',$this->kode_prodi);
-		$criteria->compare('kode_mk',$this->kode_mk);
-		$criteria->compare('nama_mk',$this->nama_mk);
+		$criteria->compare('kode_mk',$this->kode_mk,true);
+		$criteria->compare('nama_mk',$this->nama_mk,true);
 		$criteria->compare('sks',$this->sks);
-		$criteria->compare('mahasiswa',$this->mahasiswa);
-		$criteria->compare('kode_dosen',$this->kode_dosen);
-		$criteria->compare('namadosen',$this->namadosen);
+		$criteria->compare('mahasiswa',$this->mahasiswa,true);
+		$criteria->compare('kode_dosen',$this->kode_dosen,true);
+		$criteria->compare('namadosen',$this->namadosen,true);
 		$criteria->compare('semester',$this->semester);
 		$criteria->compare('tahun_akademik',$this->tahun_akademik);
 		$criteria->compare('semester_matakuliah',$this->semester_matakuliah);
