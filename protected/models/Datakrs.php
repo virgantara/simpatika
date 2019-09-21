@@ -161,43 +161,18 @@ class Datakrs extends CActiveRecord
 		$criteria=new CDbCriteria;
 		$sort = new CSort;
 
-		$criteria->addSearchCondition('id',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('kode_pt',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('kode_fak',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('kode_jenjang',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('kode_jurusan',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('kode_prodi',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('kode_mk',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('nama_mk',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('sks',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('mahasiswa',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('kode_dosen',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('namadosen',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('semester',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('kode_jadwal',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('kelas',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('harian',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('normatif',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('uts',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('uas',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('nilai_angka',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('nilai_huruf',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('bobot_nilai',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('created_date',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('tahun_akademik',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('status',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('semester_matakuliah',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('status_publis',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('jumlah_nilai',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('status_krs',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('lulus',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('pindahan',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('created',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('is_approved',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('sudah_ekd',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('score_ekd',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('updated_at',$this->SEARCH,true,'OR');
-
+		$criteria->compare('kode_fak',$this->kode_fak);
+		$criteria->compare('kode_prodi',$this->kode_prodi);
+		$criteria->compare('kode_mk',$this->kode_mk);
+		$criteria->compare('nama_mk',$this->nama_mk);
+		$criteria->compare('sks',$this->sks);
+		$criteria->compare('mahasiswa',$this->mahasiswa);
+		$criteria->compare('kode_dosen',$this->kode_dosen);
+		$criteria->compare('namadosen',$this->namadosen);
+		$criteria->compare('semester',$this->semester);
+		$criteria->compare('tahun_akademik',$this->tahun_akademik);
+		$criteria->compare('semester_matakuliah',$this->semester_matakuliah);
+		
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'sort'=>$sort,

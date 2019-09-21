@@ -7,16 +7,6 @@ $this->breadcrumbs=array(
 ?>
 <h1>Manage Datakrs</h1>
 
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('#search,#size').change(function(){
-			$('#datakrs-grid').yiiGridView.update('datakrs-grid', {
-			    url:'<?php echo Yii::app()->createUrl("Datakrs/index"); ?>&filter='+$('#search').val()+'&size='+$('#size').val()
-			});
-		});
-		
-	});
-</script>
 <div class="row">
     <div class="col-xs-12">
         
@@ -37,14 +27,12 @@ $this->breadcrumbs=array(
 <?php $this->widget('application.components.ComplexGridView', array(
 	'id'=>'datakrs-grid',
 	'dataProvider'=>$model->search(),
-	
+	'filter' => $model,
 	'columns'=>[
 	[
 		'header'=>'No',
 		'value'=>'$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)'
 	],
-		
-		'kode_prodi',
 		
 		'kode_mk',
 		'nama_mk',
@@ -54,7 +42,6 @@ $this->breadcrumbs=array(
 		'namadosen',
 		'semester',
 		'tahun_akademik',
-		'updated_at',
 		
 		[
 			'class'=>'CButtonColumn',
@@ -92,3 +79,13 @@ $this->breadcrumbs=array(
 	</div>
 </div>
 
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#search,#size').change(function(){
+			$('#datakrs-grid').yiiGridView.update('datakrs-grid', {
+			    url:'<?php echo Yii::app()->createUrl("Datakrs/index"); ?>&filter='+$('#search').val()+'&size='+$('#size').val()
+			});
+		});
+		
+	});
+</script>
