@@ -66,7 +66,7 @@ class Datakrs extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('kode_mk, sks, mahasiswa, semester, created', 'required'),
+			array('kode_mk, sks, mahasiswa, semester', 'required'),
 			array('semester, status_publis, is_approved, sudah_ekd', 'numerical', 'integerOnly'=>true),
 			array('score_ekd', 'numerical'),
 			array('kode_pt, kode_fak, kode_jurusan, kode_prodi, kode_jadwal, uas, bobot_nilai, jumlah_nilai, status_krs', 'length', 'max'=>10),
