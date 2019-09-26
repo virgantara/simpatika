@@ -822,15 +822,15 @@ class MastermahasiswaController extends Controller
 				$sheet->setCellValueByColumnAndRow(5,$row, $m->alamat.' '.$m->rt.' '.$m->rw.' '.$m->dusun.' '.$m->desa.' '.$m->kecamatan.' '.$m->kabupaten.' '.$m->provinsi);
 				$sheet->setCellValueByColumnAndRow(6,$row, $m->ktp);
 				$sheet->setCellValueByColumnAndRow(7,$row, $m->kodeProdi->singkatan);
-				$sheet->setCellValueByColumnAndRow(8,$row, $m->kodeProdi->fakultas->nama_fakultas);
+				$sheet->setCellValueByColumnAndRow(8,$row, $m->kodeProdi->kodeFakultas->nama_fakultas);
 				$sheet->setCellValueByColumnAndRow(9,$row, substr($m->nim_mhs, 2,4));
 				$sheet->setCellValueByColumnAndRow(10,$row, $agama ?: 'ISLAM');
 			
 				$i++;
 
-				if(!empty($m->ortus))
+				if(!empty($m->mahasiswaOrtus))
 				{
-					foreach($m->ortus as $ortu)
+					foreach($m->mahasiswaOrtus as $ortu)
 					{
 						
 
@@ -865,8 +865,8 @@ class MastermahasiswaController extends Controller
 			$sheet->getStyle('F1:F'.$objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setVertical(true); 
 		    
 
-		    ob_end_clean();
-		    ob_start();
+		    // ob_end_clean();
+		    // ob_start();
 		    
 		    header('Content-Type: application/vnd.ms-excel');
 		    header('Content-Disposition: attachment;filename="dataortu_'.$mprodi->nama_prodi.'.xls"');
@@ -879,7 +879,7 @@ class MastermahasiswaController extends Controller
 			// 	'xls' => $xls,
 			// 	'mprodi' => $mprodi
 			// ]);
-
+		    
 			exit;
 		}
 
