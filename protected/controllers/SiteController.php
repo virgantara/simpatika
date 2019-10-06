@@ -43,7 +43,8 @@ class SiteController extends Controller
 	public function actionIndex()
 	{
 
-
+		$role = Yii::app()->user->name;
+		// print_r($role);exit;
 		$this->render('home');	
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
@@ -78,7 +79,10 @@ class SiteController extends Controller
 			$model=new User;
 			$model->loginMode = 2;
 			$model->email=$_POST['email'];
-			$model->username = $model->email;
+			$user = User::model()->findByAttributes(array('email' => $model->email));
+			$model->username = $user->username;
+			$model->password = '123';
+
 			$result = $model->loginGoogle();
 			// print_r($result)
 			// validate user input and redirect to the previous page if valid

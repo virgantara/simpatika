@@ -184,7 +184,7 @@ class User extends MyActiveRecord
 		if($this->_identity===null)
 		{
 
-
+			
 			$this->_identity=new UserIdentity($this->username,md5($this->password), $this->loginMode,$this->email);
 			$this->_identity->authenticate();
 

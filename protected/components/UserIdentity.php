@@ -31,14 +31,6 @@ class UserIdentity extends CUserIdentity
     }
 
 
-	public function authenticateGoogle()
-	{
-		
-
-
-		return !$this->errorCode;
-	}
-
 	public function authenticate()
 	{
 
@@ -65,14 +57,14 @@ class UserIdentity extends CUserIdentity
 					
 				}
 				else{
-
+					
 					$this->errorCode=self::ERROR_NONE;
 					$this->setState('isLogin',true);
 					$this->setState('username', $user->username);
 					$this->setState('level', $user->level);
 					$this->setState('prodi',$user->kode_prodi);
 				
-				
+					
 				}
 			break;
 			case 2:
