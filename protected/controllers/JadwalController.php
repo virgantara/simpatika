@@ -1188,7 +1188,7 @@ class JadwalController extends Controller
 
 			$tahun_akademik = $tahun_akademik->tahun_id;	
 
-			$kelas = Masterkelas::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik]);
+			$kelas = Masterkelas::model()->findAll();
 		
 			$list_kelas = [];
 			foreach($kelas as $k){
@@ -1209,10 +1209,10 @@ class JadwalController extends Controller
 		        { 
 
 		        	$index++;
-		        	$hari = strtoupper($sheet->getCell('A'.$row));
+		        	$hari = trim(strtoupper($sheet->getCell('A'.$row)->getValue()));
 					
 					if(empty($hari))continue;
-		        	$jam_ke = $sheet->getCell('B'.$row);
+		        	$jam_ke = trim($sheet->getCell('B'.$row)->getValue());
 
 		        	$jam = Jam::model()->findByAttributes(array('nama_jam'=>trim($jam_ke)));
 
@@ -1223,7 +1223,7 @@ class JadwalController extends Controller
 		        	}
 		        		
 
-		        	$waktu = $sheet->getCell('C'.$row);
+		        	$waktu = trim($sheet->getCell('C'.$row)->getValue());
 		        	$waktu = explode('-', $waktu);
 		        	if(count($waktu) != 2)
 		        	{
@@ -1236,18 +1236,18 @@ class JadwalController extends Controller
 
 		        	$jam_selesai = trim($waktu[1]);
 		        	// echo $id_jam_ke;
-		        	$kode_mk = $sheet->getCell('D'.$row);
-		        	$nama_mk = $sheet->getCell('E'.$row);
+		        	$kode_mk = trim($sheet->getCell('D'.$row)->getValue());
+		        	$nama_mk = trim($sheet->getCell('E'.$row)->getValue());
 
-		        	$kode_dosen = $sheet->getCell('F'.$row);
+		        	$kode_dosen = trim($sheet->getCell('F'.$row)->getValue());
 
-		        	$fakultas = $sheet->getCell('I'.$row);
-		        	$prodi = $sheet->getCell('K'.$row);
+		        	$fakultas = trim($sheet->getCell('I'.$row)->getValue());
+		        	$prodi = trim($sheet->getCell('K'.$row)->getValue());
 
-		        	$nama_dosen = $sheet->getCell('G'.$row);
+		        	$nama_dosen = trim($sheet->getCell('G'.$row)->getValue());
 		        	// $tahun_akademik = $sheet->getCell('M'.$row);
-		        	$sks = $sheet->getCell('Q'.$row);
-		        	$semester = $sheet->getCell('N'.$row);
+		        	$sks = trim($sheet->getCell('Q'.$row)->getValue());
+		        	$semester = trim($sheet->getCell('N'.$row)->getValue());
 
 		        	$attr = array(
 		        		'kode_mata_kuliah' => $kode_mk,
@@ -1306,14 +1306,10 @@ class JadwalController extends Controller
 						throw new Exception();
 		        	}
 
-		        	$kd_ruangan = $sheet->getCell('H'.$row);
-		        	
-		        	$nama_fakultas = $sheet->getCell('J'.$row);
-		        	
-		        	$nama_prodi = $sheet->getCell('L'.$row);
-		        	
-		        	
-		        	$kampus = $sheet->getCell('O'.$row);
+		        	$kd_ruangan = trim($sheet->getCell('H'.$row)->getValue());
+		        	$nama_fakultas = trim($sheet->getCell('J'.$row)->getValue());
+		        	$nama_prodi = trim($sheet->getCell('L'.$row)->getValue());
+		        	$kampus = trim($sheet->getCell('O'.$row)->getValue());
 		        	$id_kampus = $kampus;
 		        	// $id_kampus = !empty($id_kampus) ? $id_kampus->id : '';
 
@@ -1324,7 +1320,7 @@ class JadwalController extends Controller
 		        	}
 
 		        	// $sks = $sheet->getCell('P'.$row);
-		        	$kelas = $sheet->getCell('P'.$row)->getValue();
+		        	$kelas = trim($sheet->getCell('P'.$row)->getValue());
 
 		        	if(empty($list_kelas[$kelas]))
 		        	{

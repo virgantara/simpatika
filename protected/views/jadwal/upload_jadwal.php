@@ -45,7 +45,7 @@ $this->menu=array(
 
 	<?php
 
-echo $form->error($m, 'error');
+echo $form->errorSummary($m, '<div class="alert alert-danger"','</div>');
 	 ?>
 	<div class="form-group">
 		<label class="col-sm-3 control-label no-padding-right">Masukkan Data Excel :</label>
