@@ -96,16 +96,15 @@ $kampuses = Jadwal::model()->findKampus($kode_prodi);
 foreach($kampuses as $kampus)
 {	
 
-	foreach($kampus->masterkelases as $kelas)
+	foreach($list_kelas as $q => $kelas)
 	{
-		
-		$semesters = Jadwal::model()->findSemester($kode_prodi, $kampus->id, $kelas->id);
+		$semesters = Jadwal::model()->findSemester($kode_prodi, $kampus->id, $q);
 
 		foreach($semesters as $key => $semester)
 		{
 
 			$i = 0; 
-		$model = Jadwal::model()->findRekapJadwalPerkelas($kode_prodi, $kampus->id, $kelas->id, $semester);
+		$model = Jadwal::model()->findRekapJadwalPerkelas($kode_prodi, $kampus->id, $q, $semester);
 
 		if(!empty($model)){
  ?> 
@@ -188,7 +187,8 @@ foreach($kampuses as $kampus)
 		echo $semester;?></td>
 
 		<td><?php echo $list_kampus[$m->kampus];?></td>
-		<td width="5%"><?php echo !empty($list_kelas[$m->kelas]) ? $list_kelas[$m->kelas] : '';?></td>
+		<td width="5%">
+			<?php echo !empty($list_kelas[$m->kelas]) ? $list_kelas[$m->kelas] : '';?></td>
 
 
 		</tr>

@@ -831,10 +831,10 @@ class JadwalController extends Controller
 	    $sheet->getColumnDimension('L')->setWidth(10);
 	    $sheet->getColumnDimension('M')->setWidth(8);
 	    $sheet->getColumnDimension('N')->setWidth(6);
-	    $sheet->getColumnDimension('O')->setWidth(12);
+	    $sheet->getColumnDimension('O')->setWidth(16);
 	    $sheet->getColumnDimension('P')->setWidth(6);
 	    $sheet->getColumnDimension('Q')->setWidth(6);
-		$row = 1;
+		
 	    
 	    $tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 	
@@ -861,19 +861,19 @@ class JadwalController extends Controller
 		
 
 		$kampuses = Jadwal::model()->findKampus($id);
-
+		$row = 1;
 		foreach($kampuses as $kampus)
 		{	
-			foreach($kampus->masterkelases as $kelas)
+			foreach($list_kelas as $key_kelas=>$kelas)
 			{
 
-				$semesters = Jadwal::model()->findSemester($id, $kampus->id, $kelas->id);
+				$semesters = Jadwal::model()->findSemester($id, $kampus->id, $key_kelas);
 				foreach($semesters as $semester)
 				{
 				    
 
-				    $row++;
-				    $models = Jadwal::model()->findRekapJadwalPerkelas($id, $kampus->id, $kelas->id, $semester);
+				    // $row++;
+				    $models = Jadwal::model()->findRekapJadwalPerkelas($id, $kampus->id, $key_kelas, $semester);
 				    $i = 0; 
 
 				    if(!empty($models))
@@ -895,6 +895,8 @@ class JadwalController extends Controller
 					    	);
 					    	
 					    }
+
+					    $row++;
 				    }
 				    
 				    foreach($models as $m)
@@ -932,14 +934,15 @@ class JadwalController extends Controller
 	 
 	    // $objPHPExcel->setActiveSheetIndex(0);
 	     
-	    ob_end_clean();
-	    ob_start();
+	    // ob_end_clean();
+	    // ob_start();
 	    
 	    header('Content-Type: application/vnd.ms-excel');
 	    header('Content-Disposition: attachment;filename="rekap_jadwal_'.$prodi->singkatan.'.xls"');
 	    header('Cache-Control: max-age=0');
 	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 	    $objWriter->save('php://output');
+	    die();
 	}
 
 	public function actionRekapJadwalAll()
@@ -996,7 +999,7 @@ class JadwalController extends Controller
 		foreach($kelas as $k){
 			$list_kelas[$k->id] = $k->nama_kelas;
 		}
-		
+
 		$this->render('rekap_jadwal',array(
 			'list_kampus' => $list_kampus,
 			'tahun_akademik' => $tahun_akademik,
