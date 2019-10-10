@@ -37,7 +37,7 @@ $this->breadcrumbs=array(
 <?php $this->widget('application.components.ComplexGridView', array(
 	'id'=>'mastermahasiswa-grid',
 	'dataProvider'=>$model->search(),
-	
+	'filter' => $model,
 	'columns'=>array(
 	array(
 		'header'=>'No',
@@ -48,20 +48,18 @@ $this->breadcrumbs=array(
 		'nim_mhs',
 		
 		'nama_mahasiswa',
-		'tempat_lahir',
-		'tgl_lahir',
+		// 'tempat_lahir',
+		// 'tgl_lahir',
 		'jenis_kelamin',
 		// 'tahun_masuk',
-		'hp',
-		'email',
+		// 'hp',
+		'kampus',
 		'alamat',
+		'semester',
 		// 'kecamatan',
 		// 'kecamatan_feeder',
-		'provinsi',
-		'kabupaten',
-		'warga_negara',
-		'va_code',
-		'updated_at',
+		// 'va_code',
+		// 'updated_at',
 		'status_aktivitas',
 		array(
 			'class'=>'CButtonColumn',
