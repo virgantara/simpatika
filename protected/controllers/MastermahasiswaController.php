@@ -1022,8 +1022,10 @@ class MastermahasiswaController extends Controller
 		if(isset($_POST['Mastermahasiswa']))
 		{
 			$model->attributes=$_POST['Mastermahasiswa'];
-			if($model->save())
+			if($model->save()){
+				Yii::app()->user->setFlash('success', "Data telah tersimpan.");
 				$this->redirect(array('view','id'=>$model->id));
+			}
 		}
 
 		$this->render('create',array(
@@ -1046,8 +1048,13 @@ class MastermahasiswaController extends Controller
 		if(isset($_POST['Mastermahasiswa']))
 		{
 			$model->attributes=$_POST['Mastermahasiswa'];
+
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			{
+				Yii::app()->user->setFlash('success', "Data telah tersimpan.");
+				$this->redirect(array('update','id'=>$model->id));
+			}
+			
 		}
 
 		$listKampus = Kampus::model()->findAll();

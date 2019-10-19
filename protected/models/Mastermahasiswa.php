@@ -107,7 +107,7 @@ class Mastermahasiswa extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nim_mhs, nama_mahasiswa', 'required'),
+			array('nim_mhs, nama_mahasiswa, status_aktivitas', 'required'),
 			array('status_bayar, status_mahasiswa, is_synced', 'numerical', 'integerOnly'=>true),
 			array('kode_pt, asal_prodi, kode_pos', 'length', 'max'=>6),
 			array('kode_fakultas, kode_prodi, kode_jenjang_studi, jenis_kelamin, semester_awal, batas_studi, status_awal, asal_jenjang_studi, semester, rt, rw', 'length', 'max'=>5),
@@ -127,6 +127,7 @@ class Mastermahasiswa extends CActiveRecord
 			array('jenis_tinggal, no_kps, agama, va_code', 'length', 'max'=>20),
 			array('penerima_kps, masuk_kelas', 'length', 'max'=>1),
 			array('gol_darah, kampus', 'length', 'max'=>2),
+			array('tgl_lahir, tgl_masuk, tgl_lulus, tgl_sk_yudisium', 'date','format'=>'yyyy-mm-dd', ),
 			array('tgl_lahir, tgl_masuk, tgl_lulus, keterangan, tgl_sk_yudisium, created_at, updated_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -305,6 +306,16 @@ class Mastermahasiswa extends CActiveRecord
 
 			),
 		));
+	}
+
+	protected function beforeSave()
+	{
+
+		$this->tgl_masuk = !empty($this->tgl_masuk) ? $this->tgl_masuk : null;
+		$this->tgl_lulus = !empty($this->tgl_lulus) ? $this->tgl_lulus : null;
+		$this->tgl_lahir = !empty($this->tgl_lahir) ? $this->tgl_lahir : null;
+		$this->tgl_sk_yudisium = !empty($this->tgl_sk_yudisium) ? $this->tgl_sk_yudisium : null;
+		return parent::beforeSave();
 	}
 
 	/**

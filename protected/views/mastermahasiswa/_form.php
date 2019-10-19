@@ -16,7 +16,10 @@
 		'class'=>'form-horizontal'
 	)
 )); ?>
-
+ <?php    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+    }
+?>
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 	<?php echo $form->errorSummary($model,'<div class="alert alert-danger">Silakan perbaiki beberapa kesalahan berikut:','</div>'); ?>
@@ -144,7 +147,10 @@
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'status_aktivitas', array ('class'=>'col-sm-3 control-label no-padding-right', 'tabindex'=>'17')); ?>
 		<div class="col-sm-9">
-		<?php echo $form->textField($model,'status_aktivitas',array('size'=>50,'maxlength'=>50)); ?>
+		<?php 
+$listPilihan = Pilihan::model()->findAllByAttributes(['kode' => '05']);
+		?>
+		<?php echo $form->dropDownList($model,'status_aktivitas',CHtml::listData($listPilihan,'value','label'),['empty'=>'Pilih Status Aktif']); ?>
 		<?php echo $form->error($model,'status_aktivitas'); ?>
 		</div>
 	</div>
