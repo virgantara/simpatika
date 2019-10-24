@@ -135,32 +135,14 @@ class Users extends CActiveRecord
 		$criteria=new CDbCriteria;
 		$sort = new CSort;
 
-		$criteria->addSearchCondition('id',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('role_id',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('email',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('username',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('password_hash',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('reset_hash',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('last_login',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('last_ip',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('created_on',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('deleted',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('reset_by',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('banned',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('ban_message',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('display_name',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('display_name_changed',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('timezone',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('language',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('active',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('activate_hash',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('password_iterations',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('force_password_reset',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('nim',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('status_data',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('kampus',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('fakultas',$this->SEARCH,true,'OR');
-		$criteria->addSearchCondition('prodi',$this->SEARCH,true,'OR');
+		$criteria->addSearchCondition('role_id',$this->role_id);
+		$criteria->addSearchCondition('email',$this->email,true);
+		$criteria->addSearchCondition('username',$this->username,true);
+		$criteria->addSearchCondition('display_name',$this->display_name,true);
+		$criteria->addSearchCondition('nim',$this->nim,true);
+		$criteria->addSearchCondition('kampus',$this->kampus);
+		$criteria->addSearchCondition('fakultas',$this->fakultas);
+		$criteria->addSearchCondition('prodi',$this->prodi);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

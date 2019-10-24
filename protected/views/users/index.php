@@ -36,7 +36,7 @@ $this->breadcrumbs=array(
 <?php $this->widget('application.components.ComplexGridView', array(
 	'id'=>'users-grid',
 	'dataProvider'=>$model->search(),
-	
+	'filter' => $model,
 	'columns'=>[
 	[
 		'header'=>'No',
