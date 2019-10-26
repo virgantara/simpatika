@@ -45,8 +45,8 @@ $tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
         <li><i>Mengabsen secara langsung dan meminta tanda tangan kepada mahasiswa.</i></li>
         <li><i>Tatap muka perkuliahan minimal 14 kali/semester. UTS dan UAS masing-masing 7 kali tatap muka.</i></li>
         <li><i>Jika berhalangan masuk atau ada revisi jadwal, mohon konfirmasi:<br>
-         <i>Ka.Bag. Perkuliahan : Samsirin, M.Pd.I. (085233677225)</i><br>
-            <i>Kasubbag Jadwal : Islam Daroini, S.Pd.I. (085784321239)</i>
+         <i>Ka.Bag. Perkuliahan : Muhammad Abdul Aziz, S.H.I., M.Si (+62 812-9585-2511)</i><br>
+            <i>Kasubbag Jadwal : Islam Daroini, S.Pd.I. (+62 859-4344-6777)</i>
             
         </i></li>
       </ul>

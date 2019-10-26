@@ -48,6 +48,7 @@ $this->breadcrumbs=array(
 		'display_name',
 		// 'password_hash',
 		// 'reset_hash',
+		'nim',
 		'last_login',
 		'active',
 		/*
