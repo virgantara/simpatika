@@ -29,7 +29,7 @@
 		// echo $form->textField($model,'LEVEL'); 
  		echo $form->dropDownList($model, 
  			'level', 
- 			['1'=> 'Super Admin','2'=>'BAAK', '3'=>'Prodi','4'=>'Nilai']); 
+ 			['1'=> 'Super Admin','2'=>'BAAK', '3'=>'Prodi','4'=>'Nilai','6'=>'AKPAM','7'=>'TAHFIDZ']); 
 		?>
 		<?php echo $form->error($model,'level'); ?>
 		</div>

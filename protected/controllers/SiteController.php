@@ -157,7 +157,14 @@ class SiteController extends Controller
 					$cookie = new CHttpCookie('tahunaktif', $tahunaktif->tahun_id);
 					$cookie->expire = $time_expiration; 
 					Yii::app()->request->cookies['tahunaktif'] = $cookie;	
-					$this->redirect(Yii::app()->createUrl('jadwal/index'));
+
+					if(Yii::app()->user->checkAccess([WebUser::R_AKPAM,WebUser::R_TAHFIDZ, WebUser::R_ADM]))
+					{
+						$this->redirect(Yii::app()->createUrl('pencekalan/index'));
+					}	
+
+					else
+						$this->redirect(Yii::app()->createUrl('jadwal/index'));
 					
 					break;
 				case UserIdentity::ERROR_USERNAME_INVALID:

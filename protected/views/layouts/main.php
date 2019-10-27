@@ -96,7 +96,7 @@
 				array('label'=>'Jadwal Personal', 'url'=>array('/jadwal/cetakPerDosen')),
 				
 				array('label'=>'Catatan Revisi', 'url'=>array('/jadwalLog/admin'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
-				
+				array('label'=>'Pencekalan', 'url'=>array('/pencekalan/index'),'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA,WebUser::R_BAAK, WebUser::R_AKPAM,WebUser::R_TAHFIDZ])),
 				array('label'=>'Data Belum Input Nilai', 'url'=>array('/krs/nilai'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				[
 					'label'=>'Laporan <span class="caret"></span>', 

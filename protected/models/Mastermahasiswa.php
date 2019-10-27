@@ -147,6 +147,7 @@ class Mastermahasiswa extends CActiveRecord
 			'kodeProdi' => array(self::BELONGS_TO, 'Masterprogramstudi', 'kode_prodi'),
 			'tahfidzKelompokAnggotas' => array(self::HAS_MANY, 'TahfidzKelompokAnggota', 'nim'),
 			'tahfidzNilais' => array(self::HAS_MANY, 'TahfidzNilai', 'nim'),
+			'pencekalans' => array(self::HAS_MANY, 'Pencekalan', 'nim'),
 		);
 	}
 
