@@ -27,32 +27,55 @@ $this->breadcrumbs=array(
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
     'htmlOptions' => array(
-        'target' => '_blank'
+        'target' => '_blank',
+        'class' => 'form-horizontal'
     )
 )); 
 ?>
- <div class="pull-right">
-
-Prodi
+ <div class="row">
+<div class="col-xs-12">
+	 <div class="row">
+<div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">Prodi</label>
+        <div class="col-sm-9">
 <?php 
 $list = CHtml::listData(Masterprogramstudi::model()->findAll(), 'kode_prodi','nama_prodi');
 echo CHtml::dropDownList('kode_prodi',isset($_GET['kode_prodi'])?$_GET['kode_prodi']:'',$list,array('id'=>'kode_prodi')); 
 ?>&nbsp;
-Kampus
+</div>
+</div>
+<div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">Kampus</label>
+        <div class="col-sm-9">
 <?php 
 $list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus','nama_kampus');
 echo CHtml::dropDownList('kode_kampus',isset($_GET['kode_kampus'])?$_GET['kode_kampus']:'',$list,array('id'=>'kode_kampus')); 
-
-echo ' Semester '; 
+?>
+</div></div>
+<div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">Semester</label>
+        <div class="col-sm-9">
+<?php
 $list = array();
 for($i=1;$i<=16;$i++){
 	$list[$i] = 'Semester '.$i;
 }
 echo CHtml::dropDownList('semester',isset($_GET['semester'])?$_GET['semester']:'',$list,array('id'=>'semester')); 
-echo ' Jenis Kartu ';
+?>
+</div></div>
+<div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">Jenis Kartu</label>
+        <div class="col-sm-9">
+
+<?php
+
 echo CHtml::dropDownList('jenis',isset($_GET['jenis'])?$_GET['jenis']:'',array('uts'=>'UTS','uas'=>'UAS'),array('id'=>'jenis')); 
-
- echo CHtml::submitButton('Cetak'); ?>
+?>
 </div> 
-
+</div>
+<div class="col-sm-offset-3">
+<button type="submit" class="btn btn-info"><i class="fa fa-print"></i> Cetak Data</button>
+</div>
+</div> 
+</div>
 <?php $this->endWidget(); ?>
