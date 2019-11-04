@@ -90,6 +90,7 @@ class Mastermahasiswa extends CActiveRecord
 
 	public $SEARCH;
 	public $PAGE_SIZE = 10;
+	public $uploadedFile;
 
 	/**
 	 * @return string the associated database table name

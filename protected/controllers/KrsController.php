@@ -32,7 +32,7 @@ class KrsController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','bulk','kartu','nilai'),
+				'actions'=>array('create','update','bulk','kartu','nilai','ekd'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,6 +43,45 @@ class KrsController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionEkd($prodi = '', $tahun_akademik = '', $kampus='', $xls = 0){
+		$model = null;
+
+		$result = [];
+		if(!empty($prodi)){
+			$params = [
+				'prodi' => $prodi,
+				'tahun' => $tahun_akademik,
+				'kampus' => $kampus,
+				'status' => 0
+			];
+
+			$url = '/m/ekd/list';
+
+			$hasil = Yii::app()->rest->api_GetData($url,$params);
+			
+			if(!empty($hasil->values))
+			{
+				$result = $hasil->values;
+			}
+		    
+	
+		}
+
+		if($xls){
+			$this->renderPartial('_tabel_ekd',array(
+				'result'=>$result,
+				'xls' => $xls
+			));
+		}
+
+		else{
+			$this->render('ekd',array(
+				'result'=>$result,
+				'xls' => $xls
+			));
+		}
 	}
 
 	public function actionNilai($prodi = '', $tahun_akademik = '', $kampus='', $xls = 0){

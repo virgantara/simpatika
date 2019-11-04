@@ -224,7 +224,7 @@ class MastermahasiswaController extends Controller
 
         $objPHPExcel = PHPExcel_IOFactory::load($fileName);
         $sheet = $objPHPExcel->getSheet($sheetNum); 
-        $highestRow = $sheet->getHighestRow(); 
+        $highestRow = $sheet->getHighestDataRow(); 
         // $highestColumn = $sheet->getHighestColumn();
         // $highestColumn++;
         // print_r($highestColumn);
@@ -255,7 +255,6 @@ class MastermahasiswaController extends Controller
       		$list_penghasilan[$p->kode_feeder] = $p;
       	}
 
-
 		$index = 1;
         for ($row = 2; $row <= $highestRow; $row++)
         {
@@ -263,6 +262,7 @@ class MastermahasiswaController extends Controller
 
         	$index++;
         	$nim = $sheet->getCell('B'.$row)->getValue();
+        	// print_r($nim);exit;
         	$nik = strtoupper($sheet->getCell('C'.$row)->getValue());
         	$nama = strtoupper($sheet->getCell('D'.$row)->getValue());
         	$tgl_lahir = strtoupper($sheet->getCell('E'.$row)->getValue());
@@ -325,7 +325,7 @@ class MastermahasiswaController extends Controller
 
 	public function actionUploadMhs()
 	{
-
+		$errors = '';
 		$model = new Mastermahasiswa;
 		$mhs = new Mastermahasiswa;
 		if(isset($_POST['Mastermahasiswa']))
@@ -339,7 +339,7 @@ class MastermahasiswaController extends Controller
 
 	        $objPHPExcel = PHPExcel_IOFactory::load($fileName);
 	        $sheet = $objPHPExcel->getSheet(0); 
-	        $highestRow = $sheet->getHighestRow(); 
+	        $highestRow = $sheet->getHighestDataRow(); 
 	        // $highestColumn = $sheet->getHighestColumn();
 	        // $highestColumn++;
 	        // print_r($highestColumn);
@@ -382,6 +382,7 @@ class MastermahasiswaController extends Controller
 		        	
 	        		$mhs = new Mastermahasiswa;
 	        		$mhs->nim_mhs = $nim;
+
 	        		$mhs->nama_mahasiswa = $nama;
 	        		$mhs->tempat_lahir = $tmpt_lahir;
 	        		$mhs->tgl_lahir = $tgl_lahir;
@@ -414,7 +415,10 @@ class MastermahasiswaController extends Controller
 	        		if($mhs->validate()){
 
 	        			$mhs->save();
-	        			
+	        			$this->readSheetOrtu($model,1,'AYAH');
+				        
+				        $this->readSheetOrtu($model,2,'IBU');
+				        $this->readSheetOrtu($model,3,'WALI');
 	        		}
 
 	        		else{
@@ -435,10 +439,7 @@ class MastermahasiswaController extends Controller
 
 		        }
 		        
-		        $this->readSheetOrtu($model,1,'AYAH');
 		        
-		        $this->readSheetOrtu($model,2,'IBU');
-		        $this->readSheetOrtu($model,3,'WALI');
 
 		        // $message .= '</ul>';
 		        // $this->redirect(array('trRawatInap/lainnya','id'=>$id));
@@ -452,7 +453,8 @@ class MastermahasiswaController extends Controller
 	        }
 
 			catch(Exception $e){
-				Yii::app()->user->setFlash('error', print_r($e));
+
+				Yii::app()->user->setFlash('error', $errors);
 				$transaction->rollback();
 			}	
 	    }
