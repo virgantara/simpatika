@@ -101,12 +101,12 @@
 				[
 					'label'=>'Laporan <span class="caret"></span>', 
 					'url'=>'#',
-					'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA]),
+					'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA,WebUser::R_BAAK,WebUser::R_PRODI]),
 					'itemOptions' => ['class'=>'dropdown-toggle'],
 					'linkOptions' => ['class'=>'dropdown-toggle','data-toggle'=>"dropdown",'role' =>'button'],
 					'items' => [
 						['label'=>'Laporan Input Nilai', 'url'=>['/krs/nilai'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
-						['label'=>'Laporan Input EKD', 'url'=>['/krs/ekd'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA, WebUser::R_BAAK])],
+						['label'=>'Laporan Input EKD', 'url'=>['/krs/ekd'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA, WebUser::R_BAAK, WebUser::R_PRODI])],
 						['label'=>'Mahasiswa Belum Lengkap Data Ortu', 'url'=>['/mastermahasiswa/dataortu'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Lampiran SK', 'url'=>array('/jadwalLampiranSk/admin'),'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 					]
