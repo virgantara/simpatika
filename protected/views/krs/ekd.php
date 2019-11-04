@@ -77,8 +77,8 @@
         <div class="col-md-offset-3 col-md-9">
 
           <button class="btn btn-info" type="submit">
-            <i class="ace-icon glyphicon glyphicon-upload bigger-110"></i>
-            Cari KRS
+            <i class="ace-icon glyphicon glyphicon-search bigger-110"></i>
+            Cari 
           </button>
           <?php 
 		if(!empty($_GET['prodi'])){
