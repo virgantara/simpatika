@@ -262,7 +262,7 @@ class MastermahasiswaController extends Controller
 
         	$index++;
         	$nim = $sheet->getCell('B'.$row)->getValue();
-        	// print_r($nim);exit;
+        	
         	$nik = strtoupper($sheet->getCell('C'.$row)->getValue());
         	$nama = strtoupper($sheet->getCell('D'.$row)->getValue());
         	$tgl_lahir = strtoupper($sheet->getCell('E'.$row)->getValue());
@@ -280,41 +280,41 @@ class MastermahasiswaController extends Controller
     		$ortu->nim = $nim;
     		$ortu->agama = 'I';
     		
-   //  		try
-			// {
+    		
 
     		$ortu->pendidikan = $list_pendidikan[$kd_feeder_pendidikan[0]]->value;
     		$ortu->pekerjaan = $list_pekerjaan[$kd_feeder_pekerjaan[0]]->value;
     		$ortu->penghasilan = $list_penghasilan[$kd_feeder_penghasilan[0]]->value;
-    		// }
+    			
+    		try
+			{
+	    		if($ortu->validate()){
 
-			// catch(Exception $e){
-			// 	$model->addError('error',$e->getMessage());
-			// 	exit;
-			// 	throw new Exception();
+	    			$ortu->save();
+	    		}
 
-			// }	
+	    		else{
 
-    		if($ortu->validate()){
-
-    			$ortu->save();
-    		}
-
-    		else{
-
-    			$errors = 'Baris ke-';
-				$errors .= ($index + 1).' : ';
-					
-				foreach($ortu->getErrors() as $attribute){
-					foreach($attribute as $error){
-						$errors .= $error;
+	    			$errors = 'Baris ke-';
+					$errors .= ($index + 1).' : ';
+						
+					foreach($ortu->getErrors() as $attribute){
+						foreach($attribute as $error){
+							$errors .= $error;
+						}
 					}
-				}
-				$model->addError('error',$errors);
-				throw new Exception();
-    		}
+					$model->addError('error',$errors);
+					throw new Exception();
+	    		}
 
-			
+			}
+
+			catch(Exception $e){
+				$model->addError('error','Baris ke : '.$row.', sheet: '.$hubungan.' Error Msg: '.$e->getMessage());
+				
+				// throw new Exception();
+
+			}
 
         }
 
@@ -356,6 +356,7 @@ class MastermahasiswaController extends Controller
 
 		        	$index++;
 		        	$nim = $sheet->getCell('B'.$row)->getValue();
+
 		        	$nama = strtoupper($sheet->getCell('C'.$row)->getValue());
 		        	$nama_ibu = strtoupper($sheet->getCell('D'.$row)->getValue());
 		        	$nik = strtoupper($sheet->getCell('E'.$row)->getValue());
@@ -415,6 +416,7 @@ class MastermahasiswaController extends Controller
 	        		if($mhs->validate()){
 
 	        			$mhs->save();
+	        			
 	        			$this->readSheetOrtu($model,1,'AYAH');
 				        
 				        $this->readSheetOrtu($model,2,'IBU');
@@ -453,8 +455,9 @@ class MastermahasiswaController extends Controller
 	        }
 
 			catch(Exception $e){
+				$errors .= 'Baris ke '.$row.' Error Msg: '.$e->getMessage();
+				$model->addError('error',$errors);
 
-				Yii::app()->user->setFlash('error', $errors);
 				$transaction->rollback();
 			}	
 	    }

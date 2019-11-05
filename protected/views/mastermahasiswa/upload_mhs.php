@@ -48,7 +48,7 @@ echo $form->errorSummary($model, '<div class="alert alert-danger">','</div>');
 		<div class="col-sm-9">
 		<?php 
 		
-echo $form->fileField($model, 'uploadedFile',['class'=>'form-control']); 
+echo $form->fileField($model, 'uploadedFile'); 
 echo $form->error($model, 'uploadedFile');
 
 		?>
