@@ -213,7 +213,7 @@ class MastermahasiswaController extends Controller
 
 	}
 
-	private function readSheetOrtu($model, $sheetNum, $hubungan)
+	private function readSheetOrtu($model, $sheetNum, $hubungan, $row)
 	{
 
 		$uploadedFile = $model->uploadedFile;
@@ -256,13 +256,19 @@ class MastermahasiswaController extends Controller
       	}
 
 		$index = 1;
-        for ($row = 2; $row <= $highestRow; $row++)
-        {
+		// $transaction=Yii::app()->db->beginTransaction();
+
+        try
+		{
+			
+	        // for ($row = 2; $row <= $highestRow; $row++)
+	        // {
 
 
         	$index++;
         	$nim = $sheet->getCell('B'.$row)->getValue();
-        	
+			
+				        	
         	$nik = strtoupper($sheet->getCell('C'.$row)->getValue());
         	$nama = strtoupper($sheet->getCell('D'.$row)->getValue());
         	$tgl_lahir = strtoupper($sheet->getCell('E'.$row)->getValue());
@@ -280,43 +286,47 @@ class MastermahasiswaController extends Controller
     		$ortu->nim = $nim;
     		$ortu->agama = 'I';
     		
+    		$errors = '';
     		
-
-    		$ortu->pendidikan = $list_pendidikan[$kd_feeder_pendidikan[0]]->value;
+				
+			$ortu->pendidikan = $list_pendidikan[$kd_feeder_pendidikan[0]]->value;
     		$ortu->pekerjaan = $list_pekerjaan[$kd_feeder_pekerjaan[0]]->value;
     		$ortu->penghasilan = $list_penghasilan[$kd_feeder_penghasilan[0]]->value;
-    			
-    		try
-			{
-	    		if($ortu->validate()){
 
-	    			$ortu->save();
-	    		}
+    		if($ortu->validate()){
 
-	    		else{
+    			$ortu->save();
+    			// $transaction->commit();
+    		}
 
-	    			$errors = 'Baris ke-';
-					$errors .= ($index + 1).' : ';
-						
-					foreach($ortu->getErrors() as $attribute){
-						foreach($attribute as $error){
-							$errors .= $error;
-						}
+    		else{
+
+    			// print_r($ortu->getMessage());exit;
+    			// print_r($errors);exit;
+    			$errors .= 'Baris ke-';
+				$errors .= ($index + 1).' : ';
+					
+				foreach($ortu->getErrors() as $attribute){
+					foreach($attribute as $error){
+						$errors .= $error;
 					}
-					$model->addError('error',$errors);
-					throw new Exception();
-	    		}
+				}
 
-			}
+				// $model->addError('error',$errors);
+				throw new Exception();
+    		}
 
-			catch(Exception $e){
-				$model->addError('error','Baris ke : '.$row.', sheet: '.$hubungan.' Error Msg: '.$e->getMessage());
-				
-				// throw new Exception();
+			// }
+		}
 
-			}
+		catch(Exception $e){
+			$model->addError('error','Baris ke : '.$row.', sheet: '.$hubungan.' Error Msg: '.$errors.'###'.$e->getMessage());
+			
+			// throw new Exception($e);
+			// $transaction->rollback();
+		}
 
-        }
+        
 
 	        // $message .= '</ul>';
 	     
@@ -416,11 +426,10 @@ class MastermahasiswaController extends Controller
 	        		if($mhs->validate()){
 
 	        			$mhs->save();
+	        			$this->readSheetOrtu($model,1,'AYAH',$row-1); 
+				        $this->readSheetOrtu($model,2,'IBU',$row-1);
+				        $this->readSheetOrtu($model,3,'WALI',$row-1);
 	        			
-	        			$this->readSheetOrtu($model,1,'AYAH');
-				        
-				        $this->readSheetOrtu($model,2,'IBU');
-				        $this->readSheetOrtu($model,3,'WALI');
 	        		}
 
 	        		else{
@@ -442,7 +451,6 @@ class MastermahasiswaController extends Controller
 		        }
 		        
 		        
-
 		        // $message .= '</ul>';
 		        // $this->redirect(array('trRawatInap/lainnya','id'=>$id));
 		        $transaction->commit();
@@ -460,6 +468,9 @@ class MastermahasiswaController extends Controller
 
 				$transaction->rollback();
 			}	
+
+			
+
 	    }
 
 
