@@ -106,11 +106,8 @@
       
       <p>Ditetapkan di Ponorogo,</p>
       <p>Pada Tanggal <?=$setting_sk->tanggal_sk;?><br>Rektor UNIDA Gontor.</p>
-      <img width="210px" src="data:image/png;base64,<?=$ttd->value;?>"/>
-      <br>
-      <p><div style="border-bottom:1px solid black;padding-bottom:2px;font-weight:bold;">Prof. Dr. Amal Fathullah Zarkasyi, M.A.</div>
-    <strong>NIY. 780043</strong>
-  </p>
+      <img width="200px" src="<?=Yii::app()->baseUrl;?>images/ttd.jpg"/>
+      
       
         
         
