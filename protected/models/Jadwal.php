@@ -105,6 +105,8 @@ class Jadwal extends CActiveRecord
 		// $tahunaktif = $jadwal->tahun_akademik;
 		$semester = $jadwal->semester;
 
+		// print_r($kode_mk);exit;
+
 		$model = Yii::app()->db->createCommand()
 	    ->select('*, t.id as idjadwal')
 	    ->from('simak_jadwal_temp t')
@@ -112,8 +114,9 @@ class Jadwal extends CActiveRecord
 	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
 	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
+	    // ->join('simak_masterprogramstudi p','p.kode_prodi=t.prodi')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-	    ->where('kampus=:p2 AND kode_dosen=:p3 AND hari=:p4 AND t.jam_mulai=:p5 AND t.tahun_akademik=:p6 AND t.semester=:p7 AND t.nama_mk =:p8', array(
+	    ->where('kampus=:p2 AND kode_dosen=:p3 AND hari=:p4 AND t.jam_mulai=:p5 AND t.tahun_akademik=:p6 AND t.semester=:p7 AND t.nama_mk =:p8 AND m.tahun_akademik = :p6', array(
 	    	':p2' => $kampus,
 			':p3' => $dosen,
 			':p4' => $hari,
