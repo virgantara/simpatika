@@ -2648,3 +2648,6 @@ footer .menu li a:hover {
 .peter-river{
   background-color: #3498db;
 }
+button.swal2-styled{
+  font-size : 1.5em !important;
+}

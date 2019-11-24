@@ -1,4 +1,6 @@
-<?php /* @var $this Controller */ ?>
+<?php /* @var $this Controller */ 
+$cs = Yii::app()->getClientScript();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,12 +17,18 @@
 <script src="<?php echo Yii::app()->baseUrl;?>/js/jquery.min.js"></script>
 <script src="<?php echo Yii::app()->baseUrl;?>/js/jquery-ui.min.js"></script>
 <script src="<?php echo Yii::app()->baseUrl;?>/bootstrap/js/bootstrap.min.js"></script>
-	
+<?php
+$cs->registerCssFile(Yii::app()->baseUrl.'/node_modules/sweetalert2/dist/sweetalert2.min.css');
+$cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/sweetalert2/dist/sweetalert2.all.min.js',CClientScript::POS_END);
+
+$cs->registerCssFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/introjs.min.css');
+$cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/intro.min.js',CClientScript::POS_END);
+?>	
+<link rel="stylesheet" href="<?=Yii::app()->baseUrl;?>/css/main.css">   
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
-<link rel="stylesheet" href="<?=Yii::app()->baseUrl;?>/css/main.css">   
 <body>
 
 	<nav class="navbar navbar-default navbar-inverse">
@@ -94,7 +102,15 @@
 				
 				// array('label'=>'Unggah PA', 'url'=>array('/mastermahasiswa/uploadPA'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Jadwal Personal', 'url'=>array('/jadwal/cetakPerDosen')),
-				
+				array(
+					'label'=>'PA', 
+					'itemOptions' => [
+						'data-step'=>'1',
+						'data-intro' => 'New Feature'
+					],
+					'url'=>array('/masterdosen/pa'),
+					'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA,WebUser::R_PRODI,WebUser::R_BAAK))
+				),
 				array('label'=>'Catatan Revisi', 'url'=>array('/jadwalLog/admin'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Pencekalan', 'url'=>array('/pencekalan/index'),'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA,WebUser::R_BAAK, WebUser::R_AKPAM,WebUser::R_TAHFIDZ])),
 				array('label'=>'Data Belum Input Nilai', 'url'=>array('/krs/nilai'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
@@ -190,6 +206,33 @@ Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac
 
 
 	$(document).ready(function(){
+		<?php 
+		if(Yii::app()->user->checkAccess(array(WebUser::R_SA,WebUser::R_PRODI,WebUser::R_BAAK)))
+		{
+		?>
+		var introguide = introJs();
+		introguide.setOptions({
+			exitOnOverlayClick: false,
+			doneLabel: "Klik di sini",
+
+		});
+		// introguide.start();
+	    // // localStorage.clear();
+	    var doneTour = localStorage.getItem('evt_menu_pa') === 'Completed';
+	    
+	    if(!doneTour) {
+	        introguide.start()
+
+	        introguide.oncomplete(function () {
+	            localStorage.setItem('evt_menu_pa', 'Completed');
+	            window.location.href = '<?=Yii::app()->createUrl('masterdosen/pa');?>';
+	        });
+
+	       
+	    }
+	    <?php 
+			}
+	    ?>
 		$('#btn-logout').click(function(){	
 	        signOut();
 	    });

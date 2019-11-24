@@ -13,6 +13,28 @@ class MyRest extends CApplicationComponent
 	public $baseurlVClaim = '';
 	public $baseurlAplicare = '';
 
+	public static function getDataApi($url, $params)
+	{
+		$host = Yii::app()->rest->baseurl_apigateway;
+
+		$url = $host.$url;
+		$api = new RestClient;
+		$headers = [];
+       	$result = $api->get($url, $params, $headers);		
+		try{
+			$hasil = $result->decode_response();
+			// print_r($hasil);exit;
+		}
+
+		catch(RestClientException  $e){
+			print_r($e);
+			throw new RestClientException;
+			$hasil = null;
+		}
+		
+		return $hasil;
+	} 
+
 	public static function api_GetData($url, $params){
 		$host = Yii::app()->rest->baseurl_apigateway;
 

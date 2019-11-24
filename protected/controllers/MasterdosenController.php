@@ -32,7 +32,7 @@ class MasterdosenController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','pa','ajaxSearchDosen','ajaxSimpanPa'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,6 +43,139 @@ class MasterdosenController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionAjaxSearchDosen()
+	{
+		if(Yii::app()->request->isAjaxRequest)
+		{
+			$results = [];
+			
+			$url = "/d/search";
+			$q = $_GET['term'];
+			$params = [
+				'key' => $q,
+			];
+				
+			$result = Yii::app()->rest->getDataApi($url,$params);
+			// print_r($result);exit;
+			foreach($result->values as $item)
+			{
+				$results[] = [
+					'id' => $item->id,
+					'value' => $item->nama,
+					// 'mid' => $item->mid,
+					// 'label' => $item->kec.' - '.$item->kot.' '.$item->prov
+				];
+			}
+			
+
+			// header("Content-type: text/json");
+			echo CJSON::encode($results);
+		}
+	}
+
+	public function actionAjaxSimpanPa()
+	{
+		$data = [];
+		parse_str(urldecode($_POST['datapost']),$data);
+		
+
+		$results = [];
+
+		$transaction=Yii::app()->db->beginTransaction();
+		$errors = '';
+		try
+		{
+			$criteria=new CDbCriteria;
+			$criteria->condition = "kode_prodi = :p1 AND kampus = :p2 AND status_aktivitas = :p3";
+			$criteria->params = array (
+			    ':p1' => $data['prodi'],
+			    ':p2' => $data['kampus'],
+			    ':p3' => 'A',
+			    // ':p4' => 'N',
+			);
+			$result = Mastermahasiswa::model()->findAll($criteria);
+
+			$counter = 0;
+
+			
+			foreach($result as $m)
+			{
+
+				$id_dosen = !empty($data['kode_dosen_'.$m->nim_mhs]) ?  $data['kode_dosen_'.$m->nim_mhs] : null;
+
+				if(empty($id_dosen)) continue;
+
+				$m->nip_promotor = $id_dosen;
+				if(!$m->save())
+				{
+					foreach($m->getErrors() as $attribute){
+						foreach($attribute as $error){
+							$errors .= $error.'. ';
+						}
+					}
+
+					throw new Exception;
+				}
+
+				else
+					$counter++;
+
+
+			}
+
+			$results = [
+				'code' => 200,	
+				'short' => 'success',
+				'message' => $counter.' Data Tersimpan'
+			];
+			$transaction->commit();
+		}
+		catch(Exception $e)
+		{
+
+			
+			$errors .= $e->getMessage();
+			$results = [
+				'code' => 500,
+				'short' => 'danger',
+				'message' => $errors
+			];
+		    $transaction->rollback();
+		 //    Yii::app()->user->setFlash('danger', $errors);
+			// $this->redirect(['terima']);
+	    }	
+
+	    echo json_encode($results);
+	    die();
+	}
+
+	public function actionPa($prodi = '',$kampus=''){
+		$model = null;
+
+		$result = [];
+		if(!empty($prodi) && !empty($kampus)){
+			
+
+			$criteria=new CDbCriteria;
+			$criteria->condition = "kode_prodi = :p1 AND kampus = :p2 AND status_aktivitas = :p3";
+			$criteria->params = array (
+			    ':p1' => $prodi,
+			    ':p2' => $kampus,
+			    ':p3' => 'A',
+			    // ':p4' => 'N',
+			);
+			$result = Mastermahasiswa::model()->findAll($criteria);
+			
+		    
+	
+		}
+		$this->render('pa',array(
+			'result'=>$result,
+			// 'xls' => $xls
+		));
+	
 	}
 
 
