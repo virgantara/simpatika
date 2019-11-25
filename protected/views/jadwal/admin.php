@@ -29,6 +29,10 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
+
+
+$setting = Settings::model()->findByAttributes(['name'=>'site.jadwal']);
+$tgl_akhir = !empty($setting) ? $setting->value : date('Y-m-d',strtotime(' -1 days'));
 ?>
 <style type="text/css">
 	.bentrok { 
@@ -138,9 +142,11 @@ echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 		 array(
                 'class'=>'CCheckBoxColumn',  //Tambahkan kolom untuk checkbos.
                 'selectableRows'=>2,         //MULTIPLE ROWS CAN BE SELECTED.
+                'visible' => date('Y-m-d') < $tgl_akhir
                 ),
 		array(
 			'class'=>'CButtonColumn',
+			'visible' => date('Y-m-d') < $tgl_akhir
 		),
 	),
 	'htmlOptions'=>array(

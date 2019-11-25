@@ -1,5 +1,7 @@
 <?php /* @var $this Controller */ 
 $cs = Yii::app()->getClientScript();
+$setting = Settings::model()->findByAttributes(['name'=>'site.jadwal']);
+$tgl_akhir = !empty($setting) ? $setting->value : date('Y-m-d',strtotime(' -1 days'));
 ?>
 <!DOCTYPE html>
 <html>
@@ -98,7 +100,11 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 					]
 				],
 
-				array('label'=>'Unggah Jadwal', 'url'=>array('/jadwal/uploadJadwal'),'visible'=>!Yii::app()->user->isGuest),
+				array(
+					'label'=>'Unggah Jadwal', 
+					'url'=>array('/jadwal/uploadJadwal'),
+					'visible'=>!Yii::app()->user->isGuest && date('Y-m-d') < $tgl_akhir
+				),
 				
 				// array('label'=>'Unggah PA', 'url'=>array('/mastermahasiswa/uploadPA'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Jadwal Personal', 'url'=>array('/jadwal/cetakPerDosen')),
@@ -148,6 +154,8 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 						['label'=>'User SIMPATIKA', 'url'=>['/user/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Data KRS di SIAKAD', 'url'=>['/datakrs/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA, WebUser::R_NILAI])],
 						['label'=>'TTD Rektor', 'url'=>['/utils/ttd'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
+						['label'=>'Setting Jadwal', 'url'=>['/utils/jadwal'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
+
 					]
 				],
 				array('label'=>'Biodata Mahasiswa', 'url'=>array('/mastermahasiswa/dataortu'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),

@@ -68,7 +68,7 @@
 
 
 </div><!-- form -->
-<div class="row">
+<div class="row form">
 	<div class="col-xs-12">
 
 <table id="tabel_mhs" class="table table-bordered table-hovered table-striped table-responsive">

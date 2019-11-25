@@ -32,7 +32,7 @@ class UtilsController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('foto','test','ttd','ajaxSaveTtd'),
+				'actions'=>array('foto','test','ttd','ajaxSaveTtd','jadwal'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -45,6 +45,41 @@ class UtilsController extends Controller
 		);
 	}
 
+	public function actionJadwal()
+	{
+		$setting = Settings::model()->findByAttributes(['name'=>'site.jadwal']);
+		if(empty($setting))
+		{
+			$setting = new Settings;
+			$setting->module = 'core';
+			$setting->name = 'site.jadwal';
+			$setting->value = '-';
+			$setting->save();
+		}
+
+
+
+		if(!empty($_POST['Settings']))
+		{
+			$setting->attributes = $_POST['Settings'];
+			$setting->value = Yii::app()->helper->convertSQLDate($setting->value);
+			// $setting->save();
+			if($setting->validate())
+			{
+				
+				$setting->save();
+				Yii::app()->user->setFlash('success','Data disimpan');
+			}
+
+		}
+		
+		$setting->value=date('d/m/Y',strtotime($setting->value));
+
+		$this->render('jadwal',[
+			'model' => $setting
+		]);
+	}
+
 	public function actionAjaxSaveTtd()
 	{
 		$setting = Settings::model()->findByAttributes(['name'=>'site.ttd']);
@@ -54,6 +89,7 @@ class UtilsController extends Controller
 		$encoded_image = explode(",", $data_uri)[1];
 		$setting->value = $encoded_image;
 		
+
 		if(!$setting->save()){
 			print_r($setting->getErrors());exit;
 		}
