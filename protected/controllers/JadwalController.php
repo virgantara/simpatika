@@ -33,7 +33,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete','cetakJurnal','paralel','refdosen','syncJadwal'),
+				,'uploadJadwal','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete','cetakJurnal','paralel','refdosen','syncJadwal','ajaxSync'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -46,12 +46,114 @@ class JadwalController extends Controller
 		);
 	}
 
+	public function actionAjaxSync()
+	{
+		$data['tahun_akademik'] = $_GET['ta'] ?: '0';
+
+		// print_r($data['tahun_akademik']);exit;
+		if(!empty($data['tahun_akademik']))
+		{
+			$results = [];
+
+			$transaction=Yii::app()->db->beginTransaction();
+			$errors = '';
+			$counter = 0;
+			try
+			{
+				$jadwals = Jadwal::model()->findAllByAttributes(['tahun_akademik' =>$data['tahun_akademik']]);
+				foreach($jadwals as $m)
+				{
+					$j = SimakJadwal::model()->findByAttributes(['jadwal_temp_id' => $m->id]);
+					if(empty($j))
+					{
+						$j = new SimakJadwal;
+
+					}
+
+					$j->hari = $m->hari;
+					$j->jam = $m->jam_mulai;
+					$j->kode_mk = $m->kode_mk;
+					// $j->nama_mk = $ m->nama_mk;
+					$j->semester = $m->semester;
+					$j->fakultas = $m->fakultas;
+					$j->prodi = $m->prodi;
+					$j->kd_ruangan = $m->kd_ruangan ?: '-';
+					$j->tahun_akademik = $m->tahun_akademik;
+					$j->kuota_kelas = $m->kuota_kelas;
+					$j->kampus = $m->kampus;
+					$j->kelas = !empty($m->kELAS) ? $m->kELAS->nama_kelas : '';
+					if(!$j->save())
+					{
+						foreach($j->getErrors() as $attribute){
+							foreach($attribute as $error){
+								$errors .= $error.'. ';
+							}
+						}
+
+						throw new Exception;
+					}
+					else
+						$counter++;
+
+				}
+				$results = [
+					'code' => 200,	
+					'short' => 'success',
+					'message' => $counter.' Data Tersinkron'
+				];
+				$transaction->commit();
+			}
+			catch(Exception $e)
+			{
+
+				
+				$errors .= $e->getMessage();
+				$results = [
+					'code' => 500,
+					'short' => 'danger',
+					'message' => $errors
+				];
+			    $transaction->rollback();
+			 //    Yii::app()->user->setFlash('danger', $errors);
+				// $this->redirect(['terima']);
+		    }	
+
+		    echo json_encode($results);
+		    die();
+			
+		}
+	}
+
 	public function actionSyncJadwal()
 	{
 		if(!empty($_GET['tahun_akademik'])){
-			$command = Yii::app()->db->createCommand('call proc_sync_jadwal('.$_GET['tahun_akademik'].');');
+			$jadwals = Jadwal::model()->findAllByAttributes(['tahun_akademik' =>$_GET['tahun_akademik']]);
+			foreach($jadwals as $m)
+			{
+				$j = SimakJadwal::model()->findByAttributes(['jadwal_temp_id' => $m->id]);
+				if(empty($j))
+				{
+					$j = new SimakJadwal;
 
-			$command->execute();
+				}
+
+				$j->hari = $m->hari;
+				$j->jam = $m->jam_mulai;
+				$j->kode_mk = $m->kode_mk;
+				$j->nama_mk = $m->nama_mk;
+				$j->semester = $m->semester;
+				$j->kode_dosen = $m->kode_dosen;
+				$j->fakultas = $m->fakultas;
+				$j->prodi = $m->prodi;
+				$j->kd_ruangan = $m->kd_ruangan;
+				$j->tahun_akademik = $m->tahun_akademik;
+				$j->kuota_kelas = $m->kuota_kelas;
+				$j->kampus = $m->kampus;
+				$j->kelas = !empty($m->kELAS) ? $m->kELAS->nama_kelas : '';
+				$j->save();
+			}
+			
+
 		}
 		$this->render('sync_jadwal');
 	}

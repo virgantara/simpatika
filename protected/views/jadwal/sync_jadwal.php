@@ -36,7 +36,7 @@
 	
 	<div class="clearfix form-actions">
         <div class="col-md-offset-3 col-md-9">
-		<button class="btn btn-info" type="submit">
+		<button class="btn btn-info" type="submit" id="btn-sync">
             <i class="ace-icon fa fa-check bigger-110"></i>
             Sync Now
           </button>
@@ -47,4 +47,60 @@
 
 </div><!-- form -->
 
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#btn-sync').click(function(e){
+			e.preventDefault();
+			
+			Swal.fire({
+			  title: 'Sinkronisasi Jadwal ke SIAKAD',
+			  // input: 'text',
+			  // inputAttributes: {
+			  //   autocapitalize: 'off'
+			  // },
+			  width: '30%',
+			  showCancelButton: true,
+			  // cancelButtonText: 'Batalkan',
+			  confirmButtonText: 'Sync Now',
+			  showLoaderOnConfirm: true,
+			  preConfirm: () => {
+			    return fetch('<?=Yii::app()->createUrl('jadwal/ajaxSync');?>&ta='+$('#tahun_akademik').val(),{
+			    	
+			      })
+			      .then(response => {
+			        if (!response.ok) {
+			          throw new Error(response.statusText)
+			        }
+			        return response.json()
+			      })
+			      .catch(error => {
+			        Swal.showValidationMessage(
+			          `Request failed: ${error}`
+			        )
+			      })
+			  },
+			  allowOutsideClick: () => !Swal.isLoading()
+			}).then((result) => {
+			  if (result.value) {
+			  	if(result.value.code == 200){
+			  		Swal.fire({
+					  icon: 'success',
+					  title: 'Yeay',
+					  text: result.value.message,
+					});	
+			  	}
 
+			  	else{
+			  		Swal.fire({
+					  icon: 'error',
+					  title: 'Oops...',
+					  text: result.value.message,
+					});
+			  	}
+			  	
+			  }
+			});
+
+		});
+	});
+</script>

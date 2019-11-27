@@ -154,7 +154,14 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 						['label'=>'User SIMPATIKA', 'url'=>['/user/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Data KRS di SIAKAD', 'url'=>['/datakrs/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA, WebUser::R_NILAI])],
 						['label'=>'TTD Rektor', 'url'=>['/utils/ttd'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
-						['label'=>'Setting Jadwal', 'url'=>['/utils/jadwal'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
+						[
+							'label'=>'Setting Jadwal', 
+							'url'=>['/utils/jadwal'],
+							'itemOptions' => [
+								'data-step'=>'1',
+								'data-intro' => 'New Feature'
+							],
+							'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 
 					]
 				],
@@ -238,6 +245,8 @@ Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac
 
 	       
 	    }
+
+	    
 	    <?php 
 			}
 	    ?>
