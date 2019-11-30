@@ -108,7 +108,7 @@ class MasterdosenController extends Controller
 
 
 				$m->nip_promotor = $id_dosen;
-				if(!$m->save())
+				if(!$m->save(false,['nip_promotor']))
 				{
 					foreach($m->getErrors() as $attribute){
 						foreach($attribute as $error){
