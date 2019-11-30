@@ -99,16 +99,16 @@ class MasterdosenController extends Controller
 
 			$counter = 0;
 
-			
 			foreach($result as $m)
 			{
 
-				$id_dosen = !empty($data['kode_dosen_'.$m->nim_mhs]) ?  $data['kode_dosen_'.$m->nim_mhs] : null;
+				$id_dosen = !empty($data['kode_dosen_'.$m->id]) ?  $data['kode_dosen_'.$m->id] : null;
 
 				if(empty($id_dosen)) continue;
 
+
 				$m->nip_promotor = $id_dosen;
-				if(!$m->save(false,['nip_promotor']))
+				if(!$m->save())
 				{
 					foreach($m->getErrors() as $attribute){
 						foreach($attribute as $error){

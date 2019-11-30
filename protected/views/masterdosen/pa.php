@@ -105,7 +105,7 @@
 		<td><?=$m->semester;?></td>
 		<td>
 			<input <?=$intro;?> type="text" value="<?=!empty($d) ? $d->nama_dosen : '';?>" class="nama_dosen" placeholder="Ketik Nama Dosen" />
-			<input type="hidden" value="<?=!empty($d) ? $d->id : '';?>" class="kode_dosen" name="kode_dosen_<?=$m->nim_mhs;?>"/>
+			<input type="hidden" value="<?=!empty($d) ? $d->id : '';?>" class="kode_dosen" name="kode_dosen_<?=$m->id;?>"/>
 		</td>
 	</tr>
 	<?php 
