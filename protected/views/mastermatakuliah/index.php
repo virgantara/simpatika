@@ -152,7 +152,11 @@ foreach($list_matkul as $m)
 <td><?php echo $m->kode_mata_kuliah;?>
 	
 </td>
-<td><?php echo $m->nama_mata_kuliah;?></td>
+<td><?= $m->nama_mata_kuliah;?><br>
+	<input data-item="<?=$m->kode_mata_kuliah;?>" placeholder="Nama MK Bahasa Inggris" type="text" class="nama_mk_en" size="40" value="<?= $m->nama_mata_kuliah_en;?>" />
+	<span class="loading" style="display: none">Saving...</span>
+	<span class="msg" style="display: none"></span>
+</td>
 
 <td><?=$m->tahun_akademik;?></td>
 <td><?=$m->semester;?></td>
@@ -177,6 +181,34 @@ foreach($list_matkul as $m)
 	$(document).ready(function(){
 		$( ".datepicker" ).datepicker({
 			'dateFormat' : 'yy-mm-dd'
+		});
+
+		$('.nama_mk_en').keydown(function(e){
+			if(e.which == 13){
+				var kode_mk = $(this).attr('data-item');
+				var stat = $(this).next();
+				var msg = $(this).next().next();
+				var namaEn = $(this);
+				$.ajax({
+					type : 'POST',
+	                url: "<?php echo Yii::app()->createUrl('mastermatakuliah/ajaxSave');?>",
+	                // dataType: "json",
+	                data: 'kode_mk='+kode_mk+'&prodi='+$('#kode_prodi').val()+'&tahun='+$('#tahun_akademik').val()+'&nama_en='+namaEn.val(),
+	                beforeSend: function(){
+	                	stat.show();
+	                },
+	                error : function(e){
+	                	stat.hide();
+	                },
+	                success: function (data) {
+	                    stat.hide();
+	                    var hsl = $.parseJSON(data);
+	                    msg.show();
+	                    msg.html(hsl.msg);
+	                }
+		        });
+			}
+			
 		});
 
 		$('.sync').click(function(){

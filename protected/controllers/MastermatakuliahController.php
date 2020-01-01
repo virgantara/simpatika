@@ -32,7 +32,7 @@ class MastermatakuliahController extends Controller
 				'users'=>array('*'),
 			],
 			['allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','ajaxSync'),
+				'actions'=>array('create','update','ajaxSync','ajaxSave'),
 				'users'=>array('@'),
 			],
 			['allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,6 +43,41 @@ class MastermatakuliahController extends Controller
 				'users'=>array('*'),
 			],
 		];
+	}
+
+	public function actionAjaxSave()
+	{
+		$kode_mk = $_POST['kode_mk'];
+		$prodi = $_POST['prodi'];
+		$tahun = $_POST['tahun'];
+		$nama_en = $_POST['nama_en'];
+		
+		$mk = Mastermatakuliah::model()->findByAttributes([
+			'kode_mata_kuliah' => $kode_mk,
+			'kode_prodi' => $prodi,
+			'tahun_akademik' => $tahun
+		]);
+		$results = [];
+		if(!empty($mk))
+		{
+			$mk->nama_mata_kuliah_en = trim($nama_en);
+			$mk->save(false,['nama_mata_kuliah_en']);
+			$results = [
+				'code' => 200,
+				'msg' => '<div class="label label-success">Saved</div>'
+			];
+		}
+
+		else{
+			$results = [
+				'code' => 500,
+				'msg' => '<div class="label label-danger">Something wrong</div>'
+			];
+		}
+
+		
+
+		echo json_encode($results);
 	}
 
 	public function actionAjaxSync()
