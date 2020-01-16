@@ -98,9 +98,7 @@ class MastermatakuliahController extends Controller
 		$hasil = null;
 
 		$api = new RestClient;
-		$headers = [
-			'Content-Type' => 'application/x-www-form-urlencoded'
-		];
+		$headers = Yii::app()->rest->getHeader();
 
 
 		$result = $api->post($url, $params, $headers);

@@ -22,9 +22,7 @@ class FeederController extends Controller
 		$hasil = null;
 
 		$api = new RestClient;
-		$headers = [
-			'Content-Type' => 'application/x-www-form-urlencoded'
-		];
+		$headers = Yii::app()->rest->getHeader();
 
 		$params = [
 			'table' => 'mata_kuliah',
@@ -67,9 +65,7 @@ class FeederController extends Controller
 		$hasil = null;
 
 		$api = new RestClient;
-		$headers = [
-			'Content-Type' => 'application/x-www-form-urlencoded'
-		];
+		$headers = Yii::app()->rest->getHeader();
 
 		$params = [
 			'table' => 'sms',

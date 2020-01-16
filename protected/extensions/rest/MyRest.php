@@ -12,6 +12,7 @@ class MyRest extends CApplicationComponent
 	public $baseurl_apigateway = '';
 	public $baseurlVClaim = '';
 	public $baseurlAplicare = '';
+	public $token = '';
 
 	public static function getDataApi($url, $params)
 	{
@@ -19,7 +20,7 @@ class MyRest extends CApplicationComponent
 
 		$url = $host.$url;
 		$api = new RestClient;
-		$headers = [];
+		$headers = Yii::app()->rest->getHeader();
        	$result = $api->get($url, $params, $headers);		
 		try{
 			$hasil = $result->decode_response();
@@ -44,7 +45,8 @@ class MyRest extends CApplicationComponent
 
 		$api = new RestClient;
 		$headers = [
-			'Content-Type' => 'application/json; charset=utf-8'
+			'Content-Type' => 'application/json; charset=utf-8',
+			'x-access-token' => Yii::app()->rest->token
 		];
 		$result = $api->get($url, $params, $headers);
 		// print_r($result);exit;
@@ -76,9 +78,7 @@ class MyRest extends CApplicationComponent
 		$hasil = null;
 
 		$api = new RestClient;
-		$headers = [
-			'Content-Type' => 'application/x-www-form-urlencoded'
-		];
+		$headers = Yii::app()->rest->getHeader();
 		$result = $api->post($url, $params, $headers);
 		
 		try{
@@ -109,9 +109,7 @@ class MyRest extends CApplicationComponent
 		$hasil = null;
 
 		$api = new RestClient;
-		$headers = [
-			'Content-Type' => 'application/x-www-form-urlencoded'
-		];
+		$headers = Yii::app()->rest->getHeader();
 		$result = $api->post($url, $params, $headers);
 		
 		try{
@@ -143,9 +141,7 @@ class MyRest extends CApplicationComponent
 		$hasil = null;
 
 		$api = new RestClient;
-		$headers = [
-			'Content-Type' => 'application/x-www-form-urlencoded'
-		];
+		$headers = Yii::app()->rest->getHeader();
 		$result = $api->post($url, $params, $headers);
 		
 		try{
@@ -175,7 +171,8 @@ class MyRest extends CApplicationComponent
 
 		$api = new RestClient;
 		$headers = [
-			'Content-Type' => 'application/json; charset=utf-8'
+			'Content-Type' => 'application/json; charset=utf-8',
+			'x-access-token' => Yii::app()->rest->token
 		];
 		$result = $api->get($url, $params, $headers);
 		
@@ -221,22 +218,13 @@ class MyRest extends CApplicationComponent
 
 	public static function getHeader()
 	{
-		$data = Yii::app()->rest->id;
-		$key = Yii::app()->rest->secretkey;
+		$token = Yii::app()->rest->token;
 		$host = Yii::app()->rest->baseurl;
 
-		date_default_timezone_set('UTC');
-		$tStamp= strval(time()-strtotime('1970-01-01 00:00:00'));
-		// Computes the signature by hashing the salt with the secret key as the key
-		$signature= hash_hmac('sha256', $data."&".$tStamp, $key, true);
-		// base64 encode…
-		$encodedSignature= base64_encode($signature);
 		
 
 		return array(
-			'x-cons-id' => $data,
-			'x-timestamp' => $tStamp,
-			'x-signature' => $encodedSignature,
+			'x-access-token' => $token,
 			'Content-Type' => 'Application/x-www-form-urlencoded'
 		);
 	}

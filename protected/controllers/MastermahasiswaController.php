@@ -70,18 +70,14 @@ class MastermahasiswaController extends Controller
 		
 
 		$api = new RestClient;
-		$headers = [
-			'Content-Type' => 'application/x-www-form-urlencoded'
-		];
+		$headers = Yii::app()->rest->getHeader();
 
 		$url = $host."/feeder/record";
 
 		$hasil = null;
 
 		$api = new RestClient;
-		$headers = [
-			'Content-Type' => 'application/x-www-form-urlencoded'
-		];
+		$headers = Yii::app()->rest->getHeader();
 
 		$params = [
 			'table'		=> 'mahasiswa_pt',
