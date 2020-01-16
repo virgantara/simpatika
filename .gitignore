@@ -5,6 +5,8 @@ database.php
 jadwal/*
 node_modules/*
 
+protected/config/main.php
+
 *.tar.gz
 
 *.db
