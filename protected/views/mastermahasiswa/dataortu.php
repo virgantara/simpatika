@@ -74,7 +74,7 @@ $this->menu=array(
 		$ta_masuk = !empty($_GET['ta_masuk']) ? $_GET['ta_masuk'] : date('Y').'1';
     
   
-		echo CHtml::textField('ta_masuk',$ta_masuk);
+		echo CHtml::dropDownList('ta_masuk',$ta_masuk,CHtml::listData(SimakTahunakademik::model()->findAll(),'tahun_id','tahun_id'));
 		
 		?>
 		</div>

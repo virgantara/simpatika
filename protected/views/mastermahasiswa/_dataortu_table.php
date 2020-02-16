@@ -94,7 +94,12 @@ foreach($mahasiswas as $m)
 	?>
 	<a class="btn btn-success btn-xs btn-block sync" data-item="<?=$m->nim_mhs;?>" href="javascript:void(0)"><i class="glyphicon glyphicon-refresh"></i>  Sync to Feeder</a>
 	<?php 
-}
+	}
+	else{
+		?>
+		<span class="label label-success arrowed-in">Synced with Feeder</span>
+		<?php
+	}
 	?>
 	<span class="loading" style="display: none">Syncing...</span>
 </td>
