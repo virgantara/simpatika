@@ -3,18 +3,17 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php');
 
 class Google {
 	// protected $CI;
-	public $clientId = '668363583558-3mj71ft76jmf1a6hfve7ann7iq2i73ei.apps.googleusercontent.com';
-	public $clientSecret = 'zHlDOqsS9WXvpKaTWJodHIjF';
-	public $redirectURI = 'http://local.simjad.com/index.php?r=site/oauth2callback';
+	public $clientId = '';
+	public $clientSecret = '';
+	public $redirectURI = '';
 	// public $client = null;
 	
 	public function __construct(){
 
-        $this->client = new Google_Client();
-		$this->client->setClientId($this->clientId);
-		$this->client->setClientSecret($this->clientSecret);
-		// print_r($this->redirectURI);exit;
-		$this->client->setRedirectUri($this->redirectURI);
+		$this->client = new Google_Client();
+		$this->client->setClientId(Yii::app()->params->clientId);
+		$this->client->setClientSecret(Yii::app()->params->clientSecret);
+		$this->client->setRedirectUri(Yii::app()->params->redirectURI);
 		$this->client->setScopes(array(
 			"https://www.googleapis.com/auth/plus.login",
 			// "https://www.googleapis.com/auth/plus.me",

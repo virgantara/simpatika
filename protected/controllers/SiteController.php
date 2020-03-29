@@ -37,7 +37,7 @@ class SiteController extends Controller
 		$this->render('master');
 	}
 
-	public function oauth2callback()
+	public function actionOauth2callback()
 	{
 		Yii::import('ext.google.Google');
 		$google = new Google();
@@ -51,7 +51,46 @@ class SiteController extends Controller
 			'sess_logged_in'=>1
 		];
 
-		print_r($session_data);
+		$model=new User;
+		$model->loginMode = 2;
+		$model->email=$google_data['email'];
+		$user = User::model()->findByAttributes(array('email' => $model->email));
+		$model->username = $user->username;
+		$model->password = '123';
+
+		$result = $model->loginGoogle();
+		// print_r($result)
+		// validate user input and redirect to the previous page if valid
+		switch($result)
+		{
+			case UserIdentity::ERROR_NONE:
+				
+				$time_expiration = time()+60*60*24*7; 
+				$tahunaktif = Tahunakademik::model()->findByAttributes(array('buka'=> 'Y'));	
+				$cookie = new CHttpCookie('tahunaktif', $tahunaktif->tahun_id);
+				$cookie->expire = $time_expiration; 
+				Yii::app()->request->cookies['tahunaktif'] = $cookie;	
+
+				if(Yii::app()->user->checkAccess([WebUser::R_AKPAM,WebUser::R_TAHFIDZ, WebUser::R_ADM]))
+				{
+					$this->redirect(Yii::app()->createUrl('pencekalan/index'));
+				}	
+
+				else
+					$this->redirect(Yii::app()->createUrl('jadwal/index'));
+				
+				break;
+			case UserIdentity::ERROR_USERNAME_INVALID:
+			case UserIdentity::ERROR_PASSWORD_INVALID:
+				$model->addError('username','Incorrect username or password.');
+				
+				break;
+			case UserIdentity::ERROR_USER_INACTIVE:
+
+				$model->addError('username','Akun Anda belum aktif. Silakan menghubungi Administrator.');
+				
+				break;
+		}
 		die();
 	}
 
