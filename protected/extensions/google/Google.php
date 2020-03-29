@@ -14,7 +14,6 @@ class Google {
 		$this->client->setClientId($this->clientId);
 		$this->client->setClientSecret($this->clientSecret);
 		$this->client->setRedirectUri($this->redirectURI);
-		print_r($this->redirectURI);exit;
 		$this->client->setScopes(array(
 			"https://www.googleapis.com/auth/plus.login",
 			// "https://www.googleapis.com/auth/plus.me",

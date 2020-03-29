@@ -152,8 +152,8 @@ class SiteController extends Controller
 	
 		$model=new User;
 		$this->layout = '//layouts/main_login';
-		// Yii::import('ext.google.Google');
-		// $google = new Google();
+		Yii::import('ext.google.Google');
+		$google = new Google();
 
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
@@ -217,7 +217,7 @@ class SiteController extends Controller
 	public function actionLogout()
 	{	
 		$session = Yii::app()->session;
-		$session->set('access_token','');
+		$session->remove('access_token','');
 		$session->destroy();
 		Yii::app()->user->logout();
 		$this->redirect(array('site/index'));
