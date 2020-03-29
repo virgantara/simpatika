@@ -41,7 +41,7 @@ $this->menu=array(
 <?php echo CHtml::link('Export ke XLS',array('jadwal/rekapJadwalAllXls')); ?>
 </div>
 <table border="1" cellpadding="4" style="width: 100%">
-	 <caption class="status">Ada <?php echo $total_bentrok;?> jadwal bentrok</caption>
+	 <caption class="status" style="color:white">Ada <?php echo $total_bentrok;?> jadwal bentrok</caption>
 <thead>
     <tr>
       <th width="3%">No</th>
@@ -118,7 +118,7 @@ $this->menu=array(
 
 		<td><?php echo !empty($m->kAMPUS) ? $m->kAMPUS->nama_kampus : 'ID Kampus tidak dikenali';?></td>
 		<td width="5%"><?php echo $m->kELAS->nama_kelas;?></td>
-		<td>
+		<td style="color: white">
 		 <?php 
 
 		 echo CHtml::link('Update',array('jadwal/update','id'=>$m->id),array('target'=>'_blank'));
