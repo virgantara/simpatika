@@ -152,8 +152,8 @@ class SiteController extends Controller
 	
 		$model=new User;
 		$this->layout = '//layouts/main_login';
-		Yii::import('ext.google.Google');
-		$google = new Google();
+		// Yii::import('ext.google.Google');
+		// $google = new Google();
 
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
@@ -162,6 +162,7 @@ class SiteController extends Controller
 			Yii::app()->end();
 		}
 
+		
 		// collect user input data
 		if(isset($_POST['User']))
 		{
@@ -209,7 +210,7 @@ class SiteController extends Controller
 		// display the login form
 		$this->render('login',array(
 			'model'=>$model,
-			'googl_login_url' => $google->get_login_url()
+			// 'googl_login_url' => $google->get_login_url()
 		));
 	}
 
