@@ -206,11 +206,10 @@ class SiteController extends Controller
 		}
 		
 		
-		
 		// display the login form
 		$this->render('login',array(
 			'model'=>$model,
-			// 'googl_login_url' => $google->get_login_url()
+			'google_login_url' => $google->get_login_url()
 		));
 	}
 

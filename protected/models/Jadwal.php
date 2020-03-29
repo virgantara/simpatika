@@ -755,7 +755,7 @@ class Jadwal extends CActiveRecord
 		if(empty($mk)){
 			// echo 'Kode MK '.$this->kode_mk.' tidak ada di Master Matakuliah';exit;
 		}
-		$this->SKS = !empty($mk) ? $mk->sks : 0;
+		$this->SKS = !empty($mk) && is_numeric($mk->sks) ? $mk->sks : 0;
 		$this->hari = trim($this->hari);
 		return parent::afterFind();
 	}
