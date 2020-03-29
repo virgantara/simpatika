@@ -6,7 +6,8 @@ jadwal/*
 node_modules/*
 
 protected/config/main.php
-
+vendor
+composer.lock
 *.tar.gz
 
 *.db

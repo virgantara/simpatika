@@ -2,6 +2,7 @@
 
 class SiteController extends Controller
 {
+
 	/**
 	 * Declares class-based actions.
 	 */
@@ -36,15 +37,33 @@ class SiteController extends Controller
 		$this->render('master');
 	}
 
+	public function oauth2callback()
+	{
+		Yii::import('ext.google.Google');
+		$google = new Google();
+		$google_data=$google->validate();
+		$session_data=[
+			'name'=>$google_data['name'],
+			'email'=>$google_data['email'],
+			'source'=>'google',
+			'profile_pic'=>$google_data['profile_pic'],
+			// 'link'=>$google_data['link'],
+			'sess_logged_in'=>1
+		];
+
+		print_r($session_data);
+		die();
+	}
+
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
 	 */
 	public function actionIndex()
 	{
-
 		$role = Yii::app()->user->name;
 		// print_r($role);exit;
+		
 		$this->render('home');	
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
@@ -53,6 +72,8 @@ class SiteController extends Controller
 
 	public function actionHome()
 	{
+
+		
 		$this->render('home');
 	}
 
@@ -131,6 +152,8 @@ class SiteController extends Controller
 	
 		$model=new User;
 		$this->layout = '//layouts/main_login';
+		Yii::import('ext.google.Google');
+		$google = new Google();
 
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
@@ -184,11 +207,17 @@ class SiteController extends Controller
 		
 		
 		// display the login form
-		$this->render('login',array('model'=>$model));
+		$this->render('login',array(
+			'model'=>$model,
+			'googl_login_url' => $google->get_login_url()
+		));
 	}
 
 	public function actionLogout()
-	{
+	{	
+		$session = Yii::app()->session;
+		$session->set('access_token','');
+		$session->destroy();
 		Yii::app()->user->logout();
 		$this->redirect(array('site/index'));
 	}
