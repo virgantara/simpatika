@@ -28,11 +28,11 @@ class MastermatakuliahController extends Controller
 	{
 		return [
 			['allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','ajaxMkAvailable'),
+				'actions'=>array('index','view'),
 				'users'=>array('*'),
 			],
 			['allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','ajaxSync','ajaxSave'),
+				'actions'=>array('create','update','ajaxSync','ajaxSave','ajaxMkAvailable','ajaxKelasAvailable'),
 				'users'=>array('@'),
 			],
 			['allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -44,6 +44,46 @@ class MastermatakuliahController extends Controller
 			],
 		];
 	}
+
+	public function actionAjaxKelasAvailable()
+	{
+		if(Yii::app()->request->isAjaxRequest)
+		{
+
+			$ta = SimakTahunakademik::model()->findByAttributes(['buka'=>'Y']);
+
+
+		
+			$results = [];
+			
+			$url = "/jadwal/kelas/available";
+			$params = [
+				'tahun' => $ta->tahun_id,
+				'prodi' => $_POST['prodi'],
+				'semester' => $_POST['semester'],
+				'kode_mk' => $_POST['kode_mk'],
+				'kampus' => $_POST['kampus']
+			];
+				
+			$result = Yii::app()->rest->getDataApi($url,$params);
+			
+			foreach($result->values as $item)
+			{
+				$results[] = [
+					'id' => $item->jid,
+					'value' => $item->kelas,
+					'dsn' => $item->nm
+					// 'mid' => $item->mid,
+					// 'label' => $item->kec.' - '.$item->kot.' '.$item->prov
+				];
+			}
+			
+
+			// header("Content-type: text/json");
+			echo CJSON::encode($results);
+		}
+	}
+
 
 	public function actionAjaxMkAvailable()
 	{
@@ -60,6 +100,7 @@ class MastermatakuliahController extends Controller
 			$params = [
 				'tahun' => $ta->tahun_id,
 				'prodi' => $_POST['prodi'],
+				'kampus' => $_POST['kampus'],
 				'semester' => $_POST['semester']
 			];
 				

@@ -57,7 +57,8 @@ class PencekalanController extends Controller
 				'tahun' => $tahun_akademik->tahun_id,
 				'prodi' => $_POST['kode_prodi'],
 				'kampus' => $_POST['kampus'],
-				'kode_mk' => $_POST['kode_mk']
+				'kode_mk' => $_POST['kode_mk'],
+				'jid' => $_POST['jid']
 			];
 				
 			$result = Yii::app()->rest->getDataApi($url,$params);
@@ -82,7 +83,7 @@ class PencekalanController extends Controller
 			}
 
 			Yii::app()->user->setFlash('success', 'Data tersimpan');	
-			$this->redirect(['pencekalan/akademik','kampus'=>$_POST['kampus'],'kode_prodi'=>$_POST['kode_prodi'],'kode_mk'=>$_POST['kode_mk'],'semester'=>$_POST['semester'],'btn-lihat'=>1]);
+			$this->redirect(['pencekalan/akademik','kampus'=>$_POST['kampus'],'kode_prodi'=>$_POST['kode_prodi'],'kode_mk'=>$_POST['kode_mk'],'semester'=>$_POST['semester'],'jid'=>$_POST['jid'],'btn-lihat'=>1]);
 		}
 	}
 
@@ -214,7 +215,8 @@ class PencekalanController extends Controller
 				'tahun' => $tahun_akademik->tahun_id,
 				'prodi' => $_GET['kode_prodi'],
 				'kampus' => $_GET['kampus'],
-				'kode_mk' => $_GET['kode_mk']
+				'kode_mk' => $_GET['kode_mk'],
+				'jid' => $_GET['jid']
 			];
 				
 			$result = Yii::app()->rest->getDataApi($url,$params);

@@ -13,6 +13,7 @@ for($i=1;$i<=8;$i++)
 
 $semester = !empty($_GET['semester']) ? $_GET['semester'] : '';
 $matkul = !empty($_GET['kode_mk']) ? $_GET['kode_mk'] : '';
+$jid = !empty($_GET['jid']) ? $_GET['jid'] : '';
 ?>
 <h1>Data Pencekalan</h1>
 
@@ -65,7 +66,15 @@ $matkul = !empty($_GET['kode_mk']) ? $_GET['kode_mk'] : '';
     <label class="col-sm-3 control-label no-padding-right">Mata kuliah</label>
     <div class="col-sm-9">
       <select id="matkul" name="kode_mk">
-        
+        <option value=""> - Pilih Mata Kuliah - </option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-3 control-label no-padding-right">Kelas</label>
+    <div class="col-sm-9">
+      <select id="jid" name="jid">
+        <option value=""> - Pilih Kelas - </option>
       </select>
     </div>
   </div>
@@ -110,6 +119,7 @@ $matkul = !empty($_GET['kode_mk']) ? $_GET['kode_mk'] : '';
 <input type="hidden" name="kode_prodi" value="<?=!empty($_GET['kode_prodi']) ? $_GET['kode_prodi'] : 0;?>"/>
 <input type="hidden" name="kode_mk" value="<?=!empty($_GET['kode_mk']) ? $_GET['kode_mk'] : 0;?>"/>
 <input type="hidden" name="semester" value="<?=!empty($_GET['semester']) ? $_GET['semester'] : 0;?>"/>
+<input type="hidden" name="jid" value="<?=!empty($_GET['jid']) ? $_GET['jid'] : 0;?>"/>
 <table class="table table-striped table-bordered" id="table-mahasiswa">
 
   <thead>
@@ -176,13 +186,13 @@ $matkul = !empty($_GET['kode_mk']) ? $_GET['kode_mk'] : '';
 
 <script type="text/javascript">
 
-function getMk(prodi, smt){
+function getMk(prodi, smt,kampus){
   
 
   $.ajax({
     url : '<?=Yii::app()->createUrl('mastermatakuliah/ajaxMkAvailable');?>',
     type : 'POST',
-    data : 'semester='+smt+'&prodi='+prodi,
+    data : 'semester='+smt+'&prodi='+prodi+'&kampus='+kampus,
     beforeSend : function(){
 
     },
@@ -191,14 +201,43 @@ function getMk(prodi, smt){
 
       $('#matkul').empty();
 
-      var row = '<option value=""> - Pilih Mata Kuliah - </option>';
+      var row = '';
       $.each(data, function(i,obj){
-        row += '<option value="'+obj.id+'">'+obj.id+' - '+obj.value+' - '+obj.dsn+'</option>';
+        row += '<option value="'+obj.id+'">'+obj.id+' - '+obj.value+'</option>';
       });
 
       $('#matkul').append(row);
 
       $('#matkul').val('<?=$matkul;?>');
+      var kampus = $('#kampus').val();
+      getKelas(prodi,smt,'<?=$matkul;?>',kampus);
+    }
+  });
+}
+
+function getKelas(prodi, smt,mk,kampus){
+  
+
+  $.ajax({
+    url : '<?=Yii::app()->createUrl('mastermatakuliah/ajaxKelasAvailable');?>',
+    type : 'POST',
+    data : 'semester='+smt+'&prodi='+prodi+'&kode_mk='+mk+'&kampus='+kampus,
+    beforeSend : function(){
+
+    },
+    success : function(data){
+      var data = $.parseJSON(data);
+
+      $('#jid').empty();
+
+      var row = '';
+      $.each(data, function(i,obj){
+        row += '<option value="'+obj.id+'">'+obj.value+' - '+obj.dsn+'</option>';
+      });
+
+      $('#jid').append(row);
+
+      $('#jid').val('<?=$jid;?>');
     }
   });
 }
@@ -209,14 +248,26 @@ function getMk(prodi, smt){
 
     var prodi = $('#kode_prodi').val();
     var smt = $('#semester').val();
+    var kampus = $('#kampus').val();
+    getMk(prodi, smt,kampus);
 
-    getMk(prodi, smt);
+    
 
     $('#semester, #kode_prodi').change(function(){
       var prodi = $('#kode_prodi').val();
       var smt = $('#semester').val();
+      var kampus = $('#kampus').val();
+      getMk(prodi, smt,kampus);
 
-      getMk(prodi, smt);
+    });
+
+     $('#matkul').change(function(){
+      var prodi = $('#kode_prodi').val();
+      var smt = $('#semester').val();
+      var mk = $('#matkul').val();
+      var kampus = $('#kampus').val();
+      getKelas(prodi,smt,mk,kampus);
+      
     });
   });
 </script>
