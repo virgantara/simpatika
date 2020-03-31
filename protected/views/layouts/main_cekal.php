@@ -43,7 +43,15 @@
 	        'encodeLabel'=>false,
 			'items'=>array(
 				
-				array('label'=>'Pencekalan', 'url'=>array('/pencekalan/index'),'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA,WebUser::R_BAAK, WebUser::R_AKPAM,WebUser::R_TAHFIDZ])),
+				array(
+					'label'=>'Pencekalan <span class="caret"></span>', 'url'=>'#','visible'=>Yii::app()->user->checkAccess([WebUser::R_SA,WebUser::R_BAAK, WebUser::R_AKPAM,WebUser::R_TAHFIDZ]),
+					'itemOptions' => ['class'=>'dropdown-toggle'],
+					'linkOptions' => ['class'=>'dropdown-toggle','data-toggle'=>"dropdown",'role' =>'button'],
+					'items' => [
+						['label'=>'AKPAM, ADM, & TAHFIDZ', 'url'=>['/pencekalan/index']],
+						['label'=>'AKADEMIK', 'url'=>['/pencekalan/akademik']],
+					]
+				),
 				
 				
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),

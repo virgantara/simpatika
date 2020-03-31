@@ -32,7 +32,7 @@ class PencekalanController extends Controller
 				'users'=>array('*'),
 			],
 			['allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','postdata'),
+				'actions'=>array('create','update','postdata','simpanCekalAkademik','akademik'),
 				'users'=>array('@'),
 			],
 			['allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,6 +43,47 @@ class PencekalanController extends Controller
 				'users'=>array('*'),
 			],
 		];
+	}
+
+	public function actionSimpanCekalAkademik()
+	{
+		if(!empty($_POST['btn-simpan']))
+		{
+			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+			$tahunaktif = $tahun_akademik->tahun_id;
+				
+			$url = "/mk/list/mhs";
+			$params = [
+				'tahun' => $tahun_akademik->tahun_id,
+				'prodi' => $_POST['kode_prodi'],
+				'kampus' => $_POST['kampus'],
+				'kode_mk' => $_POST['kode_mk']
+			];
+				
+			$result = Yii::app()->rest->getDataApi($url,$params);
+
+			$results = $result->values;
+			// print_r($params);exit;
+			foreach($results as $item)
+			{
+				$krs = Datakrs::model()->findByPk($item->id);
+				$krs->is_tercekal = 0;
+				$krs->keterangan_tercekal = '';
+
+				if(!empty($_POST['akademik_'.$item->id]))
+				{
+
+					$krs->is_tercekal = 1;
+					$krs->keterangan_tercekal = !empty($_POST['keterangan_tercekal_'.$item->id]) ? $_POST['keterangan_tercekal_'.$item->id] : '';
+					
+				}
+
+				$krs->save(false,['is_tercekal','keterangan_tercekal']);
+			}
+
+			Yii::app()->user->setFlash('success', 'Data tersimpan');	
+			$this->redirect(['pencekalan/akademik','kampus'=>$_POST['kampus'],'kode_prodi'=>$_POST['kode_prodi'],'kode_mk'=>$_POST['kode_mk'],'semester'=>$_POST['semester'],'btn-lihat'=>1]);
+		}
 	}
 
 	/**
@@ -158,6 +199,35 @@ class PencekalanController extends Controller
 
 
 		
+	}
+
+	public function actionAkademik()
+	{
+		$results = [];
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahunaktif = $tahun_akademik->tahun_id;
+		if(!empty($_GET['btn-lihat']))
+		{
+			
+			$url = "/mk/list/mhs";
+			$params = [
+				'tahun' => $tahun_akademik->tahun_id,
+				'prodi' => $_GET['kode_prodi'],
+				'kampus' => $_GET['kampus'],
+				'kode_mk' => $_GET['kode_mk']
+			];
+				
+			$result = Yii::app()->rest->getDataApi($url,$params);
+
+			$results = $result->values;
+			// print_r($results);exit;
+		}
+
+		
+		$this->render('akademik',[
+			'results'=>$results,
+			'tahunaktif' => $tahunaktif
+		]);
 	}
 
 	/**

@@ -28,7 +28,7 @@ class MastermatakuliahController extends Controller
 	{
 		return [
 			['allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','ajaxMkAvailable'),
 				'users'=>array('*'),
 			],
 			['allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -43,6 +43,42 @@ class MastermatakuliahController extends Controller
 				'users'=>array('*'),
 			],
 		];
+	}
+
+	public function actionAjaxMkAvailable()
+	{
+		if(Yii::app()->request->isAjaxRequest)
+		{
+
+			$ta = SimakTahunakademik::model()->findByAttributes(['buka'=>'Y']);
+
+
+		
+			$results = [];
+			
+			$url = "/jadwal/mk/available";
+			$params = [
+				'tahun' => $ta->tahun_id,
+				'prodi' => $_POST['prodi'],
+				'semester' => $_POST['semester']
+			];
+				
+			$result = Yii::app()->rest->getDataApi($url,$params);
+			// print_r($result);exit;
+			foreach($result->values as $item)
+			{
+				$results[] = [
+					'id' => $item->kd_mk,
+					'value' => $item->nm_mk,
+					// 'mid' => $item->mid,
+					// 'label' => $item->kec.' - '.$item->kot.' '.$item->prov
+				];
+			}
+			
+
+			// header("Content-type: text/json");
+			echo CJSON::encode($results);
+		}
 	}
 
 	public function actionAjaxSave()
