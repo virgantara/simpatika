@@ -70,6 +70,7 @@ class MastermatakuliahController extends Controller
 				$results[] = [
 					'id' => $item->kd_mk,
 					'value' => $item->nm_mk,
+					'dsn' => $item->nm_dsn
 					// 'mid' => $item->mid,
 					// 'label' => $item->kec.' - '.$item->kot.' '.$item->prov
 				];

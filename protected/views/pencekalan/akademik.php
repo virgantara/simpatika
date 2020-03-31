@@ -193,7 +193,7 @@ function getMk(prodi, smt){
 
       var row = '<option value=""> - Pilih Mata Kuliah - </option>';
       $.each(data, function(i,obj){
-        row += '<option value="'+obj.id+'">'+obj.id+' - '+obj.value+'</option>';
+        row += '<option value="'+obj.id+'">'+obj.id+' - '+obj.value+' - '+obj.dsn+'</option>';
       });
 
       $('#matkul').append(row);
