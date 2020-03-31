@@ -49,7 +49,7 @@ class PencekalanController extends Controller
 	{
 		if(!empty($_POST['btn-simpan']))
 		{
-			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+			$tahun_akademik = SimakTahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 			$tahunaktif = $tahun_akademik->tahun_id;
 				
 			$url = "/mk/list/mhs";
