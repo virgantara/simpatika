@@ -5,9 +5,7 @@
 <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="google-signin-client_id" content="668363583558-r1pp6okdumpn0k8h5lmqrn7noutbu2lp.apps.googleusercontent.com">
 		
-   
 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl;?>/bootstrap/css/bootstrap.min.css"> 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl;?>/css/jquery-ui.css"> 
@@ -57,7 +55,7 @@
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				array(
 					'label'=>'Logout ('.Yii::app()->user->name.')',
-					'url'=>'javascript:void(0)',
+					'url'=>['site/logout'],
 
 					// 'encodeLabel'=>false,
 
@@ -85,33 +83,7 @@
 Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id
 	</footer><!-- footer -->
 </div>
-<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
- <script type="text/javascript">
-		
-	
-	function onLoad() {
-	  gapi.load('auth2', function() {
-	    gapi.auth2.init();
-	  });
-	}
 
-	function signOut() {
-		var auth2 = gapi.auth2.getAuthInstance();
-		// auth2.signOut();
-		auth2.signOut().then(function () {
-        	window.location = '<?=Yii::app()->createUrl('site/logout');?>';
-        	// console.log('User signed out.');
-      	});
-		
-	}
-
-
-	$(document).ready(function(){
-		$('#btn-logout').click(function(){	
-	        signOut();
-	    });
-	});
-</script>
 </body>
 
 </html>
