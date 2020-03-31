@@ -164,7 +164,7 @@ class PencekalanController extends Controller
 
 	public function actionPostdata()
 	{
-		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahun_akademik = SimakTahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$tahunaktif = $tahun_akademik->tahun_id;
 
 
@@ -204,7 +204,7 @@ class PencekalanController extends Controller
 	public function actionAkademik()
 	{
 		$results = [];
-		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahun_akademik = SimakTahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$tahunaktif = $tahun_akademik->tahun_id;
 		if(!empty($_GET['btn-lihat']))
 		{
@@ -236,7 +236,7 @@ class PencekalanController extends Controller
 	public function actionIndex()
 	{
 		$results = [];
-		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahun_akademik = SimakTahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$tahunaktif = $tahun_akademik->tahun_id;
 		if(!empty($_GET['btn-lihat']))
 		{
