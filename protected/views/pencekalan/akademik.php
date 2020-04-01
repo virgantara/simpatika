@@ -18,7 +18,7 @@ $jid = !empty($_GET['jid']) ? $_GET['jid'] : '';
 <h1>Data Pencekalan</h1>
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'jam-form',
+	'id'=>'pencekalan-akademik-cari-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
 	// controller action is handling ajax validation correctly.
 	// There is a call to performAjaxValidation() commented in generated controller code.
@@ -109,6 +109,7 @@ $jid = !empty($_GET['jid']) ? $_GET['jid'] : '';
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
 	'method' => 'post',
+  'id'=>'pencekalan-akademik-form',
 	'htmlOptions'=>array(
 		'class' => 'form-horizontal'
 	),
@@ -170,7 +171,7 @@ $jid = !empty($_GET['jid']) ? $_GET['jid'] : '';
 	 <div class="clearfix form-actions">
         <div class="col-md-offset-3 col-md-9">
 
-          <button class="btn btn-info" type="submit" value="1" name="btn-simpan">
+          <button class="btn btn-info" type="submit" value="1" name="btn-simpan" id="btn-simpan">
             <i class="ace-icon glyphicon glyphicon-check bigger-110"></i>
             Simpan Data
           </button>
@@ -243,6 +244,27 @@ function getKelas(prodi, smt,mk,kampus){
 }
 
   $(document).ready(function(){
+
+    $('#btn-simpan').click(function(e){
+      e.preventDefault();
+
+      Swal.fire({
+        title: 'Anda yakin ingin mencekal mahasiswa ini ?',
+        text: "Proses ini tidak bisa ditarik kembali. Mahasiswa tercekal akan otomatis mendapat nilai E.",
+        icon: 'warning',
+        showCancelButton: true,
+        width:'50%',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, cekal sekarang!',
+        cancelButtonText: 'Tidak, batalkan'
+      }).then((result) => {
+        if (result.value) {
+          $('#pencekalan-akademik-form').submit();
+        }
+
+      });
+    });
 
     $('.alert').fadeOut(2000);
 

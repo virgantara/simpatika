@@ -1,4 +1,6 @@
-<?php /* @var $this Controller */ ?>
+<?php 
+$cs = Yii::app()->getClientScript();
+/* @var $this Controller */ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +16,10 @@
 <script src="<?php echo Yii::app()->baseUrl;?>/js/jquery-ui.min.js"></script>
 <script src="<?php echo Yii::app()->baseUrl;?>/bootstrap/js/bootstrap.min.js"></script>
 	
-
+<?php 
+$cs->registerCssFile(Yii::app()->baseUrl.'/node_modules/sweetalert2/dist/sweetalert2.min.css');
+$cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/sweetalert2/dist/sweetalert2.all.min.js',CClientScript::POS_END);
+?>
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 

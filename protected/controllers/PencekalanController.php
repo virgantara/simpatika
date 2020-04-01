@@ -47,46 +47,44 @@ class PencekalanController extends Controller
 
 	public function actionSimpanCekalAkademik()
 	{
-		if(!empty($_POST['btn-simpan']))
+		$tahun_akademik = SimakTahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		$tahunaktif = $tahun_akademik->tahun_id;
+			
+		$url = "/mk/list/mhs";
+		$params = [
+			'tahun' => $tahun_akademik->tahun_id,
+			'prodi' => $_POST['kode_prodi'],
+			'kampus' => $_POST['kampus'],
+			'kode_mk' => $_POST['kode_mk'],
+			'jid' => $_POST['jid']
+		];
+			
+		$result = Yii::app()->rest->getDataApi($url,$params);
+
+		$results = $result->values;
+		// print_r($params);exit;
+		foreach($results as $item)
 		{
-			$tahun_akademik = SimakTahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-			$tahunaktif = $tahun_akademik->tahun_id;
-				
-			$url = "/mk/list/mhs";
-			$params = [
-				'tahun' => $tahun_akademik->tahun_id,
-				'prodi' => $_POST['kode_prodi'],
-				'kampus' => $_POST['kampus'],
-				'kode_mk' => $_POST['kode_mk'],
-				'jid' => $_POST['jid']
-			];
-				
-			$result = Yii::app()->rest->getDataApi($url,$params);
+			$krs = Datakrs::model()->findByPk($item->id);
+			$krs->is_tercekal = 0;
+			$krs->keterangan_tercekal = '';
 
-			$results = $result->values;
-			// print_r($params);exit;
-			foreach($results as $item)
+			if(!empty($_POST['akademik_'.$item->id]))
 			{
-				$krs = Datakrs::model()->findByPk($item->id);
-				$krs->is_tercekal = 0;
-				$krs->keterangan_tercekal = '';
 
-				if(!empty($_POST['akademik_'.$item->id]))
-				{
-
-					$krs->is_tercekal = 1;
-					$krs->nilai_angka = 0;
-					$krs->nilai_huruf = 'E';
-					$krs->keterangan_tercekal = !empty($_POST['keterangan_tercekal_'.$item->id]) ? $_POST['keterangan_tercekal_'.$item->id] : '';
-					
-				}
-
-				$krs->save(false,['nilai_angka','nilai_huruf','is_tercekal','keterangan_tercekal']);
+				$krs->is_tercekal = 1;
+				$krs->nilai_angka = 0;
+				$krs->nilai_huruf = 'E';
+				$krs->keterangan_tercekal = !empty($_POST['keterangan_tercekal_'.$item->id]) ? $_POST['keterangan_tercekal_'.$item->id] : '';
+				
 			}
 
-			Yii::app()->user->setFlash('success', 'Data tersimpan');	
-			$this->redirect(['pencekalan/akademik','kampus'=>$_POST['kampus'],'kode_prodi'=>$_POST['kode_prodi'],'kode_mk'=>$_POST['kode_mk'],'semester'=>$_POST['semester'],'jid'=>$_POST['jid'],'btn-lihat'=>1]);
+			$krs->save(false,['nilai_angka','nilai_huruf','is_tercekal','keterangan_tercekal']);
 		}
+
+		Yii::app()->user->setFlash('success', 'Data tersimpan');	
+		$this->redirect(['pencekalan/akademik','kampus'=>$_POST['kampus'],'kode_prodi'=>$_POST['kode_prodi'],'kode_mk'=>$_POST['kode_mk'],'semester'=>$_POST['semester'],'jid'=>$_POST['jid'],'btn-lihat'=>1]);
+	
 	}
 
 	/**
