@@ -75,11 +75,13 @@ class PencekalanController extends Controller
 				{
 
 					$krs->is_tercekal = 1;
+					$krs->nilai_angka = 0;
+					$krs->nilai_huruf = 'E';
 					$krs->keterangan_tercekal = !empty($_POST['keterangan_tercekal_'.$item->id]) ? $_POST['keterangan_tercekal_'.$item->id] : '';
 					
 				}
 
-				$krs->save(false,['is_tercekal','keterangan_tercekal']);
+				$krs->save(false,['nilai_angka','nilai_huruf','is_tercekal','keterangan_tercekal']);
 			}
 
 			Yii::app()->user->setFlash('success', 'Data tersimpan');	
