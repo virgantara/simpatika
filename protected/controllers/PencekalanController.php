@@ -81,7 +81,7 @@ class PencekalanController extends Controller
 				
 			}
 
-			$krs->save(false,['nilai_angka','nilai_huruf','is_tercekal','keterangan_tercekal','nilai_angka_backup','nilai_huruf_backup']);
+			$krs->save(false,['nilai_angka_backup','nilai_huruf_backup','nilai_angka','nilai_huruf','is_tercekal','keterangan_tercekal']);
 		}
 
 		Yii::app()->user->setFlash('success', 'Data tersimpan');	
