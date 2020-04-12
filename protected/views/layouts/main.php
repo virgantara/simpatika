@@ -152,7 +152,7 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 						['label'=>'Sync Jadwal ke SIAKAD', 'url'=>['/jadwal/syncJadwal'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Prodi', 'url'=>['/masterprogramstudi/index'],'visible'=>!Yii::app()->user->isGuest],
 						['label'=>'Mata Kuliah', 'url'=>['/mastermatakuliah/index'],'visible'=>!Yii::app()->user->isGuest],
-						['label'=>'SK', 'url'=>['/sk/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA,WebUser::R_PRODI])],
+						['label'=>'SK', 'url'=>['/sk/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA,WebUser::R_PRODI,WebUser::R_BAAK])],
 						['label'=>'Kelas', 'url'=>['/masterkelas/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Kampus', 'url'=>['/kampus/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Tahun Akademik', 'url'=>['/tahunakademik/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
