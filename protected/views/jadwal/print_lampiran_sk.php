@@ -1,3 +1,20 @@
+<?php 
+
+$sk = null;
+
+if(Yii::app()->user->checkAccess([WebUser::R_PRODI]))
+{
+  $sk = Sk::model()->findByAttributes([
+    'kode_prodi' => Yii::app()->user->getState('prodi'),
+    'buka' => 1
+  ]);
+
+  
+}
+
+
+?>
+
 <table style="margin-bottom: 6px;" width="100%">
   <tr>
     <td width="100%" style="text-align: center;" >
@@ -11,23 +28,23 @@
 <table width="100%" style="font-size: 10;font-family: 'Times'">
   <tr>
     <td width="10%">Lampiran:</td>
-    <td width="90%"><?=$setting_sk->bunyi_lampiran;?>
+    <td width="90%"><?=!empty($sk) ? $sk->judul : '';?>
       <br>
       <table width="100%">
       <tr>
         <td width="17%">Nomor</td>
         <td width="3%">:</td>
-        <td width="80%"><?=$setting_sk->nomor_sk;?></td>
+        <td width="80%"><?=!empty($sk) ? $sk->nomor_sk : '';?></td>
       </tr>
       <tr>
         <td width="17%">Tanggal</td>
         <td width="3%">:</td>
-        <td width="80%"><?=$setting_sk->tanggal_sk;?></td>
+        <td width="80%"><?=!empty($sk) ? $sk->tanggal : '';?></td>
       </tr>
       <tr>
         <td width="17%">Tentang:</td>
         <td width="3%">:</td>
-        <td width="80%"><?=$setting_sk->tentang;?></td>
+        <td width="80%"><?=!empty($sk) ? $sk->tentang : '';?></td>
       </tr>
     </table>
     </td>
@@ -101,17 +118,31 @@
 </table>
 <table width="100%" style="font-size: 10;font-family: 'Times';">
   <tr>
-    <td width="60%">&nbsp;</td>
-    <td width="40%" style="text-align: left">
+    <td width="55%">&nbsp;</td>
+    <td width="45%" style="text-align: left">
       
-      <p>Ditetapkan di Ponorogo,</p>
-      <p>Pada Tanggal <?=$setting_sk->tanggal_sk;?><br>Rektor UNIDA Gontor.</p>
-      <img width="200px" src="<?=Yii::app()->baseUrl;?>images/ttd.jpg"/>
-      
-      
-        
-        
+      <p>
+      Ditetapkan di Ponorogo,<br>
+      Tanggal <?=!empty($sk) ? $sk->tanggal : '';?> <br>
+      Dekan Fakultas 
 
+      <?php 
+      if(!empty($prodi))
+      {
+        echo $prodi->kodeFakultas->nama_fakultas;
+      }
+      ?>
+    <br><br><br><br><br><br><br>
+      <?php
+
+      if(!empty($prodi))
+      {
+        echo '<strong>'.$prodi->kodeFakultas->pejabat0->nama_dosen.'</strong>&nbsp;<hr width="150px">';
+        echo '&nbsp;'.$prodi->kodeFakultas->pejabat0->niy;
+      }
+      ?>
+        
+      </p>
       
     </td>
   </tr>

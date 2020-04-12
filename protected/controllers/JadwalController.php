@@ -492,12 +492,12 @@ class JadwalController extends Controller
 				
 				$pdf->AddPage();
 				
-				
+				$prodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=>$kode_prodi]);
 				ob_start();	
 				echo $this->renderPartial('print_lampiran_sk',array(
 					'model'=>$model,
 					'listkelas' => $listkelas,
-					// 'dosen' => $dosen,
+					'prodi' => $prodi,
 					'ttd' => $ttd,
 					'list_mk' => $list_mk,
 					'setting_sk' => $setting_sk
@@ -511,7 +511,7 @@ class JadwalController extends Controller
 			// exit;
 			ob_end_clean();
 			
-			// $prodi = Masterprogramstudi::model()->findByPk($kode_prodi);
+			
 			$pdf->Output('sk_'.$kode_prodi.'.pdf','I');
 			
 		}

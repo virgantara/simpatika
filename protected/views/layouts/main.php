@@ -135,7 +135,7 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 					'itemOptions' => ['class'=>'dropdown-toggle'],
 					'linkOptions' => ['class'=>'dropdown-toggle','data-toggle'=>"dropdown",'role' =>'button'],
 					'items' => [
-						['label'=>'Laporan Input Nilai', 'url'=>['/krs/nilai'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
+						['label'=>'Laporan Belum Input Nilai', 'url'=>['/krs/nilai'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA,WebUser::R_PRODI])],
 						['label'=>'Laporan Input EKD', 'url'=>['/krs/ekd'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA, WebUser::R_BAAK, WebUser::R_PRODI])],
 						['label'=>'Mahasiswa Belum Lengkap Data Ortu', 'url'=>['/mastermahasiswa/dataortu'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Lampiran SK', 'url'=>array('/jadwalLampiranSk/admin'),'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
@@ -152,6 +152,7 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 						['label'=>'Sync Jadwal ke SIAKAD', 'url'=>['/jadwal/syncJadwal'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Prodi', 'url'=>['/masterprogramstudi/index'],'visible'=>!Yii::app()->user->isGuest],
 						['label'=>'Mata Kuliah', 'url'=>['/mastermatakuliah/index'],'visible'=>!Yii::app()->user->isGuest],
+						['label'=>'SK', 'url'=>['/sk/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA,WebUser::R_PRODI])],
 						['label'=>'Kelas', 'url'=>['/masterkelas/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Kampus', 'url'=>['/kampus/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],
 						['label'=>'Tahun Akademik', 'url'=>['/tahunakademik/index'],'visible'=>Yii::app()->user->checkAccess([WebUser::R_SA])],

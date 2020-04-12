@@ -10,6 +10,8 @@ $this->breadcrumbs=array(
 // 	array('label'=>'List Jadwal', 'url'=>array('index')),
 // 	array('label'=>'Manage Jadwal', 'url'=>array('admin')),
 // );
+
+
 ?>
 
 <script src="<?php echo Yii::app()->baseUrl;?>/js/jquery.min.js"></script>
