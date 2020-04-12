@@ -1,16 +1,12 @@
 <?php 
 
-$sk = null;
-
-if(Yii::app()->user->checkAccess([WebUser::R_PRODI]))
-{
-  $sk = Sk::model()->findByAttributes([
-    'kode_prodi' => Yii::app()->user->getState('prodi'),
-    'buka' => 1
-  ]);
+$sk = Sk::model()->findByAttributes([
+  'kode_prodi' => $prodi->kode_prodi,
+  'buka' => 1
+]);
 
   
-}
+
 
 
 ?>
