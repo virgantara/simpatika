@@ -69,10 +69,10 @@ $this->menu=array(
 		</div>
 		</div>
 		<div class="form-group">
-		    <label class="col-sm-3 control-label no-padding-right">Kampus</label>
+		    <label class="col-sm-3 control-label no-padding-right">Tahun Akademik</label>
 		    <div class="col-sm-9">
 			<?php 
-			$list = CHtml::listData(Tahunakademik::model()->findAll(), 'tahun_id','nama_tahun');
+			$list = CHtml::listData(Tahunakademik::model()->findAll(['order'=>'tahun_id desc']), 'tahun_id','nama_tahun');
 			echo CHtml::dropDownList('tahun_id',isset($_GET['tahun_id'])?$_GET['tahun_id']:'',$list,array('id'=>'tahun_id')); 
 			?>
 			</div>
