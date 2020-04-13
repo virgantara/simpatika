@@ -41,10 +41,53 @@ $this->menu=array(
 </style>
 <div class="row">
 	<div class="col-xs-12">
-
-<?php echo CHtml::link('<i class="glyphicon glyphicon-download"></i> Export ke XLS',array('jadwal/rekapJadwalAllXls'),['class'=>'btn btn-success']); ?>
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'jadwal-form',
+	'method'=>'GET',
+	'action' => Yii::app()->createUrl('jadwal/rekapJadwalAll'),
+	// Please note: When you enable ajax validation, make sure the corresponding
+	// controller action is handling ajax validation correctly.
+	// There is a call to performAjaxValidation() commented in generated controller code.
+	// See class documentation of CActiveForm for details on this.
+	'enableAjaxValidation'=>false,
+    'htmlOptions' => array(
+        
+        'class' => 'form-horizontal'
+    )
+)); 
+?>
+ <div class="row">
+<div class="col-xs-12">
+	 
+		<div class="form-group">
+		        <label class="col-sm-3 control-label no-padding-right">Prodi</label>
+		        <div class="col-sm-9">
+		<?php 
+		$list = CHtml::listData(Masterprogramstudi::model()->findAll(), 'kode_prodi','nama_prodi');
+		echo CHtml::dropDownList('kode_prodi',isset($_GET['kode_prodi'])?$_GET['kode_prodi']:'',$list,array('id'=>'kode_prodi')); 
+		?>&nbsp;
+		</div>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-3 control-label no-padding-right">Kampus</label>
+		    <div class="col-sm-9">
+			<?php 
+			$list = CHtml::listData(Tahunakademik::model()->findAll(), 'tahun_id','nama_tahun');
+			echo CHtml::dropDownList('tahun_id',isset($_GET['tahun_id'])?$_GET['tahun_id']:'',$list,array('id'=>'tahun_id')); 
+			?>
+			</div>
+		</div>
+		
+		<div class="col-sm-offset-3">
+		<button type="submit" class="btn btn-info"><i class="glyphicon glyphicon-search"></i> Lihat Data</button>
+		<?php echo CHtml::link('<i class="glyphicon glyphicon-download"></i> Export ke XLS',array('jadwal/rekapJadwalAllXls','tahun_id'=>!empty($tahun_akademik) ? $tahun_akademik->tahun_id : '0','kode_prodi'=>!empty($prodi) ? $prodi->kode_prodi : '-'),['class'=>'btn btn-success']); ?>
+		</div>
+	
 </div>
+<?php $this->endWidget(); ?>
 
+</div>
+<div class="row">
 	<div class="col-xs-12">
 
 <table class="table table-hovered table-striped">
@@ -85,7 +128,7 @@ $this->menu=array(
 		  
 
 		  $sks_dosen = 0;
-		  $jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($jd->nidn);
+		  $jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($jd->nidn, $tahun_akademik->tahun_id);
 
 		  // print_r(count($jadwal_perdosen));
 
@@ -117,7 +160,7 @@ $this->menu=array(
 		<td width="15%">
 			<?php
 			 // $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
-			 echo !empty($listprodi[$m->prodi]) ? $listprodi[$m->prodi]->singkatan : $m->nama_prodi;
+			 // echo !empty($m) ?$m->prodi->singkatan:'';
 			 // echo $m->pRODI->singkatan;
 			 ?>
 				

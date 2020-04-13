@@ -86,6 +86,8 @@ class Masterdosen extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'prodi' => array(self::BELONGS_TO, 'Masterprogramstudi', 'kode_prodi'),
+            'masterfakultases' => array(self::HAS_MANY, 'Masterfakultas', 'pejabat'),
 		);
 	}
 

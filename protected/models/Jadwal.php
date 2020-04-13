@@ -285,18 +285,24 @@ class Jadwal extends CActiveRecord
 		// return $isconflict;
 	}
 
-	public function countBentrok()
+	public function countBentrok($tahun_id = '')
 	{	
+
+		if(empty($tahun_id))
+		{
+			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));	
+			$tahun_id = $tahun_akademik->tahun_id;		
+		}
 		// $tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		// $tahunaktif = $tahun_akademik->tahun_id;
 		// $criteria=new CDbCriteria;
 		// $criteria->addCondition('t.bentrok=1 AND tahun_akademik='.$tahunaktif);
 		// $model = Jadwal::model()->findAll($criteria);	
 
-		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		// $tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$criteria=new CDbCriteria;
 		$criteria->compare('bentrok',1);
-		$criteria->compare('tahun_akademik',$tahun_akademik->tahun_id);
+		$criteria->compare('tahun_akademik',$tahun_id);
 		// $criteria->join = 'JOIN m_hari h ON h.nama_hari = t.hari';
 		$criteria->order = 'kode_dosen ASC';
 		// $criteria->group = 'kode_dosen';
@@ -429,34 +435,36 @@ class Jadwal extends CActiveRecord
 		return $model;
 	}
 
-	public function findRekapJadwalPerDosenAllBentrok($kode_dosen)
+	public function findRekapJadwalPerDosenAllBentrok($kode_dosen, $tahun_id='')
 	{
-		
+		if(empty($tahun_id))
+		{
+			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));	
+			$tahun_id = $tahun_akademik->tahun_id;		
+		}
+
 		$criteria=new CDbCriteria;
 		// $criteria->compare('tahun_akademik',$tahun_akademik);
-		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$criteria->addCondition('kode_dosen=:p1 AND bentrok = :p2 AND tahun_akademik=:p3');
 
 		$criteria->params = array(
 			':p1' =>$kode_dosen,
 			':p2' => 1,
-			':p3' => $tahun_akademik->tahun_id
+			':p3' => $tahun_id
 		);
 		$model = Jadwal::model()->findAll($criteria);	
 
 		return $model;
 	}
 
-	public function findRekapJadwalPerDosenAll($kode_dosen)
+	public function findRekapJadwalPerDosenAll($kode_dosen, $tahun_id = '')
 	{
-		// $criteria=new CDbCriteria;
-		// // $criteria->compare('tahun_akademik',$tahun_akademik);
-		// $criteria->addCondition('kode_dosen=:p1');
-		// $criteria->params = array(
-		// 	':p1' =>$kode_dosen
-		// );
-		// $model = Jadwal::model()->findAll($criteria);	
-		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+		if(empty($tahun_id))
+		{
+			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));	
+			$tahun_id = $tahun_akademik->tahun_id;		
+		}
+		// $tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$model = Yii::app()->db->createCommand()
 	    ->select('DISTINCT(t.id) as idjadwal,t.*,m.sks,j.nama_jam,km.nama_kampus,kls.nama_kelas')
 	    ->from('simak_jadwal_temp t')
@@ -467,8 +475,8 @@ class Jadwal extends CActiveRecord
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
 	    ->where('kode_dosen=:p1 AND t.tahun_akademik=:p2 AND m.tahun_akademik =:p3', [
 	    	':p1'=>$kode_dosen,
-	    	':p2'=>$tahun_akademik->tahun_id,
-	    	':p3'=>$tahun_akademik->tahun_id
+	    	':p2'=>$tahun_id,
+	    	':p3'=>$tahun_id
 	    ])
 	    // ->group('idjadwal')
 	    ->order('t.kode_dosen ASC')

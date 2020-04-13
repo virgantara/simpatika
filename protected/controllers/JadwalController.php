@@ -622,10 +622,11 @@ class JadwalController extends Controller
 		));
 	}
 
-	public function actionRekapJadwalAllXls()
+	public function actionRekapJadwalAllXls($tahun_id, $kode_prodi)
 	{
-		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-		$jadwal_prodi = Masterdosen::model()->findAll();//Jadwal::model()->findRekapJadwalAll($tahun_akademik->tahun_id);
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('tahun_id'=>$tahun_id));
+		$prodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=>$kode_prodi]);
+		$jadwal_prodi = $prodi->masterdosens;//Jadwal::model()->findRekapJadwalAll($tahun_akademik->tahun_id);
 		Yii::import('ext.PHPExcel.PHPExcel');
 		$objPHPExcel = new PHPExcel();
 		$styleArray = array(
@@ -734,14 +735,7 @@ class JadwalController extends Controller
 	    	);
 	    }
 
-	    $prodis = Masterprogramstudi::model()->findAll();
-
-		$listprodi = [];
-
-		foreach ($prodis as $p) {
-			$listprodi[$p->kode_prodi] = $p;
-		}
-
+	   
 	   	$i = 0; 
 
 		$row = $rowStart;
@@ -751,7 +745,7 @@ class JadwalController extends Controller
 			// if(empty($jd->kode_dosen)) continue;
 
 			$sks_dosen = 0;
-			$jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($jd->nidn);
+			$jadwal_perdosen = Jadwal::model()->findRekapJadwalPerDosenAll($jd->nidn, $tahun_id);
 			
 			if(empty($jadwal_perdosen)) continue;
 
@@ -760,8 +754,7 @@ class JadwalController extends Controller
 				$m = (object)$m;
 		  		$sks_dosen += $m->sks;
 
-		  		
-		  		$nm_prodi = !empty($listprodi[$m->prodi]) ? $listprodi[$m->prodi]->singkatan : $m->nama_prodi;
+		  		$nm_prodi = $m->nama_prodi;
 				
 
 				$i++;
@@ -873,6 +866,7 @@ class JadwalController extends Controller
 	    header('Cache-Control: max-age=0');
 	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 	    $objWriter->save('php://output');
+	    die();
 	}
 
 	public function actionRekapJadwalXls($id)
@@ -1050,25 +1044,36 @@ class JadwalController extends Controller
 	public function actionRekapJadwalAll()
 	{
 		
-		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-		$listdosen = Masterdosen::model()->findAll();
-		// $jadwal_prodi = Jadwal::model()->findRekapJadwalAll();
+		$tahun_akademik = null;
+		$prodi = null;
+		$listdosen = [];
+		$total_bentrok = 0;
+		if(!empty($_GET['tahun_id']) && !empty($_GET['kode_prodi']))
+		{
 
-		$prodis = Masterprogramstudi::model()->findAll();
 
-		$listprodi = [];
+			$tahun_akademik = Tahunakademik::model()->findByAttributes(['tahun_id' => $_GET['tahun_id']]);
+			
+			// $jadwal_prodi = Jadwal::model()->findRekapJadwalAll();
 
-		foreach ($prodis as $p) {
-			$listprodi[$p->kode_prodi] = $p;
-		}
+			$prodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=>$_GET['kode_prodi']]);
 
-		$total_bentrok = Jadwal::model()->countBentrok();
+			$listdosen = $prodi->masterdosens;
+			$total_bentrok = Jadwal::model()->countBentrok($_GET['tahun_id']);
+		}	
+		// $listprodi = [];
+
+		// foreach ($prodis as $p) {
+		// 	$listprodi[$p->kode_prodi] = $p;
+		// }
+
+		
 
 		$this->render('rekap_jadwal_all',array(
 			// 'jadwal_prodi' => $jadwal_prodi,
 			'tahun_akademik' => $tahun_akademik,
 			'total_bentrok' => $total_bentrok,
-			'listprodi' =>$listprodi,
+			'prodi' =>$prodi,
 			'listdosen' => $listdosen
 		));
 	}

@@ -92,6 +92,7 @@ class Masterprogramstudi extends CActiveRecord
 			'mastermahasiswas' => array(self::HAS_MANY, 'Mastermahasiswa', 'kode_prodi'),
 			'kodeFakultas' => array(self::BELONGS_TO, 'Masterfakultas', 'kode_fakultas'),
 			'prodiCapems' => array(self::HAS_MANY, 'ProdiCapem', 'prodi_id'),
+			'masterdosens' => array(self::HAS_MANY, 'Masterdosen', 'kode_prodi'),
 		);
 	}
 
