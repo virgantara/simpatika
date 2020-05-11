@@ -73,6 +73,7 @@ class JadwalController extends Controller
 					$j->hari = $m->hari;
 					$j->jam = $m->jam_mulai;
 					$j->kode_mk = $m->kode_mk;
+					$j->kode_dosen = $m->kode_dosen;
 					// $j->nama_mk = $ m->nama_mk;
 					$j->semester = $m->semester;
 					$j->fakultas = $m->fakultas;
