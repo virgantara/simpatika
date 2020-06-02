@@ -82,6 +82,7 @@ class JadwalController extends Controller
 					$j->tahun_akademik = $m->tahun_akademik;
 					$j->kuota_kelas = $m->kuota_kelas;
 					$j->kampus = $m->kampus;
+					$j->jadwal_temp_id = $m->id;
 					$j->kelas = !empty($m->kELAS) ? $m->kELAS->nama_kelas : '';
 					if(!$j->save())
 					{
