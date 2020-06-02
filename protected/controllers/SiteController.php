@@ -22,6 +22,26 @@ class SiteController extends Controller
 		);
 	}
 
+	public function actionDeleteDuplicates()
+	{
+
+		$listkrs = Yii::app()->db->createCommand()
+		    ->select('j.id')
+		    ->from('simak_jadwal j')
+		    ->where('j.tahun_akademik=20201 AND j.id not in (select d.kode_jadwal from simak_datakrs d where d.tahun_akademik = 20201)')
+		    ->queryAll();
+
+		foreach($listkrs as $m)
+		{
+			$jid = $m['id'];
+
+			$j = SimakJadwal::model()->findByPk($jid);
+			$j->delete();
+		}
+
+		die();
+	}
+
 	public function actionAbout()
 	{
 		$this->render('pages/about');
