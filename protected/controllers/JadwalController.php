@@ -63,7 +63,13 @@ class JadwalController extends Controller
 				$jadwals = Jadwal::model()->findAllByAttributes(['tahun_akademik' =>$data['tahun_akademik']]);
 				foreach($jadwals as $m)
 				{
-					$j = SimakJadwal::model()->findByAttributes(['jadwal_temp_id' => $m->id]);
+					$j = SimakJadwal::model()->findByAttributes([
+						'kode_mk' => $m->kode_mk,
+						'prodi' => $m->prodi,
+						'tahun_akademik' => $m->tahun_akademik,
+						'kampus' => $m->kampus,
+						'kode_dosen' => $m->kode_dosen
+					]);
 					if(empty($j))
 					{
 						$j = new SimakJadwal;
