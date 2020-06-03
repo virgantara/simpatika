@@ -22,6 +22,40 @@ class SiteController extends Controller
 		);
 	}
 
+	public function actionCekDobel()
+	{
+		$list = Yii::app()->db->createCommand()
+		    ->select('j.kode_mk, j.kode_dosen, j.tahun_akademik, j.kampus, j.prodi, j.kelas, count(*) as c ')
+		    ->from('simak_jadwal j')
+		    ->where('j.tahun_akademik = 20201')
+		    ->group('j.kode_mk, j.kode_dosen, j.tahun_akademik, j.kampus, j.prodi, j.kelas')
+		    ->having('c > 1')
+		    ->queryAll();
+
+		foreach($list as $jd)
+		{
+			$j = SimakJadwal::model()->findByAttributes([
+				'kode_mk' => $jd['kode_mk'],
+				'kode_dosen' => $jd['kode_dosen'],
+				'tahun_akademik' => $jd['tahun_akademik'],
+				'kampus' => $jd['kampus'],
+				'prodi' => $jd['prodi'],
+				'kelas' => $jd['kelas'],
+			],['order'=>'id DESC']);
+
+			if(!empty($j))
+			{
+				$krs = Datakrs::model()->findAllByAttributes(['kode_jadwal'=>$j->id,'tahun_akademik'=>$jd['tahun_akademik']]);
+				foreach($krs as $k)
+				{
+					$k->delete();
+				}
+				$j->delete();
+			}
+		}
+		exit;
+	}
+
 	public function actionDeleteDuplicates()
 	{
 
