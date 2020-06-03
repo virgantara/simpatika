@@ -22,59 +22,59 @@ class SiteController extends Controller
 		);
 	}
 
-	public function actionCekDobel()
-	{
-		$list = Yii::app()->db->createCommand()
-		    ->select('j.kode_mk, j.kode_dosen, j.tahun_akademik, j.kampus, j.prodi, j.kelas, count(*) as c ')
-		    ->from('simak_jadwal j')
-		    ->where('j.tahun_akademik = 20201')
-		    ->group('j.kode_mk, j.kode_dosen, j.tahun_akademik, j.kampus, j.prodi, j.kelas')
-		    ->having('c > 1')
-		    ->queryAll();
+	// public function actionCekDobel()
+	// {
+	// 	$list = Yii::app()->db->createCommand()
+	// 	    ->select('j.kode_mk, j.kode_dosen, j.tahun_akademik, j.kampus, j.prodi, j.kelas, count(*) as c ')
+	// 	    ->from('simak_jadwal j')
+	// 	    ->where('j.tahun_akademik = 20201')
+	// 	    ->group('j.kode_mk, j.kode_dosen, j.tahun_akademik, j.kampus, j.prodi, j.kelas')
+	// 	    ->having('c > 1')
+	// 	    ->queryAll();
 
-		foreach($list as $jd)
-		{
-			$j = SimakJadwal::model()->findByAttributes([
-				'kode_mk' => $jd['kode_mk'],
-				'kode_dosen' => $jd['kode_dosen'],
-				'tahun_akademik' => $jd['tahun_akademik'],
-				'kampus' => $jd['kampus'],
-				'prodi' => $jd['prodi'],
-				'kelas' => $jd['kelas'],
-			],['order'=>'id DESC']);
+	// 	foreach($list as $jd)
+	// 	{
+	// 		$j = SimakJadwal::model()->findByAttributes([
+	// 			'kode_mk' => $jd['kode_mk'],
+	// 			'kode_dosen' => $jd['kode_dosen'],
+	// 			'tahun_akademik' => $jd['tahun_akademik'],
+	// 			'kampus' => $jd['kampus'],
+	// 			'prodi' => $jd['prodi'],
+	// 			'kelas' => $jd['kelas'],
+	// 		],['order'=>'id DESC']);
 
-			if(!empty($j))
-			{
-				$krs = Datakrs::model()->findAllByAttributes(['kode_jadwal'=>$j->id,'tahun_akademik'=>$jd['tahun_akademik']]);
-				foreach($krs as $k)
-				{
-					$k->delete();
-				}
-				$j->delete();
-			}
-		}
-		exit;
-	}
+	// 		if(!empty($j))
+	// 		{
+	// 			$krs = Datakrs::model()->findAllByAttributes(['kode_jadwal'=>$j->id,'tahun_akademik'=>$jd['tahun_akademik']]);
+	// 			foreach($krs as $k)
+	// 			{
+	// 				$k->delete();
+	// 			}
+	// 			$j->delete();
+	// 		}
+	// 	}
+	// 	exit;
+	// }
 
-	public function actionDeleteDuplicates()
-	{
+	// public function actionDeleteDuplicates()
+	// {
 
-		$listkrs = Yii::app()->db->createCommand()
-		    ->select('j.id')
-		    ->from('simak_jadwal j')
-		    ->where('j.tahun_akademik=20201 AND j.id not in (select d.kode_jadwal from simak_datakrs d where d.tahun_akademik = 20201)')
-		    ->queryAll();
+	// 	$listkrs = Yii::app()->db->createCommand()
+	// 	    ->select('j.id')
+	// 	    ->from('simak_jadwal j')
+	// 	    ->where('j.tahun_akademik=20201 AND j.id not in (select d.kode_jadwal from simak_datakrs d where d.tahun_akademik = 20201)')
+	// 	    ->queryAll();
 
-		foreach($listkrs as $m)
-		{
-			$jid = $m['id'];
+	// 	foreach($listkrs as $m)
+	// 	{
+	// 		$jid = $m['id'];
 
-			$j = SimakJadwal::model()->findByPk($jid);
-			$j->delete();
-		}
+	// 		$j = SimakJadwal::model()->findByPk($jid);
+	// 		$j->delete();
+	// 	}
 
-		die();
-	}
+	// 	die();
+	// }
 
 	public function actionAbout()
 	{
