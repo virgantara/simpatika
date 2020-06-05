@@ -72,7 +72,8 @@ class JadwalController extends Controller
 						'tahun_akademik' => $m->tahun_akademik,
 						'kampus' => $m->kampus,
 						'kode_dosen' => $m->kode_dosen,
-						'kelas' => $nama_kelas
+						'kelas' => $nama_kelas,
+						'hari' => $m->hari
 					]);
 					if(empty($j))
 					{

@@ -117,7 +117,6 @@ echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 				return !empty($data->kAMPUS) ? $data->kAMPUS->nama_kampus : 'Data kampus kosong';
 			}
 		),
-		'prodi',
 		'nama_prodi',
 		'kode_mk',
 		'nama_mk',
