@@ -63,12 +63,16 @@ class JadwalController extends Controller
 				$jadwals = Jadwal::model()->findAllByAttributes(['tahun_akademik' =>$data['tahun_akademik']]);
 				foreach($jadwals as $m)
 				{
+
+					$nama_kelas = !empty($m->kELAS) ? $m->kELAS->nama_kelas : '';
+
 					$j = SimakJadwal::model()->findByAttributes([
 						'kode_mk' => $m->kode_mk,
 						'prodi' => $m->prodi,
 						'tahun_akademik' => $m->tahun_akademik,
 						'kampus' => $m->kampus,
-						'kode_dosen' => $m->kode_dosen
+						'kode_dosen' => $m->kode_dosen,
+						'kelas' => $nama_kelas
 					]);
 					if(empty($j))
 					{
@@ -89,7 +93,7 @@ class JadwalController extends Controller
 					$j->kuota_kelas = $m->kuota_kelas;
 					$j->kampus = $m->kampus;
 					$j->jadwal_temp_id = $m->id;
-					$j->kelas = !empty($m->kELAS) ? $m->kELAS->nama_kelas : '';
+					$j->kelas = $nama_kelas;
 					if(!$j->save())
 					{
 						foreach($j->getErrors() as $attribute){
