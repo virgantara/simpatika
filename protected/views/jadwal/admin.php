@@ -69,6 +69,10 @@ $tgl_akhir = !empty($setting) ? $setting->value : date('Y-m-d',strtotime(' -1 da
 	<div class="col-xs-12">
   <?php
 echo '<ul>';
+if(date('Y-m-d') <= $tgl_akhir)
+{
+	echo '<li>'.CHtml::link('Tambah Jadwal',array('jadwal/create')).'</li>';
+}
 echo '<li>'.CHtml::link('Cetak Jadwal Personal',array('jadwal/cetakPerDosen'),array('target'=>'_blank')).'</li>';
 echo '<li>'.CHtml::link('Rekap Jadwal Per Prodi',array('jadwal/rekapJadwal'),array('target'=>'_blank')).'</li>';
 echo '<li>'.CHtml::link('Rekap Jadwal Semua Dosen',array('jadwal/rekapJadwalAll'),array('target'=>'_blank')).'</li>';
@@ -79,7 +83,8 @@ echo '</ul>';
 Data per halaman
 <?php echo CHtml::dropDownList('Jadwal[PAGESIZE]',isset($_GET['size'])?$_GET['size']:'',array(10=>10,50=>50,100=>100,200=>200),array('id'=>'size','size'=>1)); ?>
 Prodi
-<?php 
+<?php
+
 $list_gol = CHtml::listData(Jadwal::model()->findProdiInJadwal(),'kode_prodi','nama_prodi');
 echo CHtml::dropDownList('Jadwal[KODEPRODI]',isset($_GET['kode_prodi'])?$_GET['kode_prodi']:'',$list_gol,array('id'=>'kode_prodi','empty' => 'Semua')); ?>  
 <?php

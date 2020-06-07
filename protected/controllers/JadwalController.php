@@ -66,15 +66,21 @@ class JadwalController extends Controller
 
 					$nama_kelas = !empty($m->kELAS) ? $m->kELAS->nama_kelas : '';
 
+					// $j = SimakJadwal::model()->findByAttributes([
+						// 'kode_mk' => $m->kode_mk,
+						// 'prodi' => $m->prodi,
+						// 'tahun_akademik' => $m->tahun_akademik,
+						// 'kampus' => $m->kampus,
+						// 'kode_dosen' => $m->kode_dosen,
+						// 'kelas' => $nama_kelas,
+						// 'hari' => $m->hari
+					// ]);
+
 					$j = SimakJadwal::model()->findByAttributes([
-						'kode_mk' => $m->kode_mk,
-						'prodi' => $m->prodi,
-						'tahun_akademik' => $m->tahun_akademik,
-						'kampus' => $m->kampus,
-						'kode_dosen' => $m->kode_dosen,
-						'kelas' => $nama_kelas,
-						'hari' => $m->hari
+						'jadwal_temp_id' => $m->id,
+						
 					]);
+
 					if(empty($j))
 					{
 						$j = new SimakJadwal;
@@ -1773,7 +1779,6 @@ class JadwalController extends Controller
 			$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=> $model->prodi));
 			$mk = Mastermatakuliah::model()->findByAttributes(array('kode_mata_kuliah'=> $model->kode_mk));
 
-
 			// $jam_ke = Jam::model()->findByPk($_POST['Jadwal']['jam_ke']);
 			$model->jam_mulai = $_POST['Jadwal']['jam_mulai'];//substr($jam_ke->jam_mulai, 0, -3);;
 			$model->jam_selesai = $_POST['Jadwal']['jam_selesai'];//substr($jam_ke->jam_selesai, 0, -3);
@@ -1783,6 +1788,8 @@ class JadwalController extends Controller
 				$model->jam_mulai = substr($model->jam_mulai,0,-3);
 				$model->jam_selesai = substr($model->jam_selesai,0,-3);
 			}
+
+			$model->jam = $model->jam_mulai.' - '.$model->jam_selesai;
 
 			$model->nama_fakultas = $fak->nama_fakultas;
 			$model->nama_prodi = $prodi->singkatan;
@@ -1838,6 +1845,8 @@ class JadwalController extends Controller
 				$model->jam_mulai = substr($model->jam_mulai,0,-3);
 				$model->jam_selesai = substr($model->jam_selesai,0,-3);
 			}
+
+			$model->jam = $model->jam_mulai.' - '.$model->jam_selesai;
 
 			$attr = array(
 				'kode_mata_kuliah'=> $model->kode_mk,
