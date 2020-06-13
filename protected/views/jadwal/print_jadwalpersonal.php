@@ -122,7 +122,7 @@ foreach($jam as $j)
         $nama_prodi .= '/'.$jd->nama_prodi;
       }
 
-      $label0 = $jd->nama_mk.'<br>';
+      $label0 = $jd->nama_matkul.'<br>';
       $lbl_prodi = '';
       if($jd->bentrok == 2)
       {
