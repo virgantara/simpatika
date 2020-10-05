@@ -1295,7 +1295,7 @@ class JadwalController extends Controller
 
 		if(isset($_POST['Jadwal']))
         {
-
+        	
 			$model->uploadedFile=CUploadedFile::getInstance($model,'uploadedFile');
 
 			Yii::import('ext.PHPExcel.PHPExcel.**', true); 
@@ -1310,6 +1310,7 @@ class JadwalController extends Controller
 	        // print_r($highestColumn);
 	        //Loop through each row of the worksheet in turn
 	        $message = '';
+
 
 	      
 
@@ -1333,6 +1334,8 @@ class JadwalController extends Controller
 	        $transaction=Yii::app()->db->beginTransaction();
 	        try
 			{
+				// print_r($fileName);exit;
+
 				$index = 1;
 		        for ($row = 2; $row <= $highestRow; $row++)
 		        { 
@@ -1377,6 +1380,22 @@ class JadwalController extends Controller
 		        	// $tahun_akademik = $sheet->getCell('M'.$row);
 		        	$sks = trim($sheet->getCell('Q'.$row)->getValue());
 		        	$semester = trim($sheet->getCell('N'.$row)->getValue());
+
+		        	$mprodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=>$prodi]);
+		        	if(empty($mprodi))
+		        	{
+
+		        		
+	        			$message .= '<div style="color:red">Kode Prodi tidak valid</div>';
+	        				// continue;
+	        			$m->addError('error','Baris ke-'.($index).' : Terjadi kesalahan input data kode prodi');
+		        		// $m->addError('error','Terjadi kesalahan input data mk');
+						throw new Exception();
+		        		
+
+		        		// $message .= '<div style="color:red">- Data Matkul berikut belum ada di master matkul: '.$kode_mk.' '.$nama_mk.'. Silakan hubungi ust Samsirin untuk input manual</div>';
+		        		// continue;
+		        	}
 
 		        	$attr = array(
 		        		'kode_mata_kuliah' => $kode_mk,
@@ -1510,7 +1529,9 @@ class JadwalController extends Controller
 					{
 						
 						$m->save();
+						
 						Jadwal::model()->cekKonflik($m);
+
 					}
 
 					else
@@ -1543,6 +1564,8 @@ class JadwalController extends Controller
 	        }
 
 			catch(Exception $e){
+
+				$m->addError('error',$e->getMessage());
 				// Yii::app()->user->setFlash('error', print_r($e->errorInfo));
 				$transaction->rollback();
 			}	
@@ -1601,6 +1624,7 @@ class JadwalController extends Controller
 	    header('Cache-Control: max-age=0');
 	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 	    $objWriter->save('php://output');
+	    die();
 	}
 
 	public function actionCekKonflik()
