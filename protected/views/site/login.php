@@ -83,21 +83,27 @@
                             <div class="space-6"></div>
 
                            <?php $form=$this->beginWidget('CActiveForm', array(
-    'id'=>'login-form',
-    'enableClientValidation'=>true,
-    'clientOptions'=>array(
-        'validateOnSubmit'=>true,
-    ),
-    'htmlOptions'=>array(
-        'class' => 'form-horizontal'
-    ),
-)); ?>
+                              'id'=>'login-form',
+                              'enableClientValidation'=>true,
+                              'clientOptions'=>array(
+                                  'validateOnSubmit'=>true,
+                              ),
+                              'htmlOptions'=>array(
+                                  'class' => 'form-horizontal'
+                              ),
+                          )); ?>
+<?php echo $form->errorSummary($model,'<div class="alert alert-danger">','</div>'); ?>
+    <?php    foreach(Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
+    }
+?>
+
     <fieldset>
         <div id="info" style="display: none"></div>
         <label class="block clearfix">
             <span class="block input-icon input-icon-right">
                <?php echo $form->textField($model,'username',['class'=>'form-control','placeholder'=>'Username']); ?>
-<?php echo $form->error($model,'username'); ?>
+
                 <i class="ace-icon fa fa-user"></i>
             </span>
         </label>
@@ -105,7 +111,7 @@
         <label class="block clearfix">
             <span class="block input-icon input-icon-right">
               <?php echo $form->passwordField($model,'password',['class'=>'form-control','placeholder'=>'Password']); ?>
-<?php echo $form->error($model,'password'); ?>
+
                 <i class="ace-icon fa fa-lock"></i>
             </span>
         </label>

@@ -62,20 +62,25 @@ $list_hari = array(
 	<li>KD PRODI diisi dengan kode prodi</li>
 	<li>PRODI diisi dengan singkatan nama prodi. Contoh : 
 		<?php 
+		echo '<ul>';
+		
 		foreach(Masterprogramstudi::model()->findAll() as $item)
 		{
-			echo $item->singkatan.', ';
+			echo '<li>'.$item->singkatan.' : '.$item->kode_prodi.'</li>';
 		}
+		echo '</ul>';
 		?>
 	</li>
 	<li>TAHUN diisi dengan kode tahun akademik. Contoh : 20172</li>
 	<li>SEMESTER diisi dengan angka saja</li>
-	<li>KAMPUS diambil dari data berikut. 
+	<li>KAMPUS diambil hanya kode kampus. Adapun datanya sbb: 
 		<?php 
+		echo '<ul>';
 		foreach(Kampus::model()->findAll() as $item)
 		{
-			echo $item->nama_kampus.', ';
+			echo '<li>'.$item->nama_kampus.': '.$item->kode_kampus.'</li>';
 		}
+		echo '</ul>';
 		?>
 	</li>
 	<li>

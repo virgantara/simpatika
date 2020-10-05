@@ -95,6 +95,7 @@ class SiteController extends Controller
 	{
 		Yii::import('ext.google.Google');
 		$google = new Google();
+
 		$google_data=$google->validate();
 		$session_data=[
 			'name'=>$google_data['name'],
@@ -109,6 +110,13 @@ class SiteController extends Controller
 		$model->loginMode = 2;
 		$model->email=$google_data['email'];
 		$user = User::model()->findByAttributes(array('email' => $model->email));
+		// print_r($user);exit;
+		if(empty($user))
+		{
+			Yii::app()->user->setFlash('danger', "Tidak ada user dengan email ini");
+			$this->redirect(['site/login']);
+		}
+
 		$model->username = $user->username;
 		$model->password = '123';
 
