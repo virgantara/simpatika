@@ -64,7 +64,7 @@ return array(
 			'class' => 'application.extensions.rest.MyRest',
 			'id' => '22821',
 			'secretkey' => '8uS2861A18',
-			'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRJZCI6IjE5MjYyMDE0IiwiY2xpZW50U2VjcmV0IjoiYmlzbWlsbGFoIiwiaWF0IjoxNTc5MTY2NDc3fQ.T5xuFl750KDGyblYBGDPpZ-fl4UDcOq4Rc6TWxux1VE',
+			'token' => '',
 			// 'id' => '25946',
 			// 'secretkey' => '0kX4792E53',
 			'baseurl_apigateway' => 'http://localhost:1926',
@@ -104,8 +104,8 @@ return array(
 		),
 		// this is used in contact page
 		'adminEmail'=>'oddy@unida.gontor.ac.id',
-		'clientId' => '668363583558-3mj71ft76jmf1a6hfve7ann7iq2i73ei.apps.googleusercontent.com',
-		'clientSecret' => 'zHlDOqsS9WXvpKaTWJodHIjF',
-		'redirectURI' => 'http://local.simjad.com/index.php?r=site/oauth2callback'
+		'clientId' => '',
+		'clientSecret' => '',
+		'redirectURI' => ''
 	),
 );
