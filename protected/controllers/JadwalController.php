@@ -1,4 +1,7 @@
 <?php
+require 'vendor/autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class JadwalController extends Controller
 {
@@ -891,8 +894,9 @@ class JadwalController extends Controller
 	public function actionRekapJadwalXls($id)
 	{
 		$prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$id));
-		Yii::import('ext.PHPExcel.PHPExcel');
-		$objPHPExcel = new PHPExcel();
+		// Yii::import('ext.PHPExcel.PHPExcel');
+		$spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
 		$styleArray = array(
 		    'font'  => array(
 		        // 'bold'  => true,
@@ -902,13 +906,13 @@ class JadwalController extends Controller
 		    ),
 		    'borders' => array(
 		    	'allborders' => array(
-	                'style' => PHPExcel_Style_Border::BORDER_THIN,
+	                'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
 	                'color' => array('rgb' => '000000')
 	            )
 		    )
 
 		);
-		$objPHPExcel->getDefaultStyle()->applyFromArray($styleArray);
+		$spreadsheet->getDefaultStyle()->applyFromArray($styleArray);
 
 		$headers = array(
 		   // 'No',
@@ -930,8 +934,9 @@ class JadwalController extends Controller
 		   'Kelas',
 		   'SKS',
 		);
-    
-	    $sheet = $objPHPExcel->setActiveSheetIndex(0);
+    	
+    	$sheet = $spreadsheet->getActiveSheet();
+	    // $sheet = $spreadsheet->setActiveSheetIndex(0);
 	    $sheet->getColumnDimension('A')->setWidth(8);
 	    $sheet->getColumnDimension('B')->setWidth(4);
 	    $sheet->getColumnDimension('C')->setWidth(12);
@@ -995,19 +1000,19 @@ class JadwalController extends Controller
 				    {
 				    	foreach($headers as $q => $v)
 					    {
-					    	$sheet->setCellValueByColumnAndRow($q,$row, strtoupper($v));
-					    	$cell = $sheet->getCellByColumnAndRow($q,$row);
-					    	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
-					    		array(
-					    			'fill' => array(
-							            'type' => PHPExcel_Style_Fill::FILL_SOLID,
-							            'color' => array('rgb' => '000000')
-							        ),
-							        'font' => array(
-							        	'color' => array('rgb'=> 'ffffff')
-							        ),
-					    		)
-					    	);
+					    	$sheet->setCellValueByColumnAndRow($q+1,$row, strtoupper($v));
+					    	// $cell = $sheet->getCellByColumnAndRow($q+1,$row);
+					    	// $cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
+					    	// 	array(
+					    	// 		'fill' => array(
+							   //          'type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+							   //          'color' => array('rgb' => '000000')
+							   //      ),
+							   //      'font' => array(
+							   //      	'color' => array('rgb'=> 'ffffff')
+							   //      ),
+					    	// 	)
+					    	// );
 					    	
 					    }
 
@@ -1019,24 +1024,24 @@ class JadwalController extends Controller
 						$m = (object)$m;
 						$i++;
 						// $sheet->setCellValueByColumnAndRow(0,$row, $i);
-						$sheet->setCellValueByColumnAndRow(0,$row, $m->hari);
-						$sheet->setCellValueByColumnAndRow(1,$row, $m->jam_ke);
-						$sheet->setCellValueByColumnAndRow(2,$row, substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3));
-						$sheet->setCellValueByColumnAndRow(3,$row, $m->kode_mk);
-						$sheet->setCellValueByColumnAndRow(4,$row, $m->nama_mk);
-						$sheet->setCellValueByColumnAndRow(5,$row, $m->kode_dosen);
-						$sheet->setCellValueByColumnAndRow(6,$row, $m->nama_dosen);
-						$sheet->setCellValueByColumnAndRow(7,$row, $m->kd_ruangan);
-						$sheet->setCellValueByColumnAndRow(8,$row, $m->fakultas);
-						$sheet->setCellValueByColumnAndRow(9,$row, $m->nama_fakultas);
-						$sheet->setCellValueByColumnAndRow(10,$row, $m->prodi);
+						$sheet->setCellValueByColumnAndRow(1,$row, $m->hari);
+						$sheet->setCellValueByColumnAndRow(2,$row, $m->jam_ke);
+						$sheet->setCellValueByColumnAndRow(3,$row, substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3));
+						$sheet->setCellValueByColumnAndRow(4,$row, $m->kode_mk);
+						$sheet->setCellValueByColumnAndRow(5,$row, $m->nama_mk);
+						$sheet->setCellValueByColumnAndRow(6,$row, $m->kode_dosen);
+						$sheet->setCellValueByColumnAndRow(7,$row, $m->nama_dosen);
+						$sheet->setCellValueByColumnAndRow(8,$row, $m->kd_ruangan);
+						$sheet->setCellValueByColumnAndRow(9,$row, $m->fakultas);
+						$sheet->setCellValueByColumnAndRow(10,$row, $m->nama_fakultas);
+						$sheet->setCellValueByColumnAndRow(11,$row, $m->prodi);
 			 			$nm_prodi = !empty($prodi) ? $prodi->singkatan : $m->nama_prodi;
-						$sheet->setCellValueByColumnAndRow(11,$row, $nm_prodi);
-						$sheet->setCellValueByColumnAndRow(12,$row, $m->tahun_akademik);
-						$sheet->setCellValueByColumnAndRow(13,$row, $semester);
-						$sheet->setCellValueByColumnAndRow(14,$row, $list_kampus[$m->kampus]);
-						$sheet->setCellValueByColumnAndRow(15,$row, !empty($list_kelas[$m->kelas]) ? $list_kelas[$m->kelas] : '');
-						$sheet->setCellValueByColumnAndRow(16,$row, !empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : 0);
+						$sheet->setCellValueByColumnAndRow(12,$row, $nm_prodi);
+						$sheet->setCellValueByColumnAndRow(13,$row, $m->tahun_akademik);
+						$sheet->setCellValueByColumnAndRow(14,$row, $semester);
+						$sheet->setCellValueByColumnAndRow(15,$row, $list_kampus[$m->kampus]);
+						$sheet->setCellValueByColumnAndRow(16,$row, !empty($list_kelas[$m->kelas]) ? $list_kelas[$m->kelas] : '');
+						$sheet->setCellValueByColumnAndRow(17,$row, !empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : 0);
 					  	$row++;
 					}
 
@@ -1046,17 +1051,29 @@ class JadwalController extends Controller
 		}
 
 	     $sheet->setTitle('Rekap Jadwal');
-	 
+	 	foreach(range('A','Z') as $columnID) {
+            $sheet->getColumnDimension($columnID)
+                ->setAutoSize(true);
+        }
 	    // $objPHPExcel->setActiveSheetIndex(0);
 	     
 	    // ob_end_clean();
 	    // ob_start();
 	    
-	    header('Content-Type: application/vnd.ms-excel');
-	    header('Content-Disposition: attachment;filename="rekap_jadwal_'.$prodi->singkatan.'.xls"');
-	    header('Cache-Control: max-age=0');
-	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-	    $objWriter->save('php://output');
+	    // header('Content-Type: application/vnd.ms-excel');
+	    // header('Content-Disposition: attachment;filename="rekap_jadwal_'.$prodi->singkatan.'.xls"');
+	    // header('Cache-Control: max-age=0');
+	    // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+	    // $objWriter->save('php://output');
+	    $writer = new Xlsx($spreadsheet);
+ 
+        $filename = 'rekap-jadwal-'.$prodi->singkatan.'_'.rand(1,1000);
+ 		ob_end_clean();
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+        
+        $writer->save('php://output'); // download file 
 	    die();
 	}
 
