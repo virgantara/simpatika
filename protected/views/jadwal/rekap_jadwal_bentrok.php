@@ -58,7 +58,7 @@ $this->menu=array(
       
       
       <th>Semester</th>
-      <th>Kampus</th>
+      <th></th>
       <th width="5%">Kelas</th>
      <th>Action</th>
     </tr>
@@ -116,8 +116,8 @@ $this->menu=array(
 
 		<td><?php echo $m->semester;?></td>
 
-		<td><?php echo !empty($m->kAMPUS) ? $m->kAMPUS->nama_kampus : 'ID Kampus tidak dikenali';?></td>
-		<td width="5%"><?php echo $m->kELAS->nama_kelas;?></td>
+		<td></td>
+		<td width="5%"><?php echo !empty($m->kAMPUS) ? $m->kAMPUS->nama_kampus : 'ID Kampus tidak dikenali';?> / <?php echo $m->kELAS->nama_kelas;?></td>
 		<td style="color: white">
 		 <?php 
 

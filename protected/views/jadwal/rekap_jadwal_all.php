@@ -108,7 +108,7 @@ $this->menu=array(
       
       
       <th>Semester</th>
-      <th>Kampus</th>
+      <th>Kelas</th>
       <th width="5%">Kelas</th>
     
     </tr>

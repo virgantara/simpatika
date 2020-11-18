@@ -18,7 +18,7 @@
       <th width="5%">Hari</th>
       <th>Jam Mulai</th>
       <th>Jam Selesai</th>
-      <th>Kampus</th>
+      <th>Kelas</th>
       <th width="15%">Nama Prodi</th><th>Kode Mk</th>
       <th width="15%">Nama Mk</th>
       <th >Kode Dosen</th>

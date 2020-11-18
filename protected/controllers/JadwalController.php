@@ -679,7 +679,7 @@ class JadwalController extends Controller
 		   'Fakultas',
 		   'Prodi',
 		   'SMT',
-		   'Kampus',
+		   'Kelas',
 		   'KLS',
 		);
     
@@ -930,7 +930,7 @@ class JadwalController extends Controller
 		   'Prodi',
 		   'TAHUN',
 		   'SMT',
-		   'Kampus',
+		   'Kelas',
 		   'Kelas',
 		   'SKS',
 		);
@@ -1617,7 +1617,7 @@ class JadwalController extends Controller
 		   'PRODI',
 		   'TAHUN',
 		   'Semester ',
-		   'Kampus',
+		   'Kelas',
 		   'Kelas',
 		   'SKS',
 		);

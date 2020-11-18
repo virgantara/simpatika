@@ -27,7 +27,7 @@ if(!empty($model))
       
       
       <th>Semester</th>
-      <th>Kampus</th>
+      <th></th>
       <th width="5%">Kelas</th>
      
     </tr>
@@ -57,8 +57,8 @@ foreach($model as $m)
 
 <td><?php echo $m->semester;?></td>
 
-<td><?php echo $m->kAMPUS->nama_kampus;?></td>
-<td width="5%"><?php echo $m->kELAS->nama_kelas;?></td>
+<td></td>
+<td width="5%"><?php echo $m->kAMPUS->nama_kampus;?> / <?php echo $m->kELAS->nama_kelas;?></td>
 
 
 </tr>

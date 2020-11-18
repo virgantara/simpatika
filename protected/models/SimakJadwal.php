@@ -96,7 +96,7 @@ class SimakJadwal extends CActiveRecord
 			'kd_ruangan' => 'Kd Ruangan',
 			'tahun_akademik' => 'Tahun Akademik',
 			'kuota_kelas' => 'Kuota Kelas',
-			'kampus' => 'Kampus',
+			'kampus' => 'Kelas',
 			'presensi' => 'Presensi',
 			'materi' => 'Materi',
 			'bobot_formatif' => 'Bobot Formatif',

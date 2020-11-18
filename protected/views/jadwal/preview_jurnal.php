@@ -33,7 +33,7 @@ $this->breadcrumbs=array(
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 <div class="row">
-    <label>Kampus</label>
+    <label>Kelas</label>
     <?php
     $kode_kampus = !empty($_POST['kode_kampus']) ? $_POST['kode_kampus'] : '';
     $list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus','nama_kampus');

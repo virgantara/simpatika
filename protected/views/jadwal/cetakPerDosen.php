@@ -101,7 +101,7 @@ if(!empty($model))
 <table class="items">
 <caption class=""> </caption><thead>
 <tr>
-<th>No</th><th>Hari</th><th>Jam Mulai</th><th>Jam Selesai</th><th>Kampus</th><th>Nama Prodi</th><th>Kode Mk</th><th>Nama Mk</th><th>Kode Dosen</th><th>Nama Dosen</th><th>Semester</th><th>Kelas</th><th>SKS</th><th>Kuota</th>
+<th>No</th><th>Hari</th><th>Jam Mulai</th><th>Jam Selesai</th><th>Kelas</th><th>Nama Prodi</th><th>Kode Mk</th><th>Nama Mk</th><th>Kode Dosen</th><th>Nama Dosen</th><th>Semester</th><th>Kelas</th><th>SKS</th><th>Kuota</th>
 </tr>
 
 </thead>

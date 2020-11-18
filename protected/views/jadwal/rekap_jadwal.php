@@ -124,7 +124,7 @@ foreach($kampuses as $kampus)
       
       
       <th>Semester</th>
-      <th>Kampus</th>
+      <th>Kelas</th>
       <th width="5%">Kelas</th>
      
     </tr>

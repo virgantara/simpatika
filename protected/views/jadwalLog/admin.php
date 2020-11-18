@@ -86,7 +86,7 @@ echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 		'jam_mulai',
 		'jam_selesai',
 		array(
-			'header' => 'Kampus',
+			'header' => 'Kelas',
 			'value' => '$data->kAMPUS->nama_kampus'
 		),
 		'prodi',

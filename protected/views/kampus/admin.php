@@ -24,7 +24,7 @@ $this->breadcrumbs=array(
         echo '<div class="alert alert-' . $key . '">' . $message . "</div>\n";
     }
 ?>
-<div class="pull-left"> <?php	echo CHtml::link('Tambah Baru',['Kampus/create'],['class'=>'btn btn-success']);
+<div class="pull-left"> <?php	echo CHtml::link('Tambah Baru',['Kelas/create'],['class'=>'btn btn-success']);
 ?></div>
 
 

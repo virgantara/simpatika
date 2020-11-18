@@ -110,7 +110,7 @@ class Users extends CActiveRecord
 			'force_password_reset' => 'Force Password Reset',
 			'nim' => 'Nim',
 			'status_data' => 'Status Data',
-			'kampus' => 'Kampus',
+			'kampus' => 'Kelas',
 			'fakultas' => 'Fakultas',
 			'prodi' => 'Prodi',
 		);

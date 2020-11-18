@@ -24,11 +24,11 @@
 )); 
 ?>
 	<div class="form-group">
-		<label class="col-sm-3 control-label no-padding-right">Kampus</label>
+		<label class="col-sm-3 control-label no-padding-right">Kelas</label>
 			<div class="col-sm-9 col-lg-4">
 		<?php 
 		$list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus', 'nama_kampus');
-		echo CHtml::dropDownList('kampus',!empty($_GET['kampus']) ? $_GET['kampus'] : '',$list,array('empty' => '(Pilih Kampus)','class'=>'form-control')); 
+		echo CHtml::dropDownList('kampus',!empty($_GET['kampus']) ? $_GET['kampus'] : '',$list,array('empty' => '(Pilih Kelas)','class'=>'form-control')); 
 		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
 		?>
 		</div>

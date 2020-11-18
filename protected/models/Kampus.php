@@ -61,8 +61,8 @@ class Kampus extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'kode_kampus' => 'Kode Kampus',
-			'nama_kampus' => 'Nama Kampus',
+			'kode_kampus' => 'Kode Kelas',
+			'nama_kampus' => 'Nama Kelas',
 		);
 	}
 

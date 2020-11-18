@@ -117,9 +117,9 @@ echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 		'jam_selesai',
 
 		array(
-			'header' => 'Kampus',
+			'header' => 'Kelas',
 			'value' => function($data){
-				return !empty($data->kAMPUS) ? $data->kAMPUS->nama_kampus : 'Data kampus kosong';
+				return !empty($data->kAMPUS) ? $data->kAMPUS->nama_kampus : 'Data kelas kosong';
 			}
 		),
 		'nama_prodi',

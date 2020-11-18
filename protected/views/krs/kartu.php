@@ -45,7 +45,7 @@ echo CHtml::dropDownList('kode_prodi',isset($_GET['kode_prodi'])?$_GET['kode_pro
 </div>
 </div>
 <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right">Kampus</label>
+        <label class="col-sm-3 control-label no-padding-right">Kelas</label>
         <div class="col-sm-9">
 <?php 
 $list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus','nama_kampus');

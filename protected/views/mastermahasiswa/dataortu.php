@@ -42,12 +42,12 @@ $this->menu=array(
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 	<div class="form-group">
-		<label class="col-sm-3 control-label no-padding-right">Kampus</label>
+		<label class="col-sm-3 control-label no-padding-right">Kelas</label>
 		<div class="col-sm-9">
 		<?php 
 		$kampus = !empty($_GET['kampus']) ? $_GET['kampus'] : '';
 		$list = CHtml::listData(Kampus::model()->findAll(), 'kode_kampus', 'nama_kampus');
-		echo CHtml::dropDownList('kampus',$kampus,$list,array('empty' => '(Pilih Kampus)','class'=>'input')); 
+		echo CHtml::dropDownList('kampus',$kampus,$list,array('empty' => '(Pilih Kelas)','class'=>'input')); 
 		// echo $form->textField($model,'prodi',array('size'=>10,'maxlength'=>10)); 
 		?>
 		</div>
