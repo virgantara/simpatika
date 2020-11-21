@@ -1,5 +1,7 @@
 <?php
 
+use \Firebase\JWT\JWT;
+
 class SiteController extends Controller
 {
 
@@ -22,59 +24,64 @@ class SiteController extends Controller
 		);
 	}
 
-	// public function actionCekDobel()
-	// {
-	// 	$list = Yii::app()->db->createCommand()
-	// 	    ->select('j.kode_mk, j.kode_dosen, j.tahun_akademik, j.kampus, j.prodi, j.kelas, count(*) as c ')
-	// 	    ->from('simak_jadwal j')
-	// 	    ->where('j.tahun_akademik = 20201')
-	// 	    ->group('j.kode_mk, j.kode_dosen, j.tahun_akademik, j.kampus, j.prodi, j.kelas')
-	// 	    ->having('c > 1')
-	// 	    ->queryAll();
+	public function actionLoginSso($token)
+    {
+    	
+        $key = Yii::app()->params->jwt_key;
+        $decoded = JWT::decode($token, base64_decode(strtr($key, '-_', '+/')), ['HS256']);
+        // print_r($decoded);exit;
+        $uuid = $decoded->uuid; // will print "1"
+        $model=new User;
+		$model->loginMode = 3; // SSO Mode
+		$model->uuid=$uuid;
+		$user = User::model()->findByAttributes(array('uuid' => $model->uuid));
+		// print_r($user);exit;
+		if(empty($user))
+		{
+			Yii::app()->user->setFlash('danger', "Tidak ada user dengan email ini");
+			$this->redirect(['site/index']);
+		}
 
-	// 	foreach($list as $jd)
-	// 	{
-	// 		$j = SimakJadwal::model()->findByAttributes([
-	// 			'kode_mk' => $jd['kode_mk'],
-	// 			'kode_dosen' => $jd['kode_dosen'],
-	// 			'tahun_akademik' => $jd['tahun_akademik'],
-	// 			'kampus' => $jd['kampus'],
-	// 			'prodi' => $jd['prodi'],
-	// 			'kelas' => $jd['kelas'],
-	// 		],['order'=>'id DESC']);
+		$model->username = $user->username;
+		$model->password = '123';
 
-	// 		if(!empty($j))
-	// 		{
-	// 			$krs = Datakrs::model()->findAllByAttributes(['kode_jadwal'=>$j->id,'tahun_akademik'=>$jd['tahun_akademik']]);
-	// 			foreach($krs as $k)
-	// 			{
-	// 				$k->delete();
-	// 			}
-	// 			$j->delete();
-	// 		}
-	// 	}
-	// 	exit;
-	// }
+		$result = $model->loginSso();
+		// print_r($result)
+		// validate user input and redirect to the previous page if valid
+		switch($result)
+		{
+			case UserIdentity::ERROR_NONE:
+				$session = Yii::app()->session;
+				$session->add('token',$token);
+				$time_expiration = time()+60*60*24*7; 
+				$tahunaktif = Tahunakademik::model()->findByAttributes(array('buka'=> 'Y'));	
+				$cookie = new CHttpCookie('tahunaktif', $tahunaktif->tahun_id);
+				$cookie->expire = $time_expiration; 
+				Yii::app()->request->cookies['tahunaktif'] = $cookie;	
 
-	// public function actionDeleteDuplicates()
-	// {
+				if(Yii::app()->user->checkAccess([WebUser::R_AKPAM,WebUser::R_TAHFIDZ, WebUser::R_ADM]))
+				{
+					$this->redirect(Yii::app()->createUrl('pencekalan/index'));
+				}	
 
-	// 	$listkrs = Yii::app()->db->createCommand()
-	// 	    ->select('j.id')
-	// 	    ->from('simak_jadwal j')
-	// 	    ->where('j.tahun_akademik=20201 AND j.id not in (select d.kode_jadwal from simak_datakrs d where d.tahun_akademik = 20201)')
-	// 	    ->queryAll();
+				else
+					$this->redirect(Yii::app()->createUrl('jadwal/index'));
+				
+				break;
+			case UserIdentity::ERROR_USERNAME_INVALID:
+			case UserIdentity::ERROR_PASSWORD_INVALID:
+				$model->addError('username','Incorrect username or password.');
+				
+				break;
+			case UserIdentity::ERROR_USER_INACTIVE:
 
-	// 	foreach($listkrs as $m)
-	// 	{
-	// 		$jid = $m['id'];
+				$model->addError('username','Akun Anda belum aktif. Silakan menghubungi Administrator.');
+				
+				break;
+		}
+    }
 
-	// 		$j = SimakJadwal::model()->findByPk($jid);
-	// 		$j->delete();
-	// 	}
-
-	// 	die();
-	// }
+	
 
 	public function actionAbout()
 	{
@@ -318,9 +325,10 @@ class SiteController extends Controller
 	{	
 		$session = Yii::app()->session;
 		$session->remove('access_token','');
+		$session->remove('uuid','');
 		$session->destroy();
 		Yii::app()->user->logout();
-		$this->redirect(array('site/index'));
+		$this->redirect(Yii::app()->params->sso_logout);
 	}
 	
 }

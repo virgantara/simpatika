@@ -1,4 +1,7 @@
 <?php
+
+
+require 'vendor/autoload.php';
 /**
  * Controller is the customized base controller class.
  * All controller classes for this application should extend from this base class.
@@ -20,4 +23,36 @@ class Controller extends CController
 	 * for more details on how to specify this property.
 	 */
 	public $breadcrumbs=array();
+
+	protected function beforeAction($action)
+	{
+		
+		if($action->id != 'loginSso')
+		{
+			$session = Yii::app()->session;
+
+			if(!Yii::app()->user->isGuest)
+			{
+
+		  		if(empty($session->get('token')))
+		  		{
+		  			return $this->redirect(Yii::app()->params->sso_login);
+		  			// return false;
+		  		}
+
+		  		else
+			    	return true;
+			}
+
+			else
+			{
+				return true;
+				// return $this->redirect(['site/loginSso']);
+			}
+		}
+
+		else{
+			return true;
+		}
+	}
 }

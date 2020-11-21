@@ -205,6 +205,32 @@ class User extends MyActiveRecord
 		return $errCode;
 	}
 
+	public function loginSso()
+	{
+		if($this->_identity===null)
+		{
+
+			
+			$this->_identity=new UserIdentity($this->username,md5($this->password), $this->loginMode,$this->email, $this->uuid);
+			$this->_identity->authenticate();
+
+		}
+
+		$errCode = $this->_identity->errorCode;
+
+
+		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
+		{
+			$duration=$this->rememberMe ? 3600*24*1 : 0; // 1 day
+			Yii::app()->user->login($this->_identity,$duration);
+			
+			
+		}
+
+
+		return $errCode;
+	}
+
 	protected function beforeSave()
 	{
 		$this->password = md5($this->password);

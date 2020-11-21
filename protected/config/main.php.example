@@ -106,6 +106,9 @@ return array(
 		'adminEmail'=>'oddy@unida.gontor.ac.id',
 		'clientId' => '',
 		'clientSecret' => '',
-		'redirectURI' => ''
+		'redirectURI' => '',
+		'jwt_key' => 'Jrk6rEHUa7',
+		'sso_login' => 'http://local.central.com/site/login',
+   		'sso_logout' => 'http://local.central.com/site/sess-logout',
 	),
 );

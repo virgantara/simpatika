@@ -2,6 +2,28 @@
 $cs = Yii::app()->getClientScript();
 $setting = Settings::model()->findByAttributes(['name'=>'site.jadwal']);
 $tgl_akhir = !empty($setting) ? $setting->value : date('Y-m-d',strtotime(' -1 days'));
+
+
+
+$list_apps = [];
+
+use \Firebase\JWT\JWT;
+
+if(!Yii::app()->user->isGuest)
+{
+	$session = Yii::app()->session;
+	$token = $session->get('token');
+	$key = Yii::app()->params->jwt_key;
+	$decoded = JWT::decode($token, base64_decode(strtr($key, '-_', '+/')), ['HS256']);	
+
+	foreach($decoded->apps as $d)
+    {
+    	$list_apps[] = [
+    		'label' => $d->app_name,
+    		'url' => $d->app_url.$token
+    	];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,7 +64,7 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#"><?php echo CHtml::encode(Yii::app()->name); ?></a>
+      <a class="navbar-brand" href="<?=Yii::app()->params->sso_login;?>"><?php echo CHtml::encode(Yii::app()->name); ?></a>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		<?php $this->widget('zii.widgets.CMenu',array(
@@ -53,6 +75,13 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 	        'encodeLabel'=>false,
 			'items'=>array(
 				['label'=>'Home', 'url'=>array('/site/index#slider-area')],
+				[
+					'label' => 'Your Apps <span class="caret"></span>',
+					'url' => '#',
+					'itemOptions' => ['class'=>'dropdown-toggle'],
+					'linkOptions' => ['class'=>'dropdown-toggle','data-toggle'=>"dropdown",'role' =>'button'],
+					'items' => $list_apps
+				],
 				[
 					'label' => 'Petunjuk & Unduhan <span class="caret"></span>',
 					'url' => '#',
