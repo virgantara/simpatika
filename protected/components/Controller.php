@@ -46,7 +46,8 @@ class Controller extends CController
 
 			else
 			{
-				return true;
+				return $this->redirect(Yii::app()->params->sso_login);
+				// return true;
 				// return $this->redirect(['site/loginSso']);
 			}
 		}
