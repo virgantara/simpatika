@@ -39,7 +39,7 @@ class SiteController extends Controller
 		if(empty($user))
 		{
 			Yii::app()->user->setFlash('danger', "Tidak ada user dengan email ini");
-			$this->redirect(['site/index']);
+			$this->redirect(Yii::app()->params->sso_login);
 		}
 
 		$model->username = $user->username;
@@ -70,12 +70,13 @@ class SiteController extends Controller
 				break;
 			case UserIdentity::ERROR_USERNAME_INVALID:
 			case UserIdentity::ERROR_PASSWORD_INVALID:
-				$model->addError('username','Incorrect username or password.');
+				$this->redirect(Yii::app()->params->sso_login);
+				// $model->addError('username','Incorrect username or password.');
 				
 				break;
 			case UserIdentity::ERROR_USER_INACTIVE:
-
-				$model->addError('username','Akun Anda belum aktif. Silakan menghubungi Administrator.');
+				$this->redirect(Yii::app()->params->sso_login);
+				// $model->addError('username','Akun Anda belum aktif. Silakan menghubungi Administrator.');
 				
 				break;
 		}
