@@ -2,6 +2,9 @@
 
 
 require 'vendor/autoload.php';
+use \Firebase\JWT\JWT;
+use GuzzleHttp\Client;
+
 /**
  * Controller is the customized base controller class.
  * All controller classes for this application should extend from this base class.
@@ -26,9 +29,13 @@ class Controller extends CController
 
 	protected function beforeAction($action)
 	{
-		
-		if($action->id != 'loginSso')
+		if($action->id == 'authCallback')
 		{
+			return true;
+		}
+		else if($action->id != 'loginSso')
+		{
+			// print_r($action->id);exit;
 			$session = Yii::app()->session;
 
 			if(!Yii::app()->user->isGuest)
@@ -41,7 +48,37 @@ class Controller extends CController
 		  		}
 
 		  		else
-			    	return true;
+		  		{
+
+		  			try
+			        {
+			            $token = $session->get('token');
+			            $key = Yii::app()->params->jwt_key;
+			            $decoded = JWT::decode($token, base64_decode(strtr($key, '-_', '+/')), ['HS256']);
+
+			            $client = new Client(['base_uri' => Yii::app()->params->invoke_token_uri]);
+						$response = $client->request('GET', Yii::app()->params->invoke_token_uri, [
+							'headers' => [
+								'x-jwt-token' => $token
+							]
+						]);
+						$res = json_decode($response->getBody());
+
+						if($res->code != 200)
+						{
+							$session->remove('token');
+                        	throw new Exception;
+						}
+						else
+							return true;
+			        }
+			        catch(Exception $e) 
+			        {
+			        	
+			        	return $this->redirect(Yii::app()->params->sso_login);
+			        }
+			    	
+		  		}
 			}
 
 			else
