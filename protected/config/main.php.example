@@ -108,7 +108,7 @@ return array(
 		'clientSecret' => '',
 		'redirectURI' => '',
 		'jwt_key' => 'Jrk6rEHUa7',
-		'sso_login' => 'http://local.central.com/site/login',
+		'sso_login' => 'http://local.central.com/site/login?callback=http://local.simpatika.com',
    		'sso_logout' => 'http://local.central.com/site/sess-logout',
    		'invoke_token_uri' => 'http://local.central.com/site/invoke-token'
 	),
