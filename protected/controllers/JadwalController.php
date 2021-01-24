@@ -535,7 +535,7 @@ class JadwalController extends Controller
 			
 			
 			$pdf->Output('sk_'.$kode_prodi.'.pdf','I');
-			
+			die();
 		}
 
 

@@ -33,9 +33,10 @@ class Controller extends CController
 		{
 			return true;
 		}
+
 		else if($action->id != 'loginSso')
 		{
-			// print_r($action->id);exit;
+			
 			$session = Yii::app()->session;
 
 			if(!Yii::app()->user->isGuest)
@@ -43,15 +44,38 @@ class Controller extends CController
 
 		  		if(empty($session->get('token')))
 		  		{
-		  			return $this->redirect(Yii::app()->params->sso_login);
-		  			// return false;
+		  			$client = new Client(['base_uri' => Yii::app()->params->invoke_token_uri]);
+					$response = $client->request('GET', Yii::app()->params->invoke_token_uri, [
+						'headers' => [
+							'x-jwt-token' => $token
+						],
+						'query' => [
+							'uuid' => Yii::app()->user->getState('uuid')
+						]
+					]);
+					$res = json_decode($response->getBody());
+					
+					if($res->code != 200)
+					{
+						$session->remove('token');
+                    	return $this->redirect(Yii::app()->params->sso_login);
+					}
+					else{
+
+						$session->add('token',$res->token);
+
+						return true;
+					}
+		  			
 		  		}
 
 		  		else
 		  		{
-
+		  			// print_r(Yii::app()->user->getState('uuid'));exit;
 		  			try
 			        {
+
+
 			            $token = $session->get('token');
 			            $key = Yii::app()->params->jwt_key;
 			            $decoded = JWT::decode($token, base64_decode(strtr($key, '-_', '+/')), ['HS256']);
@@ -60,21 +84,28 @@ class Controller extends CController
 						$response = $client->request('GET', Yii::app()->params->invoke_token_uri, [
 							'headers' => [
 								'x-jwt-token' => $token
+							],
+							'query' => [
+								'uuid' => Yii::app()->user->getState('uuid')
 							]
 						]);
 						$res = json_decode($response->getBody());
-
+						
 						if($res->code != 200)
 						{
 							$session->remove('token');
                         	throw new Exception;
 						}
-						else
+						else{
+
+							$session->add('token',$res->token);
+
 							return true;
+						}
 			        }
 			        catch(Exception $e) 
 			        {
-			        	
+
 			        	return $this->redirect(Yii::app()->params->sso_login);
 			        }
 			    	
@@ -90,6 +121,7 @@ class Controller extends CController
 		}
 
 		else{
+
 			return true;
 		}
 	}

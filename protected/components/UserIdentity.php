@@ -66,6 +66,7 @@ class UserIdentity extends CUserIdentity
 					$this->setState('username', $user->username);
 					$this->setState('level', $user->level);
 					$this->setState('prodi',$user->kode_prodi);
+					$this->setState('uuid',$user->uuid);
 				
 					
 				}
@@ -99,7 +100,7 @@ class UserIdentity extends CUserIdentity
 					$this->setState('username', $user->username);
 					$this->setState('level', $user->level);
 					$this->setState('prodi',$user->kode_prodi);
-				
+					$this->setState('uuid',$user->uuid);
 				
 				}
 			break;

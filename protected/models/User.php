@@ -207,6 +207,7 @@ class User extends MyActiveRecord
 
 	public function loginSso()
 	{
+
 		if($this->_identity===null)
 		{
 
@@ -218,9 +219,11 @@ class User extends MyActiveRecord
 
 		$errCode = $this->_identity->errorCode;
 
+		// print_r($this);
 
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
 		{
+			
 			$duration=$this->rememberMe ? 3600*24*1 : 0; // 1 day
 			Yii::app()->user->login($this->_identity,$duration);
 			

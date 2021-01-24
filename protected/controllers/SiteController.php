@@ -74,7 +74,7 @@ class SiteController extends Controller
 		$model->password = '123';
 
 		$result = $model->loginSso();
-		// print_r($result)
+		
 		// validate user input and redirect to the previous page if valid
 		switch($result)
 		{
@@ -85,16 +85,12 @@ class SiteController extends Controller
 				$tahunaktif = Tahunakademik::model()->findByAttributes(array('buka'=> 'Y'));	
 				$cookie = new CHttpCookie('tahunaktif', $tahunaktif->tahun_id);
 				$cookie->expire = $time_expiration; 
-				Yii::app()->request->cookies['tahunaktif'] = $cookie;	
-
-				if(Yii::app()->user->checkAccess([WebUser::R_AKPAM,WebUser::R_TAHFIDZ, WebUser::R_ADM]))
-				{
-					$this->redirect(Yii::app()->createUrl('pencekalan/index'));
-				}	
-
-				else
-					$this->redirect(Yii::app()->createUrl('jadwal/index'));
 				
+				Yii::app()->request->cookies['tahunaktif'] = $cookie;	
+				$this->redirect(Yii::app()->createUrl('jadwal/index'));
+				
+				
+
 				break;
 			case UserIdentity::ERROR_USERNAME_INVALID:
 			case UserIdentity::ERROR_PASSWORD_INVALID:
