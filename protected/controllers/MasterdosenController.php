@@ -200,8 +200,8 @@ class MasterdosenController extends Controller
 		);
 		$headers = array(
 		   'No',
-		   'Kode Dosen',
-		   'NIY',
+		   'Kode Unik',
+		   // 'NIY',
 		   'Nama Dosen',
 		  	
 		);
@@ -216,16 +216,24 @@ class MasterdosenController extends Controller
 	    $objPHPExcel->getActiveSheet()->setTitle('dosen');
 	 
 	    $objPHPExcel->setActiveSheetIndex(0);
-	    $objPHPExcel->getActiveSheet()->freezePane('E2');
+	    // $objPHPExcel->getActiveSheet()->freezePane('E2');
 	    $sheet = $objPHPExcel->setActiveSheetIndex(0);
 
 	    $sheet->getColumnDimension('A')->setWidth(5);
 	    $sheet->getColumnDimension('B')->setWidth(20);
-	    $sheet->getColumnDimension('C')->setWidth(16);
-	    $sheet->getColumnDimension('D')->setWidth(42);
+	    // $sheet->getColumnDimension('C')->setWidth(16);
+	    $sheet->getColumnDimension('C')->setWidth(42);
 
 
-	    $dosen = Masterdosen::model()->findAll(['order'=>'nama_dosen ASC']);
+	    
+	    $url = "/simpeg/dosen/list";
+		$params = [
+		
+		];
+			
+		$result = Yii::app()->rest->getDataApi($url,$params);
+		// print_r($result);exit;
+		$results = $result->values;
 	    
 
 	    foreach($headers as $q => $v)
@@ -246,18 +254,19 @@ class MasterdosenController extends Controller
 	    	
 	    }
 
+
 	    $i = 0;
-	    $row = 1;
-	    foreach($dosen as $d)
+	    $row = 2;
+	    foreach($results as $q =>$d)
 	    {
 	    	$i++;
-	    	$row++;
-	    	$sheet->setCellValueByColumnAndRow(0,$row, $i);
-			$sheet->setCellValueByColumnAndRow(1,$row, $d->nidn);
-			$sheet->setCellValueByColumnAndRow(2,$row, $d->niy);
-			$sheet->setCellValueByColumnAndRow(3,$row, ($d->nama_dosen));
 	    	
-	    	for($j = 0;$j<4;$j++)
+	    	// $sheet->setCellValueByColumnAndRow(0,$row, ($q+1));
+			$sheet->setCellValueByColumnAndRow(1,$row, $d->kode_unik);
+			// $sheet->setCellValueByColumnAndRow(2,$row, $d->NIY);
+			$sheet->setCellValueByColumnAndRow(2,$row, $d->nama);
+	    	
+	    	for($j = 0;$j<3;$j++)
 	    	{
 	    		$cell = $sheet->getCellByColumnAndRow($j,$row);	
 	    		$cell->getStyle($cell->getColumn().$cell->getRow())
@@ -267,7 +276,7 @@ class MasterdosenController extends Controller
 			    );
 	    	}
 	    	
-	    	
+	    	$row++;
 	    }
 	     
 	    ob_end_clean();
