@@ -36,7 +36,7 @@ class JadwalController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','index','view','getProdi','getProdiJadwal','getDosen','cekKonflik'
-				,'uploadJadwal','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete','cetakJurnal','paralel','refdosen','syncJadwal','ajaxSync'),
+				,'uploadJadwal','cetakPersonal','rekapJadwalAll','exportRekap','listBentrok','rekapJadwalAllXls','removeSelected','listParalel','rekapJadwalBentrok','cetakLampiran','admin','previewJadwalPersonal','cetakPersonalAll','delete','cetakJurnal','paralel','refdosen','syncJadwal','ajaxSync','ubah'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -47,6 +47,55 @@ class JadwalController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionUbah()
+	{
+		$semesters = [];
+
+
+		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
+
+		$ta = !empty($tahun_akademik) ? $tahun_akademik->tahun_id : date('Y').'1';
+
+		if(!empty($_GET['kode_prodi']))
+		{
+			$prodi = $_GET['kode_prodi'];
+		}	
+
+		else
+			$prodi = Yii::app()->user->getState('prodi');
+		
+		$results = [];
+
+		if($ta % 2 != 0)
+		{
+			$semesters = [1,3,5,7];
+		}
+
+		else
+		{
+			$semesters = [2,4,6,8];	
+		}
+
+
+		foreach($semesters as $s)
+		{
+			$list_matkul = Jadwal::model()->findAllByAttributes([
+				'prodi' => $prodi,
+				'tahun_akademik' => $ta,
+				'semester' => $s
+			]);
+			
+			$results[$s] = $list_matkul;
+		}
+
+		
+
+		$this->render('ubah',array(
+			'results'=>$results,
+			'ta' => $ta
+		)); 
 	}
 
 	public function actionAjaxSync()
@@ -1328,9 +1377,6 @@ class JadwalController extends Controller
 	        //Loop through each row of the worksheet in turn
 	        $message = '';
 
-
-	      
-
 			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 
 			$tahun_akademik = $tahun_akademik->tahun_id;	
@@ -1442,9 +1488,19 @@ class JadwalController extends Controller
 		        		// continue;
 		        	}
 		        	
-		        	$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$kode_dosen));
-		        	$dosenuser = SimakUsers::model()->findByAttributes(array('nim'=>$kode_dosen));
-		        	if(empty($dosen))
+		        	// $dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$kode_dosen));
+		        	// $dosenuser = SimakUsers::model()->findByAttributes(array('nim'=>$kode_dosen));
+
+		        	$url = "/simpeg/dosen/list";
+					$params = [
+						'kode_unik' => $kode_dosen
+					];
+						
+					$tmp = Yii::app()->rest->getDataApi($url,$params);
+			
+					$tmp = $tmp->values;
+					
+		        	if(count($tmp) == 0)
 		        	{
 		        		// $isnew = Masterdosen::model()->quickCreate($fakultas, $prodi, $kode_dosen, $nama_dosen);
 		        		
@@ -1453,23 +1509,23 @@ class JadwalController extends Controller
 		        		// if(!$isnew)
 		        		// {
 
-	        			$message .= '<div style="color:red">Data Dosen belum ada di master dosen</div>';
+	        			$message .= '<div style="color:red">Data Dosen belum ada di master dosen SIMPEG. Silakan hubungi bagian ketenagaan UNIDA Gontor</div>';
 	        				// continue;
-	        			$m->addError('error','Baris ke-'.($index).' : Data Dosen belum ada di master dosen');
+	        			$m->addError('error','Baris ke-'.($index).' : Data Dosen belum ada di master SIMPEG. Silakan hubungi bagian ketenagaan UNIDA Gontor');
 		        		// $m->addError('error','Terjadi kesalahan input data dosen');
 						throw new Exception();
 		        		// }
 	
 		        	}
 
-		        	if(empty($dosenuser))
-		        	{
-		        		$message .= '<div style="color:red">Data Dosen belum punya akun SIAKAD</div>';
-	        				// continue;
-	        			$m->addError('error','Baris ke-'.($index).' : Data Dosen belum punya user SIAKAD');
-		        		// $m->addError('error','Terjadi kesalahan input data dosen');
-						throw new Exception();
-		        	}
+		    //     	if(empty($dosenuser))
+		    //     	{
+		    //     		$message .= '<div style="color:red">Data Dosen belum punya akun SIAKAD</div>';
+	     //    				// continue;
+	     //    			$m->addError('error','Baris ke-'.($index).' : Data Dosen belum punya user SIAKAD');
+		    //     		// $m->addError('error','Terjadi kesalahan input data dosen');
+						// throw new Exception();
+		    //     	}
 
 		        	$kd_ruangan = trim($sheet->getCell('H'.$row)->getValue());
 		        	$nama_fakultas = trim($sheet->getCell('J'.$row)->getValue());

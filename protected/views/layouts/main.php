@@ -101,7 +101,24 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 					'url' => ['/site/about'],
 					
 				],
-				array('label'=>'Jadwal', 'url'=>array('/jadwal/index'),'visible'=>!Yii::app()->user->isGuest),
+				[
+					'label'=>'Jadwal <span class="caret"></span>', 
+					'url'=>'#',
+					'visible'=>!Yii::app()->user->isGuest,
+					'itemOptions' => ['class'=>'dropdown-toggle'],
+					'linkOptions' => ['class'=>'dropdown-toggle','data-toggle'=>"dropdown",'role' =>'button'],
+					'items' => [
+						[
+							'label'=>'Unggah Jadwal', 
+							'url'=>array('/jadwal/uploadJadwal'),
+							'visible'=>!Yii::app()->user->isGuest && date('Y-m-d') < $tgl_akhir
+						],
+						['label'=>'Manage', 'url'=>array('/jadwal/index'),'visible'=>!Yii::app()->user->isGuest],
+						['label'=>'Monitor', 'url'=>array('/jadwal/ubah'),'visible'=>!Yii::app()->user->isGuest],
+						['label'=>'Personal', 'url'=>['/jadwal/cetakPerDosen']],
+
+					]
+				],
 				[
 					'label' => 'Cetak <span class="caret"></span>',
 					'url' => '#',
@@ -129,14 +146,9 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 					]
 				],
 
-				array(
-					'label'=>'Unggah Jadwal', 
-					'url'=>array('/jadwal/uploadJadwal'),
-					'visible'=>!Yii::app()->user->isGuest && date('Y-m-d') < $tgl_akhir
-				),
 				
 				// array('label'=>'Unggah PA', 'url'=>array('/mastermahasiswa/uploadPA'),'visible'=>!Yii::app()->user->isGuest),
-				array('label'=>'Jadwal Personal', 'url'=>array('/jadwal/cetakPerDosen')),
+				
 				array(
 					'label'=>'PA', 
 					'itemOptions' => [
