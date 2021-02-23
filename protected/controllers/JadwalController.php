@@ -1487,6 +1487,28 @@ class JadwalController extends Controller
 		        		// $message .= '<div style="color:red">- Data Matkul berikut belum ada di master matkul: '.$kode_mk.' '.$nama_mk.'. Silakan hubungi ust Samsirin untuk input manual</div>';
 		        		// continue;
 		        	}
+
+		        	$attr = array(
+		        		'kode_mk' => $kode_mk,
+		        		'prodi' => $prodi
+		        	);
+
+		        	$mk = Matakuliah::model()->findByAttributes($attr);
+		        	if(empty($mk))
+		        	{
+
+		        		
+
+	        			$message .= '<div style="color:red">Wrong data mk</div>';
+	        				// continue;
+	        			$m->addError('error','Baris ke-'.($index).' : Terjadi kesalahan input data mk: '.$kode_mk.' TIDAK ADA di MATAKULIAH KURIKULUM SIAKAD');
+		        		// $m->addError('error','Terjadi kesalahan input data mk');
+						throw new Exception();
+		        		
+
+		        		// $message .= '<div style="color:red">- Data Matkul berikut belum ada di master matkul: '.$kode_mk.' '.$nama_mk.'. Silakan hubungi ust Samsirin untuk input manual</div>';
+		        		// continue;
+		        	}
 		        	
 		        	// $dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$kode_dosen));
 		        	// $dosenuser = SimakUsers::model()->findByAttributes(array('nim'=>$kode_dosen));
