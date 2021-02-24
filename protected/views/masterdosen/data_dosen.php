@@ -44,8 +44,10 @@ $this->breadcrumbs=array(
 	<thead>
 		<tr>
 			<th>No</th>
+
 			<th>Kode Unik</th>
 			<th>Nama Dosen</th>
+			<th>NIDN</th>
 			<th>Email</th>
 			<th>Jabfung</th>
 			<th>Pangkat/Gol</th>
@@ -64,6 +66,7 @@ $this->breadcrumbs=array(
 				<td><?=$q+1;?></td>
 				<td><?=$m->kode_unik;?></td>
 				<td><?=$m->nama;?></td>
+				<td><?=$m->NIDN;?></td>
 				<td><?=$m->email;?></td>
 				<td><?=$m->jabfung;?></td>
 				<td><?=$m->pangkat.' / '.$m->golongan;?></td>
