@@ -181,54 +181,54 @@ class MasterdosenController extends Controller
 
 	public function actionUnduhDataDosen()
 	{
-		Yii::import('ext.PHPExcel.PHPExcel');
-		$objPHPExcel = new PHPExcel();
-		$styleArray = array(
-		    'font'  => array(
-		        // 'bold'  => true,
-		        // 'color' => array('rgb' => 'FF0000'),
-		        'size'  => 8,
-		        'name'  => 'Times New Roman'
-		    ),
-		    'borders' => array(
-		    	'allborders' => array(
-	                'style' => PHPExcel_Style_Border::BORDER_THIN,
-	                'color' => array('rgb' => '000000')
-	            )
-		    )
+		// Yii::import('ext.PHPExcel.PHPExcel');
+		// $objPHPExcel = new PHPExcel();
+		// $styleArray = array(
+		//     'font'  => array(
+		//         // 'bold'  => true,
+		//         // 'color' => array('rgb' => 'FF0000'),
+		//         'size'  => 8,
+		//         'name'  => 'Times New Roman'
+		//     ),
+		//     'borders' => array(
+		//     	'allborders' => array(
+	 //                'style' => PHPExcel_Style_Border::BORDER_THIN,
+	 //                'color' => array('rgb' => '000000')
+	 //            )
+		//     )
 
-		);
-		$headers = array(
-		   'No',
-		   'Kode Unik',
-		   // 'NIY',
-		   'Nama Dosen',
+		// );
+		// $headers = array(
+		//    'No',
+		//    'Kode Unik',
+		//    // 'NIY',
+		//    'Nama Dosen',
 		  	
-		);
+		// );
     
-	    $objPHPExcel->setActiveSheetIndex(0);
+	 //    $objPHPExcel->setActiveSheetIndex(0);
 
-	    foreach($headers as $q => $v)
-	    {
-	    	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($q,1, $v);
-	    }
+	 //    foreach($headers as $q => $v)
+	 //    {
+	 //    	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($q,1, $v);
+	 //    }
 	    
-	    $objPHPExcel->getActiveSheet()->setTitle('dosen');
+	 //    $objPHPExcel->getActiveSheet()->setTitle('dosen');
 	 
-	    $objPHPExcel->setActiveSheetIndex(0);
-	    // $objPHPExcel->getActiveSheet()->freezePane('E2');
-	    $sheet = $objPHPExcel->setActiveSheetIndex(0);
+	 //    $objPHPExcel->setActiveSheetIndex(0);
+	 //    // $objPHPExcel->getActiveSheet()->freezePane('E2');
+	 //    $sheet = $objPHPExcel->setActiveSheetIndex(0);
 
-	    $sheet->getColumnDimension('A')->setWidth(5);
-	    $sheet->getColumnDimension('B')->setWidth(20);
-	    // $sheet->getColumnDimension('C')->setWidth(16);
-	    $sheet->getColumnDimension('C')->setWidth(42);
+	 //    $sheet->getColumnDimension('A')->setWidth(5);
+	 //    $sheet->getColumnDimension('B')->setWidth(20);
+	 //    // $sheet->getColumnDimension('C')->setWidth(16);
+	 //    $sheet->getColumnDimension('C')->setWidth(42);
 
-
+		$nama = !empty($_GET['nama']) ? $_GET['nama'] : '#';
 	    
 	    $url = "/simpeg/dosen/list";
 		$params = [
-		
+			'nama' => $nama
 		];
 			
 		$result = Yii::app()->rest->getDataApi($url,$params);
@@ -236,58 +236,61 @@ class MasterdosenController extends Controller
 		$results = $result->values;
 	    
 
-	    foreach($headers as $q => $v)
-	    {
-	    	$sheet->setCellValueByColumnAndRow($q,1, strtoupper($v));
-	    	$cell = $sheet->getCellByColumnAndRow($q,1);
-	    	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
-	    		array(
-	    			'fill' => array(
-			            'type' => PHPExcel_Style_Fill::FILL_SOLID,
-			            'color' => array('rgb' => '000000')
-			        ),
-			        'font' => array(
-			        	'color' => array('rgb'=> 'ffffff')
-			        ),
-	    		)
-	    	);
+	  //   foreach($headers as $q => $v)
+	  //   {
+	  //   	$sheet->setCellValueByColumnAndRow($q,1, strtoupper($v));
+	  //   	$cell = $sheet->getCellByColumnAndRow($q,1);
+	  //   	$cell->getStyle($cell->getColumn().$cell->getRow())->applyFromArray(
+	  //   		array(
+	  //   			'fill' => array(
+			//             'type' => PHPExcel_Style_Fill::FILL_SOLID,
+			//             'color' => array('rgb' => '000000')
+			//         ),
+			//         'font' => array(
+			//         	'color' => array('rgb'=> 'ffffff')
+			//         ),
+	  //   		)
+	  //   	);
 	    	
-	    }
+	  //   }
 
 
-	    $i = 0;
-	    $row = 2;
-	    foreach($results as $q =>$d)
-	    {
-	    	$i++;
+	  //   $i = 0;
+	  //   $row = 2;
+	  //   foreach($results as $q =>$d)
+	  //   {
+	  //   	$i++;
 	    	
-	    	// $sheet->setCellValueByColumnAndRow(0,$row, ($q+1));
-			$sheet->setCellValueByColumnAndRow(1,$row, $d->kode_unik);
-			// $sheet->setCellValueByColumnAndRow(2,$row, $d->NIY);
-			$sheet->setCellValueByColumnAndRow(2,$row, $d->nama);
+	  //   	// $sheet->setCellValueByColumnAndRow(0,$row, ($q+1));
+			// $sheet->setCellValueByColumnAndRow(1,$row, $d->kode_unik);
+			// // $sheet->setCellValueByColumnAndRow(2,$row, $d->NIY);
+			// $sheet->setCellValueByColumnAndRow(2,$row, $d->nama);
 	    	
-	    	for($j = 0;$j<3;$j++)
-	    	{
-	    		$cell = $sheet->getCellByColumnAndRow($j,$row);	
-	    		$cell->getStyle($cell->getColumn().$cell->getRow())
-	    		->getNumberFormat()
-    			->setFormatCode(
-			        PHPExcel_Style_NumberFormat::FORMAT_TEXT
-			    );
-	    	}
+	  //   	for($j = 0;$j<3;$j++)
+	  //   	{
+	  //   		$cell = $sheet->getCellByColumnAndRow($j,$row);	
+	  //   		$cell->getStyle($cell->getColumn().$cell->getRow())
+	  //   		->getNumberFormat()
+   //  			->setFormatCode(
+			//         PHPExcel_Style_NumberFormat::FORMAT_TEXT
+			//     );
+	  //   	}
 	    	
-	    	$row++;
-	    }
+	  //   	$row++;
+	  //   }
 	     
-	    ob_end_clean();
-	    ob_start();
+	  //   ob_end_clean();
+	  //   ob_start();
 	    
-	    header('Content-Type: application/vnd.ms-excel');
-	    header('Content-Disposition: attachment;filename="data_dosen.xls"');
-	    header('Cache-Control: max-age=0');
-	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-	    $objWriter->save('php://output');
-	    die();
+	  //   header('Content-Type: application/vnd.ms-excel');
+	  //   header('Content-Disposition: attachment;filename="data_dosen.xls"');
+	  //   header('Cache-Control: max-age=0');
+	  //   $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+	  //   $objWriter->save('php://output');
+	  //   die();
+		$this->render('data_dosen',array(
+			'results'=>$results,
+		));
 	}
 	/**
 	 * Displays a particular model.
