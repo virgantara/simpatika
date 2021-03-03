@@ -81,7 +81,7 @@ $this->breadcrumbs=array(
 		{
 		?>
 		<tr>
-			<td colspan="3" class="text-center"><i>Data dosen tidak ditemukan</i></td>
+			<td colspan="9" class="text-center"><h4><i>Data dosen tidak ditemukan</i></h4></td>
 		</tr>
 		<?php 
 		}

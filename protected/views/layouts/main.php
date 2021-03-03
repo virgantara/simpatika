@@ -35,16 +35,17 @@ if(!Yii::app()->user->isGuest)
 		
  -->   
 
-<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl;?>/bootstrap/css/bootstrap.min.css"> 
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl;?>/css/jquery-ui.css"> 
 
 <script src="<?php echo Yii::app()->baseUrl;?>/js/jquery.min.js"></script>
 <script src="<?php echo Yii::app()->baseUrl;?>/js/jquery-ui.min.js"></script>
-<script src="<?php echo Yii::app()->baseUrl;?>/bootstrap/js/bootstrap.min.js"></script>
 <?php
 $cs->registerCssFile(Yii::app()->baseUrl.'/node_modules/sweetalert2/dist/sweetalert2.min.css');
+$cs->registerCssFile(Yii::app()->baseUrl.'/node_modules/bootstrap3/dist/css/bootstrap.min.css');
 $cs->registerCssFile(Yii::app()->baseUrl.'/node_modules/font-awesome/css/font-awesome.min.css');
 $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/sweetalert2/dist/sweetalert2.all.min.js',CClientScript::POS_END);
+
+$cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/bootstrap3/dist/js/bootstrap.min.js',CClientScript::POS_END);
 
 $cs->registerCssFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/introjs.min.css');
 $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/intro.min.js',CClientScript::POS_END);
@@ -246,10 +247,7 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 
 	<?php echo $content; ?>
 
-	<footer class='footer-content' style="bottom: 0;">
-		Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
-Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id
-	</footer><!-- footer -->
+	
 </div>
 <!-- <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script> -->
  <script type="text/javascript">
@@ -277,26 +275,26 @@ Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac
 		if(Yii::app()->user->checkAccess(array(WebUser::R_SA,WebUser::R_PRODI,WebUser::R_BAAK)))
 		{
 		?>
-		var introguide = introJs();
-		introguide.setOptions({
-			exitOnOverlayClick: false,
-			doneLabel: "Klik di sini",
+		// var introguide = introJs();
+		// introguide.setOptions({
+		// 	exitOnOverlayClick: false,
+		// 	doneLabel: "Klik di sini",
 
-		});
-		// introguide.start();
-	    // // localStorage.clear();
-	    var doneTour = localStorage.getItem('evt_menu_pa') === 'Completed';
+		// });
+		// // introguide.start();
+	 //    // // localStorage.clear();
+	 //    var doneTour = localStorage.getItem('evt_menu_pa') === 'Completed';
 	    
-	    if(!doneTour) {
-	        introguide.start()
+	 //    if(!doneTour) {
+	 //        introguide.start()
 
-	        introguide.oncomplete(function () {
-	            localStorage.setItem('evt_menu_pa', 'Completed');
-	            window.location.href = '<?=Yii::app()->createUrl('masterdosen/pa');?>';
-	        });
+	 //        introguide.oncomplete(function () {
+	 //            localStorage.setItem('evt_menu_pa', 'Completed');
+	 //            window.location.href = '<?=Yii::app()->createUrl('masterdosen/pa');?>';
+	 //        });
 
 	       
-	    }
+	 //    }
 
 	    
 	    <?php 
@@ -307,6 +305,10 @@ Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac
 	 //    });
 	});
 </script>
+<footer class='fixed-bottom'>
+		Head Office : Main Campus University of Darussalam Gontor Demangan Siman Ponorogo East Java Indonesia 63471<br>
+Phone : (+62352) 483762, Fax : (+62352) 488182, Email : rektorat@unida.gontor.ac.id
+	</footer><!-- footer -->
 </body>
 
 </html>
