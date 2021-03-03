@@ -131,6 +131,8 @@ echo CHtml::button("Hapus Item Terpilih",array("id"=>"butt"));
 		// ),
 		'kode_dosen',
 		'nama_dosen',
+		'kode_pengampu_nidn',
+		'nama_dosen_bernidn',
 		'semester',
 
 		

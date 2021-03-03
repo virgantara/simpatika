@@ -57,7 +57,7 @@ class Jadwal extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('hari, jam_ke, kode_mk, kode_dosen, semester, kelas, prodi, kampus', 'required'),
+			array('hari, jam_ke, kode_mk, kode_dosen, semester, kelas, prodi, kampus, kode_pengampu_nidn', 'required'),
 			array('kuota_kelas', 'numerical', 'integerOnly'=>true),
 			array('hari, bobot_formatif, bobot_uts, bobot_uas', 'length', 'max'=>30),
 			array('jam, kode_mk, kode_dosen, kd_ruangan', 'length', 'max'=>20),
@@ -72,7 +72,7 @@ class Jadwal extends CActiveRecord
 			// array('jam_selesai', 'validatorCompareDateTime', 'compareAttribute' => 'jam_mulai', 'condition' => '>'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hari, jam_ke, jam, jam_mulai, jam_selesai, kode_mk, nama_mk, kode_dosen, nama_dosen, semester, kelas, fakultas, nama_fakultas, prodi, nama_prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian, bentrok, bentrok_with, creatd, modified', 'safe', 'on'=>'search'),
+			array('id, hari, jam_ke, jam, jam_mulai, jam_selesai, kode_mk, nama_mk, kode_dosen, nama_dosen, semester, kelas, fakultas, nama_fakultas, prodi, nama_prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian, bentrok, bentrok_with, created, modified, kode_pengampu_nidn, nama_dosen_bernidn', 'safe', 'on'=>'search'),
 		);
 	}
 

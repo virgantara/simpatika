@@ -50,7 +50,7 @@ class SimakJadwal extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('hari, jam, kode_mk, kode_dosen, semester, kelas, prodi, kd_ruangan, kampus', 'required'),
+			array('hari, jam, kode_mk, kode_dosen, semester, kelas, prodi, kd_ruangan, kampus, kode_pengampu_nidn', 'required'),
 			array('kuota_kelas, jadwal_temp_id', 'numerical', 'integerOnly'=>true),
 			array('hari, bobot_formatif, bobot_uts, bobot_uas', 'length', 'max'=>30),
 			array('jam, kode_mk, kode_dosen, kd_ruangan', 'length', 'max'=>20),
@@ -63,7 +63,7 @@ class SimakJadwal extends CActiveRecord
 			array('presensi, created_at, updated_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, hari, jam, kode_mk, kode_dosen, semester, kelas, fakultas, prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian, jadwal_temp_id, created_at, updated_at', 'safe', 'on'=>'search'),
+			array('id, hari, jam, kode_mk, kode_dosen, semester, kelas, fakultas, prodi, kd_ruangan, tahun_akademik, kuota_kelas, kampus, presensi, materi, bobot_formatif, bobot_uts, bobot_uas, bobot_harian1, bobot_harian, jadwal_temp_id, created_at, updated_at, kode_pengampu_nidn', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,6 +89,7 @@ class SimakJadwal extends CActiveRecord
 			'jam' => 'Jam',
 			'kode_mk' => 'Kode Mk',
 			'kode_dosen' => 'Kode Dosen',
+			'kode_pengampu_nidn' => 'Kode Dosen ber-NIDN',
 			'semester' => 'Semester',
 			'kelas' => 'Kelas',
 			'fakultas' => 'Fakultas',
