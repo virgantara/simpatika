@@ -43,6 +43,7 @@ if(!Yii::app()->user->isGuest)
 <script src="<?php echo Yii::app()->baseUrl;?>/bootstrap/js/bootstrap.min.js"></script>
 <?php
 $cs->registerCssFile(Yii::app()->baseUrl.'/node_modules/sweetalert2/dist/sweetalert2.min.css');
+$cs->registerCssFile(Yii::app()->baseUrl.'/node_modules/font-awesome/css/font-awesome.min.css');
 $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/sweetalert2/dist/sweetalert2.all.min.js',CClientScript::POS_END);
 
 $cs->registerCssFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/introjs.min.css');
@@ -75,13 +76,7 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 	        'encodeLabel'=>false,
 			'items'=>array(
 				['label'=>'Home', 'url'=>array('/site/index#slider-area')],
-				[
-					'label' => 'Your Apps <span class="caret"></span>',
-					'url' => '#',
-					'itemOptions' => ['class'=>'dropdown-toggle'],
-					'linkOptions' => ['class'=>'dropdown-toggle','data-toggle'=>"dropdown",'role' =>'button'],
-					'items' => $list_apps
-				],
+				
 				[
 					'label' => 'Petunjuk & Unduhan <span class="caret"></span>',
 					'url' => '#',
@@ -95,12 +90,12 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 						array('label'=>'Data Dosen', 'url'=>['masterdosen/unduhDataDosen']),
 					]
 				],
-				['label'=>'Important Dates', 'url'=>array('/site/index#dates')],
-				[
-					'label' => 'Tentang SIMPATIKA',
-					'url' => ['/site/about'],
+				// ['label'=>'Important Dates', 'url'=>array('/site/index#dates')],
+				// [
+				// 	'label' => 'Tentang SIMPATIKA',
+				// 	'url' => ['/site/about'],
 					
-				],
+				// ],
 				[
 					'label'=>'Jadwal <span class="caret"></span>', 
 					'url'=>'#',
@@ -216,6 +211,13 @@ $cs->registerScriptFile(Yii::app()->baseUrl.'/node_modules/intro.js/minified/int
 					]
 				],
 				array('label'=>'Biodata Mahasiswa', 'url'=>array('/mastermahasiswa/dataortu'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
+				[
+					'label' => '<i class="fa fa-server"></i> Your Apps <span class="caret"></span>',
+					'url' => '#',
+					'itemOptions' => ['class'=>'dropdown-toggle'],
+					'linkOptions' => ['class'=>'dropdown-toggle','data-toggle'=>"dropdown",'role' =>'button'],
+					'items' => $list_apps
+				],
 				// array('label'=>'Log', 'url'=>array('/logs/admin'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				// array('label'=>'Foto', 'url'=>array('/utils/foto'),'visible'=>Yii::app()->user->checkAccess(array(WebUser::R_SA))),
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),

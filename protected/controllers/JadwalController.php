@@ -979,7 +979,7 @@ class JadwalController extends Controller
 		   'Prodi',
 		   'TAHUN',
 		   'SMT',
-		   'Kelas',
+		   'Kampus',
 		   'Kelas',
 		   'SKS',
 		);
@@ -1435,14 +1435,19 @@ class JadwalController extends Controller
 		        	$nama_mk = trim($sheet->getCell('E'.$row)->getValue());
 
 		        	$kode_dosen = trim($sheet->getCell('F'.$row)->getValue());
-
-		        	$fakultas = trim($sheet->getCell('I'.$row)->getValue());
-		        	$prodi = trim($sheet->getCell('K'.$row)->getValue());
-
 		        	$nama_dosen = trim($sheet->getCell('G'.$row)->getValue());
+		        	$kode_dosen_nidn = trim($sheet->getCell('H'.$row)->getValue());
+		        	$nama_dosen_nidn = trim($sheet->getCell('I'.$row)->getValue());
+		        	$kd_ruangan = trim($sheet->getCell('J'.$row)->getValue());
+		        	$fakultas = trim($sheet->getCell('K'.$row)->getValue());
+		        	$nama_fakultas = trim($sheet->getCell('L'.$row)->getValue());
+		        	$prodi = trim($sheet->getCell('M'.$row)->getValue());
+		        	$nama_prodi = trim($sheet->getCell('N'.$row)->getValue());
+		        	$kampus = trim($sheet->getCell('Q'.$row)->getValue());
+		        	$semester = trim($sheet->getCell('P'.$row)->getValue());
 		        	// $tahun_akademik = $sheet->getCell('M'.$row);
-		        	$sks = trim($sheet->getCell('Q'.$row)->getValue());
-		        	$semester = trim($sheet->getCell('N'.$row)->getValue());
+		        	$sks = trim($sheet->getCell('S'.$row)->getValue());
+		        	
 
 		        	$mprodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=>$prodi]);
 		        	if(empty($mprodi))
@@ -1524,6 +1529,26 @@ class JadwalController extends Controller
 					
 		        	if(count($tmp) == 0)
 		        	{
+		        		
+	        			$message .= '<div style="color:red">Data Dosen belum ada di master dosen SIMPEG. Silakan hubungi bagian ketenagaan UNIDA Gontor</div>';
+	        				// continue;
+	        			$m->addError('error','Baris ke-'.($index).' : Data Dosen belum ada di master SIMPEG. Silakan hubungi bagian ketenagaan UNIDA Gontor');
+		        		throw new Exception();
+		        		
+	
+		        	}
+
+		        	$url = "/simpeg/dosen/list";
+					$params = [
+						'kode_unik' => $kode_dosen_nidn
+					];
+						
+					$tmp = Yii::app()->rest->getDataApi($url,$params);
+			
+					$tmp = $tmp->values;
+					
+		        	if(count($tmp) == 0)
+		        	{
 		        		// $isnew = Masterdosen::model()->quickCreate($fakultas, $prodi, $kode_dosen, $nama_dosen);
 		        		
 		        		// echo ($kode_dosen);exit;
@@ -1531,9 +1556,9 @@ class JadwalController extends Controller
 		        		// if(!$isnew)
 		        		// {
 
-	        			$message .= '<div style="color:red">Data Dosen belum ada di master dosen SIMPEG. Silakan hubungi bagian ketenagaan UNIDA Gontor</div>';
+	        			$message .= '<div style="color:red">Data Dosen NIDN belum ada di master dosen SIMPEG. Silakan hubungi bagian ketenagaan UNIDA Gontor</div>';
 	        				// continue;
-	        			$m->addError('error','Baris ke-'.($index).' : Data Dosen belum ada di master SIMPEG. Silakan hubungi bagian ketenagaan UNIDA Gontor');
+	        			$m->addError('error','Baris ke-'.($index).' : Data Dosen NIDN belum ada di master SIMPEG. Silakan hubungi bagian ketenagaan UNIDA Gontor');
 		        		// $m->addError('error','Terjadi kesalahan input data dosen');
 						throw new Exception();
 		        		// }
@@ -1549,10 +1574,7 @@ class JadwalController extends Controller
 						// throw new Exception();
 		    //     	}
 
-		        	$kd_ruangan = trim($sheet->getCell('H'.$row)->getValue());
-		        	$nama_fakultas = trim($sheet->getCell('J'.$row)->getValue());
-		        	$nama_prodi = trim($sheet->getCell('L'.$row)->getValue());
-		        	$kampus = trim($sheet->getCell('O'.$row)->getValue());
+		        	
 		        	$id_kampus = $kampus;
 		        	// $id_kampus = !empty($id_kampus) ? $id_kampus->id : '';
 
@@ -1686,8 +1708,10 @@ class JadwalController extends Controller
 		   'Waktu',
 		   'KD MK',
 		   'Mata Kuliah',
-		   'NIY',
-		   'Dosen Pengampu',
+		   'Kode Unik Dosen',
+		   'Nama Dosen',
+		   'Kode Unik Dosen Ber-NIDN',
+		   'Nama Dosen Ber-NIDN',
 		   'RUANG',
 		   'KD FT',
 		   'FAKULTAS',
@@ -1696,7 +1720,7 @@ class JadwalController extends Controller
 		   'TAHUN',
 		   'Semester ',
 		   'Kelas',
-		   'Kelas',
+		   'Kampus',
 		   'SKS',
 		);
     
@@ -1714,8 +1738,9 @@ class JadwalController extends Controller
 	    ob_end_clean();
 	    ob_start();
 	    
+	    $filename= 'template_jadwal_'.date('YmdHis').'.xls';
 	    header('Content-Type: application/vnd.ms-excel');
-	    header('Content-Disposition: attachment;filename="template.xls"');
+	    header('Content-Disposition: attachment;filename='.$filename);
 	    header('Cache-Control: max-age=0');
 	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 	    $objWriter->save('php://output');
