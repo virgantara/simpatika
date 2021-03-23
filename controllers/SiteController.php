@@ -1,0 +1,522 @@
+<?php
+namespace app\controllers;
+
+use Yii;
+use yii\base\InvalidParamException;
+use yii\web\BadRequestHttpException;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use app\models\LoginForm;
+use app\models\DataDiri;
+use app\models\Penelitian;
+use app\models\Pengabdian;
+use app\models\Penghargaan;
+use app\models\Prodi;
+use app\models\User;
+use app\models\PasswordResetRequestForm;
+use app\models\ResetPasswordForm;
+use app\models\ContactForm;
+use yii\data\ActiveDataProvider;
+use \Firebase\JWT\JWT;
+use yii\httpclient\Client;
+
+/**
+ * Site controller
+ */
+class SiteController extends AppController
+{
+    public $successUrl = '';
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new \yii\web\ForbiddenHttpException('You are not allowed to access this page');
+                },
+                'only' => ['logout', 'signup','testing'],
+                'rules' => [
+                    [
+                        'actions' => [
+                            'testing'
+                        ],
+                        'allow' => true,
+                        'roles' => ['theCreator'],
+                    ],
+                    [
+                        'actions' => ['signup','test'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'successCallback'],
+                'successUrl' => $this->successUrl
+            ],
+        ];
+    }
+
+    public function actionAjaxTahunList()
+    {
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+        $client_token = Yii::$app->params['client_token'];
+        $headers = ['x-access-token'=>$client_token];
+
+        $results = [];
+        // foreach($listTahun as $tahun)
+        // {
+        $params = [
+            
+        ];
+
+        $response = $client->get('/tahun/list', $params,$headers)->send();
+         // print_r($params);exit;
+        if ($response->isOk) {
+            $results = $response->data['values'];
+            
+        }
+
+        // }
+
+        echo \yii\helpers\Json::encode($results);
+        die();
+    }
+
+    public function actionAuthCallback()
+    {
+
+        // $input = json_decode(file_get_contents('php://input'),true);
+        // header('Content-type:application/json;charset=utf-8');
+
+        $results = [];
+         
+        try
+        {
+            $token = $_SERVER['HTTP_X_JWT_TOKEN'];
+            $key = Yii::$app->params['jwt_key'];
+            $decoded = JWT::decode($token, base64_decode(strtr($key, '-_', '+/')), ['HS256']);
+            $results = [
+                'code' => 200,
+                'message' => 'Valid'
+            ];   
+        }
+        catch(\Exception $e) 
+        {
+
+            $results = [
+                'code' => 500,
+                'message' => $e->getMessage()
+            ];
+        }
+
+        echo json_encode($results);
+
+        die();
+        
+       
+    }
+
+    public function actionLoginSso($token)
+    {
+        // print_r($token);exit;
+        
+        $key = Yii::$app->params['jwt_key'];
+        $decoded = JWT::decode($token, base64_decode(strtr($key, '-_', '+/')), ['HS256']);
+        
+        $uuid = $decoded->uuid; // will print "1"
+        $user = \app\models\User::find()
+            ->where([
+                'uuid'=>$uuid,
+            ])
+            ->one();
+
+        if(!empty($user))
+        {
+            
+            $session = Yii::$app->session;
+            $session->set('token',$token);
+           
+            Yii::$app->user->login($user);
+            return $this->redirect(['site/index']);
+        }
+
+        else{
+            
+            
+            return $this->redirect($decoded->iss.'/site/sso-callback?code=302')->send();
+        }
+       
+    }
+
+    public function actionLoginOtp($otp)
+    {
+        
+        $user = User::find()
+            ->where([
+                'otp'=>$otp,
+            ])
+            ->one();
+
+        if(!empty($user)){
+            $user->otp = null;
+            $user->save(false,['otp']);
+            Yii::$app->user->login($user);
+            return $this->goHome();
+        }
+
+        else{
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Invalid OTP. Please contact your department administrator.'));
+            
+            return $this->redirect(['site/login']);
+        }
+        
+    }
+
+    public function successCallback($client)
+    {
+        $attributes = $client->getUserAttributes();
+        $user = User::find()
+            ->where([
+                'email'=>$attributes['email'],
+            ])
+            ->one();
+
+        if(!empty($user)){
+            
+            Yii::$app->user->login($user);
+        }
+
+        else{
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Invalid or Unregistered Email. Please use a valid unida.gontor.ac.id email address.'));
+            
+            return $this->redirect(['site/login']);
+        }
+        
+    }
+
+    /**
+     * Displays homepage.
+     *
+     * @return mixed
+     */
+    public function actionIndex()
+    {
+
+        if (!Yii::$app->user->isGuest) {
+            $model = DataDiri::findOne(['NIY'=>Yii::$app->user->identity->NIY]);
+            return $this->render('homelog',['model'=>$model,]);
+        }
+        
+        $userTotal = User::find()
+            ->where(['status'=>'aktif','status_admin'=>'user'])
+            ->count();
+            
+        $penelitianTotal = Penelitian::find()
+            ->distinct('judul')
+            ->where(['tahun'=>date('Y')])
+            ->count();
+            
+        $pengabdianTotal = Pengabdian::find()
+            ->where(['tahun'=>date('Y')])
+            ->count();
+            
+        $penghargaanTotal = Penghargaan::find()
+            ->where(['tahun'=>date('Y')])
+            ->count();
+        
+        $model = Prodi::find()->all();
+        
+        $penelitian = Penelitian::find()
+            ->where(['tahun'=>date('Y')]);
+        
+        $pengabdian = Pengabdian::find()
+            ->where(['tahun'=>date('Y')]);
+        
+        $penghargaan = Penghargaan::find()
+            ->where(['tahun'=>date('Y')]);
+        
+        $dataProvider1 = new ActiveDataProvider([
+            'query' => $penelitian,
+            'pagination' => [
+                'pageSize' => 10
+            ],
+            'sort' => [
+                'defaultOrder' => [
+//                'tahun' => SORT_DESC,
+                'judul' => SORT_ASC, 
+                'status' => SORT_DESC,
+                ]
+            ],
+        ]);
+        
+        $dataProvider2 = new ActiveDataProvider([
+            'query' => $pengabdian,
+            'pagination' => [
+                'pageSize' => 10
+            ],
+            'sort' => [
+                'defaultOrder' => [
+//                'tahun' => SORT_DESC,
+                'nama_kegiatan' => SORT_ASC, 
+                ]
+            ],
+        ]);
+        
+        $dataProvider3 = new ActiveDataProvider([
+            'query' => $penghargaan,
+            'pagination' => [
+                'pageSize' => 10
+            ]
+        ]);
+
+
+            $dataTable = [
+                'gb' => [
+                    's1' => 0,
+                    's2' => 0,
+                    's3' => DataDiri::countData('S3','GB')
+                ],
+                'lk' => [
+                    's1' => 0,
+                    's2' => DataDiri::countData('S2','LK'),
+                    's3' => DataDiri::countData('S3','LK')
+                ],
+                'l' => [
+                    's1' => 0,
+                    's2' => DataDiri::countData('S2','L'),
+                    's3' => DataDiri::countData('S3','L')
+                ],
+                'aa' => [
+                    's1' => 0,
+                    's2' => DataDiri::countData('S2','AA'),
+                    's3' => DataDiri::countData('S3','AA')
+                ],
+                'tt'=>[
+                    's1' => 0,
+                    's2' => DataDiri::countData('S2','TT'),
+                    's3' => DataDiri::countData('S3','TT')
+                ]
+
+            ];
+            
+        return $this->render('index',[
+            'dataProvider1'=>$dataProvider1,
+            'dataProvider2'=>$dataProvider2,
+            'dataProvider3'=>$dataProvider3,
+            'userTotal'=>$userTotal,
+            'penelitianTotal'=>$penelitianTotal,
+            'pengabdianTotal'=>$pengabdianTotal,
+            'penghargaanTotal'=>$penghargaanTotal,
+            'model'=>$model,
+            'dataTable' => $dataTable
+        ]);
+        
+    }
+
+    public function actionHomelog()
+    {
+
+        if (Yii::$app->user->isGuest) {
+            return $this->goBack();
+        }else{ 
+            $user = \app\models\User::findByEmail(Yii::$app->user->identity->email);
+            $model = $user->dataDiri;
+            return $this->render('homelog',['model'=>$model,]);
+        }
+    }
+
+
+    public function actionUbahAkun()
+    {
+        $id = Yii::$app->user->identity->ID;
+        // load user data
+        $user = User::findOne($id);
+
+        if (!$user->load(Yii::$app->request->post())) {
+            return $this->render('ubahAkun', ['user' => $user]);
+        }
+
+        // only if user entered new password we want to hash and save it
+        if ($user->password) {
+            $user->setPassword($user->password);
+        }
+
+
+        if (!$user->save()) {
+            return $this->render('ubahAkun', ['user' => $user]);
+        }
+
+        Yii::$app->session->setFlash('success', Yii::t('app', 'Data user telah diupdate.'));
+        return $this->redirect(['ubah-akun']);
+    }
+        
+    /**
+     * Logs in a user.
+     *
+     * @return mixed
+     */
+    public function actionLogin()
+    {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->login()){
+                $usernya = User::findOne(['NIY'=>Yii::$app->user->identity->NIY]);
+                if($usernya->status_admin == 'user'){
+                    $model = DataDiri::findOne(['NIY'=>Yii::$app->user->identity->NIY]);
+                    return $this->render('homelog',['model'=>$model,]);
+                }
+                Yii::$app->user->logout();
+                Yii::$app->getSession()->setFlash('danger','You are admin dude!!!');
+                return $this->render('login', [
+                    'model' => $model,]);
+            }
+            return $this->render('login', [
+                'model' => $model,]);
+        } else {
+            return $this->render('login', [
+                'model' => $model,]);
+        }
+        
+    }
+
+    /**
+     * Logs out the current user.
+     *
+     * @return mixed
+     */
+    public function actionLogout()
+    {
+        
+        $session = Yii::$app->session;
+        $session->remove('token');
+        Yii::$app->user->logout();
+        $url = Yii::$app->params['sso_logout'];
+        return $this->redirect($url);
+    }
+
+    /**
+     * Displays contact page.
+     *
+     * @return mixed
+     */
+    public function actionContact()
+    {
+        $model = new ContactForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+            } else {
+                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
+            }
+
+            return $this->refresh();
+        } else {
+            return $this->render('contact', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+     * Displays about page.
+     *
+     * @return mixed
+     */
+    public function actionAbout()
+    {
+        return $this->render('about');
+    }
+
+    /**
+     * Signs user up.
+     *
+     * @return mixed
+     */
+
+    /**
+     * Requests password reset.
+     *
+     * @return mixed
+     */
+    public function actionRequestPasswordReset()
+    {
+        $model = new PasswordResetRequestForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+
+                return $this->goHome();
+            } else {
+                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+            }
+        }
+
+        return $this->render('requestPasswordResetToken', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Resets password.
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionResetPassword($token)
+    {
+        try {
+            $model = new ResetPasswordForm($token);
+        } catch (InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', 'New password saved.');
+
+            return $this->goHome();
+        }
+
+        return $this->render('resetPassword', [
+            'model' => $model,
+        ]);
+    }
+}

@@ -1,0 +1,26 @@
+<?php
+
+return [
+
+   'api_baseurl' => 'http://localhost:1926',
+   'sso_url' => 'http://local.sso.com:30101',
+   'consumer_secret' => 'siakad1',
+   'consumer_id' => 'siakadunida11111',
+   'crypt_algo' => 'aes-256-ctr',
+   'jwt_key' => 'Jrk6rEHUa7',
+   'client_token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRJZCI6IjE5MjYyMDE0IiwiY2xpZW50U2VjcmV0IjoiYmlzbWlsbGFoIiwiaWF0IjoxNTc5MTY2NDc3fQ.T5xuFl750KDGyblYBGDPpZ-fl4UDcOq4Rc6TWxux1VE',
+    'redirectUri' => 'http://local.admisi.com/site/test',
+   'sso_login' => 'http://local.central.com/site/login?callback=http://local.sia.com',
+    'sso_logout' => 'http://local.central.com/site/sess-logout',
+    'invoke_token_uri' => 'http://local.central.com/site/invoke-token',
+    's3' => [
+        'version' => 'latest',
+        'region'  => 'us-east-1',
+        'endpoint' => 'http://s3.unida.gontor.ac.id:9000',
+        'use_path_style_endpoint' => true,
+        'credentials' => [
+            'key'    => 'minio',
+            'secret' => 'minio123',
+        ],
+    ]
+];
