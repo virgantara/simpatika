@@ -89,6 +89,77 @@ class SiteController extends AppController
         ];
     }
 
+    public function actionChange()
+    {
+
+        if(Yii::$app->user->can('Dosen') || Yii::$app->user->can('Staf'))
+        {
+
+
+            $id = Yii::$app->user->identity->id;
+            // load user data
+            $user = \app\models\User::findOne($id);
+
+            $auth = Yii::$app->authManager;
+
+            // get user role if he has one  
+            if ($roles = $auth->getRolesByUser($id)) {
+                // it's enough for us the get first assigned role name
+                $role = array_keys($roles)[0]; 
+            }
+
+            // if user has role, set oldRole to that role name, else offer 'member' as sensitive default
+            $oldRole = (isset($role)) ? $auth->getRole($role) : $auth->getRole('Dosen');
+
+            // set property item_name of User object to this role name, so we can use it in our form
+            $user->item_name = $oldRole->name;
+
+            if (!$user->load(Yii::$app->request->post())) {
+                return $this->render('change', ['user' => $user, 'role' => $user->item_name]);
+            }
+
+            // only if user entered new password we want to hash and save it
+            if ($user->password) {
+                $user->setPassword($user->password);
+            }
+
+            // // if admin is activating user manually we want to remove account activation token
+            // if ($user->status == User::STATUS_ACTIVE && $user->account_activation_token != null) {
+            //     $user->removeAccountActivationToken();
+            // }         
+            
+            $user->access_role = $user->item_name;
+            if (!$user->save()) {
+                return $this->render('change', ['user' => $user, 'role' => $user->item_name]);
+            }
+
+            // take new role from the form
+            $newRole = $auth->getRole($user->item_name);
+            // get user id too
+            $userId = $user->getId();
+            
+            // we have to revoke the old role first and then assign the new one
+            // this will happen if user actually had something to revoke
+            if ($auth->revoke($oldRole, $userId)) {
+                $info = $auth->assign($newRole, $userId);
+            }
+
+            // in case user didn't have role assigned to him, then just assign new one
+            if (!isset($role)) {
+                $info = $auth->assign($newRole, $userId);
+            }
+
+            if (!$info) {
+                Yii::$app->session->setFlash('error', Yii::t('app', 'There was some error while saving user role.'));
+            }
+
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Role changed successfuly.'));
+            return $this->redirect(['change', 'id' => $user->id]);
+        }
+        
+    }
+
+
     public function actionAjaxTahunList()
     {
         $api_baseurl = Yii::$app->params['api_baseurl'];

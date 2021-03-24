@@ -112,8 +112,17 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'newFileMode' => 0644,
+        'newDirMode' => 0755,      
+        'allowedIPs' => ['127.0.0.1', '::1', '192.168.0.*'],  
+        'generators' => [ //here
+            'crud' => [ // generator name
+                'class' => 'app\template\crud\Generator', // generator class
+                'templates' => [ //setting for out templates
+                    'myCrud' => '@app/template/crud/default', // template name => path to template
+                ]
+            ]
+        ],
     ];
 }
 

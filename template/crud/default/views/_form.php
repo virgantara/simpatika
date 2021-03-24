@@ -24,35 +24,19 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="body">
+<div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-form">
 
-    <?= "<?php " ?>$form = ActiveForm::begin([
-    	'options' => [
-            'id' => 'form_validation',
-    	]
-    ]); ?>
-
-
+    <?= "<?php " ?>$form = ActiveForm::begin(); ?>
 
 <?php foreach ($generator->getColumnNames() as $attribute) {
     if (in_array($attribute, $safeAttributes)) {
-        $tableSchema = $generator->getTableSchema();
-        $column = $tableSchema->columns[$attribute];
-        ?>
-        <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right"><?= Inflector::humanize($column->name);?></label>
-        <div class="col-sm-9">
-        <?php
-        echo "    <?= " . $generator->generateActiveField($attribute). "->label(false) ?>\n\n";
-         ?>
-            
-            </div>
-        </div>
-        <?php
+        echo "    <?= " . $generator->generateActiveField($attribute) . " ?>\n\n";
     }
 } ?>
-        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Save') ?>, ['class' => 'btn btn-primary waves-effect']) ?>
-    
+    <div class="form-group">
+        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Save') ?>, ['class' => 'btn btn-success']) ?>
+    </div>
+
     <?= "<?php " ?>ActiveForm::end(); ?>
 
 </div>

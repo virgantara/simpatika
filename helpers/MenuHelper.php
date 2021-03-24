@@ -183,6 +183,11 @@ class MenuHelper
 	         			'url' => ['data-diri/create']
 	         		],
 	         		[
+	         			'template' => '<a href="{url}">{label}</a>',
+		        		'label' => 'Change Role', 
+	         			'url' => ['site/change']
+	         		],
+	         		[
 	         			'template' => '<a href="{url}" data-method="POST">{label}</a>',
 		        		'label' => 'Sign Out', 
 	         			'url' => ['site/logout']
