@@ -37,6 +37,7 @@ class JurnalController extends Controller
      */
     public function actionIndex()
     {
+      
         $searchModel = new JurnalSearch();
         $dataProvider = $searchModel->searchItemku(Yii::$app->request->queryParams);
 

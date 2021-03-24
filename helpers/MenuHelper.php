@@ -14,24 +14,30 @@ class MenuHelper
     	// $userRole = Yii::$app->user->identity->access_role;
         $menuItems = [];
 
-        $currentRoute = Yii::$app->controller->id.'/'.Yii::$app->controller->action->id;
+        // $currentRoute = Yii::$app->controller->id.'/'.Yii::$app->controller->action->id;
 		if(!Yii::$app->user->isGuest)
 		{
 			$menuItems[] = [
 		     	'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-home"></i> <span>Dashboard</span>', 
+		        'label' => '<i class="lnr lnr-home"></i><span>Dashboard</span>', 
 		        'url' => ['site/homelog'],
 		    ];
 
 		    $menuItems[] = [
 	    		'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-graduation-hat"></i> <span>Pendidikan</span>', 
+		        'label' => '<i class="lnr lnr-book"></i><span>Catatan Harian</span>', 
+		        'url' => ['catatan-harian/index'],
+	        ];
+
+		    $menuItems[] = [
+	    		'template' => '<a href="{url}">{label}</a>',
+		        'label' => '<i class="lnr lnr-graduation-hat"></i><span>Pendidikan</span>', 
 		        'url' => ['pendidikan/index'],
 	        ];
 
 	        $menuItems[] = [
 	    		'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-book"></i> <span>Pengajaran</span>', 
+		        'label' => '<i class="lnr lnr-book"></i><span>Pengajaran</span>', 
 		        'url' => ['pengajaran/index'],
 	        ];
 

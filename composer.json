@@ -32,7 +32,8 @@
         "miloschuman/yii2-highcharts-widget": "^6.0",
         "kartik-v/yii2-export": "@dev",
         "kartik-v/yii2-password": "@dev",
-        "kartik-v/yii2-widget-depdrop": "@dev"
+        "kartik-v/yii2-widget-depdrop": "@dev",
+        "kartik-v/yii2-widget-fileinput": "@dev"
 
     },
     "require-dev": {

@@ -4,11 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
-use kartik\depdrop\DepDrop;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use kartik\file\FileInput;
-use common\models\JenisPublikasi;
+use app\models\JenisPublikasi;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Jurnal */
@@ -34,7 +33,7 @@ use common\models\JenisPublikasi;
             <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                 <div class="form-group">
                     <div class="form-line">
-                           <?= $form->field($model, 'jenis_publikasi_id',['options' => ['tag' => false]])->dropDownList(ArrayHelper::map(JenisPublikasi::find()->all(),'id','nama'),['class'=>'form-control show-tick','id'=>'luaran1','prompt'=>'- Pilih Jenis Luaran -'])->label(false) ?>
+                           <?= $form->field($model, 'jenis_publikasi_id',['options' => ['tag' => false]])->dropDownList(ArrayHelper::map(JenisPublikasi::find()->where(['LIKE','kode','j'])->orderBy(['nama'=>SORT_ASC])->all(),'id','nama'),['class'=>'form-control show-tick','id'=>'luaran1','prompt'=>'- Pilih Jenis Luaran -'])->label(false) ?>
                     </div>
                 </div>
             </div>

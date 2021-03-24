@@ -137,42 +137,74 @@ class PengajaranController extends Controller
     public function actionUpdate($id)
     {
       $model = $this->findModel($id);
-      $very = Verify::findOne(['kategori'=>'12','ID_data'=>$id]);
-      if(!empty($very)){
-        $very->ver = 'Belum Diverifikasi';
-        $very->save();
-      }else{
-        $tambah = new Verify();
-        $tambah->NIY = Yii::$app->user->identity->NIY;
-        $tambah->kategori = 12;
-        $tambah->ver = 'Belum Diverifikasi';
-        $tambah->ID_data = $model->ID;
-        $tambah->save();
-      }
-      $sementara = $model->f_penugasan;
-      if ($model->load(Yii::$app->request->post())) {
-        $model->NIY = Yii::$app->user->identity->NIY;
-        $model->ver='Belum Diverifikasi';
-        $f_penugasan =UploadedFile::getInstance($model,'f_penugasan');
-        if(!empty($f_penugasan)){
-          $NameImage = $model->institusi.'-'.$model->jurusan.'-'.$model->tahun_awal.'-'.date('Ymd').'.'.$f_penugasan->extension;
-          $model->f_penugasan = $NameImage;
-          if($model->save()){
-            if(!file_exists(Yii::getAlias('@frontend').'/web/uploads/pengajaran'))
-              mkdir(Yii::getAlias('@frontend').'/web/uploads/pengajaran');
+      $f_penugasan = $model->f_penugasan;
+      $errors = '';
 
-            $f_penugasan -> saveAs(Yii::getAlias('@frontend').'/web/uploads/pengajaran/'.$NameImage);
+      $s3config = Yii::$app->params['s3'];
 
-          }}
-          $model->f_penugasan = $sementara;
-          $model->save();
-          return $this->redirect(['view', 'id' => $model->ID]);   
-        } else {
-          return $this->render('update', [
-            'model' => $model,
-          ]);
-        }
-      }
+      $s3 = new \Aws\S3\S3Client($s3config);
+
+      if ($model->load(Yii::$app->request->post())) 
+      {
+          $connection = \Yii::$app->db;
+          $transaction = $connection->beginTransaction();
+         
+
+          try 
+          {
+              
+              $model->f_penugasan =UploadedFile::getInstance($model,'f_penugasan');
+              
+              if($model->f_penugasan)
+              {
+                $f_penugasan = $model->f_penugasan->tempName;
+                $mime_type = $model->f_penugasan->type;
+                $file = 'bukti_ajar_'.$model->pengajaranData->nama.'_'.$model->NIY.'.'.$model->f_penugasan->extension;
+
+                $key = 'pengajaran/bukti/'.$file;
+                $errors = '';
+
+                 
+                $insert = $s3->putObject([
+                     'Bucket' => 'dosen',
+                     'Key'    => $key,
+                     'Body'   => 'This is the Body',
+                     'SourceFile' => $f_penugasan,
+                     'ContentType' => $mime_type
+                ]);
+
+                $plainUrl = $s3->getObjectUrl('dosen', $key);
+                $model->f_penugasan = $plainUrl;
+              }
+
+              if (empty($model->f_penugasan)){
+                  $model->f_penugasan = $f_penugasan;
+              }
+
+              if($model->validate())
+              {
+                $model->save();
+                $transaction->commit();
+              }
+
+              else{
+                $errors .= \app\helpers\MyHelper::logError($model);
+                throw new \Exception;
+              }
+          }
+
+          catch(\Exception $e)
+          {
+            $transaction->rollBack();
+            $errors .= $e->getMessage();
+            Yii::$app->getSession()->setFlash('danger',$errors);
+          } 
+      }    
+
+      return $this->render('update',[
+        'model' => $model
+      ]);
+    }
 
     /**
      * Deletes an existing Pengajaran model.

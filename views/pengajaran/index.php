@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
-$this->title = 'Pengajaran';
+$this->title = 'Riwayat Pengajaran';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="pengajaran-index">
@@ -12,7 +12,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::dropDownList('tahun','', [], ['id' => 'tahun_list','prompt'=>'- Pilih Tahun -']) ?>
+        <?php
+         // Html::dropDownList('tahun','', [], ['id' => 'tahun_list','prompt'=>'- Pilih Tahun -']) ;
+         ?>
     </p>
     <div class="pengajaran-index">
 <?php
@@ -27,11 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
         
-        'NIY',
-        [
-            'attribute'=>'namanya',
-            'value'=>'pengajaranData.nama',
-        ],
+        
+        // [
+        //     'attribute'=>'namanya',
+        //     'value'=>'pengajaranData.nama',
+        // ],
+        // 'NIY',
         'kode_mk',
         'matkul',
         'jurusan',
@@ -43,17 +46,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute'=>'bukti',
             'format'=>'raw',
             'value' => function($data){
-        if(!empty($data->f_penugasan)){
-        return
-        Html::a('View', ['pengajaran/display', 'id' => $data->ID],['class' => 'btn btn-warning']).'&nbsp;&nbsp;'.
-        Html::a('Download', ['pengajaran/download', 'id' => $data->ID],['class' => 'btn btn-primary']);
-        }
-        else
-        {
-        return
-        "<p class='btn btn-danger' align='center'>No File</p>";
-        }
-        }
+                if(!empty($data->f_penugasan)){
+                    return Html::a('View', $data->f_penugasan,['class' => 'btn btn-warning','data-pjax' => 0,'target'=>'_blank']);
+                }
+
+                else
+                {
+                    return "<p class='btn btn-danger' align='center'>No File</p>";
+                }
+            }
         ],
         [
             'attribute' => 'ver',
@@ -63,16 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             
     [
         'class' => 'yii\grid\ActionColumn',
-        'template' => '{view} {update} {delete}',
-        'visibleButtons' => [
-            'delete' => function ($model, $key, $index) {
-                return Yii::$app->user->can('baak');
-            },
-            'update' => function ($model, $key, $index) {
-                return Yii::$app->user->can('baak');
-            },
-        ]
-        
+        'template' => '{view} {update}',
     ]
 ];?>    
 <?= GridView::widget([

@@ -130,7 +130,7 @@ class DataDiriController extends Controller
 
         $sementara = $model->f_foto;
 
-        $f_penugasan = $model->f_foto;   
+        $f_foto = $model->f_foto;   
 
         $query = BidangIlmu::find()->where(['bidang_ilmu.level'=>2]);
         $query->joinWith(['kode0 as k']);

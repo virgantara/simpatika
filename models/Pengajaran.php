@@ -42,7 +42,7 @@ class Pengajaran extends \yii\db\ActiveRecord
             [['bukti'], 'safe'],
             [['program_pendidikan', 'jurusan', 'institusi', 'program','ver'], 'string', 'max' => 50],
             [['f_penugasan','namanya'], 'string', 'max' => 200],
-            [['f_penugasan'], 'file','extensions'=>'pdf,jpg,jpeg,png','maxSize' => 1024 * 1024 * 1],
+            [['f_penugasan'], 'file','extensions'=>'pdf','maxSize' => 1024 * 1024 * 3],
         ];
     }
 
@@ -57,7 +57,7 @@ class Pengajaran extends \yii\db\ActiveRecord
             'namanya' => 'Nama',
             'matkul' => 'Matkul',
             'program_pendidikan' => 'Program Pendidikan',
-            'jurusan' => 'Jurusan',
+            'jurusan' => 'Prodi',
             'institusi' => 'Institusi',
             'program' => 'Program',
             'tanggal_awal' => 'Tahun Mulai',

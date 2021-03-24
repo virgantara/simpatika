@@ -28,30 +28,27 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'ID',
             'NIY',
+            'kode_mk',
             'matkul:ntext',
-            'program_pendidikan',
+            'kelas',
+            'sks',
+
             'jurusan',
-            'institusi',
-            'program',
-            'tahun_awal',
-            'tahun_akhir',
+            'tahun_akademik',
              [
                 'attribute'=>'f_penugasan',
                 'format'=>'raw',
                 'value' => function($data){
-            if(!empty($data->f_penugasan)){
-            return
-            Html::a('View', ['pengajaran/display', 'id' => $data->ID],['class' => 'btn btn-warning']).'&nbsp;&nbsp;'.
-            Html::a('Download', ['pengajaran/download', 'id' => $data->ID],['class' => 'btn btn-primary']);
-            }
-            else
-            {
-            return
-            "<p class='btn btn-danger' align='center'>No File</p>";
-            }
-            }
+                    if(!empty($data->f_penugasan)){
+                        return Html::a('View', $data->f_penugasan,['class' => 'btn btn-warning','data-pjax' => 0,'target'=>'_blank']);
+                    }
+
+                    else
+                    {
+                        return "<p class='btn btn-danger' align='center'>No File</p>";
+                    }
+                }
             ],
             'ver',
         ],
