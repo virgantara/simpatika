@@ -301,6 +301,16 @@ class User extends UserIdentity
         $this->account_activation_token = null;
     }
 
+    public function getCatatanHarians()
+    {
+        return $this->hasMany(CatatanHarian::className(), ['user_id' => 'ID']);
+    }
+
+    public function getUnitKerjas()
+    {
+        return $this->hasMany(UnitKerja::className(), ['pejabat_id' => 'ID']);
+    }
+
     public function getAuthAssignments()
     {
         return $this->hasMany(AuthAssignment::className(), ['user_id' => 'id']);

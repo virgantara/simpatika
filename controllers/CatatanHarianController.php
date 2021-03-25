@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use Yii;
+
+use app\models\User;
 use app\models\CatatanHarian;
 use app\models\CatatanHarianSearch;
 use yii\web\Controller;
@@ -31,13 +33,55 @@ class CatatanHarianController extends Controller
         ];
     }
 
+    public function actionAjaxListCatatan()
+    {
+        if(Yii::$app->request->isPost)
+        {
+            $dataPost = $_POST['dataPost'];
+
+            $query = CatatanHarian::find();
+            $query->where([
+                'user_id' => $dataPost['user_id']
+            ]);
+
+            $periode = explode(' - ', $dataPost['periode']);
+            // print_r($dataPost['periode']);exit;
+            $tgl_awal = $periode[0];
+            $tgl_akhir = $periode[1];
+
+            $query->andFilterWhere(['between','tanggal',$tgl_awal,$tgl_akhir]);
+
+            $results = [];
+            $list = $query->all();
+            foreach($list as $item)
+            {
+                $results[] = [
+                    'id' => $item->id,
+                    'deskripsi' => $item->deskripsi,
+                    'tanggal' => $item->tanggal,
+                    'is_selesai' => $item->is_selesai,
+                    'poin' => $item->poin,
+                    'unsur_id' => $item->unsur_id,
+                    'unsur_nama' => $item->unsur->nama
+
+                ];
+            }
+
+            echo json_encode($results);
+
+            die();
+
+        }
+    }
+
     public function actionList()
     {
-        $query = CatatanHarian::find();
-        
-
+        // $query = CatatanHarian::find();
+        $user = User::findOne(Yii::$app->user->identity->id);
+        $results = [];
         return $this->render('list', [
             'results' => $results,
+            'user' => $user
         ]);
     }
 
@@ -47,13 +91,21 @@ class CatatanHarianController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CatatanHarianSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(Yii::$app->user->identity->access_role == 'Dekan' 
+            || Yii::$app->user->identity->access_role == 'Kaprodi')
+        {
+            return $this->redirect(['list']);
+        }
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        else{
+            $searchModel = new CatatanHarianSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
     }
 
     /**
