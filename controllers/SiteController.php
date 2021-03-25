@@ -92,8 +92,7 @@ class SiteController extends AppController
     public function actionChange()
     {
 
-        if(Yii::$app->user->can('Dosen') || Yii::$app->user->can('Staf'))
-        {
+        
 
 
             $id = Yii::$app->user->identity->id;
@@ -155,7 +154,7 @@ class SiteController extends AppController
 
             Yii::$app->session->setFlash('success', Yii::t('app', 'Role changed successfuly.'));
             return $this->redirect(['change', 'id' => $user->id]);
-        }
+        
         
     }
 
