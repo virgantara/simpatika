@@ -9,6 +9,7 @@ use app\models\JabatanSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 /**
  * JabatanController implements the CRUD actions for Jabatan model.
@@ -21,10 +22,39 @@ class JabatanController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new \yii\web\ForbiddenHttpException('You are not allowed to access this page');
+                },
+                'only' => ['create','update','delete','index','list'],
+                'rules' => [
+                    
+                    [
+                        'actions' => ['create','update','delete','index'],
+                        'allow' => true,
+                        'roles' => ['Dosen','Staf'],
+                    ],
+                    [
+                        'actions' => [
+                            'create','update','delete','index'
+                        ],
+                        'allow' => true,
+                        'roles' => ['Dekan','Kepala','Kaprodi'],
+                    ],
+                    [
+                        'actions' => [
+                            'create','update','delete','index','list'
+                        ],
+                        'allow' => true,
+                        'roles' => ['theCreator'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['post'],
                 ],
             ],
         ];
@@ -36,9 +66,7 @@ class JabatanController extends Controller
      */
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goBack();
-        }else{  
+       
         $searchModel = new JabatanSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -46,7 +74,7 @@ class JabatanController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-        }
+        
     }
 
     /**

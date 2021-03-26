@@ -24,13 +24,137 @@ class CatatanHarianController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new \yii\web\ForbiddenHttpException('You are not allowed to access this page');
+                },
+                'only' => ['create','update','delete','index','list'],
+                'rules' => [
+                    
+                    [
+                        'actions' => ['create','update','delete','index'],
+                        'allow' => true,
+                        'roles' => ['Dosen','Staf'],
+                    ],
+                    [
+                        'actions' => [
+                            'create','update','delete','index','list','ajax-setuju','ajax-tolak'
+                        ],
+                        'allow' => true,
+                        'roles' => ['Dekan','Kepala','Kaprodi'],
+                    ],
+                    [
+                        'actions' => [
+                            'create','update','delete','index','list'
+                        ],
+                        'allow' => true,
+                        'roles' => ['theCreator'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['post','bayar'],
                 ],
             ],
         ];
+    }
+
+    public function actionAjaxTolak()
+    {
+        if(Yii::$app->request->isPost)
+        {
+            $dataPost = $_POST['dataPost'];
+
+            $model = CatatanHarian::findOne($dataPost['id']);
+            
+            $results = [];
+            
+            if(!empty($model))
+            {
+                $model->is_selesai = '2';
+                $model->approved_by = Yii::$app->user->identity->id;
+                $model->poin = 0;
+                if($model->save())
+                {
+                    $results = [
+                        'code' => 200,
+                        'message' => 'Data updated'
+                    ];
+                }
+
+                else
+                {
+                    $results = [
+                        'code' => 500,
+                        'message' => 'Something went wrong'
+                    ];
+                }
+
+                
+            }
+
+            else{
+                $results = [
+                    'code' => 500,
+                    'message' => 'Data not found'
+                ];
+            }
+
+            echo json_encode($results);
+
+            die();
+
+        }
+    }
+
+    public function actionAjaxSetuju()
+    {
+        if(Yii::$app->request->isPost)
+        {
+            $dataPost = $_POST['dataPost'];
+
+            $model = CatatanHarian::findOne($dataPost['id']);
+            
+            $results = [];
+            
+            if(!empty($model))
+            {
+                $model->is_selesai = '1';
+                $model->approved_by = Yii::$app->user->identity->id;
+                if($model->save())
+                {
+                    $results = [
+                        'code' => 200,
+                        'message' => 'Data updated'
+                    ];
+                }
+
+                else
+                {
+                    $results = [
+                        'code' => 500,
+                        'message' => 'Something went wrong'
+                    ];
+                }
+
+                
+            }
+
+            else{
+                $results = [
+                    'code' => 500,
+                    'message' => 'Data not found'
+                ];
+            }
+
+            echo json_encode($results);
+
+            die();
+
+        }
     }
 
     public function actionAjaxListCatatan()

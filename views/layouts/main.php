@@ -32,6 +32,11 @@ SweetalertAsset::register($this);
     <title><?= Html::encode($this->title.' '.Yii::$app->name) ?></title>
 
     <?php $this->head(); ?>
+    <style type="text/css">
+        .swal2-popup {
+          font-size: 1.6rem !important;
+        }
+    </style>
 </head>
 <body>
 <?php $this->beginBody() ?>

@@ -53,7 +53,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'locale'=>[
                                 'format'=>'Y-m-d'
                             ]
-                        ]
+                        ],
+                        'pluginEvents' =>[
+                            "apply.daterangepicker" => "function(e) { 
+                              $('#pegawai_id').trigger('change');
+                            }",
+                        ]   
                     ]);
                     ?>   
                     
@@ -143,8 +148,18 @@ $(document).on("change","#pegawai_id",function(){
           row += "<td>"+obj.tanggal+"</td>";
           row += "<td>"+obj.poin+"</td>";
           row += "<td>";
-          row += "<a class=\'btn btn-success btn-lg\'><i class=\'fa fa-check\'></i> Setujui</a> "
-          row += "<a class=\'btn btn-danger btn-lg\'><i class=\'fa fa-ban\'></i> Tolak</a>"
+          if(obj.is_selesai == "0"){
+            row += "<a class=\'btn btn-success btn-lg btn-setuju\' data-item=\'"+obj.id+"\'><i class=\'fa fa-check\'></i> Setujui</a> "
+            row += "<a class=\'btn btn-danger btn-lg btn-tolak\' data-item=\'"+obj.id+"\'><i class=\'fa fa-ban\'></i> Tolak</a>"
+          }
+
+          else if(obj.is_selesai == "1"){
+            row += "<label class=\'label label-success\'><i class=\'fa fa-check\'></i> Approved</label>" 
+          }
+
+          else if(obj.is_selesai == "2"){
+            row += "<label class=\'label label-danger\'><i class=\'fa fa-check\'></i> Rejected</label>" 
+          }
           row += "</td>";
           row += "</tr>";
         });
@@ -153,6 +168,72 @@ $(document).on("change","#pegawai_id",function(){
     }
   })
 }); 
+
+$(document).on("click",".btn-setuju",function(e){
+  e.preventDefault();
+  let obj = new Object;
+  obj.id = $(this).data("item");
+
+  $.ajax({
+    url: "'.Url::to(["catatan-harian/ajax-setuju"]).'",
+    type: "POST",
+    data: {
+        dataPost: obj,
+        
+    },
+    beforeSend : function(){
+      
+    },
+    success: function (data) {
+        let hasil = $.parseJSON(data)
+        
+        if(hasil.code != 200){
+          Swal.fire(
+            \'Oops\',
+            hasil.message,
+            \'error\'
+          )
+        }
+
+        else{
+          $(\'#pegawai_id\').trigger(\'change\');
+        }
+    }
+  })
+})
+
+$(document).on("click",".btn-tolak",function(e){
+  e.preventDefault();
+  let obj = new Object;
+  obj.id = $(this).data("item");
+
+  $.ajax({
+    url: "'.Url::to(["catatan-harian/ajax-tolak"]).'",
+    type: "POST",
+    data: {
+        dataPost: obj,
+        
+    },
+    beforeSend : function(){
+      
+    },
+    success: function (data) {
+        let hasil = $.parseJSON(data)
+        
+        if(hasil.code != 200){
+          Swal.fire(
+            \'Oops\',
+            hasil.message,
+            \'error\'
+          )
+        }
+
+        else{
+          $(\'#pegawai_id\').trigger(\'change\');
+        }
+    }
+  })
+})
 
 ', \yii\web\View::POS_READY);
 

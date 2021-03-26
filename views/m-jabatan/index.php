@@ -4,22 +4,26 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\MJabatan */
+/* @var $searchModel app\models\MJabatanSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Master Jabatan';
+$this->title = 'M Jabatans';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="mjabatan-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<h3><?= Html::encode($this->title) ?></h3>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+            </div>
+<div class="panel-body ">
 
     <p>
-        <?= Html::a('Create Master Jabatan', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create M Jabatan', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
- <?php
+    <?php
     $gridColumns = [
     [
         'class'=>'kartik\grid\SerialColumn',
@@ -30,13 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'header'=>'',
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
-        
-    // 'id',
-    'nama',
-    'level',
-
-    ['class' => 'yii\grid\ActionColumn'],
-];?>      
+            'id',
+            'nama',
+            'access_role',
+    ['class' => 'yii\grid\ActionColumn']
+];?>    
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -81,5 +83,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'type' => GridView::TYPE_PRIMARY
         ],
-    ]); ?>   
+    ]); ?>
+
 </div>
+        </div>
+    </div>
+
+</div>
+

@@ -57,6 +57,11 @@ class JabatanSearch extends Jabatan
             return $dataProvider;
         }
 
+        if(Yii::$app->user->identity->access_role == 'Dosen' || Yii::$app->user->identity->access_role == 'Staf' || Yii::$app->user->identity->access_role == 'Kaprodi' || Yii::$app->user->identity->access_role == 'Dekan' || Yii::$app->user->identity->access_role == 'Kepala' || Yii::$app->user->identity->access_role == 'Kepala ')
+        {
+            $query->andWhere(['NIY'=>Yii::$app->user->identity->NIY]);
+        }
+
         // $dataProvider->sort->attributes['namanya'] = [
         // // The tables are the ones our relation are configured to
         // // in my case they are prefixed with "tbl_"
