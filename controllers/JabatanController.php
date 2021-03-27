@@ -65,13 +65,26 @@ class JabatanController extends Controller
     public function actionList()
     {
         
-        $results = Jabatan::find()->where(['NIY'=>Yii::$app->user->identity->NIY])->all();
+        $query = Jabatan::find();
+        $query->where(['NIY'=>Yii::$app->user->identity->NIY]);
+        $query->joinWith(['jabatan as j']);
+        $query->andWhere(['IN','j.nama',['Rektor','Wakil Rektor','Kepala','Ketua','Dekan','Direktur']]);
+        $listUnker = [];
+
+        $results = $query->all();
+        foreach($results as $item)
+        {
+          $listUnker[$item->unker_id] = $item->unker->nama;
+        }
+
+        $results = \app\models\MJabatan::find()->where(['NOT IN','nama',['Kepala','Dekan','Dosen','Ketua']])->all();
         $listJabatan = [];
         foreach($results as $item)
         {
-          $listJabatan[$item->unker_id] = $item->unker->nama;
+          $listJabatan[$item->id] = $item->nama;
         }
         return $this->render('list', [
+          'listUnker' => $listUnker,
           'listJabatan' => $listJabatan
         ]);
         

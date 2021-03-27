@@ -71,7 +71,8 @@ class UnitKerjaController extends \yii\web\Controller
                 $model->NIY = $dataPost['user_id'];
             }
 
-            $model->jabatan_id = 14;
+            $model->jabatan_id = $dataPost['jabatan_id'];
+            $model->tanggal_awal = $dataPost['tmt'];
 
 
             $results = [];

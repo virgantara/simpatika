@@ -3,13 +3,15 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\helpers\Url;
-
+use kartik\date\DatePicker;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\JabatanSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Jabatan Dalam Institusi';
 //$this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 <div class="jabatan-index">
 
@@ -28,7 +30,7 @@ $this->title = 'Jabatan Dalam Institusi';
                       <div class="form-group">
                         <label class="control-label">Unit Kerja</label>
                         
-                        <?=Html::dropDownList('unker_id','',$listJabatan,['prompt' => '- Pilih Unit Kerja -','class'=>'form-control input-lg','id' => 'unker_id']);?>            
+                        <?=Html::dropDownList('unker_id','',$listUnker,['prompt' => '- Pilih Unit Kerja -','class'=>'form-control input-lg','id' => 'unker_id']);?>            
                         
                       </div>
            
@@ -49,17 +51,37 @@ $this->title = 'Jabatan Dalam Institusi';
                           
                         </tbody>
                     </table>
-                    <div class="row" >
+                    <div class="row" id="modal" style="display: none" >
                         <div class="col-md-12">
                     <form>
-                      <div class="form-group">
-                        <label class="control-label">Nama</label>
-                         <input type="text" name="unker_id" id="unit_kerja_id">
-                        <input type="text" name="nama_staf" id="nama_staf" placeholder="Ketik nama dosen/tendik">
-                        <input type="text" id="user_id">           
+                        <div class="form-group">
+                            <label class="control-label">Nama</label>
+                            <input type="hidden" name="unker_id" id="unit_kerja_id">
+                            <input type="text" name="nama_staf" id="nama_staf" placeholder="Ketik nama dosen/tendik" class="form-control">
+                            <input type="hidden" id="user_id">           
                         
-                      </div>
-           
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Jabatan</label>
+                             <?=Html::dropDownList('jabatan_id','',$listJabatan,['prompt' => '- Pilih Jabatan -','class'=>'form-control','id' => 'jabatan_id']);?>   
+                            
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">TMT</label>
+                             <?=DatePicker::widget([
+                                'name' => 'tanggal', 
+                                'value' => date('Y-m-d', strtotime('0 days')),
+                                'options' => ['placeholder' => 'Pilih TMT ...','id'=>'tmt'],
+                                'pluginOptions' => [
+                                    'format' => 'yyyy-mm-dd',
+                                    'todayHighlight' => true
+                                ]
+                             ]);?>   
+                            
+                        </div>
+                        <div class="form-group">
+                            <a href="#" class="btn btn-primary" id="btn-save-pegawai"><i class="fa fa-save"></i> Simpan</a>
+                        </div>
                     </form>
                 </div>
                     </div>
@@ -76,12 +98,19 @@ $this->title = 'Jabatan Dalam Institusi';
 <?php
 
 $this->registerJs(' 
- 
+
 $(document).on("click","#btn-add-pegawai",function(){
+
+  $("#modal").show();
+}); 
+
+$(document).on("click","#btn-save-pegawai",function(){
 
   let obj = new Object;
   obj.unker_id = $("#unit_kerja_id").val();
   obj.user_id = $("#user_id").val();
+  obj.jabatan_id = $("#jabatan_id").val();
+  obj.tmt = $("#tmt").val();
   $.ajax({
     url: "'.Url::to(["unit-kerja/ajax-add-anggota"]).'",
     type: "POST",
@@ -90,10 +119,12 @@ $(document).on("click","#btn-add-pegawai",function(){
         
     },
     success: function (data) {
+        $("#modal").hide();
         let hasil = $.parseJSON(data)
         if(hasil.code == 200)
         {
             $("#unker_id").trigger("change");
+
         }
 
         else{
