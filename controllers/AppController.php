@@ -70,6 +70,7 @@ class AppController extends Controller
 
                     if($res['code'] != '200')
                     {
+                        $this->refreshToken();
                         return $this->redirect(Yii::$app->params['sso_login']);
                     }
 

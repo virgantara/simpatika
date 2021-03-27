@@ -37,7 +37,7 @@ class JabatanController extends Controller
                     ],
                     [
                         'actions' => [
-                            'create','update','delete','index'
+                            'create','update','delete','index','list'
                         ],
                         'allow' => true,
                         'roles' => ['Dekan','Kepala','Kaprodi'],
@@ -58,6 +58,23 @@ class JabatanController extends Controller
                 ],
             ],
         ];
+    }
+
+    
+
+    public function actionList()
+    {
+        
+        $results = Jabatan::find()->where(['NIY'=>Yii::$app->user->identity->NIY])->all();
+        $listJabatan = [];
+        foreach($results as $item)
+        {
+          $listJabatan[$item->unker_id] = $item->unker->nama;
+        }
+        return $this->render('list', [
+          'listJabatan' => $listJabatan
+        ]);
+        
     }
 
     /**
