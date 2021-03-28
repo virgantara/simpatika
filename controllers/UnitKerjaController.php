@@ -30,10 +30,10 @@ class UnitKerjaController extends \yii\web\Controller
                     ],
                     [
                         'actions' => [
-                            'create','update','delete','index','list','ajax-list-pegawai','ajax-list-anggota'
+                            'create','update','delete','index','list','ajax-list-pegawai','ajax-list-anggota','ajax-remove-anggota'
                         ],
                         'allow' => true,
-                        'roles' => ['Dekan','Kepala','Kaprodi'],
+                        'roles' => ['Dekan','Kepala','Kaprodi','Direktur','Ketua'],
                     ],
                     [
                         'actions' => [
@@ -51,6 +51,47 @@ class UnitKerjaController extends \yii\web\Controller
                 ],
             ],
         ];
+    }
+
+    public function actionAjaxRemoveAnggota()
+    {
+        if(Yii::$app->request->isPost)
+        {
+            $dataPost = $_POST['dataPost'];
+
+            $model = Jabatan::findOne($dataPost['id']);
+
+            $results = [];
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+           
+
+            try 
+            {
+                $model->delete();
+                $results = [
+                    'code' => 200,
+                    'message' => 'data removed'
+                ];
+                $transaction->commit();
+            }
+
+            catch(\Exception $e)
+            {
+                $transaction->rollBack();
+
+                $errors = $e->getMessage();
+                $results = [
+                    'code' => 500,
+                    'message' => $errors
+                ];
+            }
+     
+            echo json_encode($results);
+
+            die();
+
+        }
     }
 
     public function actionAjaxAddAnggota()
@@ -126,7 +167,7 @@ class UnitKerjaController extends \yii\web\Controller
                     }
                 }
                 $results[] = [
-                    'id' => $jab->nIY->ID,
+                    'id' => $jab->ID,
                     'nama' => $nama,
                     'niy' => $jab->NIY,
                     'file_penugasan' => $jab->f_penugasan,
@@ -162,9 +203,16 @@ class UnitKerjaController extends \yii\web\Controller
 
         	foreach($listJabatan as $jab)
         	{
+                $nama = !empty($jab->nIY->dataDiri) ? $jab->nIY->dataDiri->nama : '';
+                if(empty($nama)){
+                    $tendik = Tendik::find()->where(['NIY'=>$jab->NIY])->one();
+                    if(!empty($tendik)){
+                        $nama = $tendik->nama;
+                    }
+                }
         		$results[] = [
         			'id' => $jab->nIY->ID,
-        			'nama' => $jab->nIY->dataDiri->nama,
+        			'nama' => $nama,
                     'niy' => $jab->NIY,
                     'file_penugasan' => $jab->f_penugasan,
                     'tmt' => $jab->tanggal_awal,

@@ -17,28 +17,42 @@ class AppController extends Controller
     public function refreshToken()
     {
 
+        $session = Yii::$app->session;
+                
         $api_baseurl = Yii::$app->params['invoke_token_uri'];
         $client = new Client(['baseUrl' => $api_baseurl]);
         $headers = ['x-jwt-token'=>$token];
 
-        $params = [];
+        $params = [
+            'uuid' => Yii::$app->user->identity->uuid
+        ];
+        
         $response = $client->get($api_baseurl, $params,$headers)->send();
         if ($response->isOk) {
             $res = $response->data;
+
             if($res['code'] != '200')
             {
-                $session->remove('token');
-                throw new \Exception;
-                
+                return $this->redirect(Yii::$app->params['sso_login']);
+            }
+
+            else{
+                $session->set('token',$res['token']);
             }
         }
+    }
+
+    protected function handleEmptyUser()
+    {
+        return isset(Yii::$app->user->identity);
+        
     }
 
     public function beforeAction($action)
     {
         
         $session = Yii::$app->session;
-        
+
         if($session->has('token'))
         {
 
@@ -70,8 +84,8 @@ class AppController extends Controller
 
                     if($res['code'] != '200')
                     {
-                        $this->refreshToken();
                         return $this->redirect(Yii::$app->params['sso_login']);
+                        // return $this->redirect(Yii::$app->params['sso_login']);
                     }
 
                     else{

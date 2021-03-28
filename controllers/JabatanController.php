@@ -14,7 +14,7 @@ use yii\web\UploadedFile;
 /**
  * JabatanController implements the CRUD actions for Jabatan model.
  */
-class JabatanController extends Controller
+class JabatanController extends AppController
 {
     /**
      * @inheritdoc
@@ -65,6 +65,11 @@ class JabatanController extends Controller
     public function actionList()
     {
         
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
+        
         $query = Jabatan::find();
         $query->where(['NIY'=>Yii::$app->user->identity->NIY]);
         $query->joinWith(['jabatan as j']);
@@ -77,7 +82,7 @@ class JabatanController extends Controller
           $listUnker[$item->unker_id] = $item->unker->nama;
         }
 
-        $results = \app\models\MJabatan::find()->where(['NOT IN','nama',['Kepala','Dekan','Dosen','Ketua']])->all();
+        $results = \app\models\MJabatan::find()->where(['NOT IN','nama',['Kepala','Dekan','Ketua','Rektor','Wakil Rektor','Direktur']])->all();
         $listJabatan = [];
         foreach($results as $item)
         {

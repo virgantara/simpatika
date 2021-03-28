@@ -163,32 +163,34 @@ class CatatanHarianController extends Controller
         {
             $dataPost = $_POST['dataPost'];
 
-            $query = CatatanHarian::find();
-            $query->where([
-                'user_id' => $dataPost['user_id']
-            ]);
-
-            $periode = explode(' - ', $dataPost['periode']);
-            // print_r($dataPost['periode']);exit;
-            $tgl_awal = $periode[0];
-            $tgl_akhir = $periode[1];
-
-            $query->andFilterWhere(['between','tanggal',$tgl_awal,$tgl_akhir]);
-
             $results = [];
-            $list = $query->all();
-            foreach($list as $item)
+            if(!empty($dataPost['periode']))
             {
-                $results[] = [
-                    'id' => $item->id,
-                    'deskripsi' => $item->deskripsi,
-                    'tanggal' => $item->tanggal,
-                    'is_selesai' => $item->is_selesai,
-                    'poin' => $item->poin,
-                    'unsur_id' => $item->unsur_id,
-                    'unsur_nama' => $item->unsur->nama
+                $query = CatatanHarian::find();
+                $query->where([
+                    'user_id' => $dataPost['user_id']
+                ]);
+                $periode = explode(' - ', $dataPost['periode']);
+            
+                $tgl_awal = $periode[0];
+                $tgl_akhir = $periode[1];
 
-                ];
+                $query->andFilterWhere(['between','tanggal',$tgl_awal,$tgl_akhir]);
+
+                $list = $query->all();
+                foreach($list as $item)
+                {
+                    $results[] = [
+                        'id' => $item->id,
+                        'deskripsi' => $item->deskripsi,
+                        'tanggal' => $item->tanggal,
+                        'is_selesai' => $item->is_selesai,
+                        'poin' => $item->poin,
+                        'unsur_id' => $item->unsur_id,
+                        'unsur_nama' => $item->unsur->nama
+
+                    ];
+                }
             }
 
             echo json_encode($results);
@@ -215,8 +217,9 @@ class CatatanHarianController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->identity->access_role == 'Dekan' 
-            || Yii::$app->user->identity->access_role == 'Kaprodi')
+        $roles = ['Dekan','Kaprodi','Kepala','Ketua','Direktur','Rektor','Wakil Rektor'];
+        
+        if(in_array(Yii::$app->user->identity->access_role, $roles))
         {
             return $this->redirect(['list']);
         }

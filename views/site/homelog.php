@@ -14,7 +14,7 @@ $this->title = 'Lecturer Data UNIDA Gontor';
                 if(!empty($model->f_foto)){
                     echo "<img src='".$model->f_foto."' class='img-rounded pull-right' style='height:240px;'>";
                 }else{
-                    echo "<img src='".Yii::$app->view->theme->baseUrl."/assets/img/1.png'"."class='img-rounded pull-right' style='height:240px;'>";
+                    echo "<img src='".Yii::$app->view->theme->baseUrl."/assets/img/user_empty.png'"."class='img-rounded pull-right' style='height:240px;'>";
                 }
                 ?>
             

@@ -48,25 +48,25 @@ class MenuHelper
 	        ];
 
 	        $menuItems[] = [
-	    		'label' => '<i class="lnr lnr-rocket"></i><span>Penelitian</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		        'url' => '#',
-		        'submenuTemplate' => "\n<div id='pages_penelitian' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_penelitian">{label}</a>',
-		        'items'=>[
-		           	['label' => 'Usulan', 'url' => ['/lppm-penelitian/index','jenis'=>'riset']],
-	                ['label' => 'Create', 'url' => ['/lppm-penelitian/create','jenis'=>'riset']]
-		        ]
+	    		'label' => '<i class="lnr lnr-rocket"></i><span>Penelitian</span>', 
+		        'url' => ['penelitian/index'],
+		        // 'submenuTemplate' => "\n<div id='pages_penelitian' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
+		        // 'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_penelitian">{label}</a>',
+		        // 'items'=>[
+		        //    	['label' => 'Usulan', 'url' => ['/lppm-penelitian/index','jenis'=>'riset']],
+	         //        ['label' => 'Create', 'url' => ['/lppm-penelitian/create','jenis'=>'riset']]
+		        // ]
 	        ];
 
 	        $menuItems[] = [
-	    		'label' => '<i class="lnr lnr-sun"></i><span>Pengabdian</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		        'url' => '#',
-		        'submenuTemplate' => "\n<div id='pages_abdimas' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_abdimas">{label}</a>',
-		        'items'=>[
-		           	['label' => 'Usulan', 'url' => ['/lppm-penelitian/index','jenis'=>'abdimas']],
-	                ['label' => 'Create', 'url' => ['/lppm-penelitian/create','jenis'=>'abdimas']]
-		        ]
+	    		'label' => '<i class="lnr lnr-sun"></i><span>Pengabdian</span>', 
+		        'url' => ['pengabdian/index'],
+		        // 'submenuTemplate' => "\n<div id='pages_abdimas' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
+		        // 'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_abdimas">{label}</a>',
+		        // 'items'=>[
+		        //    	['label' => 'Usulan', 'url' => ['/lppm-penelitian/index','jenis'=>'abdimas']],
+	         //        ['label' => 'Create', 'url' => ['/lppm-penelitian/create','jenis'=>'abdimas']]
+		        // ]
 	        ];
 
 	        $menuItems[] = [

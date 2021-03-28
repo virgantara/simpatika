@@ -25,7 +25,7 @@ $this->title = 'Jabatan Dalam Institusi';
             </div>
 
             <div class="panel-body">
-                <div class="table-responsive">
+                
                     <form>
                       <div class="form-group">
                         <label class="control-label">Unit Kerja</label>
@@ -35,7 +35,7 @@ $this->title = 'Jabatan Dalam Institusi';
                       </div>
            
                     </form>
-
+                    <div class="table-responsive">
                     <table class="table table-striped" id="table-user">
                         <thead>
                             <tr>
@@ -45,12 +45,14 @@ $this->title = 'Jabatan Dalam Institusi';
                                 <th>Jabatan</th>
                                 <th>TMT</th>
                                 <th>Bukti Penugasan</th>
+                                <th>Option</th>
                             </tr>
                         </thead>
                         <tbody>
                           
                         </tbody>
                     </table>
+                    </div>
                     <div class="row" id="modal" style="display: none" >
                         <div class="col-md-12">
                     <form>
@@ -86,7 +88,7 @@ $this->title = 'Jabatan Dalam Institusi';
                 </div>
                     </div>
                     <a href="#" class="btn btn-primary" id="btn-add-pegawai"><i class="fa fa-plus"></i> Tambah Anggota</a>
-                </div>
+                
             </div>
         </div>
 
@@ -99,13 +101,69 @@ $this->title = 'Jabatan Dalam Institusi';
 
 $this->registerJs(' 
 
-$(document).on("click","#btn-add-pegawai",function(){
-
+$(document).on("click","#btn-add-pegawai",function(e){
+  e.preventDefault();
   $("#modal").show();
 }); 
 
-$(document).on("click","#btn-save-pegawai",function(){
 
+$(document).on("click",".btn-remove",function(e){
+  e.preventDefault();
+
+  Swal.fire({
+    title: \'Apakah Anda yakin?\',
+    text: "Data ini akan dihapus",
+    icon: \'warning\',
+    showCancelButton: true,
+    confirmButtonColor: \'#3085d6\',
+    cancelButtonColor: \'#d33\',
+    confirmButtonText: \'Ya, hapus sekarang!\'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let obj = new Object;
+      obj.id = $(this).data(\'item\');
+      $.ajax({
+        url: "'.Url::to(["unit-kerja/ajax-remove-anggota"]).'",
+        type: "POST",
+        data: {
+            dataPost: obj,
+            
+        },
+        success: function (data) {
+            $("#modal").hide();
+            let hasil = $.parseJSON(data)
+            if(hasil.code == 200)
+            {
+              Swal.fire({
+                title: \'Yeay!\',
+                icon: \'success\',
+                text: hasil.message
+              }).then((result) => {
+                if (result.value) {
+                  $("#unker_id").trigger("change");
+                }
+              });
+            }
+
+            else{
+                Swal.fire({
+                    title: \'Oops!\',
+                    icon: \'error\',
+                    text: hasil.message
+                }); 
+                console.log(hasil.message);
+            }
+        }
+      })
+     
+    }
+  })
+
+  
+}); 
+
+$(document).on("click","#btn-save-pegawai",function(e){
+  e.preventDefault();
   let obj = new Object;
   obj.unker_id = $("#unit_kerja_id").val();
   obj.user_id = $("#user_id").val();
@@ -189,6 +247,7 @@ $(document).on("change","#unker_id",function(){
           row += "<td>"+obj.jabatan+"</td>";
           row += "<td>"+obj.tmt+"</td>";
           row += "<td><a class=\'btn btn-primary\' target=\'_blank\' href=\'"+obj.file_penugasan+"\'>File Penugasan</a></td>";
+          row += "<td><a data-item=\'"+obj.id+"\' class=\'btn-remove btn btn-danger\' href=\'#\'><i class=\'fa fa-trash\'></i> Remove</a></td>";
           row += "</tr>";
         });
 

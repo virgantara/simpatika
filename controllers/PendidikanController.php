@@ -14,7 +14,7 @@ use yii\web\UploadedFile;
 /**
  * PendidikanController implements the CRUD actions for Pendidikan model.
  */
-class PendidikanController extends Controller
+class PendidikanController extends AppController
 {
     /**
      * @inheritdoc
@@ -69,6 +69,10 @@ class PendidikanController extends Controller
      */
     public function actionCreate()
     {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
         $model = new Pendidikan();
 
         $connection = \Yii::$app->db;
@@ -129,6 +133,10 @@ class PendidikanController extends Controller
      */
     public function actionUpdate($id)
     {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
         $model = $this->findModel($id);
         
         
