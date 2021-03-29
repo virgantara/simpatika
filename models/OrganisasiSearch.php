@@ -42,6 +42,8 @@ class OrganisasiSearch extends Organisasi
     public function search($params)
     {
         $query = Organisasi::find();
+        $query->alias('p');
+        $query->where(['p.NIY' => Yii::$app->user->identity->NIY]);
 
         // add conditions that should always apply here
 
