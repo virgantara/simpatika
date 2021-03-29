@@ -25,7 +25,7 @@ use yii\httpclient\Client;
 /**
  * Site controller
  */
-class SiteController extends AppController
+class SiteController extends Controller
 {
     public $successUrl = '';
     /**
