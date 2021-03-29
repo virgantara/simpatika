@@ -32,7 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'options' => [
             'id' => 'form_validation',
         ]
-    ]); ?>
+    ]); 
+    foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
+      echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';
+    }
+    ?>
 
         <div class="form-group form-float">
             <div class="form-line">

@@ -195,9 +195,15 @@ class UnitKerjaController extends \yii\web\Controller
         {
         	$dataPost = $_POST['dataPost'];
 
-        	$listJabatan = Jabatan::find()->where([
-        		'unker_id' => $dataPost['unker_id']
-        	])->all();
+        	$query = Jabatan::find()->where([
+                'unker_id' => $dataPost['unker_id']
+            ]);
+
+            // $query->joinWith([]);
+
+            $query->andWhere(['<>','NIY',Yii::$app->user->identity->NIY]);
+
+            $listJabatan = $query->all();
 
         	$results = [];
 

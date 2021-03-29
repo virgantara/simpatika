@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\Jabatan */
 Yii::$app->setHomeUrl(['/site/homelog']);
-$this->title = $model->ID;
+$this->title = $model->jabatan->nama.' '.$model->unker->nama;
 $this->params['breadcrumbs'][] = ['label' => 'Jabatan', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -28,30 +28,50 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'ID',
             'NIY',
-            'jabatan',
-            'institusi',
-            'tahun_awal',
-            'tahun_akhir',
+            [
+                'attribute'=>'nama',
+                'value'=>function($data){
+                    return $data->nIY->dataDiri->nama;
+                }
+            ],
+          
+            [
+                'attribute'=>'jabatan_id',
+                'value'=>function($data){
+                    return $data->jabatan->nama;
+                }
+                
+            ],
+             [
+                'attribute'=>'unker_id',
+                'value'=>function($data){
+                    return $data->unker->nama;
+                }
+            ],
+            'tanggal_awal',
+            'tanggal_akhir',
+//            'f_penugasan',
+            // 'update_at',
             [
                 'attribute'=>'f_penugasan',
                 'format'=>'raw',
                 'value' => function($data){
-            if(!empty($data->f_penugasan)){
-            return
-            Html::a('View', ['jabatan/display', 'id' => $data->ID],['class' => 'btn btn-warning']).'&nbsp;&nbsp;'.
-            Html::a('Download', ['jabatan/download', 'id' => $data->ID],['class' => 'btn btn-primary']);
-            }
-            else
-            {
-            return
-            "<p class='btn btn-danger' align='center'>No File</p>";
-            }
-            }
+                    if(!empty($data->f_penugasan)){
+                        return Html::a('View', ['jabatan/display', 'id' => $data->ID],[
+                        'class' => 'btn btn-warning','target'=>'_blank','data-pjax' => 0]);
+                    }
+                    else
+                    {
+                        return "<p class='btn btn-danger' align='center'>No File</p>";
+                    }
+                }
             ],
-            'update_at',
-            'ver',
+            [
+                'attribute' => 'ver',
+                'format' => 'raw',
+                'filter' => ['Belum Diverifikasi' => 'Belum Diverivikasi', 'Sudah Diverifikasi' => 'Sudah Diverifikasi','Ditolak' => 'Ditolak']
+            ],
         ],
     ]) ?>
 

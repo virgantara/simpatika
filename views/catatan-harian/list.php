@@ -113,7 +113,7 @@ $(document).on("change","#unker_id",function(){
     success: function (data) {
         let hasil = $.parseJSON(data)
         var row = "";
-
+        $("#pegawai_id").empty()
         $(hasil).each(function(i,obj){
           row += "<option value=\'"+obj.id+"\'>"+obj.nama+"</option>";
         });

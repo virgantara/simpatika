@@ -29,11 +29,12 @@ class MenuHelper
 		        'url' => ['catatan-harian/index'],
 	        ];
 
-	      //   $menuItems[] = [
-	    		// 'template' => '<a href="{url}">{label}</a>',
-		     //    'label' => '<i class="lnr lnr-book"></i><span>Unit Kerja</span>', 
-		     //    'url' => ['jabatan/list'],
-	      //   ];
+	        $menuItems[] = [
+	    		'template' => '<a href="{url}">{label}</a>',
+		        'label' => '<i class="lnr lnr-book"></i><span>Unit Kerja</span>', 
+		        'url' => ['jabatan/list'],
+		        'visible' => Yii::$app->user->can('pimpinan')
+	        ];
 
 		    $menuItems[] = [
 	    		'template' => '<a href="{url}">{label}</a>',
