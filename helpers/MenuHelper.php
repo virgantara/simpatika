@@ -120,16 +120,16 @@ class MenuHelper
 		        ]
 	        ];
 
-	        $menuItems[] = [
-	    		'label' => '<i class="lnr lnr-list"></i><span>Assignment</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		        'url' => '#',
-		        'submenuTemplate' => "\n<div id='pages_assign' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_assign">{label}</a>',
-		        'items'=>[
-		           	['label' => 'Assignment', 'url' => ['/assign/index']],
-	                ['label' => 'Files', 'url' => ['/assignment/index']],   
-		        ]
-	        ];
+	      //   $menuItems[] = [
+	    		// 'label' => '<i class="lnr lnr-list"></i><span>Assignment</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
+		     //    'url' => '#',
+		     //    'submenuTemplate' => "\n<div id='pages_assign' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
+		     //    'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_assign">{label}</a>',
+		     //    'items'=>[
+		     //       	['label' => 'Assignment', 'url' => ['/assign/index']],
+	      //           ['label' => 'Files', 'url' => ['/assignment/index']],   
+		     //    ]
+	      //   ];
 
 	      //   $menuItems[] = [
 	    		// 'label' => '<i class="lnr lnr-users"></i><span>Account</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
