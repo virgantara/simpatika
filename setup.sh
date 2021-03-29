@@ -9,3 +9,4 @@ if [ ! -f config/params-local.php ]; then
 fi
 
 chown -R www-data:www-data web/assets
+chown -R www-data:www-data runtime
