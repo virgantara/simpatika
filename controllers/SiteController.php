@@ -356,15 +356,15 @@ class SiteController extends Controller
     {
             
         return $this->render('index',[
-            'dataProvider1'=>$dataProvider1,
-            'dataProvider2'=>$dataProvider2,
-            'dataProvider3'=>$dataProvider3,
-            'userTotal'=>$userTotal,
-            'penelitianTotal'=>$penelitianTotal,
-            'pengabdianTotal'=>$pengabdianTotal,
-            'penghargaanTotal'=>$penghargaanTotal,
-            'model'=>$model,
-            'dataTable' => $dataTable
+            // 'dataProvider1'=>$dataProvider1,
+            // 'dataProvider2'=>$dataProvider2,
+            // 'dataProvider3'=>$dataProvider3,
+            // 'userTotal'=>$userTotal,
+            // 'penelitianTotal'=>$penelitianTotal,
+            // 'pengabdianTotal'=>$pengabdianTotal,
+            // 'penghargaanTotal'=>$penghargaanTotal,
+            // 'model'=>$model,
+            // 'dataTable' => $dataTable
         ]);
         
     }
