@@ -93,40 +93,40 @@ class PengajaranController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-      $model = new Pengajaran();
-      $tambah = new Verify();
+    // public function actionCreate()
+    // {
+    //   $model = new Pengajaran();
+    //   $tambah = new Verify();
 
-      if ($model->load(Yii::$app->request->post())) {
-        $model->NIY = Yii::$app->user->identity->NIY;
-        $tambah->NIY = Yii::$app->user->identity->NIY;
-        $tambah->kategori = 12;
-        $tambah->ver = 'Belum Diverifikasi';
-        $f_penugasan =UploadedFile::getInstance($model,'f_penugasan');
-        if(!empty($f_penugasan)){
-          $NameImage = $model->institusi.'-'.$model->jurusan.'-'.$model->tahun_awal.'-'.date('Ymd').'.'.$f_penugasan->extension;
-          $model->f_penugasan = $NameImage;
-            $model->ver = 'Sudah Diverifikasi'; // by pass only
-            if($model->save()){
-              if(!file_exists(Yii::getAlias('@frontend').'/web/uploads/pengajaran'))
-                mkdir(Yii::getAlias('@frontend').'/web/uploads/pengajaran');
+    //   if ($model->load(Yii::$app->request->post())) {
+    //     $model->NIY = Yii::$app->user->identity->NIY;
+    //     $tambah->NIY = Yii::$app->user->identity->NIY;
+    //     $tambah->kategori = 12;
+    //     $tambah->ver = 'Belum Diverifikasi';
+    //     $f_penugasan =UploadedFile::getInstance($model,'f_penugasan');
+    //     if(!empty($f_penugasan)){
+    //       $NameImage = $model->institusi.'-'.$model->jurusan.'-'.$model->tahun_awal.'-'.date('Ymd').'.'.$f_penugasan->extension;
+    //       $model->f_penugasan = $NameImage;
+    //         $model->ver = 'Sudah Diverifikasi'; // by pass only
+    //         if($model->save()){
+    //           if(!file_exists(Yii::getAlias('@frontend').'/web/uploads/pengajaran'))
+    //             mkdir(Yii::getAlias('@frontend').'/web/uploads/pengajaran');
 
-              $f_penugasan -> saveAs(Yii::getAlias('@frontend').'/web/uploads/pengajaran/'.$NameImage);
-              $tambah->ID_data = $model->ID;
-              $tambah->save();
-              return $this->redirect(['view', 'id' => $model->ID]); 
-            }}
-            $model->save();
-            $tambah->ID_data = $model->ID;
-            $tambah->save();
-            return $this->redirect(['view', 'id' => $model->ID]);   
-          } else {
-            return $this->render('create', [
-              'model' => $model,
-            ]);
-          }
-        }
+    //           $f_penugasan -> saveAs(Yii::getAlias('@frontend').'/web/uploads/pengajaran/'.$NameImage);
+    //           $tambah->ID_data = $model->ID;
+    //           $tambah->save();
+    //           return $this->redirect(['view', 'id' => $model->ID]); 
+    //         }}
+    //         $model->save();
+    //         $tambah->ID_data = $model->ID;
+    //         $tambah->save();
+    //         return $this->redirect(['view', 'id' => $model->ID]);   
+    //       } else {
+    //         return $this->render('create', [
+    //           'model' => $model,
+    //         ]);
+    //       }
+    // }
 
     /**
      * Updates an existing Pengajaran model.
@@ -245,28 +245,28 @@ class PengajaranController extends Controller
       }
     }
     
-    public function actionDownload($id) 
-    { 
-      $download = Pengajaran::findOne($id); 
-      $path=Yii::getAlias('@webroot').'/uploads/pengajaran/'.$download->f_penugasan;
-      if (file_exists($path)) {
-        echo 'sukese';
-        return Yii::$app->response->sendFile($path);
-      }else{
-        echo 'file not exists...';
-      }
-    }
+    // public function actionDownload($id) 
+    // { 
+    //   $download = Pengajaran::findOne($id); 
+    //   $path=Yii::getAlias('@webroot').'/uploads/pengajaran/'.$download->f_penugasan;
+    //   if (file_exists($path)) {
+    //     echo 'sukese';
+    //     return Yii::$app->response->sendFile($path);
+    //   }else{
+    //     echo 'file not exists...';
+    //   }
+    // }
     
-    public function actionDisplay($id) 
-    { 
-      $download = Pengajaran::findOne($id); 
-      $path=Yii::getAlias('@webroot').'/uploads/pengajaran/'.$download->f_penugasan;
-      if (file_exists($path)) {
-        echo 'sukese';
-        return Yii::$app->response->sendFile($path,$download->f_penugasan,['inline'=>true]);
-      }else{
-        echo 'file not exists...';
-      }
-    }
+    // public function actionDisplay($id) 
+    // { 
+    //   $download = Pengajaran::findOne($id); 
+    //   $path=Yii::getAlias('@webroot').'/uploads/pengajaran/'.$download->f_penugasan;
+    //   if (file_exists($path)) {
+    //     echo 'sukese';
+    //     return Yii::$app->response->sendFile($path,$download->f_penugasan,['inline'=>true]);
+    //   }else{
+    //     echo 'file not exists...';
+    //   }
+    // }
     
   }
