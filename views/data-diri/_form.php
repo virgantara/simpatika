@@ -131,6 +131,10 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
             </div>
         </div>
     </div>
+    <?php 
+    if(!empty($results))
+    {
+    ?>
     <div class="col-md-6">
         <div class="row">
             <div class="col-md-12">
@@ -309,6 +313,9 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
             </div>
         </div>
     </div>
+    <?php 
+    }
+    ?>
 </div>
 
 
