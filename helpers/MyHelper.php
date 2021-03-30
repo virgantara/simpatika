@@ -18,8 +18,8 @@ class MyHelper
             $accessToken = json_decode(file_get_contents($tokenPath), true);
             $sisterToken = $accessToken['id_token'];
             $created_at = $accessToken['created_at'];
-            $date     = new DateTime(date('Y-m-d H:i:s', strtotime($created_at)));
-			$current  = new DateTime(date('Y-m-d H:i:s'));
+            $date     = new \DateTime(date('Y-m-d H:i:s', strtotime($created_at)));
+			$current  = new \DateTime(date('Y-m-d H:i:s'));
 			$interval = $date->diff($current);
 			$inv = $interval->format('%I');
 

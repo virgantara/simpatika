@@ -114,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="col-lg-9">
-                <?=\app\helpers\MyHelper::convertTanggalIndo($results->tanggal_terbit);?>
+                <?=!empty($results->tanggal_terbit) ? \app\helpers\MyHelper::convertTanggalIndo($results->tanggal_terbit) : '-';?>
                 </div></td>
 
                 </tr>
