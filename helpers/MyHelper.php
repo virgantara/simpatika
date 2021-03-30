@@ -13,21 +13,43 @@ class MyHelper
 	{
 		$tokenPath = Yii::getAlias('@webroot').'/credentials/sister_token.json';
         $sisterToken = '';
-        // if (file_exists($tokenPath)) {
-        //     $accessToken = json_decode(file_get_contents($tokenPath), true);
-        //     $sisterToken = $accessToken['id_token'];
-        // }
 
-        // else{
-        if(!MyHelper::wsSisterLogin()){
-            throw new \Exception("Error Creating SISTER Token", 1);
-        }
-
-        else {
+        if (file_exists($tokenPath)) {
             $accessToken = json_decode(file_get_contents($tokenPath), true);
             $sisterToken = $accessToken['id_token'];
+            $created_at = $accessToken['created_at'];
+            $date     = new DateTime(date('Y-m-d H:i:s', strtotime($created_at)));
+			$current  = new DateTime(date('Y-m-d H:i:s'));
+			$interval = $date->diff($current);
+			$inv = $interval->format('%I');
+
+			if($inv > 5){
+				if(!MyHelper::wsSisterLogin()){
+		            throw new \Exception("Error Creating SISTER Token", 1);
+		        }
+
+		        else {
+		            $accessToken = json_decode(file_get_contents($tokenPath), true);
+		            $sisterToken = $accessToken['id_token'];
+		        }
+			}
+
+			else{
+				$accessToken = json_decode(file_get_contents($tokenPath), true);
+		        $sisterToken = $accessToken['id_token'];
+			}
         }
-        // }
+
+        else{
+	        if(!MyHelper::wsSisterLogin()){
+	            throw new \Exception("Error Creating SISTER Token", 1);
+	        }
+
+	        else {
+	            $accessToken = json_decode(file_get_contents($tokenPath), true);
+	            $sisterToken = $accessToken['id_token'];
+	        }
+        }
 
         return $sisterToken;
 	}
@@ -59,15 +81,19 @@ class MyHelper
         $id_token = '';
         if($response->error_code == 0)
         {
-        	$data = ['id_token' => $response->data->id_token];
+        	$data = [
+        		'id_token' => $response->data->id_token,
+        		'created_at' => date('Y-m-d H:i:s')
+        	];
+
         	$tokenPath = Yii::getAlias('@webroot').'/credentials/sister_token.json';
-	        if (file_exists($tokenPath)) {
-	            $sisterToken = json_decode(file_get_contents($tokenPath), true);
-	        }
-	        // print_r(Url::base(''));exit;
-        	// if (!file_exists(dirname($tokenPath))) {
-         //        mkdir(dirname($tokenPath), 0700, true);
-         //    }
+	        // if (file_exists($tokenPath)) {
+	        //     $sisterToken = json_decode(file_get_contents($tokenPath), true);
+	        // }
+	        // // print_r(Url::base(''));exit;
+        	// // if (!file_exists(dirname($tokenPath))) {
+         // //        mkdir(dirname($tokenPath), 0700, true);
+         // //    }
             
             file_put_contents($tokenPath, json_encode($data));
         	return true;
