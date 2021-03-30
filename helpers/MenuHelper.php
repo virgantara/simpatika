@@ -88,7 +88,7 @@ class MenuHelper
 		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_penelitian">{label}</a>',
 		        'items'=>[
 		           	['label' => 'Penelitian', 'url' => ['/penelitian/index']],
-		           	['label' => 'Publikasi karya', 'url' => ['/luaran/index']],
+		           	['label' => 'Publikasi karya', 'url' => ['/publikasi/index']],
 		           	['label' => 'Paten/HKI', 'url' => ['/hki/index']],
 		           	
 		        ]
@@ -136,16 +136,15 @@ class MenuHelper
 		        ]
 	        ];
 
-	      //   $menuItems[] = [
-	    		// 'label' => '<i class="lnr lnr-list"></i><span>Assignment</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		     //    'url' => '#',
-		     //    'submenuTemplate' => "\n<div id='pages_assign' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		     //    'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_assign">{label}</a>',
-		     //    'items'=>[
-		     //       	['label' => 'Assignment', 'url' => ['/assign/index']],
-	      //           ['label' => 'Files', 'url' => ['/assignment/index']],   
-		     //    ]
-	      //   ];
+	        $menuItems[] = [
+	    		'label' => '<i class="lnr lnr-list"></i><span>Layanan BKD</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
+		        'url' => '#',
+		        'submenuTemplate' => "\n<div id='pages_bkd' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
+		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_bkd">{label}</a>',
+		        'items'=>[
+		           	['label' => 'Klaim Kegiatan', 'url' => ['/bkd/klaim']],   
+		        ]
+	        ];
 
 	      //   $menuItems[] = [
 	    		// 'label' => '<i class="lnr lnr-users"></i><span>Account</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 

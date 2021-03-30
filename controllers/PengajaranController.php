@@ -32,6 +32,8 @@ class PengajaranController extends Controller
       ];
     }
 
+    
+
     public function actionAjaxJadwal()
     {
         $api_baseurl = Yii::$app->params['api_baseurl'];
@@ -59,6 +61,27 @@ class PengajaranController extends Controller
         echo \yii\helpers\Json::encode($results);
         die();
     }
+
+    public function actionAjaxLocalJadwal()
+    {
+        $dataPost = $_POST['dataPost'];
+        $query = Pengajaran::find();
+        $query->where([
+          'NIY' => Yii::$app->user->identity->NIY,
+          'tahun_akademik' => $dataPost['tahun']
+        ]);
+
+        $results = $query->asArray()->all();
+        // $results = [];
+
+
+
+        // }
+
+        echo \yii\helpers\Json::encode($results);
+        die();
+    }
+
 
     /**
      * Lists all Pengajaran models.

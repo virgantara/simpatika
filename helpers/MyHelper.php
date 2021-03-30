@@ -13,21 +13,21 @@ class MyHelper
 	{
 		$tokenPath = Yii::getAlias('@webroot').'/credentials/sister_token.json';
         $sisterToken = '';
-        if (file_exists($tokenPath)) {
+        // if (file_exists($tokenPath)) {
+        //     $accessToken = json_decode(file_get_contents($tokenPath), true);
+        //     $sisterToken = $accessToken['id_token'];
+        // }
+
+        // else{
+        if(!MyHelper::wsSisterLogin()){
+            throw new \Exception("Error Creating SISTER Token", 1);
+        }
+
+        else {
             $accessToken = json_decode(file_get_contents($tokenPath), true);
             $sisterToken = $accessToken['id_token'];
         }
-
-        else{
-            if(!MyHelper::wsSisterLogin()){
-                throw new \Exception("Error Creating SISTER Token", 1);
-            }
-
-            else {
-                $accessToken = json_decode(file_get_contents($tokenPath), true);
-                $sisterToken = $accessToken['id_token'];
-            }
-        }
+        // }
 
         return $sisterToken;
 	}
