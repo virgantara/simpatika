@@ -230,8 +230,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <tbody>
                 <?php 
-                foreach($results->data_penulis as $q=>$author)
+                if(!empty($results->data_penulis))
                 {
+                    foreach($results->data_penulis as $q=>$author)
+                    {
 
                 ?>
                 <tr>
@@ -244,6 +246,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 </tr>
                 <?php 
+                    }
                 }
                 ?>
                 </tbody>
@@ -276,8 +279,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 <tbody>
 
                 <?php 
-                foreach($results->files as $q=>$file)
+                if(!empty($results->files))
                 {
+                    foreach($results->files as $q=>$file)
+                    {
 
                 
                 ?>
@@ -292,6 +297,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <td></td>
                 </tr>
                 <?php 
+                    }
                 }
                 ?>
                 </tbody>
