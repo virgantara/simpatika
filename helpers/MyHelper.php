@@ -9,6 +9,77 @@ use Yii;
 class MyHelper
 {	
 
+	public static function getSisterToken()
+	{
+		$tokenPath = Yii::getAlias('@webroot').'/credentials/sister_token.json';
+        $sisterToken = '';
+        if (file_exists($tokenPath)) {
+            $accessToken = json_decode(file_get_contents($tokenPath), true);
+            $sisterToken = $accessToken['id_token'];
+        }
+
+        else{
+            if(!MyHelper::wsSisterLogin()){
+                throw new \Exception("Error Creating SISTER Token", 1);
+            }
+
+            else {
+                $accessToken = json_decode(file_get_contents($tokenPath), true);
+                $sisterToken = $accessToken['id_token'];
+            }
+        }
+
+        return $sisterToken;
+	}
+
+	public static function wsSisterLogin()
+	{
+		$sister_baseurl = Yii::$app->params['sister_baseurl'];
+        $sister_id_pengguna = Yii::$app->params['sister_id_pengguna'];
+        $sister_username = Yii::$app->params['sister_username'];
+        $sister_password = Yii::$app->params['sister_password'];
+        $headers = ['content-type' => 'application/json'];
+        $client = new \GuzzleHttp\Client([
+            'timeout'  => 5.0,
+            'headers' => $headers,
+            // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
+        ]);
+        $full_url = $sister_baseurl.'/Login';
+        $response = $client->post($full_url, [
+            'body' => json_encode([
+                'username' => $sister_username,
+                'password' => $sister_password,
+                'id_pengguna' => $sister_id_pengguna
+            ]), 
+            'headers' => ['Content-type' => 'application/json']
+
+        ]); 
+        
+        $response = json_decode($response->getBody());
+        $id_token = '';
+        if($response->error_code == 0)
+        {
+        	$data = ['id_token' => $response->data->id_token];
+        	$tokenPath = Yii::getAlias('@webroot').'/credentials/sister_token.json';
+	        if (file_exists($tokenPath)) {
+	            $sisterToken = json_decode(file_get_contents($tokenPath), true);
+	        }
+	        // print_r(Url::base(''));exit;
+        	// if (!file_exists(dirname($tokenPath))) {
+         //        mkdir(dirname($tokenPath), 0700, true);
+         //    }
+            
+            file_put_contents($tokenPath, json_encode($data));
+        	return true;
+        }
+
+        else
+        {
+        	print_r($response);exit;
+        	return false;
+        }
+	}
+
 	public static function gen_uuid() {
 	    return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
 	        // 32 bits for "time_low"

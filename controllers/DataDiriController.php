@@ -3,7 +3,9 @@
 namespace app\controllers;
 
 use Yii;
+use app\helpers\MyHelper;
 use app\models\Prodi;
+use app\models\User;
 use app\models\MJenjangPendidikan;
 use app\models\BidangKepakaran;
 use app\models\BidangIlmu;
@@ -19,7 +21,7 @@ use yii\httpclient\Client;
 /**
  * DataDiriController implements the CRUD actions for DataDiri model.
  */
-class DataDiriController extends Controller
+class DataDiriController extends AppController
 {
     /**
      * @inheritdoc
@@ -34,6 +36,57 @@ class DataDiriController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionInpassing()
+    {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
+
+        $user = User::findOne(Yii::$app->user->identity->ID);
+        $sisterToken = MyHelper::getSisterToken();
+            
+        $sister_baseurl = Yii::$app->params['sister_baseurl'];
+        $headers = ['content-type' => 'application/json'];
+        $client = new \GuzzleHttp\Client([
+            'timeout'  => 5.0,
+            'headers' => $headers,
+            // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
+        ]);
+        $full_url = $sister_baseurl.'/Inpassing';
+        $response = $client->post($full_url, [
+            'body' => json_encode([
+                'id_token' => $sisterToken,
+                'id_dosen' => $user->sister_id,
+                'updated_after' => [
+                    'tahun' => '2000',
+                    'bulan' => '01',
+                    'tanggal' => '01'
+                ]
+            ]), 
+            'headers' => ['Content-type' => 'application/json']
+
+        ]); 
+        
+        $results = [];
+       
+        $response = json_decode($response->getBody());
+        if($response->error_code == 0){
+            $results = $response->data;
+        }
+
+        else if($response->error_code == 100){
+            if(!MyHelper::wsSisterLogin()){
+                throw new \Exception("Error Creating SISTER Token", 1);
+                
+            }
+        }
+
+        return $this->render('inpassing',[
+            'results' => $results
+        ]);
     }
 
     public function actionList($jenjang, $pangkat)
@@ -143,7 +196,42 @@ class DataDiriController extends Controller
         $s3config = Yii::$app->params['s3'];
 
         $s3 = new \Aws\S3\S3Client($s3config);
+        $results = [];
+        if(!$model->isNewRecord)
+        {
+            $user = $model->nIY;
+            $sisterToken = MyHelper::getSisterToken();
+            
+            $sister_baseurl = Yii::$app->params['sister_baseurl'];
+            $headers = ['content-type' => 'application/json'];
+            $client = new \GuzzleHttp\Client([
+                'timeout'  => 5.0,
+                'headers' => $headers,
+                // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
+            ]);
+            $full_url = $sister_baseurl.'/Dosen/detail';
+            $response = $client->post($full_url, [
+                'body' => json_encode([
+                    'id_token' => $sisterToken,
+                    'id_dosen' => $user->sister_id
+                ]), 
+                'headers' => ['Content-type' => 'application/json']
 
+            ]); 
+            
+           
+            $response = json_decode($response->getBody());
+            if($response->error_code == 0){
+                $results = $response->data;
+            }
+
+            else if($response->error_code == 100){
+                if(!MyHelper::wsSisterLogin()){
+                    throw new \Exception("Error Creating SISTER Token", 1);
+                    
+                }
+            }
+        }
         if ($model->load(Yii::$app->request->post())) 
         {
             $connection = \Yii::$app->db;
@@ -259,6 +347,7 @@ class DataDiriController extends Controller
                 Yii::$app->getSession()->setFlash('danger',$errors);
                 return $this->render('create', [
                     'model' => $model,
+                    'results' => $results,
                     'listBidangIlmu' => $listBidangIlmu,
                     'listKepakaran' => $listKepakaran,
                     'listKampus' => $listKampus
@@ -267,6 +356,7 @@ class DataDiriController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'results' => $results,
                 'listBidangIlmu' => $listBidangIlmu,
                 'listKepakaran' => $listKepakaran,
                 'listKampus' => $listKampus

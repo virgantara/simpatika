@@ -4,6 +4,10 @@ return [
 
    'api_baseurl' => 'http://localhost:1926',
    'sso_url' => 'http://local.sso.com:30101',
+   'sister_baseurl' => 'http://sister.unida.gontor.ac.id/api.php/0.1',
+   'sister_id_pengguna' => '',
+   'sister_username' => '',
+   'sister_password' => '',
    'consumer_secret' => 'siakad1',
    'consumer_id' => 'siakadunida11111',
    'crypt_algo' => 'aes-256-ctr',

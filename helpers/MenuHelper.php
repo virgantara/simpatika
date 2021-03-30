@@ -20,8 +20,23 @@ class MenuHelper
 			$menuItems[] = [
 		     	'template' => '<a href="{url}">{label}</a>',
 		        'label' => '<i class="lnr lnr-home"></i><span>Dashboard</span>', 
-		        'url' => ['site/homelog'],
+		        'url' => ['site/index'],
 		    ];
+
+		    $menuItems[] = [
+	    		'template' => '<a href="{url}">{label}</a>',
+		        'label' => '<i class="lnr lnr-user"></i><span>Profil</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
+		        'url' => '#',
+		        'submenuTemplate' => "\n<div id='pages_profil' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
+		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_profil">{label}</a>',
+		        'items'=>[
+		           	['label' => 'Data Pribadi', 'url' => ['/data-diri/create']],
+	                ['label' => 'Inpassing', 'url' => ['/data-diri/inpassing']],
+	                ['label' => 'Jabatan Fungsional', 'url' => ['/data-diri/jabfung']],
+	                ['label' => 'Kepangkatan', 'url' => ['/data-diri/pangkat']],
+	                ['label' => 'Penempatan', 'url' => ['/data-diri/penempatan']],
+		        ]
+	        ];
 
 		    $menuItems[] = [
 	    		'template' => '<a href="{url}">{label}</a>',
