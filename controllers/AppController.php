@@ -50,10 +50,7 @@ class AppController extends Controller
 
     public function beforeAction($action)
     {
-        if(!$this::handleEmptyUser())
-        {
-            return $this->redirect(Yii::$app->params['sso_login']);
-        }
+        
         $session = Yii::$app->session;
 
         if($session->has('token'))
