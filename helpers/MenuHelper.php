@@ -142,7 +142,8 @@ class MenuHelper
 		        'submenuTemplate' => "\n<div id='pages_bkd' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
 		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_bkd">{label}</a>',
 		        'items'=>[
-		           	['label' => 'Klaim Kegiatan', 'url' => ['/bkd/klaim']],   
+		           	['label' => 'Klaim Kegiatan', 'url' => ['/bkd/klaim']],
+		           	['label' => 'BKD Saya', 'url' => ['/bkd/index']],   
 		        ]
 	        ];
 

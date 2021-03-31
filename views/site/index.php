@@ -7,6 +7,7 @@ use yii\helpers\Html;
 $this->title = 'UNIDA Gontor Lecturer Data';
 ?>
 <h1>Progres Anda Semester ini (<?=$tahun_akademik['nama_tahun'];?>)</h1>
+<h3>Tanggal <?=\app\helpers\MyHelper::convertTanggalIndo($tahun_akademik['kuliah_mulai']);?> sampai dengan <?=\app\helpers\MyHelper::convertTanggalIndo($tahun_akademik['nilai_selesai']);?></h3>
 <div class="row">
     <div class="col-md-12">	
         <div class="panel">

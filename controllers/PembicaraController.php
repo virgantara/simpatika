@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\PembicaraFiles;
-use app\models\PembicaraFilesSearch;
+use app\models\SisterFiles;
+use app\models\SisterFilesSearch;
 use app\models\Pembicara;
 use app\models\PembicaraSearch;
 use yii\web\Controller;
@@ -122,12 +122,12 @@ class PembicaraController extends AppController
                             {
                                 foreach($results->files as $file)
                                 {
-                                    $pf = PembicaraFiles::findOne($file->id_dokumen);
+                                    $pf = SisterFiles::findOne($file->id_dokumen);
                                     if(empty($pf))
-                                        $pf = new PembicaraFiles;
+                                        $pf = new SisterFiles;
 
                                     $pf->id_dokumen = $file->id_dokumen;
-                                    $pf->pembicara_id = $model->id;
+                                    $pf->parent_id = $item->id_riwayat_pembicara_orasi;
                                     $pf->nama_dokumen = $file->nama_dokumen;
                                     $pf->nama_file = $file->nama_file;
                                     $pf->jenis_file = $file->jenis_file;
@@ -206,8 +206,8 @@ class PembicaraController extends AppController
             return $this->redirect(Yii::$app->params['sso_login']);
         }
 
-        $searchModel = new PembicaraFilesSearch();
-        $searchModel->pembicara_id = $model->id;
+        $searchModel = new SisterFilesSearch();
+        $searchModel->parent_id = $model->sister_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('view', [

@@ -395,7 +395,10 @@ class SiteController extends AppController
 
         $query = Publikasi::find()->where([
             'NIY' => Yii::$app->user->identity->NIY,
+            'is_claimed' => 1,
         ]);
+
+        $query->andWhere(['not',['kegiatan_id' => null]]);
 
         $sd = $tahun_akademik['kuliah_mulai'];
         $ed = $tahun_akademik['nilai_selesai'];

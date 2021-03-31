@@ -21,9 +21,11 @@ class MyHelper
             $date     = new \DateTime(date('Y-m-d H:i:s', strtotime($created_at)));
 			$current  = new \DateTime(date('Y-m-d H:i:s'));
 			$interval = $date->diff($current);
-			$inv = $interval->format('%I');
-
-			if($inv > 5){
+			// $inv = $interval->format('%I');
+			$minutes = $interval->days * 24 * 60;
+			$minutes += $interval->h * 60;
+			$minutes += $interval->i;
+			if($minutes > 5){
 				if(!MyHelper::wsSisterLogin()){
 		            throw new \Exception("Error Creating SISTER Token", 1);
 		        }
@@ -35,6 +37,7 @@ class MyHelper
 			}
 
 			else{
+				
 				$accessToken = json_decode(file_get_contents($tokenPath), true);
 		        $sisterToken = $accessToken['id_token'];
 			}

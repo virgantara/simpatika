@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\PembicaraFiles;
+use app\models\SisterFiles;
 
 /**
  * PembicaraFilesSearch represents the model behind the search form of `app\models\PembicaraFiles`.
  */
-class PembicaraFilesSearch extends PembicaraFiles
+class SisterFilesSearch extends SisterFiles
 {
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class PembicaraFilesSearch extends PembicaraFiles
      */
     public function search($params)
     {
-        $query = PembicaraFiles::find();
+        $query = SisterFiles::find();
 
         // add conditions that should always apply here
 

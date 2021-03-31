@@ -33,7 +33,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $model,
                     'attributes' => [
                         'id',
-                        'kegiatan_id',
+                        [
+                            'attribute' => 'kegiatan_id',
+                            'value' => function($data){
+                                return $data->kegiatan->subunsur;
+                            }
+                        ],
                         'judul_publikasi_paten',
                         'nama_jenis_publikasi',
                         'tanggal_terbit',
@@ -47,6 +52,12 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
     </div>
+    <?php 
+    if(!empty($results))
+    {
+
+
+    ?>
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
@@ -308,4 +319,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
     </div>
+    <?php 
+    }
+    ?>
 </div>

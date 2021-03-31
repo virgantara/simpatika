@@ -12,6 +12,8 @@ use app\models\MPangkat;
 /* @var $this yii\web\View */
 /* @var $model common\models\DataDiri */
 /* @var $form yii\widgets\ActiveForm */
+
+$listTugasDosen = ArrayHelper::map(\app\models\TugasDosen::find()->all(),'id','nama');
 $listData = \app\models\MJabatanAkademik::getList();
 $listDataJenjang = \app\models\MJenjangPendidikan::getList();
 $bidang_ilmu = !empty($model->bidangIlmu) && !empty($model->bidangIlmu->kode0) ? $model->bidangIlmu->kode0 : ''; 
@@ -33,9 +35,9 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
                 echo $form->errorSummary($model,['header'=>'<div class="alert alert-danger">','footer'=>'</div>']);
                 
                 ?>
-
+                <?= $form->field($model, 'tugas_dosen_id')->dropDownList($listTugasDosen, ['prompt' => '-Pilih Tugas Dosen-']) ?>
                 <?= $form->field($model, 'NIDN')->textInput(['maxlength' => true]) ?>
-
+                
                 <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'nik')->textInput(['maxlength' => true]) ?>
 
@@ -115,6 +117,7 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
                 ]);
                  ?>
                  <?= $form->field($model, 'jenjang_kode')->dropDownList($listDataJenjang, ['prompt' => '-Pilih Jenjang-']) ?>
+                 
                 <?= $form->field($model, 'alamat_rumah')->textarea(['rows' => 6]) ?>
 
                 <?= $form->field($model, 'telp_hp')->textInput(['maxlength' => true]) ?>

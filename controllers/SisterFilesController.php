@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\PembicaraFiles;
-use app\models\PembicaraFilesSearch;
+use app\models\SisterFiles;
+use app\models\SisterFilesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -13,7 +13,7 @@ use yii\filters\AccessControl;
 /**
  * PembicaraFilesController implements the CRUD actions for PembicaraFiles model.
  */
-class PembicaraFilesController extends Controller
+class SisterFilesController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -36,7 +36,7 @@ class PembicaraFilesController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PembicaraFilesSearch();
+        $searchModel = new SisterFilesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -65,7 +65,7 @@ class PembicaraFilesController extends Controller
      */
     public function actionCreate()
     {
-        $model = new PembicaraFiles();
+        $model = new SisterFiles();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', "Data tersimpan");
@@ -121,7 +121,7 @@ class PembicaraFilesController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = PembicaraFiles::findOne($id)) !== null) {
+        if (($model = SisterFiles::findOne($id)) !== null) {
             return $model;
         }
 

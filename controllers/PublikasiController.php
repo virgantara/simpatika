@@ -40,6 +40,8 @@ class PublikasiController extends AppController
           'NIY' => Yii::$app->user->identity->NIY,
         ]);
 
+        $query->andWhere(['not',['kegiatan_id' => null]]);
+
         $results = $query->asArray()->all();
         echo \yii\helpers\Json::encode($results);
         die();
@@ -131,6 +133,7 @@ class PublikasiController extends AppController
                         $model->penerbit = $detail->nama_penerbit;
                         $model->doi = $detail->DOI_publikasi;
                         $model->issn = $detail->ISSN_publikasi;    
+                        $model->nama_kategori_kegiatan = $detail->nama_kategori_kegiatan;
 
                         foreach($detail->data_penulis as $author)
                         {
@@ -156,6 +159,32 @@ class PublikasiController extends AppController
                             {
                                 $errors .= \app\helpers\MyHelper::logError($pa);
                                 throw new \Exception;
+                            }
+                        }
+
+                        if(!empty($detail->files))
+                        {
+                            foreach($detail->files as $file)
+                            {
+                                $pf = \app\models\SisterFiles::findOne($file->id_dokumen);
+                                if(empty($pf))
+                                    $pf = new \app\models\SisterFiles;
+
+                                $pf->id_dokumen = $file->id_dokumen;
+                                $pf->parent_id = $item->id_riwayat_publikasi_paten;
+                                $pf->nama_dokumen = $file->nama_dokumen;
+                                $pf->nama_file = $file->nama_file;
+                                $pf->jenis_file = $file->jenis_file;
+                                $pf->tanggal_upload = $file->tanggal_upload;
+                                $pf->nama_jenis_dokumen = $file->nama_jenis_dokumen;
+                                $pf->tautan = $file->tautan;
+                                $pf->keterangan_dokumen = $file->keterangan_dokumen;
+
+                                if(!$pf->save())
+                                {
+                                    $errors .= 'PF: '.\app\helpers\MyHelper::logError($pf);
+                                    throw new \Exception;
+                                }
                             }
                         }
                     }
@@ -230,11 +259,11 @@ class PublikasiController extends AppController
 
         $user = User::findOne(Yii::$app->user->identity->ID);
         $sisterToken = MyHelper::getSisterToken();
-        if(!isset($sisterToken)){
-            $sisterToken = MyHelper::getSisterToken();
-        }
+        // if(!isset($sisterToken)){
+        //     $sisterToken = MyHelper::getSisterToken();
+        // }
 
-        // print_r($sisterToken);exit;
+        // 
         $sister_baseurl = Yii::$app->params['sister_baseurl'];
         $headers = ['content-type' => 'application/json'];
         $client = new \GuzzleHttp\Client([
@@ -259,6 +288,11 @@ class PublikasiController extends AppController
         if($response->error_code == 0){
             $results = $response->data;
         }
+        // echo '<pre>';
+        // print_r($results);
+        // echo '</pre>';
+        // exit;
+
         return $this->render('view', [
             'model' => $model,
             'results' => $results
@@ -294,10 +328,15 @@ class PublikasiController extends AppController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
 
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', "Data tersimpan");
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

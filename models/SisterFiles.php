@@ -18,14 +18,14 @@ use Yii;
  * @property string|null $updated_at
  * @property string|null $created_at
  */
-class PembicaraFiles extends \yii\db\ActiveRecord
+class SisterFiles extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'pembicara_files';
+        return 'sister_files';
     }
 
     /**
@@ -34,7 +34,7 @@ class PembicaraFiles extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_dokumen','pembicara_id'], 'required'],
+            [['id_dokumen','parent_id'], 'required'],
             [['tanggal_upload', 'updated_at', 'created_at'], 'safe'],
             [['id_dokumen', 'jenis_file'], 'string', 'max' => 100],
             [['nama_dokumen', 'nama_file', 'nama_jenis_dokumen', 'tautan', 'keterangan_dokumen'], 'string', 'max' => 255],

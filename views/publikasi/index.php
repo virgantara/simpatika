@@ -43,9 +43,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
             // 'id',
-            // 'kegiatan_id',
+
             'judul_publikasi_paten',
             'nama_jenis_publikasi',
+            'nama_kategori_kegiatan',
+            [
+                'attribute' => 'kegiatan_id',
+                'value' => function($data){
+                    return !empty($data->kegiatan) ? $data->kegiatan->subunsur : '';
+                }
+            ],
             'tanggal_terbit',
             'sister_id',
             //'updated_at',

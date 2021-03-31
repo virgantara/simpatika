@@ -44,7 +44,7 @@ class DataDiri extends \yii\db\ActiveRecord
             [['NIY', 'nama', 'gender', 'tempat_lahir', 'tanggal_lahir', 'status_kawin', 'agama', 'pangkat', 'jabatan_fungsional','alamat_rumah', 'telp_hp','status_dosen','kode_unik', 'nik','kampus'], 'required'],
             [['gender', 'status_kawin', 'alamat_kampus', 'alamat_rumah','status_dosen','jenjang_kode'], 'string'],
             [['permalink'], 'unique'],
-            [['kode_unik','tanggal_lahir','bidang_ilmu_id','permalink','expertise','kepakaran_id','kode_feeder','id_reg_ptk'], 'safe'],
+            [['kode_unik','tanggal_lahir','bidang_ilmu_id','permalink','expertise','kepakaran_id','kode_feeder','id_reg_ptk','tugas_dosen_id'], 'safe'],
             [['NIY', 'telp_kampus', 'fax_kampus', 'telp_hp'], 'string', 'max' => 15],
             [['nama', 'perguruan_tinggi'], 'string', 'max' => 50],
             [['tempat_lahir'], 'string', 'max' => 30],
@@ -58,6 +58,7 @@ class DataDiri extends \yii\db\ActiveRecord
             [['jabatan_fungsional'], 'exist', 'skipOnError' => true, 'targetClass' => MJabatanAkademik::className(), 'targetAttribute' => ['jabatan_fungsional' => 'id']],
             [['bidang_ilmu_id'], 'exist', 'skipOnError' => true, 'targetClass' => BidangIlmu::className(), 'targetAttribute' => ['bidang_ilmu_id' => 'kode']],
             [['kepakaran_id'], 'exist', 'skipOnError' => true, 'targetClass' => BidangKepakaran::className(), 'targetAttribute' => ['kepakaran_id' => 'id']],
+            [['tugas_dosen_id'], 'exist', 'skipOnError' => true, 'targetClass' => TugasDosen::className(), 'targetAttribute' => ['tugas_dosen_id' => 'id']],
         ];
     }
 
@@ -69,6 +70,7 @@ class DataDiri extends \yii\db\ActiveRecord
         return [
             'ID' => 'ID',
             'NIY' => 'NIY',
+            'tugas_dosen_id' => 'Tugas Dosen',
             'NIDN' => 'NIDN',
             'nik' => 'NIK/No KTP',
             'nama' => 'Nama',
@@ -250,5 +252,10 @@ class DataDiri extends \yii\db\ActiveRecord
         $total = $query->count();
 
         return $total;
+    }
+
+    public function getTugasDosen()
+    {
+        return $this->hasOne(TugasDosen::className(), ['id' => 'tugas_dosen_id']);
     }
 }

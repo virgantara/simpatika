@@ -19,7 +19,7 @@ class PublikasiSearch extends Publikasi
     {
         return [
             [['id', 'kegiatan_id'], 'integer'],
-            [['judul_publikasi_paten', 'nama_jenis_publikasi', 'tanggal_terbit', 'sister_id', 'updated_at', 'created_at'], 'safe'],
+            [['judul_publikasi_paten', 'nama_jenis_publikasi','nama_kategori_kegiatan', 'tanggal_terbit', 'sister_id', 'updated_at', 'created_at'], 'safe'],
         ];
     }
 

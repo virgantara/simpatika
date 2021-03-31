@@ -203,14 +203,14 @@ class DataDiriController extends AppController
             $sisterToken = MyHelper::getSisterToken();
             
             $sister_baseurl = Yii::$app->params['sister_baseurl'];
-            $headers = ['content-type' => 'application/json'];
-            $client = new \GuzzleHttp\Client([
+            $headersSister = ['content-type' => 'application/json'];
+            $sisterClient = new \GuzzleHttp\Client([
                 'timeout'  => 5.0,
-                'headers' => $headers,
+                'headers' => $headersSister,
                 // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
             ]);
             $full_url = $sister_baseurl.'/Dosen/detail';
-            $response = $client->post($full_url, [
+            $responseSister = $sisterClient->post($full_url, [
                 'body' => json_encode([
                     'id_token' => $sisterToken,
                     'id_dosen' => $user->sister_id
@@ -220,9 +220,9 @@ class DataDiriController extends AppController
             ]); 
             
            
-            $response = json_decode($response->getBody());
-            if($response->error_code == 0){
-                $results = $response->data;
+            $responseSister = json_decode($responseSister->getBody());
+            if($responseSister->error_code == 0){
+                $results = $responseSister->data;
             }
 
             else if($response->error_code == 100){
