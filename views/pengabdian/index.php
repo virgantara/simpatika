@@ -1,72 +1,112 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-use yii\widgets\Pjax;
+use kartik\grid\GridView;
+
 /* @var $this yii\web\View */
-/* @var $searchModel frontend\models\PengabdianSearch */
+/* @var $searchModel app\models\PengabdianSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-Yii::$app->setHomeUrl(['/site/homelog']);
+
 $this->title = 'Pengabdian';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="pengabdian-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<h3><?= Html::encode($this->title) ?></h3>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+            </div>
+<div class="panel-body ">
 
     <p>
         <?= Html::a('Tambah Data', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<i class="fa fa-download"></i> Import dari SISTER', ['import'], ['class' => 'btn btn-primary']) ?>
     </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+    <?php 
+    foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
+      echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';
+    }
+    ?>
+    <?php
+    $gridColumns = [
+    [
+        'class'=>'kartik\grid\SerialColumn',
+        'contentOptions'=>['class'=>'kartik-sheet-style'],
+        'width'=>'36px',
+        'pageSummary'=>'Total',
+        'pageSummaryOptions' => ['colspan' => 6],
+        'header'=>'',
+        'headerOptions'=>['class'=>'kartik-sheet-style']
+    ],
+            // 'ID',
+            // 'NIY',
+            'judul_penelitian_pengabdian',
+            'nama_tahun_ajaran',
+            'nama_skim',
+            'durasi_kegiatan',
+            // [
+            //     'attribute' => 'jenis_penelitian_pengabdian',
+            //     'value' => function($data){
+            //         return $data->jenis_penelitian_pengabdian == 'M' ? 'Pengabdian' : 'Penelitian';
+            //     }
+            // ],
+            //'nilai',
+            //'sister_id',
+            //'updated_at',
+            //'created_at',
+    ['class' => 'yii\grid\ActionColumn']
+];?>    
+<?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'rowOptions' => function($model){
-            if($model->ver == 'Belum Diverifikasi'){
-                return ['class'=>'warning'];
-            }else if($model->ver == 'Ditolak'){
-                return ['class'=>'danger'];
-            }else{
-                
-            }
-        },
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        'columns' => $gridColumns,
+        'containerOptions' => ['style' => 'overflow: auto'], 
+        'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+        'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+        'containerOptions' => ['style'=>'overflow: auto'], 
+        'beforeHeader'=>[
+            [
+                'columns'=>[
+                    ['content'=> $this->title, 'options'=>['colspan'=>14, 'class'=>'text-center warning']], //cuma satu 
+                ], 
+                'options'=>['class'=>'skip-export'] 
+            ]
+        ],
+        'exportConfig' => [
+              GridView::PDF => ['label' => 'Save as PDF'],
+              GridView::EXCEL => ['label' => 'Save as EXCEL'], //untuk menghidupkan button export ke Excell
+              GridView::HTML => ['label' => 'Save as HTML'], //untuk menghidupkan button export ke HTML
+              GridView::CSV => ['label' => 'Save as CSV'], //untuk menghidupkan button export ke CVS
+          ],
+          
+        'toolbar' =>  [
+            '{export}', 
 
-//            'ID',
-//            'NIY',
-            [
-                'attribute' => 'nama_kegiatan',
-                'contentOptions' => ['style' => 'width:30%;  white-space: normal;'],
-            ],
-            [
-                'attribute' => 'bulan',
-                'format' => 'raw',
-                'filter' => [
-                    '1' => 'Januari',
-                    '2' => 'Februari',
-                    '3' => 'Maret',
-                    '4' => 'April',
-                    '5' => 'Mei',
-                    '6' => 'Juni',
-                    '7' => 'Juli',
-                    '8' => 'Agustus',
-                    '9' => 'September',
-                    '10' => 'Oktober',
-                    '11' => 'November',
-                    '12' => 'Desember'
-                ]
-            ],
-            'nilai',
-            'tahun',
-            'tempat',
-            [
-                'attribute' => 'ver',
-                'format' => 'raw',
-                'filter' => ['Belum Diverifikasi' => 'Belum Diverivikasi', 'Sudah Diverifikasi' => 'Sudah Diverifikasi','Ditolak' => 'Ditolak']
-            ],
-
-            ['class' => 'yii\grid\ActionColumn','header'=>'Action'],
+           '{toggleData}' //uncoment untuk menghidupkan button menampilkan semua data..
+        ],
+        'toggleDataContainer' => ['class' => 'btn-group mr-2'],
+    // set export properties
+        'export' => [
+            'fontAwesome' => true
+        ],
+        'pjax' => true,
+        'bordered' => true,
+        'striped' => true,
+        // 'condensed' => false,
+        // 'responsive' => false,
+        'hover' => true,
+        // 'floatHeader' => true,
+        // 'showPageSummary' => true, //true untuk menjumlahkan nilai di suatu kolom, kebetulan pada contoh tidak ada angka.
+        'panel' => [
+            'type' => GridView::TYPE_PRIMARY
         ],
     ]); ?>
-<?php Pjax::end(); ?></div>
+
+</div>
+        </div>
+    </div>
+
+</div>
+

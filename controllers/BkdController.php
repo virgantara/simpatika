@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\KomponenKegiatan;
 use app\models\Pengajaran;
 use app\models\Publikasi;
 
@@ -24,22 +25,48 @@ class BkdController extends AppController
       
       if(!empty($model))
       {
-        $model->is_claimed = $dataPost['is_claimed'];
-        if($model->save(false,['is_claimed']))
+
+        $jabfung = $model->pengajaranData->kodeJabfung;
+        $kondisi = '';
+
+        if($jabfung == 'AA')
         {
-        	$results = [
-	        	'code' => 200,
-	        	'message' => 'Data updated'
-	        ];
+          $kondisi = 'A11';  
         }
-        
+
+        $komponen = KomponenKegiatan::find()->where([
+          'kondisi' => $kondisi
+        ])->one();
+        if(empty($komponen))
+        {
+          $results = [
+            'code' => 500,
+            'message' => 'Oops, KomponenKegiatan is empty'
+          ];
+        }
+
         else
         {
-        	$results = [
-	        	'code' => 500,
-	        	'message' => 'Oops, something wrong'
-	        ];
+          $model->komponen_id = $komponen->id;
+          $model->sks_bkd = $komponen->angka_kredit;
+          $model->is_claimed = $dataPost['is_claimed'];
+          if($model->save(false,['is_claimed','komponen_id','sks_bkd']))
+          {
+          	$results = [
+  	        	'code' => 200,
+  	        	'message' => 'Data updated'
+  	        ];
+          }
+
+          else
+          {
+            $results = [
+              'code' => 500,
+              'message' => 'Oops, something wrong'
+            ];
+          }
         }
+        
       }
 
       echo json_encode($results);

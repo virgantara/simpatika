@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Pengabdian;
+use app\models\PembicaraFiles;
 
 /**
- * PengabdianSearch represents the model behind the search form of `app\models\Pengabdian`.
+ * PembicaraFilesSearch represents the model behind the search form of `app\models\PembicaraFiles`.
  */
-class PengabdianSearch extends Pengabdian
+class PembicaraFilesSearch extends PembicaraFiles
 {
     /**
      * {@inheritdoc}
@@ -18,9 +18,7 @@ class PengabdianSearch extends Pengabdian
     public function rules()
     {
         return [
-            [['ID', 'durasi_kegiatan'], 'integer'],
-            [['NIY', 'judul_penelitian_pengabdian', 'nama_tahun_ajaran', 'nama_skim', 'jenis_penelitian_pengabdian', 'sister_id', 'updated_at', 'created_at'], 'safe'],
-            [['nilai'], 'number'],
+            [['id_dokumen', 'nama_dokumen', 'nama_file', 'jenis_file', 'tanggal_upload', 'nama_jenis_dokumen', 'tautan', 'keterangan_dokumen', 'updated_at', 'created_at'], 'safe'],
         ];
     }
 
@@ -42,9 +40,8 @@ class PengabdianSearch extends Pengabdian
      */
     public function search($params)
     {
-        $query = Pengabdian::find();
-        $query->alias('p');
-        $query->where(['p.NIY' => Yii::$app->user->identity->NIY]);
+        $query = PembicaraFiles::find();
+
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -61,19 +58,18 @@ class PengabdianSearch extends Pengabdian
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'ID' => $this->ID,
-            'durasi_kegiatan' => $this->durasi_kegiatan,
-            'nilai' => $this->nilai,
+            'tanggal_upload' => $this->tanggal_upload,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
         ]);
 
-        $query->andFilterWhere(['like', 'NIY', $this->NIY])
-            ->andFilterWhere(['like', 'judul_penelitian_pengabdian', $this->judul_penelitian_pengabdian])
-            ->andFilterWhere(['like', 'nama_tahun_ajaran', $this->nama_tahun_ajaran])
-            ->andFilterWhere(['like', 'nama_skim', $this->nama_skim])
-            ->andFilterWhere(['like', 'jenis_penelitian_pengabdian', $this->jenis_penelitian_pengabdian])
-            ->andFilterWhere(['like', 'sister_id', $this->sister_id]);
+        $query->andFilterWhere(['like', 'id_dokumen', $this->id_dokumen])
+            ->andFilterWhere(['like', 'nama_dokumen', $this->nama_dokumen])
+            ->andFilterWhere(['like', 'nama_file', $this->nama_file])
+            ->andFilterWhere(['like', 'jenis_file', $this->jenis_file])
+            ->andFilterWhere(['like', 'nama_jenis_dokumen', $this->nama_jenis_dokumen])
+            ->andFilterWhere(['like', 'tautan', $this->tautan])
+            ->andFilterWhere(['like', 'keterangan_dokumen', $this->keterangan_dokumen]);
 
         return $dataProvider;
     }

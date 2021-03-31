@@ -1,8 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-use yii\widgets\Pjax;
+use kartik\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\PenelitianSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -17,56 +16,75 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Tambah Data', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<i class="fa fa-download"></i> Import dari SISTER', ['import'], ['class' => 'btn btn-primary']) ?>
     </p>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'rowOptions' => function($model){
-            if($model->ver == 'Belum Diverifikasi'){
-                return ['class'=>'warning'];
-            }else if($model->ver == 'Ditolak'){
-                return ['class'=>'danger'];
-            }else{
-                
-            }
-        },
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-//            'ID',
-//            'NIY',
+    <?php 
+    foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
+      echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';
+    }
+    ?>
+    <?php
+    $gridColumns = [
+    [
+        'class'=>'kartik\grid\SerialColumn',
+        'contentOptions'=>['class'=>'kartik-sheet-style'],
+        'width'=>'36px',
+        'pageSummary'=>'Total',
+        'pageSummaryOptions' => ['colspan' => 6],
+        'header'=>'',
+        'headerOptions'=>['class'=>'kartik-sheet-style']
+    ],
             [
                 'attribute' => 'judul',
                 'contentOptions' => ['style' => 'width:30%;  white-space: normal;'],
             ],
-            'tahun',
-            'status',
-            'nilai',
-            'sumberdana',
-//            'f_penelitian',
+            'durasi_kegiatan',
+            'nama_skim',
+    ['class' => 'yii\grid\ActionColumn']
+];?>    
+<?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => $gridColumns,
+        'containerOptions' => ['style' => 'overflow: auto'], 
+        'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+        'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+        'containerOptions' => ['style'=>'overflow: auto'], 
+        'beforeHeader'=>[
             [
-                'attribute'=>'f_penelitian',
-                'format'=>'raw',
-                'value' => function($data){
-            if(!empty($data->f_penelitian)){
-            return
-            Html::a('View', ['penelitian/display', 'id' => $data->ID],['class' => 'btn btn-warning']).'&nbsp;&nbsp;'.
-            Html::a('Download', ['penelitian/download', 'id' => $data->ID],['class' => 'btn btn-primary']);
-            }
-            else
-            {
-            return
-            "<p class='btn btn-danger' align='center'>No File</p>";
-            }
-            }
-            ],
-            [
-                'attribute' => 'ver',
-                'format' => 'raw',
-                'filter' => ['Belum Diverifikasi' => 'Belum Diverivikasi', 'Sudah Diverifikasi' => 'Sudah Diverifikasi','Ditolak' => 'Ditolak']
-            ],
+                'columns'=>[
+                    ['content'=> $this->title, 'options'=>['colspan'=>14, 'class'=>'text-center warning']], //cuma satu 
+                ], 
+                'options'=>['class'=>'skip-export'] 
+            ]
+        ],
+        'exportConfig' => [
+              GridView::PDF => ['label' => 'Save as PDF'],
+              GridView::EXCEL => ['label' => 'Save as EXCEL'], //untuk menghidupkan button export ke Excell
+              GridView::HTML => ['label' => 'Save as HTML'], //untuk menghidupkan button export ke HTML
+              GridView::CSV => ['label' => 'Save as CSV'], //untuk menghidupkan button export ke CVS
+          ],
+          
+        'toolbar' =>  [
+            '{export}', 
 
-            ['class' => 'yii\grid\ActionColumn','header'=>'Action'],
+           '{toggleData}' //uncoment untuk menghidupkan button menampilkan semua data..
+        ],
+        'toggleDataContainer' => ['class' => 'btn-group mr-2'],
+    // set export properties
+        'export' => [
+            'fontAwesome' => true
+        ],
+        'pjax' => true,
+        'bordered' => true,
+        'striped' => true,
+        // 'condensed' => false,
+        // 'responsive' => false,
+        'hover' => true,
+        // 'floatHeader' => true,
+        // 'showPageSummary' => true, //true untuk menjumlahkan nilai di suatu kolom, kebetulan pada contoh tidak ada angka.
+        'panel' => [
+            'type' => GridView::TYPE_PRIMARY
         ],
     ]); ?>
 </div>

@@ -188,6 +188,10 @@ class DataDiri extends \yii\db\ActiveRecord
         return $this->jabatanFungsional->nama;
     }
 
+    public function getKodeJabfung(){
+        return $this->jabatanFungsional->kode;
+    }
+
     public function getPangkat0()
     {
         return $this->hasOne(MPangkat::className(), ['id' => 'pangkat']);

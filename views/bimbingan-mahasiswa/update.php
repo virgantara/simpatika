@@ -2,13 +2,13 @@
 
 use yii\helpers\Html;
 
-
 /* @var $this yii\web\View */
-/* @var $model app\models\Pengabdian */
+/* @var $model app\models\BimbinganMahasiswa */
 
-$this->title = 'Create Pengabdian';
-$this->params['breadcrumbs'][] = ['label' => 'Pengabdians', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Update Bimbingan Mahasiswa: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Bimbingan Mahasiswas', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Update';
 ?>
 <h3><?= Html::encode($this->title) ?></h3>
 <div class="row">
@@ -18,13 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
             </div>
             <div class="panel-body ">
-
-
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
-    	   </div>
+           </div>
         </div>
     </div>
 </div>

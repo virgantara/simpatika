@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Pengabdian */
+/* @var $model app\models\Pengabdian */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -12,16 +12,28 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'nama_kegiatan')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'NIY',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
 
-    <?= $form->field($model, 'bulan')->dropDownList([' '=>' ','1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'April', '5' => 'Mei', '6' => 'Juni', '7' => 'Juli', '8' => 'Agustus', '9' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember' ]) ?>
-    
-    <?= $form->field($model, 'tahun')->textInput() ?>
-    <?= $form->field($model, 'nilai')->textInput() ?>	
-    <?= $form->field($model, 'tempat')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'judul_penelitian_pengabdian',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
+
+    <?= $form->field($model, 'nama_tahun_ajaran',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
+
+    <?= $form->field($model, 'nama_skim',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
+
+    <?= $form->field($model, 'durasi_kegiatan',['options' => ['tag' => false]])->textInput() ?>
+
+    <?= $form->field($model, 'jenis_penelitian_pengabdian',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
+
+    <?= $form->field($model, 'nilai',['options' => ['tag' => false]])->textInput() ?>
+
+    <?= $form->field($model, 'sister_id',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
+
+    <?= $form->field($model, 'updated_at',['options' => ['tag' => false]])->textInput() ?>
+
+    <?= $form->field($model, 'created_at',['options' => ['tag' => false]])->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

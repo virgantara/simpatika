@@ -4,19 +4,24 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\HkiSearch */
+/* @var $searchModel app\models\BimbinganMahasiswaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Hak Kekayaan Intelektual (HKI)';
+$this->title = 'Bimbingan Mahasiswas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="hki-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<h3><?= Html::encode($this->title) ?></h3>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+            </div>
+<div class="panel-body ">
 
-   <p>
-        <?= Html::a('Tambah Data', ['create'], ['class' => 'btn btn-success']) ?>
+    <p>
+        <?= Html::a('Create Bimbingan Mahasiswa', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('<i class="fa fa-download"></i> Import dari SISTER', ['import'], ['class' => 'btn btn-primary']) ?>
     </p>
     <?php 
@@ -35,12 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'header'=>'',
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
-            // 'jenis_hki_id',
-            // 'no_pendaftaran',
-            'judul',
-            'status_hki',
-            'tahun_pelaksanaan',
-            'tanggal_terbit',
+            'id',
+            'NIY',
+            'nama',
     ['class' => 'yii\grid\ActionColumn']
 ];?>    
 <?= GridView::widget([
@@ -88,5 +90,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => GridView::TYPE_PRIMARY
         ],
     ]); ?>
-    
+
 </div>
+        </div>
+    </div>
+
+</div>
+

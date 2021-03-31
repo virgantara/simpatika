@@ -32,8 +32,7 @@ class Penelitian extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['NIY', 'judul', 'tahun', 'status', 'sumberdana','nilai'], 'required'],
-            [['tahun'], 'integer'],
+            [['NIY', 'judul', 'tahun'], 'required'],
             [['nilai'], 'number'],
             [['NIY'], 'string', 'max' => 15],
             [['namanya'],'string'],

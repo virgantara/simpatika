@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\User;
+use app\helpers\MyHelper;
 use app\models\Pengabdian;
 use app\models\Verify;
 use app\models\PengabdianSearch;
@@ -13,7 +15,7 @@ use yii\filters\VerbFilter;
 /**
  * PengabdianController implements the CRUD actions for Pengabdian model.
  */
-class PengabdianController extends Controller
+class PengabdianController extends AppController
 {
     /**
      * @inheritdoc
@@ -28,6 +30,111 @@ class PengabdianController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionImport()
+    {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
+
+        $user = User::findOne(Yii::$app->user->identity->ID);
+        $sisterToken = MyHelper::getSisterToken();
+        if(!isset($sisterToken)){
+            $sisterToken = MyHelper::getSisterToken();
+        }
+
+        // print_r($sisterToken);exit;
+        $sister_baseurl = Yii::$app->params['sister_baseurl'];
+        $headers = ['content-type' => 'application/json'];
+        $client = new \GuzzleHttp\Client([
+            'timeout'  => 5.0,
+            'headers' => $headers,
+            // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
+        ]);
+        $full_url = $sister_baseurl.'/Pengabdian';
+        $response = $client->post($full_url, [
+            'body' => json_encode([
+                'id_token' => $sisterToken,
+                'id_dosen' => $user->sister_id,
+                'updated_after' => [
+                    'tahun' => '2000',
+                    'bulan' => '01',
+                    'tanggal' => '01'
+                ]
+            ]), 
+            'headers' => ['Content-type' => 'application/json']
+
+        ]); 
+        
+        $results = [];
+       
+        $response = json_decode($response->getBody());
+        
+        if($response->error_code == 0)
+        {
+            $results = $response->data;
+            
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            $counter = 0;
+            $errors ='';
+            try     
+            {
+                foreach($results as $item)
+                {
+                    // print_r($item);exit;
+                    $model = Pengabdian::find()->where([
+                        'sister_id' => $item->id_penelitian_pengabdian
+                    ])->one();
+
+                    if(empty($model))
+                        $model = new Pengabdian;
+
+                    $model->NIY = Yii::$app->user->identity->NIY;
+                    $model->sister_id = $item->id_penelitian_pengabdian;
+                    $model->judul_penelitian_pengabdian = $item->judul_penelitian_pengabdian;
+                    $model->nama_skim = $item->nama_skim;
+                    $model->nama_tahun_ajaran = $item->nama_tahun_ajaran;
+                    $model->durasi_kegiatan = $item->durasi_kegiatan;
+                    $model->jenis_penelitian_pengabdian = $item->jenis_penelitian_pengabdian;
+                    
+                    if($model->save())
+                    {
+                        $counter++;
+
+
+                    }
+
+                    else
+                    {
+                        $errors .= \app\helpers\MyHelper::logError($model);
+                        throw new \Exception;
+                    }
+                }
+
+                $transaction->commit();
+                Yii::$app->getSession()->setFlash('success',$counter.' data imported');
+                return $this->redirect(['index']);
+            }
+
+            catch (\Exception $e) {
+                $transaction->rollBack();
+                $errors .= $e->getMessage();
+                Yii::$app->getSession()->setFlash('danger',$errors);
+                return $this->redirect(['index']);
+            } 
+        }
+
+
+        else
+        {
+            Yii::$app->getSession()->setFlash('danger',json_encode($response));
+            return $this->redirect(['index']);
+        }
+
+
     }
 
     /**

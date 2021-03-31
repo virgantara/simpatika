@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Pengabdian */
+/* @var $model app\models\BimbinganMahasiswa */
 
-$this->title = $model->ID;
-$this->params['breadcrumbs'][] = ['label' => 'Pengabdians', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Bimbingan Mahasiswas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="block-header">
@@ -17,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
    <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <?= Html::a('Update', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
-                <?= Html::a('Delete', ['delete', 'id' => $model->ID], [
+                <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Delete', ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [
                         'confirm' => 'Are you sure you want to delete this item?',
@@ -32,17 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'ID',
+            'id',
             'NIY',
-            'judul_penelitian_pengabdian',
-            'nama_tahun_ajaran',
-            'nama_skim',
-            'durasi_kegiatan',
-            'jenis_penelitian_pengabdian',
-            'nilai',
-            'sister_id',
-            'updated_at',
-            'created_at',
+            'nama',
         ],
     ]) ?>
 

@@ -1,29 +1,67 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\DetailView;
 use kartik\grid\GridView;
-
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\HkiSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $model app\models\Pembicara */
 
-$this->title = 'Hak Kekayaan Intelektual (HKI)';
+$this->title = $model->judul_makalah;
+$this->params['breadcrumbs'][] = ['label' => 'Pembicaras', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="hki-index">
+<div class="block-header">
+    <h2><?= Html::encode($this->title) ?></h2>
+</div>
+<div class="row">
+   <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => 'Are you sure you want to delete this item?',
+                        'method' => 'post',
+                    ],
+                ]) ?>
+            </div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+            <div class="panel-body ">
+        
+<?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'id',
+            'id_pembicara',
+            'id_induk_katgiat',
+            'nama_kategori_kegiatan',
+            'judul_makalah',
+            'nama_pertemuan_ilmiah',
+            'penyelenggara_kegiatan',
+            'tanggal_pelaksanaan',
+            'updated_at',
+            'created_at',
+            'NIY',
+        ],
+    ]) ?>
 
-   <p>
-        <?= Html::a('Tambah Data', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('<i class="fa fa-download"></i> Import dari SISTER', ['import'], ['class' => 'btn btn-primary']) ?>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Dokumen</h3>
+            </div>
+    <div class="panel-body ">
+
+    <p>
+        <?= Html::a('Create Pembicara File', ['pembicara-files/create','id'=>$model->id], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php 
-    foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
-      echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';
-    }
-    ?>
     <?php
     $gridColumns = [
     [
@@ -35,13 +73,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'header'=>'',
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
-            // 'jenis_hki_id',
-            // 'no_pendaftaran',
-            'judul',
-            'status_hki',
-            'tahun_pelaksanaan',
-            'tanggal_terbit',
-    ['class' => 'yii\grid\ActionColumn']
+            // 'id_dokumen',
+            'nama_dokumen',
+            'nama_file',
+            'jenis_file',
+            'tanggal_upload',
+            'nama_jenis_dokumen',
+            'tautan',
+            'keterangan_dokumen',
+            //'updated_at',
+            //'created_at',
+    // ['class' => 'yii\grid\ActionColumn']
 ];?>    
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -88,5 +130,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => GridView::TYPE_PRIMARY
         ],
     ]); ?>
-    
+
 </div>
+        </div>
+    </div>
+
+</div>
+

@@ -4,18 +4,23 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\HkiSearch */
+/* @var $searchModel app\models\PembicaraSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Hak Kekayaan Intelektual (HKI)';
+$this->title = 'Pembicara';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="hki-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<h3><?= Html::encode($this->title) ?></h3>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+            </div>
+<div class="panel-body ">
 
-   <p>
+    <p>
         <?= Html::a('Tambah Data', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('<i class="fa fa-download"></i> Import dari SISTER', ['import'], ['class' => 'btn btn-primary']) ?>
     </p>
@@ -35,12 +40,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'header'=>'',
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
-            // 'jenis_hki_id',
-            // 'no_pendaftaran',
-            'judul',
-            'status_hki',
-            'tahun_pelaksanaan',
-            'tanggal_terbit',
+            // 'id',
+            // 'id_pembicara',
+            // 'id_induk_katgiat',
+            'judul_makalah',
+            'nama_kategori_kegiatan',
+            
+            'nama_pertemuan_ilmiah',
+            'penyelenggara_kegiatan',
+            'tanggal_pelaksanaan',
+            //'updated_at',
+            //'created_at',
+            //'NIY',
     ['class' => 'yii\grid\ActionColumn']
 ];?>    
 <?= GridView::widget([
@@ -88,5 +99,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => GridView::TYPE_PRIMARY
         ],
     ]); ?>
-    
+
 </div>
+        </div>
+    </div>
+
+</div>
+

@@ -34,7 +34,7 @@ class KomponenKegiatan extends \yii\db\ActiveRecord
             [['unsur_id'], 'integer'],
             [['nama','subunsur','unsur_id'],'unique','message'=>'Data {attribute} sudah dipakai','on'=>'insert'],
             [['angka_kredit'], 'number'],
-            [['subunsur'],'safe'],
+            [['subunsur','kondisi'],'safe'],
             [['unsur_id'], 'exist', 'skipOnError' => true, 'targetClass' => UnsurUtama::className(), 'targetAttribute' => ['unsur_id' => 'id']],
         ];
     }

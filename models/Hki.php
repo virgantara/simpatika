@@ -37,10 +37,10 @@ class Hki extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['jenis_hki_id', 'no_pendaftaran', 'judul', 'status_hki', 'tahun_pelaksanaan', 'sumber_dana'], 'required'],
+            [['judul', 'tahun_pelaksanaan'], 'required'],
             [['jenis_hki_id', 'tahun_pelaksanaan'], 'integer'],
             [['berkas'], 'string'],
-            [['created_at', 'updated_at','shared_link','ver'], 'safe'],
+            [['created_at', 'updated_at','shared_link','ver','nama_jenis_publikasi','tanggal_terbit'], 'safe'],
             [['no_pendaftaran', 'judul', 'status_hki', 'sumber_dana'], 'string', 'max' => 255],
             [['jenis_hki_id'], 'exist', 'skipOnError' => true, 'targetClass' => JenisLuaran::className(), 'targetAttribute' => ['jenis_hki_id' => 'id']],
         ];

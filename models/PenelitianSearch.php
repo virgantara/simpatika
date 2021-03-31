@@ -19,7 +19,7 @@ class PenelitianSearch extends Penelitian
     {
         return [
             [['ID', 'tahun'], 'integer'],
-            [['NIY', 'judul', 'status', 'sumberdana','namanya','ver'], 'safe'],
+            [['NIY', 'judul', 'status', 'sumberdana','namanya','ver','durasi_kegiatan','nama_skim'], 'safe'],
         ];
     }
 
@@ -77,6 +77,8 @@ class PenelitianSearch extends Penelitian
             ->andFilterWhere(['like', 'data_diri.nama', $this->namanya])
             ->andFilterWhere(['like', 'status', $this->status])
             ->andFilterWhere(['like', 'ver', $this->ver])
+            ->andFilterWhere(['like', 'durasi_kegiatan', $this->durasi_kegiatan])
+            ->andFilterWhere(['like', 'nama_skim', $this->nama_skim])
             ->andFilterWhere(['like', 'sumberdana', $this->sumberdana]);
 //            ->andFilterWhere(['like', 'f_penelitian', $this->f_penelitian]);
 

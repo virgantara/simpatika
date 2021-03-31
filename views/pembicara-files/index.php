@@ -4,26 +4,25 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\HkiSearch */
+/* @var $searchModel app\models\PembicaraFilesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Hak Kekayaan Intelektual (HKI)';
+$this->title = 'Pembicara Files';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="hki-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<h3><?= Html::encode($this->title) ?></h3>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+            </div>
+    <div class="panel-body ">
 
-   <p>
-        <?= Html::a('Tambah Data', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('<i class="fa fa-download"></i> Import dari SISTER', ['import'], ['class' => 'btn btn-primary']) ?>
+    <p>
+        <?= Html::a('Create Pembicara Files', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php 
-    foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
-      echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';
-    }
-    ?>
     <?php
     $gridColumns = [
     [
@@ -35,12 +34,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'header'=>'',
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
-            // 'jenis_hki_id',
-            // 'no_pendaftaran',
-            'judul',
-            'status_hki',
-            'tahun_pelaksanaan',
-            'tanggal_terbit',
+            'id_dokumen',
+            'nama_dokumen',
+            'nama_file',
+            'jenis_file',
+            'tanggal_upload',
+            //'nama_jenis_dokumen',
+            //'tautan',
+            //'keterangan_dokumen',
+            //'updated_at',
+            //'created_at',
     ['class' => 'yii\grid\ActionColumn']
 ];?>    
 <?= GridView::widget([
@@ -88,5 +91,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => GridView::TYPE_PRIMARY
         ],
     ]); ?>
-    
+
 </div>
+        </div>
+    </div>
+
+</div>
+

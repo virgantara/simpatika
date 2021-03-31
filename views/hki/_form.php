@@ -29,7 +29,7 @@ use kartik\file\FileInput;
                 <div class="form-group">
                     <label class="form-label">Jenis HKI</label>
                     <div class="form-line">
-                    <?= $form->field($model, 'jenis_hki_id',['options' => ['tag' => false]])->dropDownList(ArrayHelper::map(\common\models\JenisLuaran::find()->where(['kode'=>'HKI'])->all(),'id','nama'),['class'=>'form-control show-tick','prompt'=>'- Pilih Jenis -'])->label(false) ?>
+                    <?= $form->field($model, 'jenis_hki_id',['options' => ['tag' => false]])->dropDownList(ArrayHelper::map(\app\models\JenisLuaran::find()->where(['kode'=>'HKI'])->all(),'id','nama'),['class'=>'form-control show-tick','prompt'=>'- Pilih Jenis -'])->label(false) ?>
 
                     
                     </div>

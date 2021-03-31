@@ -71,7 +71,7 @@ class MenuHelper
 		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_pendidikan">{label}</a>',
 		        'items'=>[
 		           	['label' => 'Pengajaran', 'url' => ['/pengajaran/index']],
-		           	['label' => 'Bimbingan Mahasiswa', 'url' => ['/pengajaran/index']],
+		           	['label' => 'Bimbingan Mahasiswa', 'url' => ['/bimbingan-mahasiswa/index']],
 		           	['label' => 'Pengujian Mahasiswa', 'url' => ['/pengajaran/index']],
 		           	['label' => 'Bahan Ajar', 'url' => ['/produk-ajar/index']],
 		           	['label' => 'Orasi ilmiah', 'url' => ['/konferensi/index']],
@@ -102,7 +102,7 @@ class MenuHelper
 		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_pengabdian">{label}</a>',
 		        'items'=>[
 		           	['label' => 'Pengabdian', 'url' => ['/pengabdian/index']],
-		           	['label' => 'Pembicara', 'url' => ['/pengajaran/index']],
+		           	['label' => 'Pembicara', 'url' => ['/pembicara/index']],
 		           	['label' => 'Jabatan Struktural', 'url' => ['/organisasi/index']],
 		        ]
 	        ];

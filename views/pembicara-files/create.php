@@ -4,10 +4,10 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Pengabdian */
+/* @var $model app\models\PembicaraFiles */
 
-$this->title = 'Create Pengabdian';
-$this->params['breadcrumbs'][] = ['label' => 'Pengabdians', 'url' => ['index']];
+$this->title = 'Create Pembicara Files';
+$this->params['breadcrumbs'][] = ['label' => 'Pembicara Files', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <h3><?= Html::encode($this->title) ?></h3>

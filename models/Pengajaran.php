@@ -39,7 +39,7 @@ class Pengajaran extends \yii\db\ActiveRecord
             [['matkul'], 'string'],
            
             [['NIY'], 'string', 'max' => 15],
-            [['bukti'], 'safe'],
+            [['bukti','komponen_id','sks_bkd'], 'safe'],
             [['program_pendidikan', 'jurusan', 'institusi', 'program','ver'], 'string', 'max' => 50],
             [['f_penugasan','namanya'], 'string', 'max' => 200],
             [['f_penugasan'], 'file','extensions'=>'pdf','maxSize' => 1024 * 1024 * 3],
