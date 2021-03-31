@@ -11,7 +11,7 @@ class MyHelper
 
 	public static function getSisterToken()
 	{
-		$tokenPath = Yii::getAlias('@webroot').'/credentials/sister_token.json';
+		$tokenPath = Yii::getAlias('@webroot').'/credentials/token/sister_token.json';
         $sisterToken = '';
 
         if (file_exists($tokenPath)) {
@@ -86,14 +86,8 @@ class MyHelper
         		'created_at' => date('Y-m-d H:i:s')
         	];
 
-        	$tokenPath = Yii::getAlias('@webroot').'/credentials/sister_token.json';
-	        // if (file_exists($tokenPath)) {
-	        //     $sisterToken = json_decode(file_get_contents($tokenPath), true);
-	        // }
-	        // // print_r(Url::base(''));exit;
-        	// // if (!file_exists(dirname($tokenPath))) {
-         // //        mkdir(dirname($tokenPath), 0700, true);
-         // //    }
+        	$tokenPath = Yii::getAlias('@webroot').'/credentials/token/sister_token.json';
+	 
             
             file_put_contents($tokenPath, json_encode($data));
         	return true;

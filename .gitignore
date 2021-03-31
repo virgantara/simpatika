@@ -36,3 +36,5 @@ db.php
 params-local.php
 
 node_modules/*
+
+sister_token.json
