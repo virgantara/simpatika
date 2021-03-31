@@ -50,7 +50,7 @@ class AppController extends Controller
 
     public function beforeAction($action)
     {
-        if(!parent::handleEmptyUser())
+        if(!$this::handleEmptyUser())
         {
             return $this->redirect(Yii::$app->params['sso_login']);
         }
