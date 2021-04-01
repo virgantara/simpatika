@@ -9,6 +9,61 @@ use Yii;
 class MyHelper
 {	
 
+	public static function convertKategoriKegiatan($prefix){
+		$listKategori = \yii\helpers\ArrayHelper::map(\app\models\KategoriKegiatan::find()->where(['like','id',$prefix.'%',false])->orderBy(['id'=>SORT_ASC])->all(),'id',function($data){
+		    return $data->id;
+		});
+		$results = [];
+		foreach($listKategori as $q=>$v)
+		{
+		    $last3 = substr($v, -3,3);  
+		    if($last3 == '000') continue;
+
+		    if($last3 % 100 == 0)
+		    {
+		        $induk = \app\models\KategoriKegiatan::findOne($prefix.$last3);
+		        if(empty($induk)) continue;
+		        for($i=0;$i<=10;$i++)
+		        {
+		            $id = $prefix.($last3 + $i);
+
+		            $m = \app\models\KategoriKegiatan::findOne($id);
+		            if(!empty($m)){
+		                $results[$induk->nama][$id] = $m->nama;
+		            }
+		            
+		        }
+		    }   
+		}
+
+		$temps = [];
+
+		foreach($results as $q => $values)
+		{   
+		    $tmp = [];
+		    if(count($values) == 1)
+		    {
+
+		        $tmp = $values;
+		    }
+
+		    else
+		    {
+		        foreach($values as $qq => $vv)
+		        {
+
+		            if(substr($qq,-1) != '0'){
+		                $tmp[$qq] = $vv;
+		            }
+		        }
+		    }
+
+		    $temps[$q]=$tmp;
+		}
+
+		return $temps;
+	}
+
 	public static function getSisterToken()
 	{
 		$tokenPath = Yii::getAlias('@webroot').'/credentials/token/sister_token.json';

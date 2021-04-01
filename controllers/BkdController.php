@@ -8,6 +8,7 @@ use app\models\TugasDosen;
 use app\models\KomponenKegiatan;
 use app\models\Pengajaran;
 use app\models\Publikasi;
+use app\models\Pengabdian;
 use yii\httpclient\Client;
 
 class BkdController extends AppController
@@ -68,6 +69,20 @@ class BkdController extends AppController
 
         $publikasi = $query->all();
 
+        $query = Pengabdian::find()->where([
+            'NIY' => Yii::$app->user->identity->NIY,
+            'is_claimed' => 1,
+        ]);
+
+        // $sd = $tahun_akademik['kuliah_mulai'];
+        // $ed = $tahun_akademik['nilai_selesai'];
+
+        // $query->andFilterWhere(['between','tahun_kegiatan',$sd, $ed]);
+        $query->orderBy(['tahun_kegiatan'=>SORT_ASC]);
+
+        $pengabdian = $query->all();
+
+
         $query = TugasDosenBkd::find();
         $query->joinWith(['unsur as u']);
         $query->where([
@@ -108,6 +123,7 @@ class BkdController extends AppController
         return $this->render('index',[
             'pengajaran' => $pengajaran,
             'publikasi' => $publikasi,
+            'pengabdian' => $pengabdian,
             'tahun_akademik' =>   $tahun_akademik,
             'bkd_ajar' => $bkd_ajar,
             'bkd_pub' => $bkd_pub,
@@ -193,6 +209,50 @@ class BkdController extends AppController
           $model->sks_bkd = $komponen->angka_kredit;
           $model->is_claimed = $dataPost['is_claimed'];
           if($model->save(false,['is_claimed','kegiatan_id','sks_bkd']))
+          {
+            $results = [
+              'code' => 200,
+              'message' => 'Data updated'
+            ];
+          }
+
+          else
+          {
+            $results = [
+              'code' => 500,
+              'message' => 'Oops, something wrong'
+            ];
+          }
+        }
+      }
+
+      echo json_encode($results);
+      die();
+    }
+
+    public function actionAjaxClaimPengabdian()
+    {
+      $dataPost = $_POST['dataPost'];
+      $model = Pengabdian::findOne($dataPost['id']);
+      $resutls = [];
+      if(!empty($model))
+      {
+        $komponen = $model->komponenKegiatan;
+        
+        if(empty($komponen))
+        {
+          $results = [
+            'code' => 500,
+            'message' => 'Oops, KomponenKegiatan is empty'
+          ];
+        }
+
+        else
+        {
+          $model->komponen_kegiatan_id = $komponen->id;
+          $model->nilai = $komponen->angka_kredit;
+          $model->is_claimed = $dataPost['is_claimed'];
+          if($model->save(false,['is_claimed','komponen_kegiatan_id','sks_bkd']))
           {
             $results = [
               'code' => 200,

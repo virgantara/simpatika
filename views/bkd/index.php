@@ -102,6 +102,50 @@ $total_penunjang = 0;
     <div class="col-md-12"> 
         <div class="panel">
             <div class="panel-heading">
+                Pengabdian
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th class="text-center">Kegiatan</th>
+                                <th class="text-center">Tanggal Terbit</th>
+                                <th class="text-center">Beban Kredit</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+
+                            
+                            foreach ($pengabdian as $key => $value) 
+                            {
+                                # code...
+                                $total_abdi += $value->nilai;
+                            ?>
+                            <tr>
+                                <td><?=$key+1;?></td>
+                                <td>Melakukan pengabdian <?=$value->judul_penelitian_pengabdian;?> di <?=$value->tempat_kegiatan;?> </td>
+                                <td><?=$value->tahun_kegiatan;?></td>
+                                <td class="text-center"><?=$value->nilai;?></td>
+                            </tr>
+                            <?php 
+                            }
+                            ?>
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+<div class="row">
+    <div class="col-md-12"> 
+        <div class="panel">
+            <div class="panel-heading">
                 Summary Report
             </div>
             <div class="panel-body">

@@ -78,7 +78,23 @@ use yii\helpers\ArrayHelper;
 				Pengabdian
 			</div>
 			<div class="panel-body">
-				
+				<table class="table" id="tabel-pengabdian">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Judul</th>
+                            <th>SKIM</th>
+                            <th>Tahun Kegiatan</th>
+                            <th>Tempat Kegiatan</th>
+                            <th>SKS BKD</th>
+                            <th>Klaim</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                    
+                </table>
 			</div>
 		</div>
 	</div>
@@ -102,6 +118,35 @@ use yii\helpers\ArrayHelper;
 <?php 
 
 $this->registerJs(' 
+
+$(document).on("click",".btn-claim-pengabdian",function(e){
+    e.preventDefault()
+
+    var obj = new Object
+    obj.id = $(this).data("item")
+    obj.is_claimed = "0";
+    if($(this).is(":checked"))
+        obj.is_claimed = "1"
+
+    $.ajax({
+        type : \'POST\',
+        data : {
+            dataPost : obj
+        },
+        url : \''.Url::to(['bkd/ajax-claim-pengabdian']).'\',
+        async: true,
+        beforeSend : function(){
+
+        },
+        success: function(res){
+            var res = $.parseJSON(res);
+            $("#tahun_list").trigger("change")
+        }
+
+    });
+
+})
+
 $(document).on("click",".btn-claim-publikasi",function(e){
     e.preventDefault()
 
@@ -238,6 +283,46 @@ function getPublikasi(tahun){
     });
 }
 
+function getPengabdian(tahun){
+    
+    var obj = new Object;
+    obj.tahun = tahun;
+    $.ajax({
+        type : \'POST\',
+        data : {
+            dataPost : obj
+        },
+        url : \''.Url::to(['pengabdian/ajax-list']).'\',
+        async: true,
+        beforeSend : function(){
+
+        },
+        success: function(res){
+            var res = $.parseJSON(res);
+            var row = ""
+            $("#tabel-pengabdian > tbody").empty()
+            var total_sks = 0
+            $.each(res, function(i,obj){
+                let isClaimed = obj.is_claimed == 1 ? "checked" : "";
+                row += "<tr>"
+                row += "<td>"+(i+1)+"</td>"
+                row += "<td>"+obj.judul_penelitian_pengabdian+"</td>"
+                row += "<td>"+obj.nama_skim+"</td>"
+                row += "<td>"+obj.tahun_kegiatan+"</td>"
+                row += "<td>"+obj.tempat_kegiatan+"</td>"
+                row += "<td>"+obj.nilai+"</td>"
+                row += "<td><input type=\'checkbox\' "+isClaimed+" data-item=\'"+obj.ID+"\' class=\'btn-claim-pengabdian\'/></td>"
+                row += "</tr>"
+
+            })
+
+            $("#tabel-pengabdian > tbody").append(row)
+                
+        }
+
+    });
+}
+
 function getJadwal(tahun){
 	var obj = new Object
     obj.tahun = tahun
@@ -286,6 +371,7 @@ $(document).on("change","#tahun_list",function(e){
 
     getJadwal($(this).val())
     getPublikasi($(this).val())
+    getPengabdian($(this).val())
 })
 
 getTahunList(function(err, res){
