@@ -183,23 +183,19 @@ class PengabdianController extends AppController
     public function actionCreate()
     {
         $model = new Pengabdian();
-        $tambah = new Verify();
+        $model->NIY = Yii::$app->user->identity->NIY;
+        $model->jenis_penelitian_pengabdian = 'M';
 
         if ($model->load(Yii::$app->request->post())) {
-           $model->NIY = Yii::$app->user->identity->NIY;
-            $tambah->NIY = Yii::$app->user->identity->NIY;
-            $tambah->kategori = 11;
-            $tambah->ver = 'Belum Diverifikasi';
+           
             if($model->save()){
-                $tambah->ID_data = $model->ID;
-                $tambah->save();
-            return $this->redirect(['view', 'id' => $model->ID]);
+                return $this->redirect(['view', 'id' => $model->ID]);
             }
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**

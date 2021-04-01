@@ -1,7 +1,12 @@
 <?php
-
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
+
+$listSkim = ArrayHelper::map(\app\models\SkimKegiatan::find()->orderBy(['nama'=>SORT_ASC])->all(),'id','nama');
+$listBidang = ArrayHelper::map(\app\models\KelompokBidang::find()->orderBy(['nama'=>SORT_ASC])->all(),'id','nama');
+$listKategori = ArrayHelper::map(\app\models\KategoriKegiatan::find()->where(['like','id','130%',false])->orderBy(['nama'=>SORT_ASC])->all(),'id','nama');
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Pengabdian */
@@ -12,25 +17,19 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'NIY',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
-
+   
     <?= $form->field($model, 'judul_penelitian_pengabdian',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
 
     <?= $form->field($model, 'nama_tahun_ajaran',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
 
-    <?= $form->field($model, 'nama_skim',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
+    <?= $form->field($model, 'skim_kegiatan_id',['options' => ['tag' => false]])->dropDownList($listSkim) ?>
+
+     <?= $form->field($model, 'kategori_kegiatan_id',['options' => ['tag' => false]])->dropDownList($listKategori) ?>
+
+      <?= $form->field($model, 'kelompok_bidang_id',['options' => ['tag' => false]])->dropDownList($listBidang) ?>
 
     <?= $form->field($model, 'durasi_kegiatan',['options' => ['tag' => false]])->textInput() ?>
 
-    <?= $form->field($model, 'jenis_penelitian_pengabdian',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
-
-    <?= $form->field($model, 'nilai',['options' => ['tag' => false]])->textInput() ?>
-
-    <?= $form->field($model, 'sister_id',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true]) ?>
-
-    <?= $form->field($model, 'updated_at',['options' => ['tag' => false]])->textInput() ?>
-
-    <?= $form->field($model, 'created_at',['options' => ['tag' => false]])->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

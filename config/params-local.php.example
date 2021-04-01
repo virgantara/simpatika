@@ -8,6 +8,7 @@ return [
    'sister_id_pengguna' => '',
    'sister_username' => '',
    'sister_password' => '',
+   'sister_lembaga_iptek' => '715253d2-bafa-429a-9ff7-a85b34ff955d',
    'consumer_secret' => 'siakad1',
    'consumer_id' => 'siakadunida11111',
    'crypt_algo' => 'aes-256-ctr',

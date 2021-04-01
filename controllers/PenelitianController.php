@@ -39,10 +39,7 @@ class PenelitianController extends AppController
 
         $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
         $sisterToken = \app\helpers\MyHelper::getSisterToken();
-        if(!isset($sisterToken)){
-            $sisterToken = \app\helpers\MyHelper::getSisterToken();
-        }
-
+        
         // print_r($sisterToken);exit;
         $sister_baseurl = Yii::$app->params['sister_baseurl'];
         $headers = ['content-type' => 'application/json'];
