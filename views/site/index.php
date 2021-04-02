@@ -149,7 +149,7 @@ if($bkd_penunjang->nilai_minimal > 0){
                         </div>
                     </li>
                     <li>
-                        <p>Pengajaran <span class="label-percent"><?=$persen_b;?>%</span></p>
+                        <p>Penelitian <span class="label-percent"><?=$persen_b;?>%</span></p>
                         <div class="progress progress-xs">
                             <div class="progress-bar <?=$label_b;?>" role="progressbar" aria-valuenow="<?=$persen_b;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$persen_b;?>%">
                                 <span class="sr-only"><?=$persen_b;?>% Complete</span>
