@@ -11,6 +11,9 @@ use app\models\LoginForm;
 use app\models\DataDiri;
 use app\models\Tendik;
 use app\models\Pengajaran;
+use app\models\Organisasi;
+use app\models\PengelolaJurnal;
+use app\models\TugasDosenBkd;
 use app\models\Penelitian;
 use app\models\Publikasi;
 use app\models\Pengabdian;
@@ -360,6 +363,7 @@ class SiteController extends AppController
         {
             return $this->redirect(Yii::$app->params['sso_login']);
         }
+        $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
         $api_baseurl = Yii::$app->params['api_baseurl'];
         $client = new Client(['baseUrl' => $api_baseurl]);
         $client_token = Yii::$app->params['client_token'];
@@ -384,7 +388,6 @@ class SiteController extends AppController
             }
         }
 
-        // print_r($results);exit;
         $pengajaran = Pengajaran::find()->where([
             'NIY' => Yii::$app->user->identity->NIY,
             // 'is_claimed' => 1,
@@ -408,9 +411,80 @@ class SiteController extends AppController
 
         $publikasi = $query->all();
 
+        $query = Pengabdian::find()->where([
+            'NIY' => Yii::$app->user->identity->NIY,
+            'is_claimed' => 1,
+        ]);
+
+        // $sd = $tahun_akademik['kuliah_mulai'];
+        // $ed = $tahun_akademik['nilai_selesai'];
+
+        // $query->andFilterWhere(['between','tahun_kegiatan',$sd, $ed]);
+        $query->orderBy(['tahun_kegiatan'=>SORT_ASC]);
+
+        $pengabdian = $query->all();
+
+        $query = Organisasi::find()->where([
+            'NIY' => Yii::$app->user->identity->NIY,
+            'is_claimed' => 1,
+        ]);
+
+        $organisasi = $query->all();
+
+        $query = PengelolaJurnal::find()->where([
+            'NIY' => Yii::$app->user->identity->NIY,
+            'is_claimed' => 1,
+        ]);
+
+        $pengelolaJurnal = $query->all();
+
+        $query = TugasDosenBkd::find();
+        $query->joinWith(['unsur as u']);
+        $query->where([
+          'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
+          'u.kode' => 'AJAR'
+        ]);
+
+        $bkd_ajar = $query->one();
+
+        $query = TugasDosenBkd::find();
+        $query->joinWith(['unsur as u']);
+        $query->where([
+          'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
+          'u.kode' => 'RISET'
+        ]);
+
+        $bkd_pub = $query->one();
+
+        $query = TugasDosenBkd::find();
+        $query->joinWith(['unsur as u']);
+        $query->where([
+          'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
+          'u.kode' => 'ABDIMAS'
+        ]);
+
+        $bkd_abdi = $query->one();
+
+        $query = TugasDosenBkd::find();
+        $query->joinWith(['unsur as u']);
+        $query->where([
+          'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
+          'u.kode' => 'PENUNJANG'
+        ]);
+
+        $bkd_penunjang = $query->one();
+
         return $this->render('index',[
             'pengajaran' => $pengajaran,
             'publikasi' => $publikasi,
+            'pengabdian' => $pengabdian,
+            'organisasi' => $organisasi,
+            'pengelolaJurnal' => $pengelolaJurnal,
+            'tahun_akademik' =>   $tahun_akademik,
+            'bkd_ajar' => $bkd_ajar,
+            'bkd_pub' => $bkd_pub,
+            'bkd_abdi' => $bkd_abdi,
+            'bkd_penunjang' => $bkd_penunjang,
             'tahun_akademik' =>   $tahun_akademik  
         ]);
         

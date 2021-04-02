@@ -4,55 +4,60 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Organisasi */
-Yii::$app->setHomeUrl(['/site/homelog']);
-$this->title = $model->organisasi;
-$this->params['breadcrumbs'][] = ['label' => 'Organisasi', 'url' => ['index']];
+/* @var $model app\models\Organisasi */
+
+$this->title = $model->ID;
+$this->params['breadcrumbs'][] = ['label' => 'Organisasis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="organisasi-view">
+<div class="block-header">
+    <h2><?= Html::encode($this->title) ?></h2>
+</div>
+<div class="row">
+   <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <?= Html::a('Update', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Delete', ['delete', 'id' => $model->ID], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => 'Are you sure you want to delete this item?',
+                        'method' => 'post',
+                    ],
+                ]) ?>
+            </div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Edit', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->ID], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
+            <div class="panel-body ">
+        
+<?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'ID',
-            'NIY',
             'organisasi',
             'jabatan',
-            'tahun_awal',
-            'tahun_akhir',
             [
-                'attribute'=>'f_sk',
-                'format'=>'raw',
+                'attribute' => 'kategori_kegiatan_id',
                 'value' => function($data){
-            if(!empty($data->f_sk)){
-            return
-            Html::a('View', ['organisasi/display', 'id' => $data->ID],['class' => 'btn btn-warning']).'&nbsp;&nbsp;'.
-            Html::a('Download', ['organisasi/download', 'id' => $data->ID],['class' => 'btn btn-primary']);
-            }
-            else
-            {
-            return
-            "<p class='btn btn-danger' align='center'>No File</p>";
-            }
-            }
+                    return !empty($data->kategoriKegiatan) ? $data->kategoriKegiatan->nama : '-';
+                }
             ],
+            
+           
+            [
+                'attribute' => 'komponen_kegiatan_id',
+                'value' => function($data){
+                    return !empty($data->komponenKegiatan) ? $data->komponenKegiatan->nama : '-';
+                }
+            ],
+            'tanggal_mulai_keanggotaan',
+            'selesai_keanggotaan',
+            'sister_id',
             'update_at',
-            'ver',
+            
         ],
     ]) ?>
 
+            </div>
+        </div>
+
+    </div>
 </div>

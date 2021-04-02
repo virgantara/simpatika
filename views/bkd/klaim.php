@@ -107,7 +107,20 @@ use yii\helpers\ArrayHelper;
 				Penunjang
 			</div>
 			<div class="panel-body">
-				
+				<table class="table" id="tabel-penunjang">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kegiatan</th>
+                            <th>SKS BKD</th>
+                            <th>Klaim</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                    
+                </table>
 			</div>
 		</div>
 	</div>
@@ -118,6 +131,62 @@ use yii\helpers\ArrayHelper;
 <?php 
 
 $this->registerJs(' 
+
+$(document).on("click",".btn-claim-pengelolaJurnal",function(e){
+    e.preventDefault()
+
+    var obj = new Object
+    obj.id = $(this).data("item")
+    obj.is_claimed = "0";
+    if($(this).is(":checked"))
+        obj.is_claimed = "1"
+
+    $.ajax({
+        type : \'POST\',
+        data : {
+            dataPost : obj
+        },
+        url : \''.Url::to(['bkd/ajax-claim-pengelola-jurnal']).'\',
+        async: true,
+        beforeSend : function(){
+
+        },
+        success: function(res){
+            var res = $.parseJSON(res);
+            $("#tahun_list").trigger("change")
+        }
+
+    });
+
+})
+
+$(document).on("click",".btn-claim-organisasi",function(e){
+    e.preventDefault()
+
+    var obj = new Object
+    obj.id = $(this).data("item")
+    obj.is_claimed = "0";
+    if($(this).is(":checked"))
+        obj.is_claimed = "1"
+
+    $.ajax({
+        type : \'POST\',
+        data : {
+            dataPost : obj
+        },
+        url : \''.Url::to(['bkd/ajax-claim-organisasi']).'\',
+        async: true,
+        beforeSend : function(){
+
+        },
+        success: function(res){
+            var res = $.parseJSON(res);
+            $("#tahun_list").trigger("change")
+        }
+
+    });
+
+})
 
 $(document).on("click",".btn-claim-pengabdian",function(e){
     e.preventDefault()
@@ -323,6 +392,79 @@ function getPengabdian(tahun){
     });
 }
 
+
+
+function getPenunjang(tahun){
+    $("#tabel-penunjang > tbody").empty()
+    var obj = new Object;
+    obj.tahun = tahun;
+    var counter = 0;
+    $.ajax({
+        type : \'POST\',
+        data : {
+            dataPost : obj
+        },
+        url : \''.Url::to(['organisasi/ajax-list']).'\',
+        async: true,
+        beforeSend : function(){
+
+        },
+        success: function(res){
+            var res = $.parseJSON(res);
+            var row = ""
+            var total_sks = 0
+            $.each(res, function(i,obj){
+                let isClaimed = obj.is_claimed == 1 ? "checked" : "";
+                counter++;
+                row += "<tr>"
+                row += "<td>"+(counter)+"</td>"
+                row += "<td>Menjadi "+obj.jabatan+" pada organisasi "+obj.organisasi+" dari tanggal "+obj.tanggal_mulai_keanggotaan+" hingga tanggal "+obj.selesai_keanggotaan+"</td>"
+                row += "<td>"+obj.sks_bkd+"</td>"
+                row += "<td><input type=\'checkbox\' "+isClaimed+" data-item=\'"+obj.ID+"\' class=\'btn-claim-organisasi\'/></td>"
+                row += "</tr>"
+
+            })
+
+            $("#tabel-penunjang > tbody").append(row)
+                
+        }
+
+    });
+
+    $.ajax({
+        type : \'POST\',
+        data : {
+            dataPost : obj
+        },
+        url : \''.Url::to(['pengelola-jurnal/ajax-list']).'\',
+        async: true,
+        beforeSend : function(){
+
+        },
+        success: function(res){
+            var res = $.parseJSON(res);
+            var row = ""
+            
+            var total_sks = 0
+            $.each(res, function(i,obj){
+                let isClaimed = obj.is_claimed == 1 ? "checked" : "";
+                counter++;
+                row += "<tr>"
+                row += "<td>"+(counter)+"</td>"
+                row += "<td>Menjadi "+obj.peran_dalam_kegiatan +" pada "+obj.nama_media_publikasi+" dari tanggal "+obj.tgl_sk_tugas+" hingga tanggal "+obj.tgl_sk_tugas_selesai+"</td>"
+                row += "<td>"+obj.sks_bkd+"</td>"
+                row += "<td><input type=\'checkbox\' "+isClaimed+" data-item=\'"+obj.id+"\' class=\'btn-claim-pengelolaJurnal\'/></td>"
+                row += "</tr>"
+
+            })
+
+            $("#tabel-penunjang > tbody").append(row)
+                
+        }
+
+    });
+}
+
 function getJadwal(tahun){
 	var obj = new Object
     obj.tahun = tahun
@@ -372,6 +514,7 @@ $(document).on("change","#tahun_list",function(e){
     getJadwal($(this).val())
     getPublikasi($(this).val())
     getPengabdian($(this).val())
+    getPenunjang($(this).val())
 })
 
 getTahunList(function(err, res){

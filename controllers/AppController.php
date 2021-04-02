@@ -14,7 +14,7 @@ use Yii;
 class AppController extends Controller
 {
     
-    public function refreshToken()
+    public function refreshToken($token)
     {
 
         $session = Yii::$app->session;
@@ -67,32 +67,7 @@ class AppController extends Controller
 
             catch(\Exception $e) 
             {
-                // print_r($e);exit;
-                $session = Yii::$app->session;
-                
-                $api_baseurl = Yii::$app->params['invoke_token_uri'];
-                $client = new Client(['baseUrl' => $api_baseurl]);
-                $headers = ['x-jwt-token'=>$token];
-
-                $params = [
-                    'uuid' => Yii::$app->user->identity->uuid
-                ];
-                
-                $response = $client->get($api_baseurl, $params,$headers)->send();
-                if ($response->isOk) {
-                    $res = $response->data;
-
-                    if($res['code'] != '200')
-                    {
-                        return $this->redirect(Yii::$app->params['sso_login']);
-                        // return $this->redirect(Yii::$app->params['sso_login']);
-                    }
-
-                    else{
-                        $session->set('token',$res['token']);
-                    }
-                }
-                // 
+                $this->refreshToken($token);
             }
             
             if (!parent::beforeAction($action)) {

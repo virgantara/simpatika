@@ -44,7 +44,7 @@ class PenelitianController extends AppController
         $sister_baseurl = Yii::$app->params['sister_baseurl'];
         $headers = ['content-type' => 'application/json'];
         $client = new \GuzzleHttp\Client([
-            'timeout'  => 5.0,
+            'timeout'  => 10.0,
             'headers' => $headers,
             // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
         ]);
@@ -79,26 +79,49 @@ class PenelitianController extends AppController
             {
                 foreach($results as $item)
                 {
-                    // print_r($item);exit;
                     $model = Penelitian::find()->where([
                         'sister_id' => $item->id_penelitian_pengabdian
                     ])->one();
 
                     if(empty($model))
                         $model = new Penelitian;
-
                     $model->NIY = Yii::$app->user->identity->NIY;
                     $model->sister_id = $item->id_penelitian_pengabdian;
-                    $model->judul = $item->judul_penelitian_pengabdian;
+                    $model->judul_penelitian_pengabdian = $item->judul_penelitian_pengabdian;
                     $model->nama_skim = $item->nama_skim;
-                    $model->tahun = $item->nama_tahun_ajaran;
+                    $model->nama_tahun_ajaran = $item->nama_tahun_ajaran;
                     $model->durasi_kegiatan = $item->durasi_kegiatan;
+
+                    $full_url = $sister_baseurl.'/Penelitian/detail';
+                    $resp = $client->post($full_url, [
+                        'body' => json_encode([
+                            'id_token' => $sisterToken,
+                            'id_dosen' => $user->sister_id,
+                            'id_penelitian_pengabdian' => $model->sister_id
+                        ]), 
+                        'headers' => ['Content-type' => 'application/json']
+
+                    ]); 
                     
+                    
+                    $resp = json_decode($resp->getBody());
+                    if($resp->error_code == 0){
+                        $res = $resp->data;
+                        $model->tahun_usulan = $res->nama_tahun_anggaran;
+                        $model->tahun_kegiatan = $res->nama_tahun_anggaran;
+                        $model->tahun_dilaksanakan = $res->nama_tahun_anggaran;
+                        $model->tahun_pelaksanaan_ke = $res->tahun_pelaksanaan_ke;
+                        $model->dana_dikti = $res->dana_dari_dikti;
+                        $model->dana_pt = $res->dana_dari_PT;
+                        $model->dana_institusi_lain = $res->dana_dari_instansi_lain;
+                        // print_r($res);exit;
+                    }
+
                     if($model->save())
                     {
                         $counter++;
 
-
+                        
                     }
 
                     else
@@ -157,14 +180,50 @@ class PenelitianController extends AppController
      */
     public function actionView($id)
     {
-
+        $model = $this->findModel($id);
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
         $searchModel = new \app\models\PenelitianAnggotaSearch();
         $searchModel->penelitian_id = $id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        // $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
+        // $sisterToken = \app\helpers\MyHelper::getSisterToken();
+        // // if(!isset($sisterToken)){
+        // //     $sisterToken = MyHelper::getSisterToken();
+        // // }
 
+        // // 
+        // $sister_baseurl = Yii::$app->params['sister_baseurl'];
+        // $headers = ['content-type' => 'application/json'];
+        // $client = new \GuzzleHttp\Client([
+        //     'timeout'  => 5.0,
+        //     'headers' => $headers,
+        //     // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
+        // ]);
+        // $full_url = $sister_baseurl.'/Penelitian/detail';
+        // $response = $client->post($full_url, [
+        //     'body' => json_encode([
+        //         'id_token' => $sisterToken,
+        //         'id_dosen' => $user->sister_id,
+        //         'id_penelitian_pengabdian' => $model->sister_id
+        //     ]), 
+        //     'headers' => ['Content-type' => 'application/json']
+
+        // ]); 
+        
+        // $results = [];
+       
+        // $response = json_decode($response->getBody());
+        // if($response->error_code == 0){
+        //     $results = $response->data;
+        // }
+
+        
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -177,33 +236,48 @@ class PenelitianController extends AppController
      */
     public function actionCreate()
     {
-        $model = new Penelitian();
-        $tambah = new Verify();
-
-         if ($model->load(Yii::$app->request->post())) {
-            $model->NIY = Yii::$app->user->identity->NIY;
-            $tambah->NIY = Yii::$app->user->identity->NIY;
-            $tambah->kategori = 10;
-            $tambah->ver = 'Belum Diverifikasi';
-            $f_penelitian =UploadedFile::getInstance($model,'f_penelitian');
-            if(!empty($f_penelitian)){
-            $NameImage = $model->judul.'-'.$model->tahun.'-'.$model->status.'-'.date('Ymd').'.'.$f_penelitian->extension;
-            $model->f_penelitian = $NameImage;
-            if($model->save()){
-                $f_penelitian -> saveAs('uploads/'.$model->NIY.'/penelitian/'.$NameImage);
-                $tambah->ID_data = $model->ID;
-                $tambah->save();
-                return $this->redirect(['view', 'id' => $model->ID]); 
-            }}
-            $model->save();
-            $tambah->ID_data = $model->ID;
-            $tambah->save();
-            return $this->redirect(['view', 'id' => $model->ID]);   
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
         }
+        $model = new Penelitian();
+        $model->NIY = Yii::$app->user->identity->NIY;
+
+        if ($model->load(Yii::$app->request->post())) 
+        {
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            $counter = 0;
+            $errors ='';
+            try     
+            {
+
+                if($model->save())
+                {   
+                    $transaction->commit();
+                    Yii::$app->getSession()->setFlash('success','Data successfully added');
+                    return $this->redirect(['index']);
+       
+                }
+
+                else
+                {
+                    $errors .= \app\helpers\MyHelper::logError($model);        
+                    throw new \Exception;
+                }
+            }
+
+            catch (\Exception $e) {
+                $transaction->rollBack();
+                $errors .= $e->getMessage();
+                Yii::$app->getSession()->setFlash('danger',$errors);
+                // return $this->redirect(['create']);
+            } 
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -214,40 +288,48 @@ class PenelitianController extends AppController
      */
     public function actionUpdate($id)
     {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
         $model = $this->findModel($id);
-        $very = Verify::findOne(['kategori'=>'10','ID_data'=>$id]);
-            if(!empty($very)){
-            $very->ver = 'Belum Diverifikasi';
-            $very->save();
-            }else{
-              $tambah = new Verify();
-              $tambah->NIY = Yii::$app->user->identity->NIY;
-              $tambah->kategori = 10;
-              $tambah->ver = 'Belum Diverifikasi';
-              $tambah->ID_data = $model->ID;
-              $tambah->save();
+        $model->NIY = Yii::$app->user->identity->NIY;
+
+        if ($model->load(Yii::$app->request->post())) 
+        {
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            $counter = 0;
+            $errors ='';
+            try     
+            {
+
+                if($model->save())
+                {   
+                    $transaction->commit();
+                    Yii::$app->getSession()->setFlash('success','Data successfully added');
+                    return $this->redirect(['index']);
+       
+                }
+
+                else
+                {
+                    $errors .= \app\helpers\MyHelper::logError($model);        
+                    throw new \Exception;
+                }
+            }
+
+            catch (\Exception $e) {
+                $transaction->rollBack();
+                $errors .= $e->getMessage();
+                Yii::$app->getSession()->setFlash('danger',$errors);
+                // return $this->redirect(['create']);
+            } 
         }
-        $sementara = $model->f_penelitian;
-        if ($model->load(Yii::$app->request->post())) {
-            $model->NIY = Yii::$app->user->identity->NIY;
-            $model->ver='Belum Diverifikasi';
-            
-            $f_penelitian =UploadedFile::getInstance($model,'f_penelitian');
-            if(!empty($f_penelitian)){
-            $NameImage = $model->judul.'-'.$model->tahun.'-'.$model->status.'-'.date('Ymd').'.'.$f_penelitian->extension;
-            $model->f_penelitian = $NameImage;
-            if($model->save()){
-                $f_penelitian -> saveAs('uploads/'.$model->NIY.'/penelitian/'.$NameImage);
-                return $this->redirect(['view', 'id' => $model->ID]); 
-            }}
-            $model->f_penelitian = $sementara;
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->ID]);   
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**

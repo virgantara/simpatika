@@ -2,19 +2,25 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+
 /* @var $this yii\web\View */
-/* @var $searchModel frontend\models\PenelitianSearch */
+/* @var $searchModel app\models\PenelitianSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-Yii::$app->setHomeUrl(['/site/homelog']);
-$this->title = 'Penelitian';
+
+$this->title = 'Penelitians';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="penelitian-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<h3><?= Html::encode($this->title) ?></h3>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+            </div>
+<div class="panel-body ">
 
-    <p>
+     <p>
         <?= Html::a('Tambah Data', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('<i class="fa fa-download"></i> Import dari SISTER', ['import'], ['class' => 'btn btn-primary']) ?>
     </p>
@@ -34,12 +40,29 @@ $this->params['breadcrumbs'][] = $this->title;
         'header'=>'',
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
-            [
-                'attribute' => 'judul',
-                'contentOptions' => ['style' => 'width:30%;  white-space: normal;'],
-            ],
-            'durasi_kegiatan',
+            'judul_penelitian_pengabdian',
+            'tahun_kegiatan',
+            // 'status',
+            
+            //'nilai',
+            //'sister_id',
             'nama_skim',
+            'durasi_kegiatan',
+            'tempat_kegiatan',
+            'dana_dikti',
+            'dana_institusi_lain',
+            'dana_pt',
+            //'tahun_usulan',
+            //'tahun_dilaksanakan',
+            'tahun_pelaksanaan_ke',
+            //'no_sk_tugas',
+            //'tgl_sk_tugas',
+            //'kategori_kegiatan_id',
+            //'skim_kegiatan_id',
+            //'kelompok_bidang_id',
+            //'komponen_kegiatan_id',
+            //'updated_at',
+            //'created_at',
     ['class' => 'yii\grid\ActionColumn']
 ];?>    
 <?= GridView::widget([
@@ -87,4 +110,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => GridView::TYPE_PRIMARY
         ],
     ]); ?>
+
 </div>
+        </div>
+    </div>
+
+</div>
+

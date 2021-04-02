@@ -146,6 +146,66 @@ $total_penunjang = 0;
     <div class="col-md-12"> 
         <div class="panel">
             <div class="panel-heading">
+                Penunjang
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th class="text-center">Kegiatan</th>
+                                <th class="text-center">Beban Kredit</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+
+                            $counter=0;
+                            foreach ($organisasi as $key => $value) 
+                            {
+                                # code...
+                                $total_penunjang += $value->sks_bkd;
+                                $counter++;
+                            ?>
+                            <tr>
+                                <td><?=$counter;?></td>
+                                <td>Menjadi <?=$value->jabatan;?> di <?=$value->organisasi;?> </td>
+                                <td class="text-center"><?=$value->sks_bkd;?></td>
+                            </tr>
+                            <?php 
+                            }
+                            ?>
+                            <?php
+
+                            
+                            foreach ($pengelolaJurnal as $key => $value) 
+                            {
+                                # code...
+                                $total_penunjang += $value->sks_bkd;
+                                $counter++;
+                            ?>
+                            <tr>
+                                <td><?=$counter;?></td>
+                                <td>Menjadi <?=$value->peran_dalam_kegiatan;?> di <?=$value->nama_media_publikasi;?> </td>
+                                <td class="text-center"><?=$value->sks_bkd;?></td>
+                            </tr>
+                            <?php 
+                            }
+                            ?>
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+<div class="row">
+    <div class="col-md-12"> 
+        <div class="panel">
+            <div class="panel-heading">
                 Summary Report
             </div>
             <div class="panel-body">
@@ -157,6 +217,7 @@ $total_penunjang = 0;
                 	<li>Total Penunjang Anda sebesar <strong><?=$total_penunjang;?> sks</strong>. Syarat minimal adalah <strong><?=!empty($bkd_penunjang->nilai_minimal) ? $bkd_penunjang->nilai_minimal.' sks' : 'boleh kosong';?></strong>. </li>
                 	<li>Total Pengabdian + Penunjang Anda sebesar <strong><?=$total_abdi + $total_penunjang;?> sks</strong></li>
                 </ul>
+                <h2>Total BKD Anda : <?=$total_ajar+$total_pub+$total_abdi+$total_penunjang;?> sks</h2>
             </div>
         </div>
     </div>

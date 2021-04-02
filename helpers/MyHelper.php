@@ -9,6 +9,14 @@ use Yii;
 class MyHelper
 {	
 
+	public static function experience($L) {
+        $a=0;
+        for($x=1; $x<$L; $x++) {
+            $a += floor($x+300*pow(2, ($x/7)));
+        }
+        return floor($a/4);
+    }
+
 	public static function convertKategoriKegiatan($prefix){
 		$listKategori = \yii\helpers\ArrayHelper::map(\app\models\KategoriKegiatan::find()->where(['like','id',$prefix.'%',false])->orderBy(['id'=>SORT_ASC])->all(),'id',function($data){
 		    return $data->id;

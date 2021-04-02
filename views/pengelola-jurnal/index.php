@@ -4,13 +4,14 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\OrganisasiSearch */
+/* @var $searchModel app\models\PengelolaJurnalSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Organisasi';
+$this->title = 'Pengelola Jurnals';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<h3><?= Html::encode($this->title) ?></h3>
 <div class="row">
     <div class="col-md-12">
         <div class="panel">
@@ -20,14 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="panel-body ">
 
     <p>
-        <?= Html::a('Tambah Data', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('<i class="fa fa-download"></i> Import dari SISTER', ['import'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Create Pengelola Jurnal', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php 
-    foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
-      echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';
-    }
-    ?>
     <?php
     $gridColumns = [
     [
@@ -39,16 +34,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'header'=>'',
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
-            // 'tahun_awal',
-            // 'tahun_akhir',
-            'organisasi',
-            'jabatan',
-            //'f_sk',
-            'tanggal_mulai_keanggotaan',
-            'selesai_keanggotaan',
+
+            'peran_dalam_kegiatan',
+            'nama_media_publikasi',
+            'no_sk_tugas',
+            // 'apakah_masih_aktif',
+            'tgl_sk_tugas',
+            //'tgl_sk_tugas_selesai',
+            
+            //'kategori_kegiatan_id',
+            //'komponen_kegiatan_id',
+            //'NIY',
             //'sister_id',
-            //'update_at',
-            //'ver',
+            //'sks_bkd',
+            //'is_claimed',
+            //'updated_at',
+            //'created_at',
     ['class' => 'yii\grid\ActionColumn']
 ];?>    
 <?= GridView::widget([

@@ -8,23 +8,23 @@ use yii\data\ActiveDataProvider;
 use app\models\Organisasi;
 
 /**
- * OrganisasiSearch represents the model behind the search form of `common\models\Organisasi`.
+ * OrganisasiSearch represents the model behind the search form of `app\models\Organisasi`.
  */
 class OrganisasiSearch extends Organisasi
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
             [['ID', 'tahun_awal'], 'integer'],
-            [['NIY', 'tahun_akhir', 'organisasi', 'jabatan', 'update_at', 'ver','namanya'], 'safe'],
+            [['NIY', 'tahun_akhir', 'organisasi', 'jabatan', 'f_sk', 'tanggal_mulai_keanggotaan', 'selesai_keanggotaan', 'sister_id', 'update_at', 'ver'], 'safe'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
@@ -44,7 +44,6 @@ class OrganisasiSearch extends Organisasi
         $query = Organisasi::find();
         $query->alias('p');
         $query->where(['p.NIY' => Yii::$app->user->identity->NIY]);
-
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -59,28 +58,21 @@ class OrganisasiSearch extends Organisasi
             return $dataProvider;
         }
 
-        
-        $dataProvider->sort->attributes['namanya'] = [
-        // The tables are the ones our relation are configured to
-        // in my case they are prefixed with "tbl_"
-        'asc' => ['data_diri.nama' => SORT_ASC],
-        'desc' => ['data_diri.nama' => SORT_DESC],
-        ];
-        
-        $query->joinWith('organisasiData');
         // grid filtering conditions
         $query->andFilterWhere([
             'ID' => $this->ID,
             'tahun_awal' => $this->tahun_awal,
+            'tanggal_mulai_keanggotaan' => $this->tanggal_mulai_keanggotaan,
+            'selesai_keanggotaan' => $this->selesai_keanggotaan,
             'update_at' => $this->update_at,
         ]);
 
         $query->andFilterWhere(['like', 'NIY', $this->NIY])
-            ->andFilterWhere(['like', 'data_diri.nama', $this->namanya])
             ->andFilterWhere(['like', 'tahun_akhir', $this->tahun_akhir])
             ->andFilterWhere(['like', 'organisasi', $this->organisasi])
             ->andFilterWhere(['like', 'jabatan', $this->jabatan])
-//            ->andFilterWhere(['like', 'f_sk', $this->f_sk])
+            ->andFilterWhere(['like', 'f_sk', $this->f_sk])
+            ->andFilterWhere(['like', 'sister_id', $this->sister_id])
             ->andFilterWhere(['like', 'ver', $this->ver]);
 
         return $dataProvider;

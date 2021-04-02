@@ -7,6 +7,8 @@ use app\models\TugasDosenBkd;
 use app\models\TugasDosen;
 use app\models\KomponenKegiatan;
 use app\models\Pengajaran;
+use app\models\Organisasi;
+use app\models\PengelolaJurnal;
 use app\models\Publikasi;
 use app\models\Pengabdian;
 use yii\httpclient\Client;
@@ -82,6 +84,19 @@ class BkdController extends AppController
 
         $pengabdian = $query->all();
 
+        $query = Organisasi::find()->where([
+            'NIY' => Yii::$app->user->identity->NIY,
+            'is_claimed' => 1,
+        ]);
+
+        $organisasi = $query->all();
+
+        $query = PengelolaJurnal::find()->where([
+            'NIY' => Yii::$app->user->identity->NIY,
+            'is_claimed' => 1,
+        ]);
+
+        $pengelolaJurnal = $query->all();
 
         $query = TugasDosenBkd::find();
         $query->joinWith(['unsur as u']);
@@ -124,6 +139,8 @@ class BkdController extends AppController
             'pengajaran' => $pengajaran,
             'publikasi' => $publikasi,
             'pengabdian' => $pengabdian,
+            'organisasi' => $organisasi,
+            'pengelolaJurnal' => $pengelolaJurnal,
             'tahun_akademik' =>   $tahun_akademik,
             'bkd_ajar' => $bkd_ajar,
             'bkd_pub' => $bkd_pub,
@@ -274,4 +291,92 @@ class BkdController extends AppController
       die();
     }
 
+    public function actionAjaxClaimOrganisasi()
+    {
+      $resutls = [];
+      $dataPost = $_POST['dataPost'];
+      $model = Organisasi::findOne($dataPost['id']);
+      
+      if(!empty($model))
+      {
+        $komponen = $model->komponenKegiatan;
+        
+        if(empty($komponen))
+        {
+          $results = [
+            'code' => 500,
+            'message' => 'Oops, KomponenKegiatan is empty'
+          ];
+        }
+
+        else
+        {
+          $model->komponen_kegiatan_id = $komponen->id;
+          $model->sks_bkd = $komponen->angka_kredit;
+          $model->is_claimed = $dataPost['is_claimed'];
+          if($model->save(false,['is_claimed','komponen_kegiatan_id','sks_bkd']))
+          {
+            $results = [
+              'code' => 200,
+              'message' => 'Data updated'
+            ];
+          }
+
+          else
+          {
+            $results = [
+              'code' => 500,
+              'message' => 'Oops, something wrong'
+            ];
+          }
+        }
+      }
+
+      echo json_encode($results);
+      die();
+    }
+
+    public function actionAjaxClaimPengelolaJurnal()
+    {
+      $dataPost = $_POST['dataPost'];
+      $model = PengelolaJurnal::findOne($dataPost['id']);
+      $resutls = [];
+      if(!empty($model))
+      {
+        $komponen = $model->komponenKegiatan;
+        
+        if(empty($komponen))
+        {
+          $results = [
+            'code' => 500,
+            'message' => 'Oops, KomponenKegiatan is empty'
+          ];
+        }
+
+        else
+        {
+          $model->komponen_kegiatan_id = $komponen->id;
+          $model->sks_bkd = $komponen->angka_kredit;
+          $model->is_claimed = $dataPost['is_claimed'];
+          if($model->save(false,['is_claimed','komponen_kegiatan_id','sks_bkd']))
+          {
+            $results = [
+              'code' => 200,
+              'message' => 'Data updated'
+            ];
+          }
+
+          else
+          {
+            $results = [
+              'code' => 500,
+              'message' => 'Oops, something wrong'
+            ];
+          }
+        }
+      }
+
+      echo json_encode($results);
+      die();
+    }
 }

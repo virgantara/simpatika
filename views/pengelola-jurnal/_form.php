@@ -5,7 +5,6 @@ use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
-
 $query = \app\models\KomponenKegiatan::find();
 $query->alias('p');
 $query->select(['p.nama']);
@@ -86,23 +85,30 @@ $years = array_combine(range(date("Y"), 2006), range(date("Y"), 2006));
        
         </div>
     </div>
-    
     <div class="form-group">
-        <label class="control-label col-md-3">Nama Organisasi</label>
+        <label class="control-label col-md-3">Peran dalam Kegiatan</label>
         <div class="col-md-9">
-        <?= $form->field($model, 'organisasi',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true])->label(false) ?>
+     <?= $form->field($model, 'peran_dalam_kegiatan',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true])->label(false) ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-3">Nama Media Publikasi</label>
+        <div class="col-md-9">
+        <?= $form->field($model, 'nama_media_publikasi',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true])->label(false) ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-3">No SK Penugasan</label>
+        <div class="col-md-9">
+        <?= $form->field($model, 'no_sk_tugas',['options' => ['tag' => false]])->textInput()->label(false) ?>
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-md-3">Peran</label>
+        <label class="control-label col-md-3">Tgl SK Penugasan</label>
         <div class="col-md-9">
-        <?= $form->field($model, 'jabatan',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true])->label(false) ?>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-md-3">Mulai Keanggotaan</label>
-        <div class="col-md-9">
-        <?= $form->field($model, 'tanggal_mulai_keanggotaan',['options' => ['tag' => false]])->widget(
+        <?= $form->field($model, 'tgl_sk_tugas',['options' => ['tag' => false]])->widget(
             DatePicker::className(),[
                 'name' => 'tgl_sk_tugas', 
                 'value' => date('Y-m-d', strtotime('0 days')),
@@ -117,13 +123,13 @@ $years = array_combine(range(date("Y"), 2006), range(date("Y"), 2006));
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-md-3">Selesai Keanggotaan</label>
+        <label class="control-label col-md-3">Tgl SK Penugasan Selesai</label>
         <div class="col-md-9">
-        <?= $form->field($model, 'selesai_keanggotaan',['options' => ['tag' => false]])->widget(
+        <?= $form->field($model, 'tgl_sk_tugas_selesai',['options' => ['tag' => false]])->widget(
             DatePicker::className(),[
-                'name' => 'tgl_sk_tugas', 
+                'name' => 'tgl_sk_tugas_selesai', 
                 'value' => date('Y-m-d', strtotime('0 days')),
-                'options' => ['placeholder' => 'Pilih tanggal ...'],
+                'options' => ['placeholder' => 'Pilih tanggal SK ...'],
                 'pluginOptions' => [
                     'autoclose' => true,
                     'format' => 'yyyy-mm-dd',
@@ -133,8 +139,12 @@ $years = array_combine(range(date("Y"), 2006), range(date("Y"), 2006));
         )->label(false) ?>
         </div>
     </div>
-    
-   
+    <div class="form-group">
+        <label class="control-label col-md-3">Masih aktif?</label>
+        <div class="col-md-9">
+        <?= $form->field($model, 'apakah_masih_aktif',['options' => ['tag' => false]])->radioList(['1' => 'Ya','0'=>'Tidak'])->label(false) ?>
+        </div>
+    </div>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

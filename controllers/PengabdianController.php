@@ -99,7 +99,7 @@ class PengabdianController extends AppController
             {
                 foreach($results as $item)
                 {
-                    // print_r($item);exit;
+                   
                     $model = Pengabdian::find()->where([
                         'sister_id' => $item->id_penelitian_pengabdian
                     ])->one();

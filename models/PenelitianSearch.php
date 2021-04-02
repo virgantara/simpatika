@@ -8,23 +8,24 @@ use yii\data\ActiveDataProvider;
 use app\models\Penelitian;
 
 /**
- * PenelitianSearch represents the model behind the search form of `common\models\Penelitian`.
+ * PenelitianSearch represents the model behind the search form of `app\models\Penelitian`.
  */
 class PenelitianSearch extends Penelitian
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['ID', 'tahun'], 'integer'],
-            [['NIY', 'judul', 'status', 'sumberdana','namanya','ver','durasi_kegiatan','nama_skim'], 'safe'],
+            [['ID', 'tahun_kegiatan', 'durasi_kegiatan', 'tahun_usulan', 'tahun_dilaksanakan', 'tahun_pelaksanaan_ke', 'komponen_kegiatan_id'], 'integer'],
+            [['NIY', 'judul_penelitian_pengabdian', 'status', 'dana_dikti', 'sister_id', 'nama_skim', 'tempat_kegiatan', 'no_sk_tugas', 'tgl_sk_tugas', 'kategori_kegiatan_id', 'skim_kegiatan_id', 'kelompok_bidang_id', 'updated_at', 'created_at'], 'safe'],
+            [['dana_institusi_lain', 'nilai', 'dana_pt'], 'number'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
@@ -58,29 +59,34 @@ class PenelitianSearch extends Penelitian
             return $dataProvider;
         }
 
-        $dataProvider->sort->attributes['namanya'] = [
-        // The tables are the ones our relation are configured to
-        // in my case they are prefixed with "tbl_"
-        'asc' => ['data_diri.nama' => SORT_ASC],
-        'desc' => ['data_diri.nama' => SORT_DESC],
-        ];
-        
-        $query->joinWith('penelitianData');
         // grid filtering conditions
         $query->andFilterWhere([
             'ID' => $this->ID,
-            'tahun' => $this->tahun,
+            'tahun_kegiatan' => $this->tahun_kegiatan,
+            'dana_institusi_lain' => $this->dana_institusi_lain,
+            'nilai' => $this->nilai,
+            'durasi_kegiatan' => $this->durasi_kegiatan,
+            'dana_pt' => $this->dana_pt,
+            'tahun_usulan' => $this->tahun_usulan,
+            'tahun_dilaksanakan' => $this->tahun_dilaksanakan,
+            'tahun_pelaksanaan_ke' => $this->tahun_pelaksanaan_ke,
+            'tgl_sk_tugas' => $this->tgl_sk_tugas,
+            'komponen_kegiatan_id' => $this->komponen_kegiatan_id,
+            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at,
         ]);
 
         $query->andFilterWhere(['like', 'NIY', $this->NIY])
-            ->andFilterWhere(['like', 'judul', $this->judul])
-            ->andFilterWhere(['like', 'data_diri.nama', $this->namanya])
+            ->andFilterWhere(['like', 'judul_penelitian_pengabdian', $this->judul_penelitian_pengabdian])
             ->andFilterWhere(['like', 'status', $this->status])
-            ->andFilterWhere(['like', 'ver', $this->ver])
-            ->andFilterWhere(['like', 'durasi_kegiatan', $this->durasi_kegiatan])
+            ->andFilterWhere(['like', 'dana_dikti', $this->dana_dikti])
+            ->andFilterWhere(['like', 'sister_id', $this->sister_id])
             ->andFilterWhere(['like', 'nama_skim', $this->nama_skim])
-            ->andFilterWhere(['like', 'sumberdana', $this->sumberdana]);
-//            ->andFilterWhere(['like', 'f_penelitian', $this->f_penelitian]);
+            ->andFilterWhere(['like', 'tempat_kegiatan', $this->tempat_kegiatan])
+            ->andFilterWhere(['like', 'no_sk_tugas', $this->no_sk_tugas])
+            ->andFilterWhere(['like', 'kategori_kegiatan_id', $this->kategori_kegiatan_id])
+            ->andFilterWhere(['like', 'skim_kegiatan_id', $this->skim_kegiatan_id])
+            ->andFilterWhere(['like', 'kelompok_bidang_id', $this->kelompok_bidang_id]);
 
         return $dataProvider;
     }

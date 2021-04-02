@@ -183,6 +183,7 @@ $years = array_combine(range(date("Y"), 2006), range(date("Y"), 2006));
                 'value' => date('Y-m-d', strtotime('0 days')),
                 'options' => ['placeholder' => 'Pilih tanggal SK ...'],
                 'pluginOptions' => [
+                    'autoclose' => true,
                     'format' => 'yyyy-mm-dd',
                     'todayHighlight' => true
                 ]

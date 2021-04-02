@@ -115,26 +115,26 @@ class MenuHelper
 		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_penunjang">{label}</a>',
 		        'items'=>[
 		           	['label' => 'Anggota Profesi', 'url' => ['/organisasi/index']],
-		           	['label' => 'Pengelola jurnal', 'url' => ['/pengajaran/index']],
-		           	['label' => 'Penghargaan', 'url' => ['/organisasi/index']],
-		           	['label' => 'Visiting Scientist', 'url' => ['/organisasi/index']],
-		           	['label' => 'Penunjang lain', 'url' => ['/organisasi/index']],
+		           	['label' => 'Pengelola jurnal', 'url' => ['/pengelola-jurnal/index']],
+		           	['label' => 'Penghargaan', 'url' => '#'],
+		           	['label' => 'Visiting Scientist', 'url' => '#'],
+		           	['label' => 'Penunjang lain', 'url' => '#'],
 		        ]
 	        ];
 
-	        $menuItems[] = [
-	    		'label' => '<i class="lnr lnr-chart-bars"></i><span>Luaran</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		        'url' => '#',
-		        'submenuTemplate' => "\n<div id='pages_luaran' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_luaran">{label}</a>',
-		        'items'=>[
-		           	['label' => 'Jurnal', 'url' => ['/jurnal/index']],
-                    ['label' => 'Buku', 'url' => ['/buku/index']],    
-                    ['label' => 'Forum Ilmiah', 'url' => ['/konferensi/index']],
-                    ['label' => 'HKI', 'url' => ['/hki/index']],
-                    ['label' => 'Luaran Lain', 'url' => ['/luaran-lain/index']], 
-		        ]
-	        ];
+	      //   $menuItems[] = [
+	    		// 'label' => '<i class="lnr lnr-chart-bars"></i><span>Luaran</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
+		     //    'url' => '#',
+		     //    'submenuTemplate' => "\n<div id='pages_luaran' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
+		     //    'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_luaran">{label}</a>',
+		     //    'items'=>[
+		     //       	['label' => 'Jurnal', 'url' => ['/jurnal/index']],
+       //              ['label' => 'Buku', 'url' => ['/buku/index']],    
+       //              ['label' => 'Forum Ilmiah', 'url' => ['/konferensi/index']],
+       //              ['label' => 'HKI', 'url' => ['/hki/index']],
+       //              ['label' => 'Luaran Lain', 'url' => ['/luaran-lain/index']], 
+		     //    ]
+	      //   ];
 
 	        $menuItems[] = [
 	    		'label' => '<i class="lnr lnr-list"></i><span>Layanan BKD</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
