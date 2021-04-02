@@ -164,7 +164,10 @@ class PengajaranController extends AppController
      */
     public function actionIndex()
     {
-        
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
         $searchModel = new PengajaranSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
