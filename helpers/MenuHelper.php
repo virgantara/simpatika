@@ -225,9 +225,12 @@ class MenuHelper
 			
     		$class = $session->has('class') ? $session->get('class') : '';
     		$stars = $session->has('stars') ? $session->get('stars') : '';
-
+    		$label_stars = '';
+    		for($i=0;$i<$stars;$i++){
+    			$label_stars .= '<i class="lnr lnr-star"></i>';
+    		}
     		$menuItems[] = [
-		     	'template' => '<a href="{url}" class="dropdown-toggle" data-toggle="dropdown"><i class="lnr lnr-star"></i> <span class="badge bg-success">'.$class.$stars.'</span></a>',
+		     	'template' => '<a href="{url}" class="dropdown-toggle" data-toggle="dropdown">'.$label_stars.' <span class="badge bg-success">'.$class.$stars.'</span></a>',
 		        'label' => ''
 		        
 		    ];
