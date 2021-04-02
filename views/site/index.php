@@ -106,15 +106,11 @@ else {
     $label_d = 'progress-bar-danger';
 }
 
-
-
-
-
 ?>
 <h1>Pencapaian Anda Semester ini (<?=$tahun_akademik['nama_tahun'];?>)</h1>
 <h4><?=\app\helpers\MyHelper::convertTanggalIndo($tahun_akademik['kuliah_mulai']);?> sampai dengan <?=\app\helpers\MyHelper::convertTanggalIndo($tahun_akademik['nilai_selesai']);?></h4>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
     
         <div class="panel">
             <div class="panel-heading">
@@ -127,10 +123,10 @@ else {
             <div class="panel-body">
                 <ul class="list-unstyled task-list">
                     <li>
-                        <p>Updating Users Settings <span class="label-percent">23%</span></p>
+                        <p>Update Profil <span class="label-percent"><?=$results['persentaseProfil'];?>%</span></p>
                         <div class="progress progress-xs">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="23" aria-valuemin="0" aria-valuemax="100" style="width:23%">
-                                <span class="sr-only">23% Complete</span>
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$results['persentaseProfil'];?>" aria-valuemin="0" aria-valuemax="100" style="width:<?=$results['persentaseProfil'];?>%">
+                                <span class="sr-only"><?=$results['persentaseProfil'];?>% Complete</span>
                             </div>
                         </div>
                     </li>
@@ -171,15 +167,36 @@ else {
         </div>
         <!-- END TASKS -->
     </div>
-    <div class="col-md-12">	
+    <div class="col-md-6">	
         <div class="panel">
             <div class="panel-heading">
-            	<h3>Anda telah mencapai tingkatan <?=$currentClass['rank'];?> dengan <?=$currentClass['stars'];?> bintang kelas <?=$currentClass['class'];?></h3>
+            	<h3 class="panel-title">Summary Reports</h3>
+                <div class="right">
+                    <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+                    <button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+                </div>
             </div>
             <div class="panel-body">
-            	<div class="alert alert-info">
-       
-                 Level Anda sekarang : <strong><?=$level;?></strong>. Anda perlu <strong><?=$remainingExp;?></strong> exp lagi untuk mencapai level berikutnya. 
+                
+            	<div class="alert alert-default">
+                     <ul >
+                    <li>
+                            Kegiatan Pengajaran dan Penelitian Anda
+                            <?php 
+                            echo ($persen_a + $persen_b >= 100) ? '<strong>sudah mencukupi</strong>' : 'belum mencukupi';
+                            ?>
+                    </li>
+                    <li>
+                        Kegiatan Pengabdian dan Penunjang Anda
+                            <?php 
+                            echo ($persen_c + $persen_d >= 100) ? '<strong>sudah mencukupi</strong>' : 'belum mencukupi';
+                            ?>
+                    </li>
+                    <li>Anda telah mencapai tingkatan <?=$currentClass['rank'];?> dengan <?=$currentClass['stars'];?> bintang kelas <?=$currentClass['class'];?></li>
+                    <li>Level Anda sekarang : <strong><?=$level;?></strong>. Anda perlu <strong><?=$remainingExp;?></strong> exp lagi untuk mencapai level berikutnya. </li>
+                    
+                </ul>
+                 
                 </div>
             </div>
         </div>

@@ -624,14 +624,24 @@ class SiteController extends AppController
 
         $bkd_penunjang = $query->one();
 
-        // $listColumns = Yii::$app->db->createCommand('SHOW COLUMNS FROM data_diri')->queryAll();
-        // echo '<pre>';
-        // print_r($listColumns);
-        // echo '</pre>';
-        // exit;
+        $listColumns = Yii::$app->db->createCommand('SHOW COLUMNS FROM data_diri')->queryAll();
 
+        $countNotEmpty = 0;
+        foreach($listColumns as $col)
+        {
+            $tmp = Yii::$app->db->createCommand('SELECT '.$col['Field'].' FROM data_diri WHERE '.$col['Field'].' IS NOT NULL AND NIY = "'.Yii::$app->user->identity->NIY.'" ')->queryOne();
+
+            if(isset($tmp))
+                $countNotEmpty++;
+            
+
+        }
+
+        $persentaseProfil = round($countNotEmpty / count($listColumns) * 100,2);
+        // print_r($countNotEmpty);exit;
         $results = [
-            'totalCatatanHarian' => $totalCatatanHarian
+            'totalCatatanHarian' => $totalCatatanHarian,
+            'persentaseProfil' => $persentaseProfil
         ];
         return $this->render('index',[
             'pengajaran' => $pengajaran,
