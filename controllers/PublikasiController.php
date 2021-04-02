@@ -259,6 +259,11 @@ class PublikasiController extends AppController
      */
     public function actionIndex()
     {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
+
         $searchModel = new PublikasiSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
