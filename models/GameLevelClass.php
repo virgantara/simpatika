@@ -46,6 +46,7 @@ class GameLevelClass extends \yii\db\ActiveRecord
             'level_max' => 'Level Max',
             'class' => 'Class',
             'stars' => 'Stars',
+            'rank' => 'Rank'
         ];
     }
 
@@ -57,7 +58,21 @@ class GameLevelClass extends \yii\db\ActiveRecord
         $results = [
             'class' => !empty($model) ? $model->class : '',
             'stars' => !empty($model) ? $model->stars : 0,
+            'rank' => !empty($model) ? $model->rank : '',
         ];
         return $results;
     }
+
+    // public static function getNextLevel($exp)
+    // {
+    //     $query = GameLevelClass::find();
+    //     $query->where($level.' <= level_max AND '.$level.' >= level_min');
+    //     $model = $query->all();
+    //     $results = [
+    //         'class' => !empty($model[1]) ? $model[1]->class : '',
+    //         'stars' => !empty($model[1]) ? $model[1]->stars : 0,
+    //         'rank' => !empty($model[1]) ? $model[1]->rank : '',
+    //     ];
+    //     return $results;
+    // }
 }

@@ -40,19 +40,21 @@ $total_bkd = $total_ajar+$total_pub+$total_abdi+$total_penunjang;
 $exp = $total_bkd * 1000;
 $level = MasterLevel::getLevel($exp);
 $results = GameLevelClass::getCurrentClass($level);
+$nextLevel = MasterLevel::getNextLevel($exp);
+$remainingExp = $nextLevel['nextExp'] - $exp;
 ?>
-<h1>Progres Anda Semester ini (<?=$tahun_akademik['nama_tahun'];?>)</h1>
-<h3>Tanggal <?=\app\helpers\MyHelper::convertTanggalIndo($tahun_akademik['kuliah_mulai']);?> sampai dengan <?=\app\helpers\MyHelper::convertTanggalIndo($tahun_akademik['nilai_selesai']);?></h3>
+<h1>Pencapaian Anda Semester ini (<?=$tahun_akademik['nama_tahun'];?>)</h1>
+<h4><?=\app\helpers\MyHelper::convertTanggalIndo($tahun_akademik['kuliah_mulai']);?> sampai dengan <?=\app\helpers\MyHelper::convertTanggalIndo($tahun_akademik['nilai_selesai']);?></h4>
 <div class="row">
     <div class="col-md-12">	
         <div class="panel">
             <div class="panel-heading">
-            	
+            	<h3>Anda telah mencapai tingkatan <?=$results['rank'];?> dengan <?=$results['stars'];?> bintang kelas <?=$results['class'];?></h3>
             </div>
             <div class="panel-body">
             	<div class="alert alert-info">
-                 <h3>Current level : <?=$level;?>    </h3>
-                 <h1>Your are now a <?=$results['stars'];?>-starred <?=$results['class'];?> class lecturer</h1>
+       
+                 Level Anda sekarang : <strong><?=$level;?></strong>. Anda perlu <strong><?=$remainingExp;?></strong> exp lagi untuk mencapai level berikutnya. 
                 </div>
             </div>
         </div>

@@ -53,4 +53,19 @@ class MasterLevel extends \yii\db\ActiveRecord
         $model = $query->one();
         return !empty($model) ? $model->level : 0;
     }
+
+    public static function getNextLevel($exp)
+    {
+        $query = MasterLevel::find();
+        $query->where(['>=','exp',$exp]);
+        $query->orderBy(['exp'=>SORT_ASC]);
+        $query->limit(2);
+        $model = $query->all();
+        $results = [
+            'currentLevel' => !empty($model[0]) ? $model[0]->level : 0,
+            'nextLevel' => !empty($model[1]) ? $model[1]->level : 0,
+            'nextExp' => !empty($model[1]) ? $model[1]->exp : 0,
+        ];
+        return $results;
+    }
 }
