@@ -11,6 +11,7 @@ use app\models\LoginForm;
 use app\models\DataDiri;
 use app\models\Tendik;
 use app\models\Pengajaran;
+use app\models\CatatanHarian;
 use app\models\Organisasi;
 use app\models\PengelolaJurnal;
 use app\models\TugasDosenBkd;
@@ -352,6 +353,13 @@ class SiteController extends AppController
         
     }
 
+    protected function sumPoinCatatanHarian($sd, $ed)
+    {
+        $query = CatatanHarian::find()->where(['user_id'=>Yii::$app->user->identity->ID]);
+        $query->andFilterWhere(['between','tanggal',$sd, $ed]);
+        return $query->sum('poin');
+    }
+
     /**
      * Displays homepage.
      *
@@ -405,6 +413,8 @@ class SiteController extends AppController
 
         $sd = $tahun_akademik['kuliah_mulai'];
         $ed = $tahun_akademik['nilai_selesai'];
+
+        $totalCatatanHarian = $this->sumPoinCatatanHarian($sd, $ed);
 
         $query->andFilterWhere(['between','tanggal_terbit',$sd, $ed]);
         $query->orderBy(['tanggal_terbit'=>SORT_ASC]);
@@ -473,9 +483,12 @@ class SiteController extends AppController
         ]);
 
         $bkd_penunjang = $query->one();
-
+        $results = [
+            'totalCatatanHarian' => $totalCatatanHarian
+        ];
         return $this->render('index',[
             'pengajaran' => $pengajaran,
+            'results' => $results,
             'publikasi' => $publikasi,
             'pengabdian' => $pengabdian,
             'organisasi' => $organisasi,

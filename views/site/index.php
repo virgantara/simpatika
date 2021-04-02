@@ -38,8 +38,9 @@ foreach ($pengelolaJurnal as $key => $value)
 $total_bkd = $total_ajar+$total_pub+$total_abdi+$total_penunjang;
 
 $exp = $total_bkd * 1000;
+$exp += $results['totalCatatanHarian'];
 $level = MasterLevel::getLevel($exp);
-$results = GameLevelClass::getCurrentClass($level);
+$currentClass = GameLevelClass::getCurrentClass($level);
 $nextLevel = MasterLevel::getNextLevel($exp);
 $remainingExp = $nextLevel['nextExp'] - $exp;
 ?>
@@ -49,7 +50,7 @@ $remainingExp = $nextLevel['nextExp'] - $exp;
     <div class="col-md-12">	
         <div class="panel">
             <div class="panel-heading">
-            	<h3>Anda telah mencapai tingkatan <?=$results['rank'];?> dengan <?=$results['stars'];?> bintang kelas <?=$results['class'];?></h3>
+            	<h3>Anda telah mencapai tingkatan <?=$currentClass['rank'];?> dengan <?=$currentClass['stars'];?> bintang kelas <?=$currentClass['class'];?></h3>
             </div>
             <div class="panel-body">
             	<div class="alert alert-info">
