@@ -223,6 +223,15 @@ class MenuHelper
         }
     	if(!Yii::$app->user->isGuest){	
 			
+    		$class = $session->has('class') ? $session->get('class') : '';
+    		$stars = $session->has('stars') ? $session->get('stars') : '';
+
+    		$menuItems[] = [
+		     	'template' => '<a href="{url}" class="dropdown-toggle" data-toggle="dropdown"><i class="lnr lnr-star"></i> <span class="badge bg-success">'.$class.$stars.'</span></a>',
+		        'label' => ''
+		        
+		    ];
+
     		 $menuItems[] = [
 		     	'template' => '<a href="{url}" class="dropdown-toggle" data-toggle="dropdown"><i class="lnr lnr-layers"></i> <span>{label}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>',
 		        'label' => 'Your apps', 

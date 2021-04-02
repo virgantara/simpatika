@@ -37,12 +37,12 @@ foreach ($pengelolaJurnal as $key => $value)
 
 $total_bkd = $total_ajar+$total_pub+$total_abdi+$total_penunjang;
 
-$exp = $total_bkd * 1000;
-$exp += $results['totalCatatanHarian'];
-$level = MasterLevel::getLevel($exp);
-$currentClass = GameLevelClass::getCurrentClass($level);
-$nextLevel = MasterLevel::getNextLevel($exp);
-$remainingExp = $nextLevel['nextExp'] - $exp;
+// $exp = $total_bkd * 1000;
+// $exp += $results['totalCatatanHarian'];
+// $level = MasterLevel::getLevel($exp);
+// $currentClass = GameLevelClass::getCurrentClass($level);
+// $nextLevel = MasterLevel::getNextLevel($exp);
+// $remainingExp = $nextLevel['nextExp'] - $exp;
 
 $persen_a = 0;
 $persen_b = 0;
@@ -192,8 +192,6 @@ else {
                             echo ($persen_c + $persen_d >= 100) ? '<strong>sudah mencukupi</strong>' : 'belum mencukupi';
                             ?>
                     </li>
-                    <li>Anda telah mencapai tingkatan <?=$currentClass['rank'];?> dengan <?=$currentClass['stars'];?> bintang kelas <?=$currentClass['class'];?></li>
-                    <li>Level Anda sekarang : <strong><?=$level;?></strong>. Anda perlu <strong><?=$remainingExp;?></strong> exp lagi untuk mencapai level berikutnya. </li>
                     
                 </ul>
                  
