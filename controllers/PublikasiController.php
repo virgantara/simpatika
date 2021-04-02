@@ -6,6 +6,8 @@ use Yii;
 use app\helpers\MyHelper;
 use app\models\User;
 use app\models\Publikasi;
+use app\models\JenisPublikasi;
+use app\models\KategoriKegiatan;
 use app\models\PublikasiAuthor;
 use app\models\PublikasiSearch;
 use yii\web\Controller;
@@ -97,6 +99,16 @@ class PublikasiController extends AppController
                 $counter = 0;
                 foreach($results as $item)
                 {
+
+                    $jenisPublikasi = JenisPublikasi::find()->where(['nama'=> $item->nama_jenis_publikasi])->one();
+
+                    if(empty($jenisPublikasi)){
+                        $errors .= 'Jenis Publikasi '.$item->nama_jenis_publikasi.' belum ada di database';
+                        throw new \Exception;
+                    }
+                        
+                    
+
                     $model = Publikasi::find()->where([
                         'sister_id' => $item->id_riwayat_publikasi_paten
                     ])->one();
@@ -104,10 +116,13 @@ class PublikasiController extends AppController
                     if(empty($model))
                         $model = new Publikasi;
 
+
                     $model->NIY = Yii::$app->user->identity->NIY;
                     $model->sister_id = $item->id_riwayat_publikasi_paten;
                     $model->judul_publikasi_paten = $item->judul_publikasi_paten;
                     $model->nama_jenis_publikasi = $item->nama_jenis_publikasi;
+                    $model->jenis_publikasi_id = $jenisPublikasi->id;
+                    
                     $model->tanggal_terbit = $item->tanggal_terbit;
                     $full_url = $sister_baseurl.'/Publikasi/detail';
                     $response = $client->post($full_url, [
@@ -134,6 +149,16 @@ class PublikasiController extends AppController
                         $model->doi = $detail->DOI_publikasi;
                         $model->issn = $detail->ISSN_publikasi;    
                         $model->nama_kategori_kegiatan = $detail->nama_kategori_kegiatan;
+                        $kategoriKegiatan = KategoriKegiatan::find()->where(['nama'=> $detail->nama_kategori_kegiatan])->one();
+
+
+
+                        if(empty($kategoriKegiatan)){
+                            $errors .= 'KategoriKegiatan '.$item->nama_kategori_kegiatan.' belum ada di database';
+                            throw new \Exception;
+                        }
+
+                        $model->kategori_kegiatan_id = $kategoriKegiatan->id;
 
                         foreach($detail->data_penulis as $author)
                         {

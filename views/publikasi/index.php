@@ -45,8 +45,19 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'id',
 
             'judul_publikasi_paten',
-            'nama_jenis_publikasi',
-            'nama_kategori_kegiatan',
+            // 'nama_jenis_publikasi',
+            [
+                'attribute' => 'kategori_kegiatan_id',
+                'value' => function($data){
+                    return !empty($data->kategoriKegiatan) ? $data->kategoriKegiatan->nama : '';
+                }
+            ],
+            [
+                'attribute' => 'jenis_publikasi_id',
+                'value' => function($data){
+                    return !empty($data->jenisPublikasi) ? $data->jenisPublikasi->nama : '';
+                }
+            ],
             [
                 'attribute' => 'kegiatan_id',
                 'value' => function($data){

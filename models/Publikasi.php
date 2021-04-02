@@ -47,7 +47,7 @@ class Publikasi extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tanggal_terbit', 'updated_at', 'created_at'], 'safe'],
+            [['tanggal_terbit', 'updated_at', 'created_at','jenis_publikasi_id'], 'safe'],
             [['kegiatan_id'], 'integer'],
             [['sks_bkd'], 'number'],
             [['judul_publikasi_paten', 'nama_jenis_publikasi', 'nama_kategori_kegiatan', 'tautan_laman_jurnal', 'tautan', 'penerbit', 'doi', 'issn'], 'string', 'max' => 255],
@@ -58,6 +58,8 @@ class Publikasi extends \yii\db\ActiveRecord
             [['is_claimed'], 'string', 'max' => 1],
             [['NIY'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['NIY' => 'NIY']],
             [['kegiatan_id'], 'exist', 'skipOnError' => true, 'targetClass' => KomponenKegiatan::className(), 'targetAttribute' => ['kegiatan_id' => 'id']],
+            [['kategori_kegiatan_id'], 'exist', 'skipOnError' => true, 'targetClass' => KategoriKegiatan::className(), 'targetAttribute' => ['kategori_kegiatan_id' => 'id']],
+               [['jenis_publikasi_id'], 'exist', 'skipOnError' => true, 'targetClass' => JenisPublikasi::className(), 'targetAttribute' => ['jenis_publikasi_id' => 'id']],
         ];
     }
 
@@ -108,5 +110,15 @@ class Publikasi extends \yii\db\ActiveRecord
     public function getKegiatan()
     {
         return $this->hasOne(KomponenKegiatan::className(), ['id' => 'kegiatan_id']);
+    }
+
+    public function getKategoriKegiatan()
+    {
+        return $this->hasOne(KategoriKegiatan::className(), ['id' => 'kategori_kegiatan_id']);
+    }
+
+    public function getJenisPublikasi()
+    {
+        return $this->hasOne(JenisPublikasi::className(), ['id' => 'jenis_publikasi_id']);
     }
 }
