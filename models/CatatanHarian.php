@@ -39,7 +39,7 @@ class CatatanHarian extends \yii\db\ActiveRecord
             [['unsur_id', 'user_id', 'deskripsi'], 'required'],
             [['unsur_id', 'user_id', 'approved_by'], 'integer'],
             [['deskripsi'], 'string'],
-            [['tanggal', 'updated_at', 'created_at','poin'], 'safe'],
+            [['tanggal', 'updated_at', 'created_at','poin','kondisi'], 'safe'],
             [['is_selesai'], 'string', 'max' => 1],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'ID']],
             [['unsur_id'], 'exist', 'skipOnError' => true, 'targetClass' => UnsurKegiatan::className(), 'targetAttribute' => ['unsur_id' => 'id']],

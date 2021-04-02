@@ -15,7 +15,7 @@ use yii\httpclient\Client;
 /**
  * PengajaranController implements the CRUD actions for Pengajaran model.
  */
-class PengajaranController extends Controller
+class PengajaranController extends AppController
 {
     /**
      * @inheritdoc
@@ -32,7 +32,82 @@ class PengajaranController extends Controller
       ];
     }
 
-    
+    public function actionImportJurnal()
+    {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
+        $list = Pengajaran::find()->where(['NIY'=>Yii::$app->user->identity->NIY])->all();
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+        $client_token = Yii::$app->params['client_token'];
+        $headers = ['x-access-token'=>$client_token];
+        $unsur = \app\models\UnsurKegiatan::findOne(1);
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        $counter = 0;
+        $errors ='';
+        try     
+        {
+          foreach($list as $model)
+          {
+            $params = [
+                'jadwal_id' => $model->jadwal_id
+            ];
+            
+            $response = $client->get('/jadwal/dosen/jurnal', $params,$headers)->send();
+            $errors = '';
+            if ($response->isOk) 
+            {
+
+                $results = $response->data['values'];
+                $status = $response->data['status'];
+
+                if($status == 200)
+                {
+                    foreach($results as $res)
+                    {
+                        $kondisi = 'CH'.$model->jadwal_id.'_'.$res['id'];    
+                    
+
+                        $catatan = \app\models\CatatanHarian::find()->where(['kondisi' => $kondisi])->one();
+                        if(empty($catatan)){
+                            $catatan = new \app\models\CatatanHarian;
+                        }
+
+                        $catatan->user_id = Yii::$app->user->identity->ID;
+                        $catatan->unsur_id = $unsur->id;
+                        $catatan->deskripsi = $unsur->nama.' pertemuan ke-'.$res['pertemuan_ke'].' matkul '.$model->matkul.' '.$model->sks.' di ruang '.$res['ruang'];
+                        $catatan->is_selesai = '1';
+                        $catatan->poin = 10;
+                        $catatan->kondisi = $kondisi;
+                        $catatan->tanggal = date('Y-m-d',strtotime($res['waktu']));
+                        if($catatan->save())
+                        {
+                          $counter++;
+                        }
+
+                        else{
+                          $errors .= \app\helpers\MyHelper::logError($catatan);
+                          throw new \Exception;
+                        }
+                    }
+                }
+            }
+          }
+          $transaction->commit();
+          Yii::$app->getSession()->setFlash('success',$counter.' data imported');
+          return $this->redirect(['index']);
+        }
+
+        catch (\Exception $e) {
+            $transaction->rollBack();
+            $errors .= $e->getMessage();
+            Yii::$app->getSession()->setFlash('danger',$errors);
+            return $this->redirect(['index']);
+        } 
+    }
 
     public function actionAjaxJadwal()
     {
@@ -106,8 +181,11 @@ class PengajaranController extends Controller
      */
     public function actionView($id)
     {
+      $model = $this->findModel($id);
+      
+      
       return $this->render('view', [
-        'model' => $this->findModel($id),
+        'model' => $model,
       ]);
     }
 
