@@ -31,7 +31,7 @@ class MyHelper
 		    {
 		        $induk = \app\models\KategoriKegiatan::findOne($prefix.$last3);
 		        if(empty($induk)) continue;
-		        for($i=0;$i<=10;$i++)
+		        for($i=0;$i<=50;$i++)
 		        {
 		            $id = $prefix.($last3 + $i);
 

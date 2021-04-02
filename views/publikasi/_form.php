@@ -39,6 +39,12 @@ foreach($listKomponen as $k)
 }
 
 $listKegiatan = \app\helpers\MyHelper::convertKategoriKegiatan('120');
+
+// echo '<pre>';
+// print_r($listKegiatan);
+// echo '</pre>';
+// exit;
+
 $listJenisPublikasi = ArrayHelper::map(\app\models\JenisPublikasi::find()->all(),'id','nama');
 
 
