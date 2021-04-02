@@ -230,7 +230,7 @@ class MenuHelper
     			$label_stars .= '<i class="lnr lnr-star"></i>';
     		}
     		$menuItems[] = [
-		     	'template' => '<a href="{url}" class="dropdown-toggle" data-toggle="dropdown">'.$label_stars.' <span class="badge bg-success">'.$class.$stars.'</span></a>',
+		     	'template' => '<a href="{url}" class="dropdown-toggle" data-toggle="dropdown">'.$label_stars.' <span class="badge bg-success">'.$class.'</span></a>',
 		        'label' => ''
 		        
 		    ];
