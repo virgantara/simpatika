@@ -31,7 +31,7 @@ class MenuHelper
 		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_profil">{label}</a>',
 		        'items'=>[
 		           	['label' => 'Data Pribadi', 'url' => ['/data-diri/create']],
-	                ['label' => 'Inpassing', 'url' => ['/data-diri/inpassing']],
+	                ['label' => 'Inpassing', 'url' => ['/inpassing']],
 	                ['label' => 'Jabatan Fungsional', 'url' => ['/jabatan-fungsional/index']],
 	                ['label' => 'Kepangkatan', 'url' => ['/kepangkatan/index']],
 	                ['label' => 'Penempatan', 'url' => ['/penugasan/index']],
@@ -147,16 +147,11 @@ class MenuHelper
 		        ]
 	        ];
 
-	      //   $menuItems[] = [
-	    		// 'label' => '<i class="lnr lnr-users"></i><span>Account</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		     //    'url' => '#',
-		     //    'submenuTemplate' => "\n<div id='pages_akun' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		     //    'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_akun">{label}</a>',
-		     //    'items'=>[
-		     //       	['label' => 'Change Password', 'url' => ['/site/ubah-akun']],
-	      //          	['label' => 'Support', 'url' => ['/support/index']],    
-		     //    ]
-	      //   ];
+	        $menuItems[] = [
+	    		'label' => '<i class="lnr lnr-sync"></i><span>Sinkronisasi</span>', 
+		        'url' => ['site/sync'],
+		        
+	        ];
 
 	            
 	          

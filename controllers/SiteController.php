@@ -98,6 +98,762 @@ class SiteController extends AppController
         ];
     }
 
+    public function actionAjaxImport()
+    {
+        $connection = \Yii::$app->db;
+        
+        $errors ='';
+        $results = [];
+        
+        $res1 = $this->importPengabdian();
+        $res2 = $this->importPenelitian();
+        $res3 = $this->importPenugasan();
+        $res4 = $this->importInpassing();
+        $res5 = $this->importJurnal();
+        $res6 = $this->importPengajaran();
+        $code = $res1['code'];
+        $results = [
+            'code' => $code,
+            'items' => [
+                [
+                    'modul' => 'pengabdian',
+                    'data' => $res1['message']
+                ],
+                [
+                    'modul' => 'penelitian',
+                    'data' => $res2['message']
+                ],
+                [
+                    'modul' => 'penugasan',
+                    'data' => $res3['message']
+                ],
+                [
+                    'modul' => 'inpassing',
+                    'data' => $res4['message']
+                ],
+                [
+                    'modul' => 'jurnal_pengajaran',
+                    'data' => $res5['message']
+                ],
+                [
+                    'modul' => 'pengajaran',
+                    'data' => $res6['message']
+                ],
+            ]
+        ];
+
+
+        echo json_encode($results);
+        die(); 
+    }
+
+    protected function importPengajaran()
+    {
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+        $client_token = Yii::$app->params['client_token'];
+        $headers = ['x-access-token'=>$client_token];
+       
+        $results = [];
+        $params = [
+            
+        ];
+
+        $response = $client->get('/tahun/list', $params,$headers)->send();
+         
+        $tahun_akademik_list = '';
+
+        if ($response->isOk) {
+            $results = $response->data['values'];
+            if(!empty($results))
+            {
+                $tahun_akademik_list = $results;
+            }
+        }
+
+        $results = [];
+
+        $transaction = Yii::$app->db->beginTransaction();
+        $errors = '';
+        $count_sukses = 0;
+        $count_failed = 0;
+        $list_prodi = \app\models\Prodi::find()->all();
+        try 
+        {
+            foreach($tahun_akademik_list as $tahun_akademik)
+            {
+                $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
+                $params = [
+                    'uuid' => $user->uuid,
+                    'tahun' => $tahun_akademik['tahun_id']
+                ];
+
+                $response = $client->get('/jadwal/dosen/uuid', $params,$headers)->send();
+             
+                if ($response->isOk) 
+                {
+                    $results = $response->data['values'];
+                    $status = $response->data['status'];
+                    if($status == 200)
+                    {
+                        foreach($results as $res)
+                        {
+
+                            $model = \app\models\Pengajaran::find()->where(['jadwal_id'=>$res['id']])->one();
+                            if(empty($model))
+                            {
+                                $model = new \app\models\Pengajaran;
+                                $model->jadwal_id = $res['id'];
+                                $model->NIY = $user->NIY;
+                            }
+
+                            $model->matkul = $res['nama_mk'];
+                            $model->kode_mk = $res['kode_mk'];
+                            $model->jurusan = $res['prodi'];
+                            $model->jam = $res['jam'];
+                            $model->hari = $res['hari'];
+                            $model->kelas = $res['kelas'];
+                            $model->sks = $res['sks'];
+                            $model->tahun_akademik = $res['ta'];
+                            $model->ver = 'Sudah Diverifikasi';
+
+                            if($model->save())
+                            {
+                                $count_sukses++;
+
+                            }
+
+                            else
+                            {
+                                
+                                foreach($model->getErrors() as $attribute){
+                                    foreach($attribute as $error){
+                                        $errors .= $error.' ';
+                                    }
+                                }
+
+                                throw new \Exception;
+                                
+                            }
+
+
+                        }    
+                    }
+                    
+                }
+            }
+            $transaction->commit();
+            $results = [
+                'code' => 200,
+                'message' => $count_sukses.' Data synced'
+            ];
+        }
+
+        catch(\Exception $e)
+        {
+            $errors .= $e->getMessage();
+            $results = [
+                'code' => 500,
+                'message' => $errors
+            ];
+            $transaction->rollback();
+        }
+
+        return $results;
+       
+ 
+    }
+
+    protected function importJurnal()
+    {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
+        $list = \app\models\Pengajaran::find()->where(['NIY'=>Yii::$app->user->identity->NIY])->all();
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+        $client_token = Yii::$app->params['client_token'];
+        $headers = ['x-access-token'=>$client_token];
+        $unsur = \app\models\UnsurKegiatan::findOne(1);
+        $connection = \Yii::$app->db;
+        $transaction = $connection->beginTransaction();
+        $counter = 0;
+        $errors ='';
+        $results = [];
+        try     
+        {
+            foreach($list as $model)
+            {
+                $params = [
+                    'jadwal_id' => $model->jadwal_id
+                ];
+                
+                $response = $client->get('/jadwal/dosen/jurnal', $params,$headers)->send();
+                $errors = '';
+                if ($response->isOk) 
+                {
+
+                    $results = $response->data['values'];
+                    $status = $response->data['status'];
+
+                    if($status == 200)
+                    {
+                        foreach($results as $res)
+                        {
+                            $kondisi = 'CH'.$model->jadwal_id.'_'.$res['id'];    
+                        
+
+                            $catatan = \app\models\CatatanHarian::find()->where(['kondisi' => $kondisi])->one();
+                            if(empty($catatan)){
+                                $catatan = new \app\models\CatatanHarian;
+                            }
+
+                            $catatan->user_id = Yii::$app->user->identity->ID;
+                            $catatan->unsur_id = $unsur->id;
+                            $catatan->deskripsi = $unsur->nama.' pertemuan ke-'.$res['pertemuan_ke'].' matkul '.$model->matkul.' '.$model->sks.' di ruang '.$res['ruang'];
+                            $catatan->is_selesai = '1';
+                            $catatan->poin = 10;
+                            $catatan->kondisi = $kondisi;
+                            $catatan->tanggal = date('Y-m-d',strtotime($res['waktu']));
+                            if($catatan->save())
+                            {
+                              $counter++;
+                            }
+
+                            else{
+                              $errors .= \app\helpers\MyHelper::logError($catatan);
+                              throw new \Exception;
+                            }
+                        }
+                    }
+                }
+            }
+            $transaction->commit();
+            $results = [
+                'code' => 200,
+                'message' => $counter.' data imported'
+                
+            ];
+        }
+
+        catch (\Exception $e) {
+            $transaction->rollBack();
+            $errors .= $e->getMessage();
+            $results = [
+                'code' => 500,
+                'message' => $errors
+                
+            ];
+        } 
+
+        return $results;
+    }
+
+    protected function importInpassing()
+    {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
+        $results = [];
+        $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
+        $sisterToken = \app\helpers\MyHelper::getSisterToken();
+        if(!isset($sisterToken)){
+            $sisterToken = MyHelper::getSisterToken();
+        }
+
+        // print_r($sisterToken);exit;
+        $sister_baseurl = Yii::$app->params['sister_baseurl'];
+        $headers = ['content-type' => 'application/json'];
+        $client = new \GuzzleHttp\Client([
+            'timeout'  => 5.0,
+            'headers' => $headers,
+            // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
+        ]);
+        $full_url = $sister_baseurl.'/Inpassing';
+        $response = $client->post($full_url, [
+            'body' => json_encode([
+                'id_token' => $sisterToken,
+                'id_dosen' => $user->sister_id,
+                'updated_after' => [
+                    'tahun' => '2000',
+                    'bulan' => '01',
+                    'tanggal' => '01'
+                ]
+            ]), 
+            'headers' => ['Content-type' => 'application/json']
+
+        ]); 
+        
+        $results = [];
+       
+        $response = json_decode($response->getBody());
+        
+        if($response->error_code == 0)
+        {
+            $results = $response->data;
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            $counter = 0;
+            $errors ='';
+            try     
+            {
+                foreach($results as $item)
+                {
+                    
+                    $model = \app\models\Inpassing::find()->where([
+                        'sister_id' => $item->id_riwayat_inpassing
+                    ])->one();
+
+                    if(empty($model))
+                        $model = new \app\models\Inpassing;
+
+                    $model->NIY = Yii::$app->user->identity->NIY;
+                    $model->sister_id = $item->id_riwayat_inpassing;
+                    $model->nama_golongan = $item->nama_golongan;
+                    $model->nomor_sk_inpassing = $item->nomor_sk_inpassing;
+                    $model->tanggal_sk = $item->tanggal_sk;
+                    $model->sk_inpassing_terhitung_mulai_tanggal = $item->sk_inpassing_terhitung_mulai_tanggal;
+                   
+                    if($model->save())
+                    {
+                        $counter++;
+                    }
+
+                    else
+                    {
+                        $errors .= \app\helpers\MyHelper::logError($model);
+                        throw new \Exception;
+                    }
+                }
+
+                $transaction->commit();
+                $results = [
+                    'code' => 200,
+                    'message' => $counter.' data imported'
+                    
+                ];
+            }
+
+            catch (\Exception $e) {
+                $transaction->rollBack();
+                $errors .= $e->getMessage();
+                $results = [
+                    'code' => 500,
+                    'message' => $errors
+                ];
+            } 
+        }
+
+
+        else
+        {
+            $errors .= json_encode($response);
+            $results = [
+                'code' => 500,
+                'message' => $errors
+            ];
+        }
+
+        return $results;
+
+    }
+
+    protected function importPenugasan()
+    {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
+        $results = [];
+        $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
+        $sisterToken = \app\helpers\MyHelper::getSisterToken();
+        if(!isset($sisterToken)){
+            $sisterToken = MyHelper::getSisterToken();
+        }
+
+        // print_r($sisterToken);exit;
+        $sister_baseurl = Yii::$app->params['sister_baseurl'];
+        $headers = ['content-type' => 'application/json'];
+        $client = new \GuzzleHttp\Client([
+            'timeout'  => 5.0,
+            'headers' => $headers,
+            // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
+        ]);
+        $full_url = $sister_baseurl.'/Penempatan';
+        $response = $client->post($full_url, [
+            'body' => json_encode([
+                'id_token' => $sisterToken,
+                'id_dosen' => $user->sister_id,
+                'updated_after' => [
+                    'tahun' => '2000',
+                    'bulan' => '01',
+                    'tanggal' => '01'
+                ]
+            ]), 
+            'headers' => ['Content-type' => 'application/json']
+
+        ]); 
+        
+        $results = [];
+       
+        $response = json_decode($response->getBody());
+        
+        if($response->error_code == 0)
+        {
+            $results = $response->data;
+            
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            $counter = 0;
+            $errors ='';
+            try     
+            {
+                foreach($results as $item)
+                {
+                    
+                    $model = \app\models\Penugasan::find()->where([
+                        'sister_id' => $item->id_riwayat_penempatan
+                    ])->one();
+
+                    if(empty($model))
+                        $model = new \app\models\Penugasan;
+
+                    $model->NIY = Yii::$app->user->identity->NIY;
+                    $model->sister_id = $item->id_riwayat_penempatan;
+                    $model->status_pegawai = $item->status_pegawai;
+                    $model->nama_ikatan_kerja = $item->nama_ikatan_kerja;
+                    $model->nama_jenjang_pendidikan = $item->nama_jenjang_pendidikan;
+                    $model->unit_kerja = $item->unit_kerja;
+                    $model->perguruan_tinggi = $item->perguruan_tinggi;
+                    $model->terhitung_mulai_tanggal_surat_tugas = $item->terhitung_mulai_tanggal_surat_tugas;
+
+                    if($model->save())
+                    {
+                        $counter++;
+
+                        
+                    }
+
+                    else
+                    {
+                        $errors .= \app\helpers\MyHelper::logError($model);
+                        throw new \Exception;
+                    }
+                }
+
+                $transaction->commit();
+                $results = [
+                    'code' => 200,
+                    'message' => $counter.' data imported'
+                    
+                ];
+            }
+
+            catch (\Exception $e) {
+                $transaction->rollBack();
+                $errors .= $e->getMessage();
+                $results = [
+                    'code' => 500,
+                    'message' => $errors
+                ];
+            } 
+        }
+
+
+        else
+        {
+            $errors .= json_encode($response);
+            $results = [
+                'code' => 500,
+                'message' => $errors
+            ];
+        }
+
+        return $results;
+
+    }
+
+    protected function importPengabdian()
+    {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
+        $results = [];
+        $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
+        $sisterToken = \app\helpers\MyHelper::getSisterToken();
+        if(!isset($sisterToken)){
+            $sisterToken = MyHelper::getSisterToken();
+        }
+
+        // print_r($sisterToken);exit;
+        $sister_baseurl = Yii::$app->params['sister_baseurl'];
+        $headers = ['content-type' => 'application/json'];
+        $client = new \GuzzleHttp\Client([
+            'timeout'  => 5.0,
+            'headers' => $headers,
+            // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
+        ]);
+        $full_url = $sister_baseurl.'/Pengabdian';
+        $response = $client->post($full_url, [
+            'body' => json_encode([
+                'id_token' => $sisterToken,
+                'id_dosen' => $user->sister_id,
+                'updated_after' => [
+                    'tahun' => '2000',
+                    'bulan' => '01',
+                    'tanggal' => '01'
+                ]
+            ]), 
+            'headers' => ['Content-type' => 'application/json']
+
+        ]); 
+        
+        $results = [];
+       
+        $response = json_decode($response->getBody());
+        
+        if($response->error_code == 0)
+        {
+            $results = $response->data;
+            
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            $counter = 0;
+            $errors ='';
+            try     
+            {
+                foreach($results as $item)
+                {
+                   
+                    $model = \app\models\Pengabdian::find()->where([
+                        'sister_id' => $item->id_penelitian_pengabdian
+                    ])->one();
+
+                    if(empty($model))
+                        $model = new \app\models\Pengabdian;
+
+                    $model->NIY = Yii::$app->user->identity->NIY;
+                    $model->sister_id = $item->id_penelitian_pengabdian;
+                    $model->judul_penelitian_pengabdian = $item->judul_penelitian_pengabdian;
+                    $model->nama_skim = $item->nama_skim;
+                    $model->nama_tahun_ajaran = $item->nama_tahun_ajaran;
+                    $model->durasi_kegiatan = $item->durasi_kegiatan;
+                    $model->jenis_penelitian_pengabdian = $item->jenis_penelitian_pengabdian;
+                    $full_url = $sister_baseurl.'/Pengabdian/detail';
+                    $resp = $client->post($full_url, [
+                        'body' => json_encode([
+                            'id_token' => $sisterToken,
+                            'id_dosen' => $user->sister_id,
+                            'id_penelitian_pengabdian' => $model->sister_id
+                        ]), 
+                        'headers' => ['Content-type' => 'application/json']
+
+                    ]); 
+                    
+                    $res = [];
+                   
+                    $resp = json_decode($resp->getBody());
+                    if($resp->error_code == 0){
+                        $res = $resp->data;
+                        $model->tahun_usulan = $res->nama_tahun_anggaran;
+                        $model->tahun_kegiatan = $res->nama_tahun_anggaran;
+                        $model->tahun_dilaksanakan = $res->nama_tahun_anggaran;
+                        $model->tahun_pelaksanaan_ke = $res->tahun_pelaksanaan_ke;
+                        $model->dana_dikti = $res->dana_dari_dikti;
+                        $model->dana_pt = $res->dana_dari_PT;
+                        $model->dana_institusi_lain = $res->dana_dari_instansi_lain;
+                        // print_r($res);exit;
+                    }
+
+                    if($model->save())
+                    {
+                        $counter++;
+
+                        
+                    }
+
+                    else
+                    {
+                        $errors .= \app\helpers\MyHelper::logError($model);
+                        throw new \Exception;
+                    }
+                }
+
+                $transaction->commit();
+                $results = [
+                    'code' => 200,
+                    'message' => $counter.' data imported'
+                    
+                ];
+            }
+
+            catch (\Exception $e) {
+                $transaction->rollBack();
+                $errors .= $e->getMessage();
+                $results = [
+                    'code' => 500,
+                    'message' => $errors
+                ];
+            } 
+        }
+
+
+        else
+        {
+            $errors .= json_encode($response);
+            $results = [
+                'code' => 500,
+                'message' => $errors
+            ];
+        }
+
+        return $results;
+
+    }
+
+    protected function importPenelitian()
+    {
+        $results = [];
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
+
+        $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
+        $sisterToken = \app\helpers\MyHelper::getSisterToken();
+        
+        // print_r($sisterToken);exit;
+        $sister_baseurl = Yii::$app->params['sister_baseurl'];
+        $headers = ['content-type' => 'application/json'];
+        $client = new \GuzzleHttp\Client([
+            'timeout'  => 10.0,
+            'headers' => $headers,
+            // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
+        ]);
+        $full_url = $sister_baseurl.'/Penelitian';
+        $response = $client->post($full_url, [
+            'body' => json_encode([
+                'id_token' => $sisterToken,
+                'id_dosen' => $user->sister_id,
+                'updated_after' => [
+                    'tahun' => '2000',
+                    'bulan' => '01',
+                    'tanggal' => '01'
+                ]
+            ]), 
+            'headers' => ['Content-type' => 'application/json']
+
+        ]); 
+        
+        $results = [];
+       
+        $response = json_decode($response->getBody());
+        
+        if($response->error_code == 0)
+        {
+            $results = $response->data;
+            
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            $counter = 0;
+            $errors ='';
+            try     
+            {
+                foreach($results as $item)
+                {
+                    $model = Penelitian::find()->where([
+                        'sister_id' => $item->id_penelitian_pengabdian
+                    ])->one();
+
+                    if(empty($model))
+                        $model = new Penelitian;
+                    $model->NIY = Yii::$app->user->identity->NIY;
+                    $model->sister_id = $item->id_penelitian_pengabdian;
+                    $model->judul_penelitian_pengabdian = $item->judul_penelitian_pengabdian;
+                    $model->nama_skim = $item->nama_skim;
+                    $model->nama_tahun_ajaran = $item->nama_tahun_ajaran;
+                    $model->durasi_kegiatan = $item->durasi_kegiatan;
+
+                    $full_url = $sister_baseurl.'/Penelitian/detail';
+                    $resp = $client->post($full_url, [
+                        'body' => json_encode([
+                            'id_token' => $sisterToken,
+                            'id_dosen' => $user->sister_id,
+                            'id_penelitian_pengabdian' => $model->sister_id
+                        ]), 
+                        'headers' => ['Content-type' => 'application/json']
+
+                    ]); 
+                    
+                    
+                    $resp = json_decode($resp->getBody());
+                    if($resp->error_code == 0){
+                        $res = $resp->data;
+                        $model->tahun_usulan = $res->nama_tahun_anggaran;
+                        $model->tahun_kegiatan = $res->nama_tahun_anggaran;
+                        $model->tahun_dilaksanakan = $res->nama_tahun_anggaran;
+                        $model->tahun_pelaksanaan_ke = $res->tahun_pelaksanaan_ke;
+                        $model->dana_dikti = $res->dana_dari_dikti;
+                        $model->dana_pt = $res->dana_dari_PT;
+                        $model->dana_institusi_lain = $res->dana_dari_instansi_lain;
+                        // print_r($res);exit;
+                    }
+
+                    if($model->save())
+                    {
+                        $counter++;
+
+                        
+                    }
+
+                    else
+                    {
+                        $errors .= \app\helpers\MyHelper::logError($model);
+                        throw new \Exception;
+                    }
+                }
+
+                $transaction->commit();
+                $results = [
+                    'code' => 200,
+                    'message' => $counter.' data imported'
+                    
+                ];
+            }
+
+            catch (\Exception $e) {
+                $transaction->rollBack();
+                $errors .= $e->getMessage();
+                $results = [
+                    'code' => 500,
+                    'message' => $errors
+                ];
+            } 
+        }
+
+
+        else
+        {
+            $errors .= json_encode($response);
+            $results = [
+                'code' => 500,
+                'message' => $errors
+            ];
+        }
+
+        return $results;
+
+
+    }
+
+    public function actionSync()
+    {
+        return $this->render('sync');
+    }
+
     public function actionAjaxCariUser() {
 
         $q = $_GET['term'];

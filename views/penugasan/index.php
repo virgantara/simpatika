@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\PengabdianSearch */
+/* @var $searchModel app\models\PenugasanSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Pengabdian';
+$this->title = 'Penugasan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -20,15 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 <div class="panel-body ">
 
-    <p>
-        <?= Html::a('Tambah Data', ['create'], ['class' => 'btn btn-success']) ?>
-      
-    </p>
-    <?php 
-    foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
-      echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';
-    }
-    ?>
+    
     <?php
     $gridColumns = [
     [
@@ -40,23 +32,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'header'=>'',
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
-            // 'ID',
-            // 'NIY',
-            'judul_penelitian_pengabdian',
-            'nama_tahun_ajaran',
-            'nama_skim',
-            'durasi_kegiatan',
-            // [
-            //     'attribute' => 'jenis_penelitian_pengabdian',
-            //     'value' => function($data){
-            //         return $data->jenis_penelitian_pengabdian == 'M' ? 'Pengabdian' : 'Penelitian';
-            //     }
-            // ],
-            //'nilai',
-            //'sister_id',
-            //'updated_at',
-            //'created_at',
-    ['class' => 'yii\grid\ActionColumn']
+            'status_pegawai',
+            'nama_ikatan_kerja',
+            'nama_jenjang_pendidikan',
+            'unit_kerja',
+            'perguruan_tinggi',
+            'terhitung_mulai_tanggal_surat_tugas'
 ];?>    
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
