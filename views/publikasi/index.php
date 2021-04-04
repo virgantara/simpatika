@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     <p>
         <?= Html::a('Create Publikasi', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('<i class="fa fa-download"></i> Import dari SISTER', ['import'], ['class' => 'btn btn-primary']) ?>
+        
 
 
     </p>

@@ -14,6 +14,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\httpclient\Client;
 
 /**
  * PublikasiController implements the CRUD actions for Publikasi model.
@@ -41,9 +42,35 @@ class PublikasiController extends AppController
         $query->where([
           'NIY' => Yii::$app->user->identity->NIY,
         ]);
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new Client(['baseUrl' => $api_baseurl]);
+        $client_token = Yii::$app->params['client_token'];
+        $headers = ['x-access-token'=>$client_token];
+
+        $results = [];
+        // foreach($listTahun as $tahun)
+        // {
+        $params = [
+            
+        ];
+
+        $response = $client->get('/tahun/aktif', $params,$headers)->send();
+         
+        $tahun_akademik = '';
+
+        if ($response->isOk) {
+            $results = $response->data['values'];
+            if(!empty($results[0]))
+            {
+                $tahun_akademik = $results[0];
+            }
+        }
 
         $query->andWhere(['not',['kegiatan_id' => null]]);
+        $sd = $tahun_akademik['kuliah_mulai'];
+        $ed = $tahun_akademik['nilai_selesai'];
 
+        $query->andFilterWhere(['between','tanggal_terbit',$sd, $ed]);
         $results = $query->asArray()->all();
         echo \yii\helpers\Json::encode($results);
         die();

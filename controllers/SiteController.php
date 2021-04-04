@@ -111,6 +111,7 @@ class SiteController extends AppController
         $res4 = $this->importInpassing();
         $res5 = $this->importJurnal();
         $res6 = $this->importPengajaran();
+        $res7 = $this->importPublikasi();
         $code = $res1['code'];
         $results = [
             'code' => $code,
@@ -139,12 +140,223 @@ class SiteController extends AppController
                     'modul' => 'pengajaran',
                     'data' => $res6['message']
                 ],
+                [
+                    'modul' => 'publikasi',
+                    'data' => $res7['message']
+                ],
             ]
         ];
 
 
         echo json_encode($results);
         die(); 
+    }
+
+    protected function importPublikasi()
+    {
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
+        $results = [];
+        $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
+        $sisterToken = \app\helpers\MyHelper::getSisterToken();
+        $sister_baseurl = Yii::$app->params['sister_baseurl'];
+        $headers = ['content-type' => 'application/json'];
+        $client = new \GuzzleHttp\Client([
+            'timeout'  => 5.0,
+            'headers' => $headers,
+       
+        ]);
+        $full_url = $sister_baseurl.'/Publikasi';
+        $response = $client->post($full_url, [
+            'body' => json_encode([
+                'id_token' => $sisterToken,
+                'id_dosen' => $user->sister_id,
+                'updated_after' => [
+                    'tahun' => '2000',
+                    'bulan' => '01',
+                    'tanggal' => '01'
+                ]
+            ]), 
+            'headers' => ['Content-type' => 'application/json']
+
+        ]); 
+        
+        $results = [];
+       
+        $response = json_decode($response->getBody());
+        if($response->error_code == 0){
+            $results = $response->data;
+            $connection = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+           
+            $errors ='';
+            try     
+            {
+                $counter = 0;
+                foreach($results as $item)
+                {
+
+                    $jenisPublikasi = \app\models\JenisPublikasi::find()->where(['nama'=> $item->nama_jenis_publikasi])->one();
+
+                    if(empty($jenisPublikasi)){
+                        $errors .= 'Jenis Publikasi '.$item->nama_jenis_publikasi.' belum ada di database';
+                        throw new \Exception;
+                    }
+                        
+                    
+
+                    $model = \app\models\Publikasi::find()->where([
+                        'sister_id' => $item->id_riwayat_publikasi_paten
+                    ])->one();
+
+                    if(empty($model))
+                        $model = new \app\models\Publikasi;
+
+
+                    $model->NIY = Yii::$app->user->identity->NIY;
+                    $model->sister_id = $item->id_riwayat_publikasi_paten;
+                    $model->judul_publikasi_paten = $item->judul_publikasi_paten;
+                    $model->nama_jenis_publikasi = $item->nama_jenis_publikasi;
+                    $model->jenis_publikasi_id = $jenisPublikasi->id;
+                    
+                    $model->tanggal_terbit = $item->tanggal_terbit;
+                    $full_url = $sister_baseurl.'/Publikasi/detail';
+                    $response = $client->post($full_url, [
+                        'body' => json_encode([
+                            'id_token' => $sisterToken,
+                            'id_dosen' => $user->sister_id,
+                            'id_riwayat_publikasi_paten' => $item->id_riwayat_publikasi_paten
+                        ]), 
+                        'headers' => ['Content-type' => 'application/json']
+
+                    ]); 
+                    
+                    $results = [];
+                   
+                    $response = json_decode($response->getBody());
+                    if($response->error_code == 0){
+                        $detail = $response->data;
+                        $model->tautan_laman_jurnal = $detail->tautan_laman_jurnal;
+                        $model->tautan = $detail->tautan;
+                        $model->volume = $detail->volume;
+                        $model->nomor = $detail->nomor_hasil_publikasi;
+                        $model->halaman = $detail->halaman;
+                        $model->penerbit = $detail->nama_penerbit;
+                        $model->doi = $detail->DOI_publikasi;
+                        $model->issn = $detail->ISSN_publikasi;    
+                        $model->nama_kategori_kegiatan = $detail->nama_kategori_kegiatan;
+                        $kategoriKegiatan = \app\models\KategoriKegiatan::find()->where(['nama'=> $detail->nama_kategori_kegiatan])->one();
+
+
+
+                        if(empty($kategoriKegiatan)){
+                            $errors .= 'KategoriKegiatan '.$item->nama_kategori_kegiatan.' belum ada di database';
+                            throw new \Exception;
+                        }
+
+                        $model->kategori_kegiatan_id = $kategoriKegiatan->id;
+
+                        foreach($detail->data_penulis as $author)
+                        {
+                            // print_r($author);exit;
+                            $pa = \app\models\PublikasiAuthor::find()->where([
+                                'author_id' => $author->id_dosen,
+                                'publikasi_id' => $item->id_riwayat_publikasi_paten
+                            ])->one();
+
+                            if(empty($pa))
+                                $pa = new \app\models\PublikasiAuthor;
+
+
+                            $pa->author_id = $author->id_dosen;
+                            $pa->author_nama = $author->nama;
+                            $pa->publikasi_id = $item->id_riwayat_publikasi_paten;
+                            $pa->urutan = $author->no_urut;
+                            $pa->afiliasi = $author->afiliasi_penulis;
+                            $pa->peran_nama = $author->peran_dalam_kegiatan;
+                            $pa->corresponding_author = $author->apakah_corresponding_author;
+                            $pa->jenis_peranan = $author->jenis_peranan;
+                            if(!$pa->save())
+                            {
+                                $errors .= \app\helpers\MyHelper::logError($pa);
+                                throw new \Exception;
+                            }
+                        }
+
+                        if(!empty($detail->files))
+                        {
+                            foreach($detail->files as $file)
+                            {
+                                $pf = \app\models\SisterFiles::findOne($file->id_dokumen);
+                                if(empty($pf))
+                                    $pf = new \app\models\SisterFiles;
+
+                                $pf->id_dokumen = $file->id_dokumen;
+                                $pf->parent_id = $item->id_riwayat_publikasi_paten;
+                                $pf->nama_dokumen = $file->nama_dokumen;
+                                $pf->nama_file = $file->nama_file;
+                                $pf->jenis_file = $file->jenis_file;
+                                $pf->tanggal_upload = $file->tanggal_upload;
+                                $pf->nama_jenis_dokumen = $file->nama_jenis_dokumen;
+                                $pf->tautan = $file->tautan;
+                                $pf->keterangan_dokumen = $file->keterangan_dokumen;
+
+                                if(!$pf->save())
+                                {
+                                    $errors .= 'PF: '.\app\helpers\MyHelper::logError($pf);
+                                    throw new \Exception;
+                                }
+                            }
+                        }
+                    }
+
+
+
+                    if($model->save())
+                    {
+                        $counter++;
+
+
+                    }
+
+                    else
+                    {
+                        $errors .= \app\helpers\MyHelper::logError($model);
+                        throw new \Exception;
+                    }
+                }
+
+                $transaction->commit();
+                $results = [
+                    'code' => 200,
+                    'message' => $counter.' data imported'
+                ];
+                
+            }
+
+            catch (\Exception $e) {
+                $transaction->rollBack();
+                $errors .= $e->getMessage();
+                $results = [
+                    'code' => 500,
+                    'message' => $errors
+                ];
+            } 
+        }
+
+
+        else
+        {
+            Yii::$app->getSession()->setFlash('danger',json_encode($response));
+            $results = [
+                'code' => 500,
+                'message' => json_encode($response)
+            ];
+        }
+
+        return $results;
     }
 
     protected function importPengajaran()

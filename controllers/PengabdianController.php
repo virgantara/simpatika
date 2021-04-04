@@ -34,13 +34,41 @@ class PengabdianController extends AppController
 
     public function actionAjaxList()
     {
+        $api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new \yii\httpclient\Client(['baseUrl' => $api_baseurl]);
+        $client_token = Yii::$app->params['client_token'];
+        $headers = ['x-access-token'=>$client_token];
+
+        $results = [];
+        // foreach($listTahun as $tahun)
+        // {
+        $params = [
+            
+        ];
+
+        $response = $client->get('/tahun/aktif', $params,$headers)->send();
+         
+        $tahun_akademik = '';
+
+        if ($response->isOk) {
+            $results = $response->data['values'];
+            if(!empty($results[0]))
+            {
+                $tahun_akademik = $results[0];
+            }
+        }
+
         $dataPost = $_POST['dataPost'];
         $query = Pengabdian::find();
         $query->where([
           'NIY' => Yii::$app->user->identity->NIY,
-          'tahun_kegiatan' => substr($dataPost['tahun'], 0,4)
+          // 'tahun_kegiatan' => substr($dataPost['tahun'], 0,4)
         ]);
 
+        $sd = $tahun_akademik['kuliah_mulai'];
+        $ed = $tahun_akademik['nilai_selesai'];
+
+        $query->andFilterWhere(['between','tgl_sk_tugas',$sd, $ed]);
 
         $results = $query->asArray()->all();
         echo \yii\helpers\Json::encode($results);

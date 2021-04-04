@@ -11,13 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?php
-
-         // Html::dropDownList('tahun','', [], ['id' => 'tahun_list','prompt'=>'- Pilih Tahun -']) ;
-         ?>
-          <?= Html::a('<i class="fa fa-download"></i> Import dari SIAKAD', ['import-jurnal'], ['class' => 'btn btn-primary']) ?>
-    </p>
+    
     <?php 
     foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
       echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';

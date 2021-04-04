@@ -46,6 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'nama_tahun_ajaran',
             'nama_skim',
             'durasi_kegiatan',
+            'no_sk_tugas',
+            'tgl_sk_tugas',
             // [
             //     'attribute' => 'jenis_penelitian_pengabdian',
             //     'value' => function($data){
