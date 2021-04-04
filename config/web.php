@@ -42,7 +42,9 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => false,
-            'authTimeout' => 3600 * 1000, // auth expire 
+            'authTimeout' => 7 * 24 *60 * 60, // auth expire 
+            'enableSession' => true,
+            'autoRenewCookie' => true,
         ],
         'session' => [
             'class' => 'yii\web\Session',

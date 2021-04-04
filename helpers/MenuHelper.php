@@ -32,9 +32,9 @@ class MenuHelper
 		        'items'=>[
 		           	['label' => 'Data Pribadi', 'url' => ['/data-diri/create']],
 	                ['label' => 'Inpassing', 'url' => ['/data-diri/inpassing']],
-	                ['label' => 'Jabatan Fungsional', 'url' => ['/data-diri/jabfung']],
-	                ['label' => 'Kepangkatan', 'url' => ['/data-diri/pangkat']],
-	                ['label' => 'Penempatan', 'url' => ['/data-diri/penempatan']],
+	                ['label' => 'Jabatan Fungsional', 'url' => ['/jabatan-fungsional/index']],
+	                ['label' => 'Kepangkatan', 'url' => ['/kepangkatan/index']],
+	                ['label' => 'Penempatan', 'url' => ['/penugasan/index']],
 		        ]
 	        ];
 

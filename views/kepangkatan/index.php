@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\PenelitianSearch */
+/* @var $searchModel app\models\KepangkatanSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Penelitians';
+$this->title = 'Kepangkatans';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 <div class="panel-body ">
 
-     <p>
+    <p>
         
         <?= Html::a('<i class="fa fa-download"></i> Import dari SISTER', ['import'], ['class' => 'btn btn-primary']) ?>
     </p>
@@ -40,30 +40,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'header'=>'',
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
-            'judul_penelitian_pengabdian',
-            'tahun_kegiatan',
-            // 'status',
-            
-            //'nilai',
-            //'sister_id',
-            'nama_skim',
-            'durasi_kegiatan',
-            'tempat_kegiatan',
-            'dana_dikti',
-            'dana_institusi_lain',
-            'dana_pt',
-            //'tahun_usulan',
-            //'tahun_dilaksanakan',
-            'tahun_pelaksanaan_ke',
-            //'no_sk_tugas',
-            //'tgl_sk_tugas',
-            //'kategori_kegiatan_id',
-            //'skim_kegiatan_id',
-            //'kelompok_bidang_id',
-            //'komponen_kegiatan_id',
-            //'updated_at',
-            //'created_at',
-    ['class' => 'yii\grid\ActionColumn']
+            'kode_golongan',
+            'nama_golongan',
+            'no_sk_pangkat',
+            'terhitung_mulai_tanggal_sk_pangkat',
+            'tanggal_sk_pengangkatan',
+            'masa_kerja_golongan_tahun',
+            'masa_kerja_golongan_bulan',
+            //'id_pangkat_golongan',
+    // ['class' => 'yii\grid\ActionColumn']
 ];?>    
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
