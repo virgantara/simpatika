@@ -38,40 +38,22 @@ class PublikasiController extends AppController
 
     public function actionAjaxList()
     {
+        
         $query = Publikasi::find();
         $query->where([
           'NIY' => Yii::$app->user->identity->NIY,
         ]);
-        $api_baseurl = Yii::$app->params['api_baseurl'];
-        $client = new Client(['baseUrl' => $api_baseurl]);
-        $client_token = Yii::$app->params['client_token'];
-        $headers = ['x-access-token'=>$client_token];
+        $dataPost = $_POST['dataPost'];
+        $bkd_periode = \app\models\BkdPeriode::find()->where(['tahun_id' => $dataPost['tahun']])->one();
+        $sd = $bkd_periode->tanggal_bkd_awal;
+        $ed = $bkd_periode->tanggal_bkd_akhir;
 
-        $results = [];
-        // foreach($listTahun as $tahun)
-        // {
-        $params = [
-            
-        ];
-
-        $response = $client->get('/tahun/aktif', $params,$headers)->send();
-         
-        $tahun_akademik = '';
-
-        if ($response->isOk) {
-            $results = $response->data['values'];
-            if(!empty($results[0]))
-            {
-                $tahun_akademik = $results[0];
-            }
-        }
-
-        $query->andWhere(['not',['kegiatan_id' => null]]);
-        $sd = $tahun_akademik['kuliah_mulai'];
-        $ed = $tahun_akademik['nilai_selesai'];
 
         $query->andFilterWhere(['between','tanggal_terbit',$sd, $ed]);
         $results = $query->asArray()->all();
+          
+
+
         echo \yii\helpers\Json::encode($results);
         die();
     }

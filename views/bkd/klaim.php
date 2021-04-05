@@ -2,10 +2,12 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+
+$list_tahun = ArrayHelper::map($list_bkd_periode,'tahun_id','nama_periode');
 ?>
 <h1>Klaim Kegiatan BKD</h1>
 <p>
-    <?= Html::dropDownList('tahun','', [], ['id' => 'tahun_list','prompt'=>'- Pilih Tahun -']) ?>
+    <?= Html::dropDownList('tahun','', $list_tahun, ['id' => 'tahun_list']) ?>
 </p>
 <div class="row">
 	<div class="col-md-12">
@@ -225,6 +227,8 @@ $(document).on("click",".btn-claim-publikasi",function(e){
     if($(this).is(":checked"))
     	obj.is_claimed = "1"
 
+    obj.tahun_id = $(this).data("ta")
+
     $.ajax({
         type : \'POST\',
         data : {
@@ -252,6 +256,9 @@ $(document).on("click",".btn-claim",function(e){
     obj.is_claimed = "0";
     if($(this).is(":checked"))
     	obj.is_claimed = "1"
+
+    obj.tahun_id = $(this).data("ta");
+    obj.sks = $(this).data("sks")
 
     $.ajax({
         type : \'POST\',
@@ -313,10 +320,15 @@ function fetchJadwal(tahun, callback){
 
 function getPublikasi(tahun){
 	
+    var obj = new Object;
+    obj.tahun = tahun;
+
 
     $.ajax({
         type : \'POST\',
-        
+        data : {
+            dataPost : obj
+        },
         url : \''.Url::to(['publikasi/ajax-list']).'\',
         async: true,
         beforeSend : function(){
@@ -340,7 +352,7 @@ function getPublikasi(tahun){
                 row += "<td><a href=\'"+obj.doi+"\' target=\'_blank\'>Link</a></td>"
                 row += "<td>"+obj.issn+"</td>"
                 row += "<td></td>"
-                row += "<td><input type=\'checkbox\' "+isClaimed+" data-item=\'"+obj.id+"\' class=\'btn-claim-publikasi\'/></td>"
+                row += "<td><input type=\'checkbox\' "+isClaimed+" data-ta=\'"+tahun+"\' data-item=\'"+obj.id+"\' class=\'btn-claim-publikasi\'/></td>"
                 row += "</tr>"
 
             })
@@ -495,7 +507,7 @@ function getJadwal(tahun){
                 row += "<td>"+obj.jurusan+"</td>"
                 row += "<td>"+obj.tahun_akademik+"</td>"
                 row += "<td>"+obj.sks+"</td>"
-                row += "<td><input type=\'checkbox\' "+isClaimed+" data-item=\'"+obj.ID+"\' class=\'btn-claim\'/></td>"
+                row += "<td><input type=\'checkbox\' "+isClaimed+" data-ta=\'"+obj.tahun_akademik+"\' data-sks=\'"+obj.sks+"\' data-item=\'"+obj.ID+"\' class=\'btn-claim\'/></td>"
                 row += "</tr>"
 
                 total_sks += eval(obj.sks)
@@ -517,35 +529,8 @@ $(document).on("change","#tahun_list",function(e){
     getPenunjang($(this).val())
 })
 
-getTahunList(function(err, res){
-    $("#tahun_list").empty()
-    var row = ""
-    $.each(res, function(i, obj){
-        row += "<option value=\'"+obj.tahun_id+"\'>"+obj.nama_tahun+"</option>"
-    })
+ $("#tahun_list").trigger("change")
 
-    $("#tahun_list").append(row)
-
-
-    $("#tahun_list").trigger("change")
-})
-
-function getTahunList(callback){
-    $.ajax({
-        type : \'POST\',
-        
-        url : \''.Url::to(['site/ajax-tahun-list']).'\',
-        async: true,
-        beforeSend : function(){
-
-        },
-        success: function(res){
-            var res = $.parseJSON(res);
-            callback(null, res)
-        }
-
-    });
-}
 ', \yii\web\View::POS_READY);
 
 ?>

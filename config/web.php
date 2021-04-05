@@ -47,8 +47,11 @@ $config = [
             'autoRenewCookie' => true,
         ],
         'session' => [
-            'class' => 'yii\web\Session',
-            'cookieParams' => ['lifetime' => 7 * 24 *60 * 60]
+            'class' => 'yii\web\DbSession',
+            'cookieParams' => ['lifetime' => 7 * 24 *60 * 60],
+            'timeout' => 60 * 60 * 24, //session expire
+            'useCookies' => true,
+
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
