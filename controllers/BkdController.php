@@ -12,6 +12,7 @@ use app\models\Pengajaran;
 use app\models\Organisasi;
 use app\models\PengelolaJurnal;
 use app\models\Publikasi;
+use app\models\PublikasiAuthor;
 use app\models\Pengabdian;
 use yii\httpclient\Client;
 
@@ -201,7 +202,13 @@ class BkdController extends AppController
             $bkd->komponen_id = $komponen->id;
             $bkd->deskripsi = 'Melakukan publikasi '.$model->nama_kategori_kegiatan.' judul '.$model->judul_publikasi_paten;
             $bkd->kondisi = (string)$model->id;
-            $bkd->sks = $komponen->angka_kredit;
+            $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
+            $publikasiAuthor = PublikasiAuthor::find()->where([
+              'author_id' => $user->dataDiri->sister_id,
+              'publikasi_id' => $model->sister_id
+            ])->one();
+            $multiplier = !empty($publikasiAuthor) && $publikasiAuthor->urutan == 1 ? 0.6 : 0.4;
+            $bkd->sks = $komponen->angka_kredit * $multiplier;
 
             if(!$bkd->save())
             {

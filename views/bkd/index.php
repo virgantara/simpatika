@@ -10,48 +10,63 @@ $total_penunjang = 0;
 ?>
 <h1>Progres BKD Anda Semester ini (<?=$bkd_periode->nama_periode;?>)</h1>
 <h3>Tanggal <?=\app\helpers\MyHelper::convertTanggalIndo($bkd_periode->tanggal_bkd_awal);?> sampai dengan <?=\app\helpers\MyHelper::convertTanggalIndo($bkd_periode->tanggal_bkd_akhir);?></h3>
-<?php 
-foreach ($results as $key => $value) 
-{
-    if(empty($value['items'])) continue;
-?>
+
 <div class="row">
     <div class="col-md-12">	
         <div class="panel">
             <div class="panel-heading">
-            	<?=$value['unsur'];?>
+            	
             </div>
             <div class="panel-body">
             	<div class="table-responsive">
+                    
             		<table class="table table-striped table-hover">
             			<thead>
             				<tr>
             					<th>No</th>
+                                <th>Unsur Utama</th>
             					<th class="text-center">Kegiatan</th>
             					<th class="text-center">Beban Kredit</th>
             					
             			    </tr>
             			</thead>
             			<tbody>
-            				<?php
-
-            				$total_ajar = 0; 
-            				foreach ($value['items'] as $q => $v) 
-            				{
+                            <?php 
+                            $counter = 0;
+                            $total =0;
+                            foreach ($results as $key => $value) 
+                            {
+                                if(empty($value['items'])) continue;
+                            
+                				$subtotal = 0; 
+                				foreach ($value['items'] as $q => $v) 
+                				{
+                                    $counter++;
 
             					# code...
-            					// $total_ajar += $value->sks_bkd;
+            					   $subtotal += $v->sks;
             				?>
             				<tr>
-            					<td><?=$q+1;?></td>
+            					<td><?=$counter ;?></td>
+                                <td><?=$value['unsur'];?></td>
             					<td><?=$v->deskripsi;?></td>
             					<td class="text-center"><?=$v->sks;?></td>
             				</tr>
-            				<?php 
-            				}
-            				?>
+                				<?php 
+                				}
+
+                                $total += $subtotal;
+                				?>
             			</tbody>
-            			
+            			<?php 
+                        }
+                        ?>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-right">Total Kredit</td>
+                                <td class="text-center"><?=$total;?></td>
+                            </tr>
+                        </tfoot>
             		</table>
             	</div>
             	
@@ -61,6 +76,3 @@ foreach ($results as $key => $value)
 </div>   
 
 
-<?php 
-}
-?>
