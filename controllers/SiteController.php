@@ -158,6 +158,9 @@ class SiteController extends AppController
         {
             return $this->redirect(Yii::$app->params['sso_login']);
         }
+
+        $list_peran = \app\helpers\MyHelper::getPeranPublikasi();
+        $flipped_list_peran = array_flip($list_peran);
         $results = [];
         $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
         $sisterToken = \app\helpers\MyHelper::getSisterToken();
@@ -269,13 +272,17 @@ class SiteController extends AppController
                             if(empty($pa))
                                 $pa = new \app\models\PublikasiAuthor;
 
+                            $dd = DataDiri::find()->where(['sister_id' => $author->id_dosen])->one();
 
+                            $pa->pub_id = $model->id;
+                            $pa->NIY = !empty($dd) ? $dd->NIY : Yii::$app->user->identity->NIY;
                             $pa->author_id = $author->id_dosen;
                             $pa->author_nama = $author->nama;
                             $pa->publikasi_id = $item->id_riwayat_publikasi_paten;
                             $pa->urutan = $author->no_urut;
                             $pa->afiliasi = $author->afiliasi_penulis;
                             $pa->peran_nama = $author->peran_dalam_kegiatan;
+                            $pa->peran_id = $flipped_list_peran[$pa->peran_nama];
                             $pa->corresponding_author = $author->apakah_corresponding_author;
                             $pa->jenis_peranan = $author->jenis_peranan;
                             if(!$pa->save())

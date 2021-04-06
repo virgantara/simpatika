@@ -1,5 +1,5 @@
 <?php
-
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -236,34 +236,45 @@ $this->params['breadcrumbs'][] = $this->title;
                 <th >Afiliasi</th>
                 <th >Peran</th>
                 <th >Corresponding Author</th>
+                <th>Option</th>
                 </tr>
                 </thead>
 
                 <tbody>
                 <?php 
-                if(!empty($results->data_penulis))
+                if(!empty($model->publikasiAuthors))
                 {
-                    foreach($results->data_penulis as $q=>$author)
+                    foreach($model->publikasiAuthors as $q=>$author)
                     {
 
                 ?>
                 <tr>
                 <td ><?=$q+1;?></td>
-                <td><?=$author->nama;?></td>
-                <td><?=$author->no_urut;?></td>
-                <td><?=$author->afiliasi_penulis;?></td>
-                <td><?=$author->peran_dalam_kegiatan;?></td>
-                <td><?=$author->apakah_corresponding_author == 1 ? 'Ya' : 'Bukan';?></td>
-
+                <td><?=$author->author_nama;?>
+                    
+                    <input type='hidden' value='<?=$author->NIY;?>' class='niy'>
+                </td>
+                <td><?=$author->urutan;?></td>
+                <td><?=$author->afiliasi;?></td>
+                <td><?=$author->peran_nama;?></td>
+                <td><?=$author->corresponding_author == 1 ? 'Ya' : 'Bukan';?> </td>
+                <td><button class='btn-remove-author btn btn-danger btn-sm'><i class='fa fa-trash'></i> </button></td>
                 </tr>
                 <?php 
                     }
                 }
                 ?>
+                <tr>
+                    <td colspan="6">
+                    <a id="btn-add-author" href="javascript:void(0)" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Author</a>
+                
+                    </td>
+                </tr>
                 </tbody>
+
                 </table>
 
-
+                
 
                 <div class="row" style="margin: 5px 0;"></div>
                 <table class="table table-hover table-bordered table-striped">
@@ -323,3 +334,122 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     ?>
 </div>
+
+
+
+<?php
+
+
+
+$this->registerJs(' 
+
+
+$(document).on("click",".btn-remove-author",function(e){
+    e.preventDefault();
+
+    var obj = new Object;
+    obj.NIY = $(this).closest("tr").find("input.niy").val();
+    obj.pub_id = "'.$model->id.'";
+    
+    $.ajax({
+        url: "'.Url::to(["publikasi/ajax-remove-author"]).'",
+        type: "POST",
+        data: {
+            dataPost: obj,
+            
+        },
+        success: function (data) {
+
+            var res = $.parseJSON(data)
+
+            if(res.code == 200){
+                Swal.fire(\'Yeay...\', res.message, \'success\')
+            }
+
+            else{
+                Swal.fire(\'Oops...\', res.message, \'error\')
+            }
+        }
+    })
+
+})
+
+$(document).on("click",".btn-save-author",function(e){
+    e.preventDefault();
+
+    var obj = new Object;
+    obj.NIY = $(this).closest("tr").find("input.niy").val();
+    obj.pub_id = "'.$model->id.'";
+    obj.urutan = $(this).closest("tr").find("input.urutan").val();
+    obj.afiliasi = $(this).closest("tr").find("input.afiliasi").val();
+    obj.peran_id = $(this).closest("tr").find("select.peran_id").val();
+
+    $.ajax({
+        url: "'.Url::to(["publikasi/ajax-add-author"]).'",
+        type: "POST",
+        data: {
+            dataPost: obj,
+            
+        },
+        success: function (data) {
+
+            var res = $.parseJSON(data)
+
+            if(res.code == 200){
+                Swal.fire(\'Yeay...\', res.message, \'success\')
+            }
+
+            else{
+                Swal.fire(\'Oops...\', res.message, \'error\')
+            }
+        }
+    })
+
+})
+
+$(document).on("click","#btn-add-author",function(e){
+    e.preventDefault();
+
+    var row = "<tr>"
+    row += "<td><span class=\'numbering\'></span></td>"
+    row += "<td><input type=\'text\' class=\'form-control nama_dosen\'><input type=\'hidden\' class=\'niy\'></td>"
+    row += "<td><input type=\'number\' class=\'urutan\' style=\'width:100px\'></td>"
+    row += "<td><input type=\'text\' class=\'afiliasi\' value=\'Universitas Darussalam Gontor\'></td>"
+    row += "<td><select class=\'form-control peran_id\'><option value=\'A\'>Penulis</option><option value=\'B\'>Editor</option><option value=\'C\'>Penerjemah</option><option value=\'D\'>Penemu/Inventor</option></select></td>"
+    row += "<td><input type=\'checkbox\' value=\'1\' class=\'apakah_corresponding_author\'></td>"
+    row += "<td><button class=\'btn-save-author btn btn-primary btn-sm\'><i class=\'fa fa-plus\'></i> Add</button> <button class=\'btn-remove-author btn btn-danger btn-sm\'><i class=\'fa fa-trash\'></i> Remove</button></td>"
+    row += "</tr>"
+
+    $(this).parent().parent().before(row)
+})
+
+
+$(document).bind("keyup.autocomplete",function(){
+    $(".nama_dosen").autocomplete({
+        minLength:1,
+        select:function(event, ui){
+            $(this).next().val(ui.item.niy);
+        },
+      
+        focus: function (event, ui) {
+            $(this).next().val(ui.item.niy);
+        },
+        source:function(request, response) {
+            $.ajax({
+                url: "'.Url::to(["data-diri/ajax-cari-dosen-simpeg"]).'",
+                dataType: "json",
+                data: {
+                    term: request.term,
+                    
+                },
+                success: function (data) {
+                    response(data);
+                }
+            })
+        },
+       
+    });
+}); 
+', \yii\web\View::POS_READY);
+
+?>

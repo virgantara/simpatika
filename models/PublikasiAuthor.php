@@ -35,6 +35,7 @@ class PublikasiAuthor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['urutan','pub_id'], 'required'],
             [['urutan'], 'integer'],
             [['updated_at', 'created_at','jenis_peranan'], 'safe'],
             [['author_id', 'publikasi_id'], 'string', 'max' => 100],

@@ -38,6 +38,31 @@ class DataDiriController extends AppController
         ];
     }
 
+    public function actionAjaxCariDosenSimpeg() {
+
+        $q = $_GET['term'];
+        
+        $query = DataDiri::find();
+        $query->where(['LIKE','nama',$q]);
+        $query->limit(10);
+        $results = $query->all();
+        
+        $out = [];
+
+        foreach ($results as $key => $value) {
+            $out[] = [
+                'id' => $value->nIY->ID,
+                'niy' => $value->NIY,
+                'label' => $value->nama
+            ];
+        }
+
+        
+        echo \yii\helpers\Json::encode($out);
+
+        die();
+    }
+
     public function actionInpassing()
     {
         if(!parent::handleEmptyUser())

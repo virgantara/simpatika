@@ -36,6 +36,82 @@ class PublikasiController extends AppController
         ];
     }
 
+    public function actionAjaxRemoveAuthor()
+    {
+        $list_peran = \app\helpers\MyHelper::getPeranPublikasi();
+        $dataPost = $_POST['dataPost'];
+        $model = PublikasiAuthor::find()->where([
+            'pub_id' => $dataPost['pub_id'],
+            'NIY' => $dataPost['NIY'],
+        ])->one();
+        
+        $results = [];
+        if(!empty($model))
+        {
+            $model->delete();
+            $results = [
+                'code' => 200,
+                'message' => 'Data deleted'
+            ];
+        }
+
+        else
+        {
+            $results = [
+                'code' => 500,
+                'message' => \app\helpers\MyHelper::logError($model)
+            ];
+        }
+
+        echo json_encode($results);
+        die();
+    }
+
+    public function actionAjaxAddAuthor()
+    {
+        $list_peran = \app\helpers\MyHelper::getPeranPublikasi();
+        $dataPost = $_POST['dataPost'];
+        $model = PublikasiAuthor::find()->where([
+            'pub_id' => $dataPost['pub_id'],
+            'NIY' => $dataPost['NIY'],
+        ])->one();
+
+        if(empty($model))
+            $model = new PublikasiAuthor;
+
+        $user = User::find()->where([
+            'NIY'=>$dataPost['NIY']
+        ])->one();
+        $model->NIY = $dataPost['NIY'];
+        $model->pub_id = $dataPost['pub_id'];
+        $model->urutan = $dataPost['urutan'];
+        $model->afiliasi = $dataPost['afiliasi'];
+        $model->peran_id = $dataPost['peran_id'];
+        $model->peran_nama = $list_peran[$dataPost['peran_id']];
+        $model->author_nama = !empty($user) ? strtoupper($user->dataDiri->nama) : '-';
+        $model->author_id = !empty($user) ? strtoupper($user->dataDiri->sister_id) : null;
+
+        $results = [];
+        if($model->save())
+        {
+            $results = [
+                'code' => 200,
+                'message' => 'Data Added'
+            ];
+        }
+
+        else
+        {
+            $results = [
+                'code' => 500,
+                'message' => \app\helpers\MyHelper::logError($model)
+            ];
+        }
+
+        echo json_encode($results);
+        die();
+    }
+
     public function actionAjaxList()
     {
         
@@ -180,7 +256,8 @@ class PublikasiController extends AppController
                             if(empty($pa))
                                 $pa = new PublikasiAuthor;
 
-
+                            $pa->pub_id = $model->id;
+                            $pa->NIY = Yii::$app->user->identity->NIY;
                             $pa->author_id = $author->id_dosen;
                             $pa->author_nama = $author->nama;
                             $pa->publikasi_id = $item->id_riwayat_publikasi_paten;

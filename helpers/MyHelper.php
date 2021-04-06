@@ -8,6 +8,16 @@ use Yii;
  */
 class MyHelper
 {	
+	public static function getPeranPublikasi(){
+		$list_peran = [
+            'A' => 'Penulis',
+            'B' => 'Editor',
+            'C' => 'Penerjemah',
+            'D' => 'Penemu/inventor'
+        ];
+
+        return $list_peran;
+	}
 
 	public static function experience($L) {
         $a=0;

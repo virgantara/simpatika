@@ -11,7 +11,9 @@ use Yii;
  * @property string|null $judul_publikasi_paten
  * @property string|null $NIY
  * @property string|null $nama_jenis_publikasi
+ * @property int|null $jenis_publikasi_id
  * @property string|null $nama_kategori_kegiatan
+ * @property string|null $kategori_kegiatan_id
  * @property string|null $tanggal_terbit
  * @property string|null $sister_id
  * @property string|null $tautan_laman_jurnal
@@ -30,6 +32,9 @@ use Yii;
  *
  * @property User $nIY
  * @property KomponenKegiatan $kegiatan
+ * @property KategoriKegiatan $kategoriKegiatan
+ * @property JenisPublikasi $jenisPublikasi
+ * @property PublikasiAuthor[] $publikasiAuthors
  */
 class Publikasi extends \yii\db\ActiveRecord
 {
@@ -47,19 +52,19 @@ class Publikasi extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tanggal_terbit', 'updated_at', 'created_at','jenis_publikasi_id'], 'safe'],
-            [['kegiatan_id'], 'integer'],
+            [['jenis_publikasi_id', 'kegiatan_id'], 'integer'],
+            [['tanggal_terbit', 'updated_at', 'created_at'], 'safe'],
             [['sks_bkd'], 'number'],
             [['judul_publikasi_paten', 'nama_jenis_publikasi', 'nama_kategori_kegiatan', 'tautan_laman_jurnal', 'tautan', 'penerbit', 'doi', 'issn'], 'string', 'max' => 255],
             [['NIY'], 'string', 'max' => 15],
-            [['sister_id'], 'string', 'max' => 100],
+            [['kategori_kegiatan_id', 'sister_id'], 'string', 'max' => 100],
             [['volume', 'nomor'], 'string', 'max' => 5],
             [['halaman'], 'string', 'max' => 50],
             [['is_claimed'], 'string', 'max' => 1],
             [['NIY'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['NIY' => 'NIY']],
             [['kegiatan_id'], 'exist', 'skipOnError' => true, 'targetClass' => KomponenKegiatan::className(), 'targetAttribute' => ['kegiatan_id' => 'id']],
             [['kategori_kegiatan_id'], 'exist', 'skipOnError' => true, 'targetClass' => KategoriKegiatan::className(), 'targetAttribute' => ['kategori_kegiatan_id' => 'id']],
-               [['jenis_publikasi_id'], 'exist', 'skipOnError' => true, 'targetClass' => JenisPublikasi::className(), 'targetAttribute' => ['jenis_publikasi_id' => 'id']],
+            [['jenis_publikasi_id'], 'exist', 'skipOnError' => true, 'targetClass' => JenisPublikasi::className(), 'targetAttribute' => ['jenis_publikasi_id' => 'id']],
         ];
     }
 
@@ -73,7 +78,9 @@ class Publikasi extends \yii\db\ActiveRecord
             'judul_publikasi_paten' => 'Judul Publikasi Paten',
             'NIY' => 'Niy',
             'nama_jenis_publikasi' => 'Nama Jenis Publikasi',
+            'jenis_publikasi_id' => 'Jenis Publikasi ID',
             'nama_kategori_kegiatan' => 'Nama Kategori Kegiatan',
+            'kategori_kegiatan_id' => 'Kategori Kegiatan ID',
             'tanggal_terbit' => 'Tanggal Terbit',
             'sister_id' => 'Sister ID',
             'tautan_laman_jurnal' => 'Tautan Laman Jurnal',
@@ -112,13 +119,33 @@ class Publikasi extends \yii\db\ActiveRecord
         return $this->hasOne(KomponenKegiatan::className(), ['id' => 'kegiatan_id']);
     }
 
+    /**
+     * Gets query for [[KategoriKegiatan]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getKategoriKegiatan()
     {
         return $this->hasOne(KategoriKegiatan::className(), ['id' => 'kategori_kegiatan_id']);
     }
 
+    /**
+     * Gets query for [[JenisPublikasi]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getJenisPublikasi()
     {
         return $this->hasOne(JenisPublikasi::className(), ['id' => 'jenis_publikasi_id']);
+    }
+
+    /**
+     * Gets query for [[PublikasiAuthors]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPublikasiAuthors()
+    {
+        return $this->hasMany(PublikasiAuthor::className(), ['pub_id' => 'id']);
     }
 }
