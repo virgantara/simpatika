@@ -197,7 +197,7 @@ class PengelolaJurnalController extends AppController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', "Data tersimpan");
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -220,9 +220,17 @@ class PengelolaJurnalController extends AppController
         }
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+
+            if($model->validate())
+            {
+                $komponen = \app\models\KomponenKegiatan::findOne($model->komponen_kegiatan_id);
+                $model->sks_bkd = $komponen->angka_kredit;
+                $model->save();
+            }
+            
             Yii::$app->session->setFlash('success', "Data tersimpan");
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

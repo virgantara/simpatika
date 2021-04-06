@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\PengelolaJurnal */
+/* @var $model app\models\PenunjangLain */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Pengelola Jurnals', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Penunjang Lains', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="block-header">
@@ -32,25 +32,16 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            [
-                'attribute' => 'kategori_kegiatan_id',
-                'value' => function($data){
-                    return !empty($data->kategoriKegiatan) ? $data->kategoriKegiatan->nama : '-';
-                }
-            ],
-            
-           
-            [
-                'attribute' => 'komponen_kegiatan_id',
-                'value' => function($data){
-                    return !empty($data->komponenKegiatan) ? $data->komponenKegiatan->nama : '-';
-                }
-            ],
-            'peran_dalam_kegiatan',
-            'nama_media_publikasi',
+            'id',
+            'kategori_kegiatan_id',
+            'komponen_kegiatan_id',
+            'jenis_panitia_id',
+            'tingkat_id',
+            'nama_kegiatan',
+            'instansi',
             'no_sk_tugas',
-            // 'apakah_masih_aktif',
-            'tgl_sk_tugas',
+            'tanggal_mulai',
+            'tanggal_selesai',
         ],
     ]) ?>
 

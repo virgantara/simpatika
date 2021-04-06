@@ -23,6 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Pengelola Jurnal', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+     <?php 
+    foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
+      echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';
+    }
+    ?>
     <?php
     $gridColumns = [
     [
@@ -34,16 +39,28 @@ $this->params['breadcrumbs'][] = $this->title;
         'header'=>'',
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
-
+            [
+                'attribute' => 'kategori_kegiatan_id',
+                'value' => function($data){
+                    return !empty($data->kategoriKegiatan) ? $data->kategoriKegiatan->nama : '-';
+                }
+            ],
+            
+           
+            [
+                'attribute' => 'komponen_kegiatan_id',
+                'value' => function($data){
+                    return !empty($data->komponenKegiatan) ? $data->komponenKegiatan->nama : '-';
+                }
+            ],
             'peran_dalam_kegiatan',
             'nama_media_publikasi',
+            'sks_bkd',
             'no_sk_tugas',
             // 'apakah_masih_aktif',
             'tgl_sk_tugas',
             //'tgl_sk_tugas_selesai',
-            
-            //'kategori_kegiatan_id',
-            //'komponen_kegiatan_id',
+
             //'NIY',
             //'sister_id',
             //'sks_bkd',

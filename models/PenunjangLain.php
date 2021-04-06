@@ -5,19 +5,19 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "pengelola_jurnal".
+ * This is the model class for table "penunjang_lain".
  *
  * @property int $id
- * @property string $peran_dalam_kegiatan
- * @property string|null $no_sk_tugas
- * @property string|null $apakah_masih_aktif
- * @property string|null $tgl_sk_tugas
- * @property string|null $tgl_sk_tugas_selesai
- * @property string|null $nama_media_publikasi
  * @property string|null $kategori_kegiatan_id
  * @property int|null $komponen_kegiatan_id
+ * @property int $jenis_panitia_id
+ * @property string $tingkat_id
+ * @property string|null $nama_kegiatan
+ * @property string|null $instansi
+ * @property string|null $no_sk_tugas
+ * @property string|null $tanggal_mulai
+ * @property string|null $tanggal_selesai
  * @property string|null $NIY
- * @property string|null $sister_id
  * @property float|null $sks_bkd
  * @property string|null $is_claimed
  * @property string|null $updated_at
@@ -25,16 +25,18 @@ use Yii;
  *
  * @property KategoriKegiatan $kategoriKegiatan
  * @property KomponenKegiatan $komponenKegiatan
+ * @property Tingkat $tingkat
+ * @property JenisPanitia $jenisPanitia
  * @property User $nIY
  */
-class PengelolaJurnal extends \yii\db\ActiveRecord
+class PenunjangLain extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'pengelola_jurnal';
+        return 'penunjang_lain';
     }
 
     /**
@@ -43,17 +45,18 @@ class PengelolaJurnal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['peran_dalam_kegiatan','komponen_kegiatan_id','kategori_kegiatan_id'], 'required'],
-            [['tgl_sk_tugas', 'tgl_sk_tugas_selesai', 'updated_at', 'created_at'], 'safe'],
-            [['komponen_kegiatan_id'], 'integer'],
+            [['komponen_kegiatan_id', 'jenis_panitia_id'], 'integer'],
+            [['jenis_panitia_id', 'tingkat_id'], 'required'],
+            [['tanggal_mulai', 'tanggal_selesai', 'updated_at', 'created_at'], 'safe'],
             [['sks_bkd'], 'number'],
-            [['peran_dalam_kegiatan', 'nama_media_publikasi'], 'string', 'max' => 255],
-            [['no_sk_tugas', 'sister_id'], 'string', 'max' => 100],
-            [['apakah_masih_aktif', 'is_claimed'], 'string', 'max' => 1],
-            [['kategori_kegiatan_id'], 'string', 'max' => 10],
+            [['kategori_kegiatan_id'], 'string', 'max' => 100],
+            [['tingkat_id', 'is_claimed'], 'string', 'max' => 1],
+            [['nama_kegiatan', 'instansi', 'no_sk_tugas'], 'string', 'max' => 255],
             [['NIY'], 'string', 'max' => 15],
             [['kategori_kegiatan_id'], 'exist', 'skipOnError' => true, 'targetClass' => KategoriKegiatan::className(), 'targetAttribute' => ['kategori_kegiatan_id' => 'id']],
             [['komponen_kegiatan_id'], 'exist', 'skipOnError' => true, 'targetClass' => KomponenKegiatan::className(), 'targetAttribute' => ['komponen_kegiatan_id' => 'id']],
+            [['tingkat_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tingkat::className(), 'targetAttribute' => ['tingkat_id' => 'id']],
+            [['jenis_panitia_id'], 'exist', 'skipOnError' => true, 'targetClass' => JenisPanitia::className(), 'targetAttribute' => ['jenis_panitia_id' => 'id']],
             [['NIY'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['NIY' => 'NIY']],
         ];
     }
@@ -65,16 +68,16 @@ class PengelolaJurnal extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'peran_dalam_kegiatan' => 'Peran Dalam Kegiatan',
+            'kategori_kegiatan_id' => 'Kategori Kegiatan ID',
+            'komponen_kegiatan_id' => 'Komponen Kegiatan ID',
+            'jenis_panitia_id' => 'Jenis Panitia ID',
+            'tingkat_id' => 'Tingkat ID',
+            'nama_kegiatan' => 'Nama Kegiatan',
+            'instansi' => 'Instansi',
             'no_sk_tugas' => 'No Sk Tugas',
-            'apakah_masih_aktif' => 'Apakah Masih Aktif',
-            'tgl_sk_tugas' => 'Tgl Sk Tugas',
-            'tgl_sk_tugas_selesai' => 'Tgl Sk Tugas Selesai',
-            'nama_media_publikasi' => 'Nama Media Publikasi',
-            'kategori_kegiatan_id' => 'Kategori Kegiatan',
-            'komponen_kegiatan_id' => 'Komponen BKD',
+            'tanggal_mulai' => 'Tanggal Mulai',
+            'tanggal_selesai' => 'Tanggal Selesai',
             'NIY' => 'Niy',
-            'sister_id' => 'Sister ID',
             'sks_bkd' => 'Sks Bkd',
             'is_claimed' => 'Is Claimed',
             'updated_at' => 'Updated At',
@@ -100,6 +103,26 @@ class PengelolaJurnal extends \yii\db\ActiveRecord
     public function getKomponenKegiatan()
     {
         return $this->hasOne(KomponenKegiatan::className(), ['id' => 'komponen_kegiatan_id']);
+    }
+
+    /**
+     * Gets query for [[Tingkat]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTingkat()
+    {
+        return $this->hasOne(Tingkat::className(), ['id' => 'tingkat_id']);
+    }
+
+    /**
+     * Gets query for [[JenisPanitia]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getJenisPanitia()
+    {
+        return $this->hasOne(JenisPanitia::className(), ['id' => 'jenis_panitia_id']);
     }
 
     /**

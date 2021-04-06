@@ -143,6 +143,9 @@ $(document).on("click",".btn-claim-pengelolaJurnal",function(e){
     if($(this).is(":checked"))
         obj.is_claimed = "1"
 
+    obj.tahun_id = $(this).data("ta")
+
+
     $.ajax({
         type : \'POST\',
         data : {
@@ -171,12 +174,44 @@ $(document).on("click",".btn-claim-organisasi",function(e){
     if($(this).is(":checked"))
         obj.is_claimed = "1"
 
+    obj.tahun_id = $(this).data("ta")
+
     $.ajax({
         type : \'POST\',
         data : {
             dataPost : obj
         },
         url : \''.Url::to(['bkd/ajax-claim-organisasi']).'\',
+        async: true,
+        beforeSend : function(){
+
+        },
+        success: function(res){
+            var res = $.parseJSON(res);
+            $("#tahun_list").trigger("change")
+        }
+
+    });
+
+})
+
+$(document).on("click",".btn-claim-penunjang-lain",function(e){
+    e.preventDefault()
+
+    var obj = new Object
+    obj.id = $(this).data("item")
+    obj.is_claimed = "0";
+    if($(this).is(":checked"))
+        obj.is_claimed = "1"
+
+    obj.tahun_id = $(this).data("ta")
+
+    $.ajax({
+        type : \'POST\',
+        data : {
+            dataPost : obj
+        },
+        url : \''.Url::to(['bkd/ajax-claim-penunjang-lain']).'\',
         async: true,
         beforeSend : function(){
 
@@ -368,6 +403,8 @@ function getPengabdian(tahun){
     
     var obj = new Object;
     obj.tahun = tahun;
+    var counter = 0;
+    $("#tabel-pengabdian > tbody").empty()
     $.ajax({
         type : \'POST\',
         data : {
@@ -381,18 +418,56 @@ function getPengabdian(tahun){
         success: function(res){
             var res = $.parseJSON(res);
             var row = ""
-            $("#tabel-pengabdian > tbody").empty()
+            
             var total_sks = 0
             $.each(res, function(i,obj){
+                counter++;
                 let isClaimed = obj.is_claimed == 1 ? "checked" : "";
                 row += "<tr>"
-                row += "<td>"+(i+1)+"</td>"
+                row += "<td>"+(counter)+"</td>"
                 row += "<td>"+obj.judul_penelitian_pengabdian+"</td>"
                 row += "<td>"+obj.nama_skim+"</td>"
                 row += "<td>"+obj.tahun_kegiatan+"</td>"
                 row += "<td>"+obj.tempat_kegiatan+"</td>"
                 row += "<td>"+obj.nilai+"</td>"
                 row += "<td><input type=\'checkbox\' "+isClaimed+" data-item=\'"+obj.ID+"\' class=\'btn-claim-pengabdian\'/></td>"
+                row += "</tr>"
+
+            })
+
+            $("#tabel-pengabdian > tbody").append(row)
+                
+        }
+
+    });
+
+    $.ajax({
+        type : \'POST\',
+        data : {
+            dataPost : obj
+        },
+        url : \''.Url::to(['pengelola-jurnal/ajax-list']).'\',
+        async: true,
+        beforeSend : function(){
+
+        },
+        success: function(res){
+            var res = $.parseJSON(res);
+            var row = ""
+            
+            var total_sks = 0
+            $.each(res, function(i,obj){
+
+                let isClaimed = obj.is_claimed == 1 ? "checked" : "";
+                counter++;
+                row += "<tr>"
+                row += "<td>"+(counter)+"</td>"
+                row += "<td>Menjadi "+obj.peran_dalam_kegiatan +" pada "+obj.nama_media_publikasi+"</td>"
+                row += "<td></td>"
+                row += "<td></td>"
+                row += "<td></td>"
+                row += "<td>"+obj.sks_bkd+"</td>"
+                row += "<td><input type=\'checkbox\' "+isClaimed+" data-ta=\'"+$("#tahun_list").val()+"\' data-sks=\'"+obj.sks_bkd+"\' data-item=\'"+obj.id+"\' class=\'btn-claim-pengelolaJurnal\'/></td>"
                 row += "</tr>"
 
             })
@@ -432,7 +507,7 @@ function getPenunjang(tahun){
                 row += "<td>"+(counter)+"</td>"
                 row += "<td>Menjadi "+obj.jabatan+" pada organisasi "+obj.organisasi+" dari tanggal "+obj.tanggal_mulai_keanggotaan+" hingga tanggal "+obj.selesai_keanggotaan+"</td>"
                 row += "<td>"+obj.sks_bkd+"</td>"
-                row += "<td><input type=\'checkbox\' "+isClaimed+" data-item=\'"+obj.ID+"\' class=\'btn-claim-organisasi\'/></td>"
+                row += "<td><input type=\'checkbox\' data-ta=\'"+$("#tahun_list").val()+"\' "+isClaimed+" data-item=\'"+obj.ID+"\' class=\'btn-claim-organisasi\'/></td>"
                 row += "</tr>"
 
             })
@@ -448,7 +523,7 @@ function getPenunjang(tahun){
         data : {
             dataPost : obj
         },
-        url : \''.Url::to(['pengelola-jurnal/ajax-list']).'\',
+        url : \''.Url::to(['penunjang-lain/ajax-list']).'\',
         async: true,
         beforeSend : function(){
 
@@ -456,16 +531,15 @@ function getPenunjang(tahun){
         success: function(res){
             var res = $.parseJSON(res);
             var row = ""
-            
             var total_sks = 0
             $.each(res, function(i,obj){
                 let isClaimed = obj.is_claimed == 1 ? "checked" : "";
                 counter++;
                 row += "<tr>"
                 row += "<td>"+(counter)+"</td>"
-                row += "<td>Menjadi "+obj.peran_dalam_kegiatan +" pada "+obj.nama_media_publikasi+" dari tanggal "+obj.tgl_sk_tugas+" hingga tanggal "+obj.tgl_sk_tugas_selesai+"</td>"
+                row += "<td>Menjadi "+obj.peran+" pada kegiatan "+obj.nama_kegiatan+" dari tanggal "+obj.tanggal_mulai+" hingga tanggal "+obj.tanggal_selesai+"</td>"
                 row += "<td>"+obj.sks_bkd+"</td>"
-                row += "<td><input type=\'checkbox\' "+isClaimed+" data-item=\'"+obj.id+"\' class=\'btn-claim-pengelolaJurnal\'/></td>"
+                row += "<td><input type=\'checkbox\' data-ta=\'"+$("#tahun_list").val()+"\' "+isClaimed+" data-item=\'"+obj.id+"\' class=\'btn-claim-penunjang-lain\'/></td>"
                 row += "</tr>"
 
             })

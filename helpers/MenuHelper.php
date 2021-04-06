@@ -104,6 +104,7 @@ class MenuHelper
 		           	['label' => 'Pengabdian', 'url' => ['/pengabdian/index']],
 		           	['label' => 'Pembicara', 'url' => ['/pembicara/index']],
 		           	['label' => 'Jabatan Struktural', 'url' => ['/organisasi/index']],
+		           	['label' => 'Pengelola jurnal', 'url' => ['/pengelola-jurnal/index']],
 		        ]
 	        ];
 
@@ -115,10 +116,10 @@ class MenuHelper
 		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_penunjang">{label}</a>',
 		        'items'=>[
 		           	['label' => 'Anggota Profesi', 'url' => ['/organisasi/index']],
-		           	['label' => 'Pengelola jurnal', 'url' => ['/pengelola-jurnal/index']],
+		           	
 		           	['label' => 'Penghargaan', 'url' => '#'],
 		           	['label' => 'Visiting Scientist', 'url' => '#'],
-		           	['label' => 'Penunjang lain', 'url' => '#'],
+		           	['label' => 'Penunjang lain', 'url' => ['penunjang-lain/index']],
 		        ]
 	        ];
 

@@ -54,50 +54,12 @@ class BkdController extends AppController
           ];
         }
 
-        // $query = TugasDosenBkd::find();
-        // $query->joinWith(['unsur as u']);
-        // $query->where([
-        //   'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
-        //   'u.kode' => 'AJAR'
-        // ]);
-
-        // $bkd_ajar = $query->one();
-
-        // $query = TugasDosenBkd::find();
-        // $query->joinWith(['unsur as u']);
-        // $query->where([
-        //   'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
-        //   'u.kode' => 'RISET'
-        // ]);
-
-        // $bkd_pub = $query->one();
-
-        // $query = TugasDosenBkd::find();
-        // $query->joinWith(['unsur as u']);
-        // $query->where([
-        //   'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
-        //   'u.kode' => 'ABDIMAS'
-        // ]);
-
-        // $bkd_abdi = $query->one();
-
-        // $query = TugasDosenBkd::find();
-        // $query->joinWith(['unsur as u']);
-        // $query->where([
-        //   'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
-        //   'u.kode' => 'PENUNJANG'
-        // ]);
-
-        // $bkd_penunjang = $query->one();
 
 
         return $this->render('index',[
             'results' => $results,
             'bkd_periode' =>   $bkd_periode,
-            // 'bkd_ajar' => $bkd_ajar,
-            // 'bkd_pub' => $bkd_pub,
-            // 'bkd_abdi' => $bkd_abdi,
-            // 'bkd_penunjang' => $bkd_penunjang
+           
         ]);
         
     }
@@ -346,6 +308,42 @@ class BkdController extends AppController
           $model->komponen_kegiatan_id = $komponen->id;
           $model->sks_bkd = $komponen->angka_kredit;
           $model->is_claimed = $dataPost['is_claimed'];
+          $bkd = BkdDosen::find()->where([
+            'tahun_id' => $dataPost['tahun_id'],
+            'dosen_id' => Yii::$app->user->identity->ID,
+            'komponen_id' => $komponen->id,
+            'kondisi' => (string)$model->ID
+          ])->one();
+          if($model->is_claimed == '1')
+          {
+            if(empty($bkd))
+            {
+              $bkd = new BkdDosen;
+            }
+
+            $bkd->tahun_id = $dataPost['tahun_id'];
+            $bkd->dosen_id = Yii::$app->user->identity->ID;
+            $bkd->komponen_id = $komponen->id;
+            $bkd->deskripsi = 'Menjadi '.$model->jabatan.' pada '.$model->organisasi;
+            $bkd->kondisi = (string)$model->ID;
+            $bkd->sks = $komponen->angka_kredit;
+
+            if(!$bkd->save())
+            {
+              $results = [
+                'code' => 500,
+                'message' => \app\helpers\MyHelper::logError($bkd)
+              ];
+
+              // print_r($results);exit;
+            }
+          }
+
+          else if($model->is_claimed == '0')
+          {
+            if(!empty($bkd))
+              $bkd->delete();
+          }
           if($model->save(false,['is_claimed','komponen_kegiatan_id','sks_bkd']))
           {
             $results = [
@@ -390,6 +388,122 @@ class BkdController extends AppController
           $model->komponen_kegiatan_id = $komponen->id;
           $model->sks_bkd = $komponen->angka_kredit;
           $model->is_claimed = $dataPost['is_claimed'];
+          $bkd = BkdDosen::find()->where([
+            'tahun_id' => $dataPost['tahun_id'],
+            'dosen_id' => Yii::$app->user->identity->ID,
+            'komponen_id' => $komponen->id,
+            'kondisi' => (string)$model->ID
+          ])->one();
+          if($model->is_claimed == '1')
+          {
+            if(empty($bkd))
+            {
+              $bkd = new BkdDosen;
+            }
+
+            $bkd->tahun_id = $dataPost['tahun_id'];
+            $bkd->dosen_id = Yii::$app->user->identity->ID;
+            $bkd->komponen_id = $komponen->id;
+            $bkd->deskripsi = 'Menjadi '.$model->peran_dalam_kegiatan.' di jurnal '.$model->nama_media_publikasi;
+            $bkd->kondisi = (string)$model->id;
+            $bkd->sks = $komponen->angka_kredit;
+
+            if(!$bkd->save())
+            {
+              $results = [
+                'code' => 500,
+                'message' => \app\helpers\MyHelper::logError($bkd)
+              ];
+
+              print_r($results);exit;
+            }
+          }
+
+          else if($model->is_claimed == '0')
+          {
+            if(!empty($bkd))
+              $bkd->delete();
+          }
+          if($model->save(false,['is_claimed','komponen_kegiatan_id','sks_bkd']))
+          {
+            $results = [
+              'code' => 200,
+              'message' => 'Data updated'
+            ];
+          }
+
+          else
+          {
+            $results = [
+              'code' => 500,
+              'message' => 'Oops, something wrong'
+            ];
+          }
+        }
+      }
+
+      echo json_encode($results);
+      die();
+    }
+
+    public function actionAjaxClaimPenunjangLain()
+    {
+      $dataPost = $_POST['dataPost'];
+      $model = \app\models\PenunjangLain::findOne($dataPost['id']);
+      $resutls = [];
+      if(!empty($model))
+      {
+        $komponen = $model->komponenKegiatan;
+        
+        if(empty($komponen))
+        {
+          $results = [
+            'code' => 500,
+            'message' => 'Oops, KomponenKegiatan is empty'
+          ];
+        }
+
+        else
+        {
+          $model->komponen_kegiatan_id = $komponen->id;
+          $model->sks_bkd = $komponen->angka_kredit;
+          $model->is_claimed = $dataPost['is_claimed'];
+          $bkd = BkdDosen::find()->where([
+            'tahun_id' => $dataPost['tahun_id'],
+            'dosen_id' => Yii::$app->user->identity->ID,
+            'komponen_id' => $komponen->id,
+            'kondisi' => (string)$model->id
+          ])->one();
+          if($model->is_claimed == '1')
+          {
+            if(empty($bkd))
+            {
+              $bkd = new BkdDosen;
+            }
+
+            $bkd->tahun_id = $dataPost['tahun_id'];
+            $bkd->dosen_id = Yii::$app->user->identity->ID;
+            $bkd->komponen_id = $komponen->id;
+            $bkd->deskripsi = 'Menjadi '.$model->jenisPanitia->nama.' pada kegiatan '.$model->nama_kegiatan;
+            $bkd->kondisi = (string)$model->id;
+            $bkd->sks = $komponen->angka_kredit;
+
+            if(!$bkd->save())
+            {
+              $results = [
+                'code' => 500,
+                'message' => \app\helpers\MyHelper::logError($bkd)
+              ];
+
+              print_r($results);exit;
+            }
+          }
+
+          else if($model->is_claimed == '0')
+          {
+            if(!empty($bkd))
+              $bkd->delete();
+          }
           if($model->save(false,['is_claimed','komponen_kegiatan_id','sks_bkd']))
           {
             $results = [

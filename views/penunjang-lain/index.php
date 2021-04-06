@@ -4,13 +4,14 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\OrganisasiSearch */
+/* @var $searchModel app\models\PenunjangLainSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Organisasi';
+$this->title = 'Penunjang Lains';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<h3><?= Html::encode($this->title) ?></h3>
 <div class="row">
     <div class="col-md-12">
         <div class="panel">
@@ -20,14 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="panel-body ">
 
     <p>
-        <?= Html::a('Tambah Data', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('<i class="fa fa-download"></i> Import dari SISTER', ['import'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Create Penunjang Lain', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php 
-    foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
-      echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';
-    }
-    ?>
     <?php
     $gridColumns = [
     [
@@ -39,17 +34,38 @@ $this->params['breadcrumbs'][] = $this->title;
         'header'=>'',
         'headerOptions'=>['class'=>'kartik-sheet-style']
     ],
-            // 'tahun_awal',
-            // 'tahun_akhir',
-            'organisasi',
-            'jabatan',
-            //'f_sk',
-            'tanggal_mulai_keanggotaan',
-            'selesai_keanggotaan',
-            'sks_bkd',
-            //'sister_id',
-            //'update_at',
-            //'ver',
+            [
+                'attribute' => 'kategori_kegiatan_id',
+                'value' => function($data){
+                    return !empty($data->kategoriKegiatan) ? $data->kategoriKegiatan->nama : '-';
+                }
+            ],
+            
+           
+            [
+                'attribute' => 'komponen_kegiatan_id',
+                'value' => function($data){
+                    return !empty($data->komponenKegiatan) ? $data->komponenKegiatan->nama : '-';
+                }
+            ],
+            
+            [
+                'attribute' => 'jenis_panitia_id',
+                'value' => function($data){
+                    return !empty($data->jenisPanitia) ? $data->jenisPanitia->nama : '-';
+                }
+            ],
+            [
+                'attribute' => 'tingkat_id',
+                'value' => function($data){
+                    return !empty($data->tingkat) ? $data->tingkat->nama : '-';
+                }
+            ],
+            'nama_kegiatan',
+            'instansi',
+            'no_sk_tugas',
+            'tanggal_mulai',
+            'tanggal_selesai',
     ['class' => 'yii\grid\ActionColumn']
 ];?>    
 <?= GridView::widget([
