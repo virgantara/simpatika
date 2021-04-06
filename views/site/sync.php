@@ -52,7 +52,7 @@ $(document).on("click","#btn-import",function(e){
         beforeSend : function(){
             Swal.fire({
                 title: \'Please Wait !\',
-                html: \'data importing\',
+                html: \'Importing data\',
                 allowOutsideClick: false,
                 showCancelButton: false, 
                 showConfirmButton: false,
