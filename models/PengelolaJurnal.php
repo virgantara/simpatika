@@ -44,7 +44,7 @@ class PengelolaJurnal extends \yii\db\ActiveRecord
     {
         return [
             [['peran_dalam_kegiatan','komponen_kegiatan_id','kategori_kegiatan_id'], 'required'],
-            [['tgl_sk_tugas', 'tgl_sk_tugas_selesai', 'updated_at', 'created_at'], 'safe'],
+            [['tgl_sk_tugas', 'tgl_sk_tugas_selesai', 'updated_at', 'created_at','is_claimed','sks_bkd'], 'safe'],
             [['komponen_kegiatan_id'], 'integer'],
             [['sks_bkd'], 'number'],
             [['peran_dalam_kegiatan', 'nama_media_publikasi'], 'string', 'max' => 255],
