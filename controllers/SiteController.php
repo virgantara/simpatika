@@ -399,6 +399,8 @@ class SiteController extends AppController
         $list_prodi = \app\models\Prodi::find()->all();
         try 
         {
+
+            $komponen = \app\models\KomponenKegiatan::find()->where(['kondisi'=>'A'])->one();
             foreach($tahun_akademik_list as $tahun_akademik)
             {
                 $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
@@ -435,6 +437,8 @@ class SiteController extends AppController
                             $model->sks = $res['sks'];
                             $model->tahun_akademik = $res['ta'];
                             $model->ver = 'Sudah Diverifikasi';
+                            $model->komponen_id = $komponen->id;
+                            $model->sks_bkd = $komponen->angka_kredit;
 
                             if($model->save())
                             {
