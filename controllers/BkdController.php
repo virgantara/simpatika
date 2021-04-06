@@ -392,7 +392,7 @@ class BkdController extends AppController
             'tahun_id' => $dataPost['tahun_id'],
             'dosen_id' => Yii::$app->user->identity->ID,
             'komponen_id' => $komponen->id,
-            'kondisi' => (string)$model->ID
+            'kondisi' => (string)$model->id
           ])->one();
           if($model->is_claimed == '1')
           {
