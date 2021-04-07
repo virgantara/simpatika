@@ -1631,34 +1631,15 @@ class SiteController extends AppController
             return $this->redirect(Yii::$app->params['sso_login']);
         }
         $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
-        $api_baseurl = Yii::$app->params['api_baseurl'];
-        $client = new Client(['baseUrl' => $api_baseurl]);
-        $client_token = Yii::$app->params['client_token'];
-        $headers = ['x-access-token'=>$client_token];
-
+        
         $results = [];
-        // foreach($listTahun as $tahun)
-        // {
-        $params = [
-            
-        ];
-
-        $response = $client->get('/tahun/aktif', $params,$headers)->send();
-         
-        $tahun_akademik = '';
-
-        if ($response->isOk) {
-            $results = $response->data['values'];
-            if(!empty($results[0]))
-            {
-                $tahun_akademik = $results[0];
-            }
-        }
+        
+        $bkd_periode = \app\models\BkdPeriode::find()->where(['buka' => 'Y'])->one();
 
         $pengajaran = Pengajaran::find()->where([
             'NIY' => Yii::$app->user->identity->NIY,
             // 'is_claimed' => 1,
-            'tahun_akademik' => $tahun_akademik['tahun_id']
+            'tahun_akademik' => $bkd_periode->tahun_id
         ])->all();
 
         // print_r($tahun_akademik);exit;
@@ -1670,8 +1651,8 @@ class SiteController extends AppController
 
         $query->andWhere(['not',['kegiatan_id' => null]]);
 
-        $sd = $tahun_akademik['kuliah_mulai'];
-        $ed = $tahun_akademik['nilai_selesai'];
+        $sd = $bkd_periode->tanggal_bkd_awal;
+        $ed = $bkd_periode->tanggal_bkd_akhir;
 
         $totalCatatanHarian = $this->sumPoinCatatanHarian($sd, $ed, Yii::$app->user->identity->ID);
 
@@ -1769,12 +1750,11 @@ class SiteController extends AppController
             'pengabdian' => $pengabdian,
             'organisasi' => $organisasi,
             'pengelolaJurnal' => $pengelolaJurnal,
-            'tahun_akademik' =>   $tahun_akademik,
             'bkd_ajar' => $bkd_ajar,
             'bkd_pub' => $bkd_pub,
             'bkd_abdi' => $bkd_abdi,
             'bkd_penunjang' => $bkd_penunjang,
-            'tahun_akademik' =>   $tahun_akademik  
+            'bkd_periode' =>   $bkd_periode  
         ]);
         
     }

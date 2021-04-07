@@ -37,13 +37,6 @@ foreach ($pengelolaJurnal as $key => $value)
 
 $total_bkd = $total_ajar+$total_pub+$total_abdi+$total_penunjang;
 
-// $exp = $total_bkd * 1000;
-// $exp += $results['totalCatatanHarian'];
-// $level = MasterLevel::getLevel($exp);
-// $currentClass = GameLevelClass::getCurrentClass($level);
-// $nextLevel = MasterLevel::getNextLevel($exp);
-// $remainingExp = $nextLevel['nextExp'] - $exp;
-
 $persen_a = 0;
 $persen_b = 0;
 $persen_c = 0;
@@ -108,8 +101,8 @@ else {
 }
 
 ?>
-<h1>Pencapaian Anda Semester ini (<?=$tahun_akademik['nama_tahun'];?>)</h1>
-<h4><?=\app\helpers\MyHelper::convertTanggalIndo($tahun_akademik['kuliah_mulai']);?> sampai dengan <?=\app\helpers\MyHelper::convertTanggalIndo($tahun_akademik['nilai_selesai']);?></h4>
+<h1>Pencapaian Anda Semester ini (<?=$bkd_periode->nama_periode;?>)</h1>
+<h4><?=\app\helpers\MyHelper::convertTanggalIndo($bkd_periode->tanggal_bkd_awal);?> sampai dengan <?=\app\helpers\MyHelper::convertTanggalIndo($bkd_periode->tanggal_bkd_akhir);?></h4>
 <div class="row">
     <div class="col-md-6">
     

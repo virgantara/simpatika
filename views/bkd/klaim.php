@@ -158,7 +158,15 @@ $(document).on("click",".btn-claim-pengelolaJurnal",function(e){
         },
         success: function(res){
             var res = $.parseJSON(res);
-            $("#tahun_list").trigger("change")
+            if(res.code == 200)
+                $("#tahun_list").trigger("change")
+            else{
+                Swal.fire({
+                  title: \'Oops!\',
+                  icon: \'error\',
+                  text: res.message
+                });
+            }
         }
 
     });
@@ -188,7 +196,15 @@ $(document).on("click",".btn-claim-organisasi",function(e){
         },
         success: function(res){
             var res = $.parseJSON(res);
-            $("#tahun_list").trigger("change")
+            if(res.code == 200)
+                $("#tahun_list").trigger("change")
+            else{
+                Swal.fire({
+                  title: \'Oops!\',
+                  icon: \'error\',
+                  text: res.message
+                });
+            }
         }
 
     });
@@ -218,7 +234,15 @@ $(document).on("click",".btn-claim-penunjang-lain",function(e){
         },
         success: function(res){
             var res = $.parseJSON(res);
-            $("#tahun_list").trigger("change")
+            if(res.code == 200)
+                $("#tahun_list").trigger("change")
+            else{
+                Swal.fire({
+                  title: \'Oops!\',
+                  icon: \'error\',
+                  text: res.message
+                });
+            }
         }
 
     });
@@ -246,7 +270,15 @@ $(document).on("click",".btn-claim-pengabdian",function(e){
         },
         success: function(res){
             var res = $.parseJSON(res);
-            $("#tahun_list").trigger("change")
+            if(res.code == 200)
+                $("#tahun_list").trigger("change")
+            else{
+                Swal.fire({
+                  title: \'Oops!\',
+                  icon: \'error\',
+                  text: res.message
+                });
+            }
         }
 
     });
@@ -276,7 +308,15 @@ $(document).on("click",".btn-claim-publikasi",function(e){
         },
         success: function(res){
             var res = $.parseJSON(res);
-            $("#tahun_list").trigger("change")
+            if(res.code == 200)
+                $("#tahun_list").trigger("change")
+            else{
+                Swal.fire({
+                  title: \'Oops!\',
+                  icon: \'error\',
+                  text: res.message
+                });
+            }
         }
 
     });
@@ -307,7 +347,15 @@ $(document).on("click",".btn-claim",function(e){
         },
         success: function(res){
             var res = $.parseJSON(res);
-            $("#tahun_list").trigger("change")
+            if(res.code == 200)
+                $("#tahun_list").trigger("change")
+            else{
+                Swal.fire({
+                  title: \'Oops!\',
+                  icon: \'error\',
+                  text: res.message
+                });
+            }
         }
 
     });
