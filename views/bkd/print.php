@@ -65,9 +65,16 @@ else{
 
 $is_cukup_cd = false;
 $label_cd = '';
-if($total_abdi > $bkd_abdi && $total_penunjang > $bkd_penunjang)
+if(!empty($bkd_abdi->nilai_minimal) || !empty($bkd_penunjang->nilai_minimal))
 {
-    $is_cukup_cd = $persen_c + $persen_d >= 100;
+    if($total_abdi > $bkd_abdi && $total_penunjang > $bkd_penunjang)
+    {
+        $is_cukup_cd = $persen_c + $persen_d >= 100;
+    }
+}
+
+else{
+    $is_cukup_cd = true;
 }
 
 if($is_cukup_cd){
