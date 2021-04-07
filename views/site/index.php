@@ -100,6 +100,43 @@ else {
     $label_d = 'progress-bar-danger';
 }
 
+$is_cukup_ab = false;
+$label_ab = '';
+if($total_ajar > $bkd_ajar && $total_pub > $bkd_pub)
+{
+    $is_cukup_ab = $persen_a + $persen_b >= 100;
+}
+
+if($is_cukup_ab){
+    $label_ab = '<span style="color:#5cb85c"><i class="lnr lnr-thumbs-up"></i> sudah mencukupi</label>';
+}
+
+else{
+    $label_ab = '<span style="color:#d9534f"><i class="lnr lnr-thumbs-down"></i> belum mencukupi</label>';
+}
+
+$is_cukup_cd = false;
+$label_cd = '';
+
+if(!empty($bkd_abdi->nilai_minimal) || !empty($bkd_penunjang->nilai_minimal))
+{
+    if($total_abdi > $bkd_abdi && $total_penunjang > $bkd_penunjang)
+    {
+        $is_cukup_cd = $persen_c + $persen_d >= 100;
+    }
+}
+
+else{
+    $is_cukup_cd = true;
+}
+
+if($is_cukup_cd){
+    $label_cd = '<span style="color:#5cb85c"><i class="lnr lnr-thumbs-up"></i> sudah mencukupi</label>';
+}
+
+else{
+    $label_cd = '<span style="color:#d9534f"><i class="lnr lnr-thumbs-down"></i> belum mencukupi</label>';
+}
 ?>
 <h1>Pencapaian Anda Semester ini (<?=$bkd_periode->nama_periode;?>)</h1>
 <h4><?=\app\helpers\MyHelper::convertTanggalIndo($bkd_periode->tanggal_bkd_awal);?> sampai dengan <?=\app\helpers\MyHelper::convertTanggalIndo($bkd_periode->tanggal_bkd_akhir);?></h4>
@@ -175,41 +212,10 @@ else {
             	<div class="alert alert-default">
                      <ul >
                     <li>
-                            Kegiatan Pengajaran dan Penelitian Anda
-                            <?php 
-                            $is_cukup_ab = false;
-                            if($total_ajar > $bkd_ajar && $total_pub > $bkd_pub)
-                            {
-                                $is_cukup_ab = $persen_a + $persen_b >= 100;
-                            }
-
-                            if($is_cukup_ab){
-                                echo '<span style="color:#5cb85c"><i class="lnr lnr-thumbs-up"></i> sudah mencukupi</label>';
-                            }
-
-                            else{
-                                echo '<span style="color:#d9534f"><i class="lnr lnr-thumbs-down"></i> belum mencukupi</label>';
-                            }
-                            
-                            ?>
+                            Kegiatan Pengajaran dan Penelitian Anda <?=$label_ab;?>
                     </li>
                     <li>
-                        Kegiatan Pengabdian dan Penunjang Anda
-                        <?php 
-                        $is_cukup_cd = false;
-                        if($total_abdi > $bkd_abdi && $total_penunjang > $bkd_penunjang)
-                        {
-                            $is_cukup_cd = $persen_c + $persen_d >= 100;
-                        }
-
-                        if($is_cukup_cd){
-                            echo '<span style="color:#5cb85c"><i class="lnr lnr-thumbs-up"></i> sudah mencukupi</label>';
-                        }
-
-                        else{
-                            echo '<span style="color:#d9534f"><i class="lnr lnr-thumbs-down"></i> belum mencukupi</label>';
-                        }
-                        ?>
+                        Kegiatan Pengabdian dan Penunjang Anda <?=$label_cd;?>
                     </li>
                     
                 </ul>
