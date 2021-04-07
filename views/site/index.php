@@ -45,12 +45,12 @@ $label_a = '';
 $label_b = '';
 $label_c = '';
 $label_d = '';
-$bkd_ajar = $bkd_ajar->nilai_minimal > 0 ? $bkd_ajar->nilai_minimal : 1;
-$bkd_pub = $bkd_pub->nilai_minimal > 0 ? $bkd_pub->nilai_minimal : 1;
-$bkd_abdi = $bkd_abdi->nilai_minimal > 0 ? $bkd_abdi->nilai_minimal : 1;
-$bkd_penunjang = $bkd_penunjang->nilai_minimal > 0 ? $bkd_penunjang->nilai_minimal : 1;
+$num_bkd_ajar = $bkd_ajar->nilai_minimal > 0 ? $bkd_ajar->nilai_minimal : 1;
+$num_bkd_pub = $bkd_pub->nilai_minimal > 0 ? $bkd_pub->nilai_minimal : 1;
+$num_bkd_abdi = $bkd_abdi->nilai_minimal > 0 ? $bkd_abdi->nilai_minimal : 1;
+$num_bkd_penunjang = $bkd_penunjang->nilai_minimal > 0 ? $bkd_penunjang->nilai_minimal : 1;
 
-$persen_a = round(($total_ajar) / ($bkd_ajar) * 100,2);
+$persen_a = round(($total_ajar) / ($num_bkd_ajar) * 100,2);
 
 if($persen_a >= 100){
     $label_a = 'progress-bar-success';
@@ -63,7 +63,7 @@ else if($persen_a > 50){
 else {
     $label_a = 'progress-bar-danger';
 }
-$persen_b = round(($total_pub) / ($bkd_pub) * 100,2);
+$persen_b = round(($total_pub) / ($num_bkd_pub) * 100,2);
 if($persen_b >= 100){
     $label_b = 'progress-bar-success';
 }
@@ -75,7 +75,7 @@ else if($persen_b > 50){
 else {
     $label_b = 'progress-bar-danger';
 }
-$persen_c = round(($total_abdi) / ($bkd_abdi) * 100,2);
+$persen_c = round(($total_abdi) / ($num_bkd_abdi) * 100,2);
 if($persen_c >= 100){
     $label_c = 'progress-bar-success';
 }
@@ -87,7 +87,7 @@ else if($persen_c > 50){
 else {
     $label_c = 'progress-bar-danger';
 }
-$persen_d = round(($total_penunjang) / ($bkd_penunjang) * 100,2);
+$persen_d = round(($total_penunjang) / ($num_bkd_penunjang) * 100,2);
 if($persen_d >= 100){
     $label_d = 'progress-bar-success';
 }
@@ -102,7 +102,7 @@ else {
 
 $is_cukup_ab = false;
 $label_ab = '';
-if($total_ajar > $bkd_ajar && $total_pub > $bkd_pub)
+if($total_ajar > $num_bkd_ajar && $total_pub > $num_bkd_pub)
 {
     $is_cukup_ab = $persen_a + $persen_b >= 100;
 }
@@ -117,10 +117,10 @@ else{
 
 $is_cukup_cd = false;
 $label_cd = '';
-
 if(!empty($bkd_abdi->nilai_minimal) || !empty($bkd_penunjang->nilai_minimal))
 {
-    if($total_abdi > $bkd_abdi && $total_penunjang > $bkd_penunjang)
+    
+    if($total_abdi > $num_bkd_abdi && $total_penunjang > $num_bkd_penunjang)
     {
         $is_cukup_cd = $persen_c + $persen_d >= 100;
     }
