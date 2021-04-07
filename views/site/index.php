@@ -184,14 +184,39 @@ else {
                     <li>
                             Kegiatan Pengajaran dan Penelitian Anda
                             <?php 
-                            echo ($persen_a + $persen_b >= 100) ? '<strong>sudah mencukupi</strong>' : 'belum mencukupi';
+                            $is_cukup_ab = false;
+                            if($total_ajar > $bkd_ajar && $total_pub > $bkd_pub)
+                            {
+                                $is_cukup_ab = $persen_a + $persen_b >= 100;
+                            }
+
+                            if($is_cukup_ab){
+                                echo '<span style="color:#5cb85c"><i class="lnr lnr-thumbs-up"></i> sudah mencukupi</label>';
+                            }
+
+                            else{
+                                echo '<span style="color:#d9534f"><i class="lnr lnr-thumbs-down"></i> belum mencukupi</label>';
+                            }
+                            
                             ?>
                     </li>
                     <li>
                         Kegiatan Pengabdian dan Penunjang Anda
-                            <?php 
-                            echo ($persen_c + $persen_d >= 100) ? '<strong>sudah mencukupi</strong>' : 'belum mencukupi';
-                            ?>
+                        <?php 
+                        $is_cukup_cd = false;
+                        if($total_abdi > $bkd_abdi && $total_penunjang > $bkd_penunjang)
+                        {
+                            $is_cukup_cd = $persen_c + $persen_d >= 100;
+                        }
+
+                        if($is_cukup_cd){
+                            echo '<span style="color:#5cb85c"><i class="lnr lnr-thumbs-up"></i> sudah mencukupi</label>';
+                        }
+
+                        else{
+                            echo '<span style="color:#d9534f"><i class="lnr lnr-thumbs-down"></i> belum mencukupi</label>';
+                        }
+                        ?>
                     </li>
                     
                 </ul>
