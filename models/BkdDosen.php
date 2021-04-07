@@ -37,7 +37,6 @@ class BkdDosen extends \yii\db\ActiveRecord
             [['sks'], 'number'],
             [['updated_at', 'created_at'], 'safe'],
             [['kondisi'], 'string', 'max' => 100],
-            [['deskripsi'], 'string', 'max' => 255],
             [['tahun_id', 'dosen_id', 'komponen_id', 'kondisi'], 'unique', 'targetAttribute' => ['tahun_id', 'dosen_id', 'komponen_id', 'kondisi']],
         ];
     }
