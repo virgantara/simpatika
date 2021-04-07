@@ -111,7 +111,7 @@ class SiteController extends AppController
 
         $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
 
-        if(empty($user->dataDiri->sister_id))
+        if(empty($user->sister_id))
         {
             $results = [
                 'code' => 404,
