@@ -13,7 +13,7 @@ $total_pub = 0;
 $total_ajar = 0; 
 foreach ($pengajaran as $key => $value) 
 {
-    $total_ajar += $value->sks_bkd;
+    $total_ajar += $value->sks_bkd * $value->sks;
 }
 
 foreach ($publikasi as $key => $value) 
@@ -58,6 +58,7 @@ $bkd_abdi = $bkd_abdi->nilai_minimal > 0 ? $bkd_abdi->nilai_minimal : 1;
 $bkd_penunjang = $bkd_penunjang->nilai_minimal > 0 ? $bkd_penunjang->nilai_minimal : 1;
 
 $persen_a = round(($total_ajar) / ($bkd_ajar) * 100,2);
+
 if($persen_a >= 100){
     $label_a = 'progress-bar-success';
 }
