@@ -100,54 +100,70 @@ class SiteController extends AppController
 
     public function actionAjaxImport()
     {
-        $connection = \Yii::$app->db;
         
         $errors ='';
         $results = [];
         
-        $res1 = $this->importPengabdian();
-        $res2 = $this->importPenelitian();
-        $res3 = $this->importPenugasan();
-        $res4 = $this->importInpassing();
-        $res5 = $this->importJurnal();
-        $res6 = $this->importPengajaran();
-        $res7 = $this->importPublikasi();
-        $code = $res1['code'];
-        $results = [
-            'code' => $code,
-            'items' => [
-                [
-                    'modul' => 'pengabdian',
-                    'data' => $res1['message']
-                ],
-                [
-                    'modul' => 'penelitian',
-                    'data' => $res2['message']
-                ],
-                [
-                    'modul' => 'penugasan',
-                    'data' => $res3['message']
-                ],
-                [
-                    'modul' => 'inpassing',
-                    'data' => $res4['message']
-                ],
-                [
-                    'modul' => 'jurnal_pengajaran',
-                    'data' => $res5['message']
-                ],
-                [
-                    'modul' => 'pengajaran',
-                    'data' => $res6['message']
-                ],
-                [
-                    'modul' => 'publikasi',
-                    'data' => $res7['message']
-                ],
-            ]
-        ];
+        if(!parent::handleEmptyUser())
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
 
+        $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
 
+        if(empty($user->dataDiri->sister_id))
+        {
+            $results = [
+                'code' => 404,
+                'message' => 'Oops, data Anda belum dipetakan'
+            ];
+        }
+
+        else
+        {
+            $res1 = $this->importPengabdian();
+            $res2 = $this->importPenelitian();
+            $res3 = $this->importPenugasan();
+            $res4 = $this->importInpassing();
+            $res5 = $this->importJurnal();
+            $res6 = $this->importPengajaran();
+            $res7 = $this->importPublikasi();
+            $code = $res1['code'];
+            $results = [
+                'code' => $code,
+                'items' => [
+                    [
+                        'modul' => 'pengabdian',
+                        'data' => $res1['message']
+                    ],
+                    [
+                        'modul' => 'penelitian',
+                        'data' => $res2['message']
+                    ],
+                    [
+                        'modul' => 'penugasan',
+                        'data' => $res3['message']
+                    ],
+                    [
+                        'modul' => 'inpassing',
+                        'data' => $res4['message']
+                    ],
+                    [
+                        'modul' => 'jurnal_pengajaran',
+                        'data' => $res5['message']
+                    ],
+                    [
+                        'modul' => 'pengajaran',
+                        'data' => $res6['message']
+                    ],
+                    [
+                        'modul' => 'publikasi',
+                        'data' => $res7['message']
+                    ],
+                ]
+            ];
+
+        }
         echo json_encode($results);
         die(); 
     }
@@ -261,36 +277,7 @@ class SiteController extends AppController
 
                         $model->kategori_kegiatan_id = $kategoriKegiatan->id;
 
-                        foreach($detail->data_penulis as $author)
-                        {
-                            // print_r($author);exit;
-                            $pa = \app\models\PublikasiAuthor::find()->where([
-                                'author_id' => $author->id_dosen,
-                                'publikasi_id' => $item->id_riwayat_publikasi_paten
-                            ])->one();
-
-                            if(empty($pa))
-                                $pa = new \app\models\PublikasiAuthor;
-
-                            $dd = DataDiri::find()->where(['sister_id' => $author->id_dosen])->one();
-
-                            $pa->pub_id = $model->id;
-                            $pa->NIY = !empty($dd) ? $dd->NIY : Yii::$app->user->identity->NIY;
-                            $pa->author_id = $author->id_dosen;
-                            $pa->author_nama = $author->nama;
-                            $pa->publikasi_id = $item->id_riwayat_publikasi_paten;
-                            $pa->urutan = $author->no_urut;
-                            $pa->afiliasi = $author->afiliasi_penulis;
-                            $pa->peran_nama = $author->peran_dalam_kegiatan;
-                            $pa->peran_id = $flipped_list_peran[$pa->peran_nama];
-                            $pa->corresponding_author = $author->apakah_corresponding_author;
-                            $pa->jenis_peranan = $author->jenis_peranan;
-                            if(!$pa->save())
-                            {
-                                $errors .= \app\helpers\MyHelper::logError($pa);
-                                throw new \Exception;
-                            }
-                        }
+                        
 
                         if(!empty($detail->files))
                         {
@@ -323,6 +310,36 @@ class SiteController extends AppController
 
                     if($model->save())
                     {
+                        foreach($detail->data_penulis as $author)
+                        {
+                            // print_r($author);exit;
+                            $pa = \app\models\PublikasiAuthor::find()->where([
+                                'author_id' => $author->id_dosen,
+                                'publikasi_id' => $item->id_riwayat_publikasi_paten
+                            ])->one();
+
+                            if(empty($pa))
+                                $pa = new \app\models\PublikasiAuthor;
+
+                            $dd = DataDiri::find()->where(['sister_id' => $author->id_dosen])->one();
+
+                            $pa->pub_id = $model->id;
+                            $pa->NIY = !empty($dd) ? $dd->NIY : Yii::$app->user->identity->NIY;
+                            $pa->author_id = $author->id_dosen;
+                            $pa->author_nama = $author->nama;
+                            $pa->publikasi_id = $item->id_riwayat_publikasi_paten;
+                            $pa->urutan = $author->no_urut;
+                            $pa->afiliasi = $author->afiliasi_penulis;
+                            $pa->peran_nama = $author->peran_dalam_kegiatan;
+                            $pa->peran_id = $flipped_list_peran[$pa->peran_nama];
+                            $pa->corresponding_author = $author->apakah_corresponding_author;
+                            $pa->jenis_peranan = $author->jenis_peranan;
+                            if(!$pa->save())
+                            {
+                                $errors .= \app\helpers\MyHelper::logError($pa);
+                                throw new \Exception;
+                            }
+                        }
                         $counter++;
 
 
@@ -978,7 +995,10 @@ class SiteController extends AppController
         if($response->error_code == 0)
         {
             $results = $response->data;
-            
+            // echo '<pre>';
+            // print_r($results);
+            // echo '</pre>';
+            // exit;
             $connection = \Yii::$app->db;
             $transaction = $connection->beginTransaction();
             $counter = 0;
