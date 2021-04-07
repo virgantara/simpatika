@@ -161,6 +161,192 @@ class BkdController extends AppController
         
     }
 
+    public function actionPrint()
+    {
+        
+        $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
+        
+        $bkd_periode = BkdPeriode::find()->where(['buka' => 'Y'])->one();
+
+        $unsur_utama = \app\models\UnsurUtama::find()->orderBy(['urutan'=>SORT_ASC])->all();
+        $results = [];
+
+        foreach($unsur_utama as $item)
+        {
+          $tmp = [];
+          foreach($item->komponenKegiatans as $komponen)
+          {
+            $list_bkd = BkdDosen::find()->where([
+              'tahun_id' => $bkd_periode->tahun_id,
+              'dosen_id' => $user->ID,
+              'komponen_id' => $komponen->id
+            ])->all();
+            foreach($list_bkd as $bkd)
+            {
+              $tmp[] = $bkd;
+            }
+            
+          }
+
+          $results[$item->id] = [
+            'unsur' => $item->nama,
+
+            'items' => $tmp
+          ];
+        }
+
+        $bkd_periode = \app\models\BkdPeriode::find()->where(['buka' => 'Y'])->one();
+
+        $pengajaran = Pengajaran::find()->where([
+            'NIY' => Yii::$app->user->identity->NIY,
+            // 'is_claimed' => 1,
+            'tahun_akademik' => $bkd_periode->tahun_id
+        ])->all();
+
+        // print_r($tahun_akademik);exit;
+
+        $query = Publikasi::find()->where([
+            'NIY' => Yii::$app->user->identity->NIY,
+            'is_claimed' => 1,
+        ]);
+
+        $query->andWhere(['not',['kegiatan_id' => null]]);
+
+        $sd = $bkd_periode->tanggal_bkd_awal;
+        $ed = $bkd_periode->tanggal_bkd_akhir;
+
+
+        $query->andFilterWhere(['between','tanggal_terbit',$sd, $ed]);
+        $query->orderBy(['tanggal_terbit'=>SORT_ASC]);
+
+        $publikasi = $query->all();
+
+        $query = Pengabdian::find()->where([
+            'NIY' => Yii::$app->user->identity->NIY,
+            'is_claimed' => 1,
+        ]);
+
+        // $sd = $tahun_akademik['kuliah_mulai'];
+        // $ed = $tahun_akademik['nilai_selesai'];
+
+        // $query->andFilterWhere(['between','tahun_kegiatan',$sd, $ed]);
+        $query->orderBy(['tahun_kegiatan'=>SORT_ASC]);
+
+        $pengabdian = $query->all();
+
+        $query = Organisasi::find()->where([
+            'NIY' => Yii::$app->user->identity->NIY,
+            'is_claimed' => 1,
+        ]);
+
+        $organisasi = $query->all();
+
+        $query = PengelolaJurnal::find()->where([
+            'NIY' => Yii::$app->user->identity->NIY,
+            'is_claimed' => 1,
+        ]);
+
+        $pengelolaJurnal = $query->all();
+
+        $query = TugasDosenBkd::find();
+        $query->joinWith(['unsur as u']);
+        $query->where([
+          'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
+          'u.kode' => 'AJAR'
+        ]);
+
+        $bkd_ajar = $query->one();
+
+        $query = TugasDosenBkd::find();
+        $query->joinWith(['unsur as u']);
+        $query->where([
+          'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
+          'u.kode' => 'RISET'
+        ]);
+
+        $bkd_pub = $query->one();
+
+        $query = TugasDosenBkd::find();
+        $query->joinWith(['unsur as u']);
+        $query->where([
+          'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
+          'u.kode' => 'ABDIMAS'
+        ]);
+
+        $bkd_abdi = $query->one();
+
+        $query = TugasDosenBkd::find();
+        $query->joinWith(['unsur as u']);
+        $query->where([
+          'tugas_dosen_id'=>$user->dataDiri->tugas_dosen_id,
+          'u.kode' => 'PENUNJANG'
+        ]);
+
+        $bkd_penunjang = $query->one();
+
+        try
+        {
+
+            $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);  
+            $pdf->SetPrintHeader(false);
+            $pdf->SetPrintFooter(false);
+            $fontpath = Yii::getAlias('@webroot').'/klorofil/assets/fonts/pala.ttf';
+            
+            $fontreg = \TCPDF_FONTS::addTTFfont($fontpath, 'TrueTypeUnicode', '', 86);
+            $pdf->SetFont($fontreg, '', 12);
+            $pdf->AddPage();
+            ob_start();
+            echo $this->renderPartial('cover', [
+                'user' => $user,
+                'bkd_periode' =>   $bkd_periode,
+            ]);
+
+            $data = ob_get_clean();
+            ob_start();
+            $imgdata = Yii::getAlias('@webroot').'/klorofil/assets/img/logo-ori.png';
+            $pdf->Image($imgdata,$pdf->getPageWidth()/2 - 10,10,20);
+            $pdf->Ln(50);
+            // $pdf->writeHTMLCell(50, 38, '', $y, $grades, 1, 0, 0, true, 'J', true);
+            $pdf->writeHTMLCell($pdf->getPageWidth() - 50,10,25,50,$data, 0, 0, 0, true, 'J', true);
+            
+
+            ob_start();
+            echo $this->renderPartial('print', [
+                 'results' => $results,
+                 'user' => $user,
+                'bkd_periode' =>   $bkd_periode,
+                'pengajaran' => $pengajaran,
+                // 'results' => $results,
+                'publikasi' => $publikasi,
+                'pengabdian' => $pengabdian,
+                'organisasi' => $organisasi,
+                'pengelolaJurnal' => $pengelolaJurnal,
+                'bkd_ajar' => $bkd_ajar,
+                'bkd_pub' => $bkd_pub,
+                'bkd_abdi' => $bkd_abdi,
+                'bkd_penunjang' => $bkd_penunjang,
+            ]);
+
+            $data = ob_get_clean();
+            ob_start();
+            
+            
+            $pdf->SetFont($fontreg, '', 10);
+            $pdf->AddPage();
+            // $imgdata = Yii::getAlias('@webroot').'/klorofil/assets/img/logo-ori.png';
+            // $pdf->Image($imgdata,10,10,15);
+            $pdf->writeHTML($data);
+
+            
+            $pdf->Output('lkd_'.$user->dataDiri->nama.'_'.rand(1,100).'.pdf','I');
+        }
+        catch(\HTML2PDF_exception $e) {
+            echo $e;
+            exit;
+        }
+        die();
+    }
+
     public function actionKlaim()
     {
         $list_bkd_periode = BkdPeriode::find()->all();

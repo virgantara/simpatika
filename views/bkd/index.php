@@ -91,7 +91,7 @@ else{
     <div class="col-md-12">	
         <div class="panel">
             <div class="panel-heading">
-            	
+            	<?=Html::a('<i class="fa fa-print"></i> Cetak LKD',['bkd/print'],['class'=>'btn btn-success']);?>
             </div>
             <div class="panel-body">
             	<div class="table-responsive">
