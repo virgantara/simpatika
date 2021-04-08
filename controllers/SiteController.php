@@ -1197,10 +1197,11 @@ class SiteController extends AppController
         // this will happen if user actually had something to revoke
         if ($auth->revoke($oldRole, $userId)) {
             $info = $auth->assign($newRole, $userId);
+            // print_r($userId);exit;
         }
 
-        // in case user didn't have role assigned to him, then just assign new one
-        if (!isset($role)) {
+        // // in case user didn't have role assigned to him, then just assign new one
+        if (empty($role)) {
             $info = $auth->assign($newRole, $userId);
         }
 
@@ -1631,7 +1632,10 @@ class SiteController extends AppController
             return $this->redirect(Yii::$app->params['sso_login']);
         }
         $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
-        
+        if(empty($user->dataDiri))
+        {
+            return $this->redirect(Yii::$app->params['sso_login']);
+        }
         $results = [];
         
         $bkd_periode = \app\models\BkdPeriode::find()->where(['buka' => 'Y'])->one();
