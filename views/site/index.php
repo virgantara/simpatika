@@ -120,12 +120,10 @@ else if($status_dosen == 'DS')
 {
     $is_cukup_ab = ($total_ajar > $num_bkd_ajar && $total_pub > $num_bkd_pub);
 
-    if($total_abdi > $num_bkd_abdi && $total_penunjang > $num_bkd_penunjang)
+    if((!empty($total_abdi) && !empty($total_penunjang)) && ($total_abdi > $num_bkd_abdi && $total_penunjang > $num_bkd_penunjang))
     {
         $is_cukup_cd = $total_abdi + $total_penunjang >= 3;
     }
-
-    $is_cukup_cd = (!empty($total_abdi) && !empty($total_penunjang));
 }
 
 else if($status_dosen == 'PS')
