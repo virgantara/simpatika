@@ -102,7 +102,8 @@ class UnitKerjaController extends \yii\web\Controller
 
             $model = Jabatan::find()->where([
                 'unker_id' => $dataPost['unker_id'],
-                'NIY' => $dataPost['user_id']
+                'NIY' => $dataPost['user_id'],
+                'jabatan_id' => $dataPost['jabatan_id']
             ])->one();
 
             if(empty($model))
@@ -110,9 +111,9 @@ class UnitKerjaController extends \yii\web\Controller
                 $model = new Jabatan;
                 $model->unker_id = $dataPost['unker_id'];
                 $model->NIY = $dataPost['user_id'];
+                $model->jabatan_id = $dataPost['jabatan_id'];
             }
 
-            $model->jabatan_id = $dataPost['jabatan_id'];
             $model->tanggal_awal = $dataPost['tmt'];
 
 
