@@ -46,11 +46,13 @@ $label_b = '';
 $label_c = '';
 $label_d = '';
 $num_bkd_ajar = $bkd_ajar->nilai_minimal > 0 ? $bkd_ajar->nilai_minimal : 1;
-$num_bkd_pub = $bkd_pub->nilai_minimal > 0 ? $bkd_pub->nilai_minimal : 1;
-$num_bkd_abdi = $bkd_abdi->nilai_minimal > 0 ? $bkd_abdi->nilai_minimal : 1;
-$num_bkd_penunjang = $bkd_penunjang->nilai_minimal > 0 ? $bkd_penunjang->nilai_minimal : 1;
-
+$num_bkd_pub = $bkd_pub->nilai_minimal;
+$num_bkd_abdi = $bkd_abdi->nilai_minimal;
+$num_bkd_penunjang = $bkd_penunjang->nilai_minimal;
 $persen_a = round(($total_ajar) / ($num_bkd_ajar) * 100,2);
+$persen_b = !empty($num_bkd_pub) ? round(($total_pub) / ($num_bkd_pub) * 100,2) : 0;
+$persen_c = !empty($num_bkd_abdi) ? round(($total_abdi) / ($num_bkd_abdi) * 100,2) : 0;
+$persen_d = !empty($num_bkd_penunjang) ? round(($total_penunjang) / ($num_bkd_penunjang) * 100,2) : 0;
 
 if($persen_a >= 100){
     $label_a = 'progress-bar-success';
@@ -63,7 +65,7 @@ else if($persen_a > 50){
 else {
     $label_a = 'progress-bar-danger';
 }
-$persen_b = round(($total_pub) / ($num_bkd_pub) * 100,2);
+
 if($persen_b >= 100){
     $label_b = 'progress-bar-success';
 }
@@ -75,7 +77,7 @@ else if($persen_b > 50){
 else {
     $label_b = 'progress-bar-danger';
 }
-$persen_c = round(($total_abdi) / ($num_bkd_abdi) * 100,2);
+
 if($persen_c >= 100){
     $label_c = 'progress-bar-success';
 }
@@ -87,7 +89,7 @@ else if($persen_c > 50){
 else {
     $label_c = 'progress-bar-danger';
 }
-$persen_d = round(($total_penunjang) / ($num_bkd_penunjang) * 100,2);
+
 if($persen_d >= 100){
     $label_d = 'progress-bar-success';
 }
@@ -105,6 +107,11 @@ $label_ab = '';
 if($total_ajar > $num_bkd_ajar && $total_pub > $num_bkd_pub)
 {
     $is_cukup_ab = $persen_a + $persen_b >= 100;
+}
+
+else
+{
+    $is_cukup_ab = true;
 }
 
 if($is_cukup_ab){

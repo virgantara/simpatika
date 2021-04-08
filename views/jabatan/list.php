@@ -13,8 +13,6 @@ $this->title = 'Jabatan Dalam Institusi';
 
 
 ?>
-<div class="jabatan-index">
-
 
 <div class="row">
    <div class="col-md-12">
