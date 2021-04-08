@@ -1758,7 +1758,8 @@ class SiteController extends AppController
             'bkd_pub' => $bkd_pub,
             'bkd_abdi' => $bkd_abdi,
             'bkd_penunjang' => $bkd_penunjang,
-            'bkd_periode' =>   $bkd_periode  
+            'bkd_periode' =>   $bkd_periode,
+            'user' => $user  
         ]);
         
     }

@@ -148,7 +148,7 @@ class BkdController extends AppController
             'results' => $results,
             'bkd_periode' =>   $bkd_periode,
             'pengajaran' => $pengajaran,
-            // 'results' => $results,
+            'user' => $user,
             'publikasi' => $publikasi,
             'pengabdian' => $pengabdian,
             'organisasi' => $organisasi,

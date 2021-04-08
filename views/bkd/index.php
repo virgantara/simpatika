@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 
+
 /* @var $this yii\web\View */
 
 $this->title = 'UNIDA Gontor Lecturer Data';
@@ -12,7 +13,8 @@ $total_pub = 0;
 $total_ajar = 0; 
 foreach ($pengajaran as $key => $value) 
 {
-    $total_ajar += $value->sks_bkd * $value->sks;
+    if($value->is_claimed == '1')
+        $total_ajar += $value->sks_bkd * $value->sks;
 }
 
 foreach ($publikasi as $key => $value) 
@@ -55,14 +57,42 @@ $persen_d = !empty($num_bkd_penunjang) ? round(($total_penunjang) / ($num_bkd_pe
 
 $is_cukup_ab = false;
 $label_ab = '';
-if($total_ajar > $num_bkd_ajar && $total_pub > $num_bkd_pub)
+$is_cukup_cd = false;
+$label_cd = '';
+$status_dosen = $user->dataDiri->tugasDosen->id;
+
+if($status_dosen == 'DT')
 {
-    $is_cukup_ab = $persen_a + $persen_b >= 100;
+    $is_cukup_ab = $total_ajar > $num_bkd_ajar;
+   
+    $is_cukup_cd = true;
 }
 
-else
+else if($status_dosen == 'DS')
 {
-    $is_cukup_ab = true;
+    $is_cukup_ab = ($total_ajar > $num_bkd_ajar && $total_pub > $num_bkd_pub);
+
+    if($total_abdi > $num_bkd_abdi && $total_penunjang > $num_bkd_penunjang)
+    {
+        $is_cukup_cd = $total_abdi + $total_penunjang >= 3;
+    }
+
+    $is_cukup_cd = (!empty($total_abdi) && !empty($total_penunjang));
+}
+
+else if($status_dosen == 'PS')
+{
+    $is_cukup_ab = ($total_ajar > $num_bkd_ajar && $total_pub > $num_bkd_pub);
+    if($total_abdi > $num_bkd_abdi && $total_penunjang > $num_bkd_penunjang)
+    {
+        $is_cukup_cd = $total_abdi + $total_penunjang >= 3;
+    }
+}
+
+else if($status_dosen == 'PT')
+{
+    $is_cukup_ab = $total_ajar > $num_bkd_ajar;
+    $is_cukup_cd = true;
 }
 
 if($is_cukup_ab){
@@ -72,23 +102,6 @@ if($is_cukup_ab){
 else{
     $label_ab = '<span style="color:#d9534f"><i class="lnr lnr-thumbs-down"></i> belum mencukupi</label>';
 }
-
-$is_cukup_cd = false;
-$label_cd = '';
-
-if(!empty($bkd_abdi->nilai_minimal) || !empty($bkd_penunjang->nilai_minimal))
-{
-    
-    if($total_abdi > $num_bkd_abdi && $total_penunjang > $num_bkd_penunjang)
-    {
-        $is_cukup_cd = $persen_c + $persen_d >= 100;
-    }
-}
-
-else{
-    $is_cukup_cd = true;
-}
-
 
 if($is_cukup_cd){
     $label_cd = '<span style="color:#5cb85c"><i class="lnr lnr-thumbs-up"></i> sudah mencukupi</label>';
