@@ -35,7 +35,7 @@ class Jabatan extends \yii\db\ActiveRecord
     {
         return [
             [['NIY', 'jabatan_id', 'unker_id'], 'required'],
-            [['NIY', 'jabatan_id', 'unker_id'], 'unique'],
+            [['NIY', 'jabatan_id', 'unker_id'], 'unique','on'=>'insert'],
             [['jabatan_id', 'unker_id'], 'integer'],
             [['tanggal_awal', 'tanggal_akhir', 'update_at','no_sk'], 'safe'],
             [['NIY'], 'string', 'max' => 15],
