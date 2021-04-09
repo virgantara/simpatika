@@ -286,7 +286,7 @@ class PengajaranController extends AppController
               $file = strtolower($fileBukti->nama_jenis_dokumen).'_'.$model->NIY.'.'.$fileBukti->tautan->extension;
               $fileBukti->jenis_file = $mime_type;
               $fileBukti->tanggal_upload = date('Y-m-d H:i:s');
-              $key = 'pengajaran/'.$fileBukti->nama_jenis_dokumen.'/'.$file;
+              $key = 'pengajaran/'.$fileBukti->nama_jenis_dokumen.'/'.$model->tahun_akademik.'/'.$model->NIY.'/'.$file;
               $errors = '';
 
                
