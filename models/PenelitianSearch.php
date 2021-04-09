@@ -43,8 +43,11 @@ class PenelitianSearch extends Penelitian
     public function search($params)
     {
         $query = Penelitian::find();
-        $query->alias('p');
-        $query->where(['p.NIY' => Yii::$app->user->identity->NIY]);
+        $query->joinWith(['penelitianAnggotas as pa']);
+        
+        $query->where(['pa.NIY' => Yii::$app->user->identity->NIY]);
+        // $query->alias('p');
+        // $query->where(['p.NIY' => Yii::$app->user->identity->NIY]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -76,8 +79,7 @@ class PenelitianSearch extends Penelitian
             'created_at' => $this->created_at,
         ]);
 
-        $query->andFilterWhere(['like', 'NIY', $this->NIY])
-            ->andFilterWhere(['like', 'judul_penelitian_pengabdian', $this->judul_penelitian_pengabdian])
+        $query->andFilterWhere(['like', 'judul_penelitian_pengabdian', $this->judul_penelitian_pengabdian])
             ->andFilterWhere(['like', 'status', $this->status])
             ->andFilterWhere(['like', 'dana_dikti', $this->dana_dikti])
             ->andFilterWhere(['like', 'sister_id', $this->sister_id])

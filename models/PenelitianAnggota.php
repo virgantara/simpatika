@@ -34,6 +34,7 @@ class PenelitianAnggota extends \yii\db\ActiveRecord
         return [
             [['NIY', 'status_anggota', 'penelitian_id'], 'required'],
             [['beban_kerja'], 'number'],
+            [['NIY', 'penelitian_id'], 'unique','message' =>'Peneliti ini sudah ada','on'=>'insert'],
             [['penelitian_id'], 'integer'],
             [['created'], 'safe'],
             [['NIY'], 'string', 'max' => 15],

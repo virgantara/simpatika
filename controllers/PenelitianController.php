@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\User;
+use app\models\PenelitianAnggota;
 use app\models\Penelitian;
 use app\models\Verify;
 use app\models\PenelitianSearch;
@@ -28,6 +30,149 @@ class PenelitianController extends AppController
                 ],
             ],
         ];
+    }
+
+    public function actionAjaxListAnggota()
+    {
+        $dataPost = $_POST['dataPost'];
+        $query = PenelitianAnggota::find();
+        $query->where([
+          'penelitian_id' => $dataPost['penelitian_id'],
+        ]);
+        $list = $query->all();
+        $results = [];
+
+        foreach($list as $item)
+        {
+            $results[] = [
+                'NIY' => $item->NIY,
+                'nama' => $item->nIY->dataDiri->nama,
+                'status_anggota' => $item->status_anggota,
+                'beban_kerja' => $item->beban_kerja
+            ];
+        }
+
+        echo \yii\helpers\Json::encode($results);
+        die();
+    }
+
+    public function actionAjaxUpdateAuthor()
+    {
+        $list_peran = \app\helpers\MyHelper::getPeranPublikasi();
+        $dataPost = $_POST['dataPost'];
+        $model = PenelitianAnggota::find()->where([
+            'penelitian_id' => $dataPost['penelitian_id'],
+            'NIY' => $dataPost['NIY'],
+        ])->one();
+        if(!empty($model))
+        {
+            $user = User::find()->where([
+                'NIY'=>$dataPost['NIY']
+            ])->one();
+            $model->NIY = $dataPost['NIY'];
+            $model->penelitian_id = $dataPost['penelitian_id'];
+            $model->status_anggota = $dataPost['status_anggota'];
+            $model->beban_kerja = $dataPost['beban_kerja'];
+            
+            $results = [];
+            if($model->save())
+            {
+                $results = [
+                    'code' => 200,
+                    'message' => 'Data Updated'
+                ];
+            }
+
+            else
+            {
+                $results = [
+                    'code' => 500,
+                    'message' => \app\helpers\MyHelper::logError($model)
+                ];
+            }
+        }
+        
+        else
+        {
+            $results = [
+                'code' => 500,
+                'message' => 'Author not found'
+            ];
+        }
+        echo json_encode($results);
+        die();
+    }
+
+    public function actionAjaxRemoveAuthor()
+    {
+        $list_peran = \app\helpers\MyHelper::getPeranPublikasi();
+        $dataPost = $_POST['dataPost'];
+        $model = PenelitianAnggota::find()->where([
+            'penelitian_id' => $dataPost['penelitian_id'],
+            'NIY' => $dataPost['NIY'],
+        ])->one();
+        
+        $results = [];
+        if(!empty($model))
+        {
+            $model->delete();
+            $results = [
+                'code' => 200,
+                'message' => 'Data deleted'
+            ];
+        }
+
+        else
+        {
+            $results = [
+                'code' => 500,
+                'message' => \app\helpers\MyHelper::logError($model)
+            ];
+        }
+
+        echo json_encode($results);
+        die();
+    }
+
+    public function actionAjaxAddAuthor()
+    {
+        $list_peran = \app\helpers\MyHelper::getPeranPublikasi();
+        $dataPost = $_POST['dataPost'];
+        $model = PenelitianAnggota::find()->where([
+            'penelitian_id' => $dataPost['penelitian_id'],
+            'NIY' => $dataPost['NIY'],
+        ])->one();
+
+        if(empty($model))
+            $model = new PenelitianAnggota;
+
+        $user = User::find()->where([
+            'NIY'=>$dataPost['NIY']
+        ])->one();
+        $model->NIY = $dataPost['NIY'];
+        $model->penelitian_id = $dataPost['penelitian_id'];
+        $model->status_anggota = $dataPost['status_anggota'];
+        $model->beban_kerja = $dataPost['beban_kerja'];
+        
+        $results = [];
+        if($model->save())
+        {
+            $results = [
+                'code' => 200,
+                'message' => 'Data Added'
+            ];
+        }
+
+        else
+        {
+            $results = [
+                'code' => 500,
+                'message' => \app\helpers\MyHelper::logError($model)
+            ];
+        }
+
+        echo json_encode($results);
+        die();
     }
 
     public function actionImport()
@@ -451,8 +596,7 @@ class PenelitianController extends AppController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-        $this->findVer($id)->delete();
-
+       
         return $this->redirect(['index']);
     }
 

@@ -20,6 +20,8 @@ use Yii;
  */
 class SisterFiles extends \yii\db\ActiveRecord
 {
+
+
     /**
      * {@inheritdoc}
      */
@@ -35,7 +37,9 @@ class SisterFiles extends \yii\db\ActiveRecord
     {
         return [
             [['id_dokumen','parent_id'], 'required'],
-            [['tanggal_upload', 'updated_at', 'created_at'], 'safe'],
+            
+            [['tautan'], 'file', 'skipOnEmpty' => true, 'extensions' => 'pdf','maxSize' => 1024 * 1024],
+            [['tanggal_upload', 'updated_at', 'created_at','tautan'], 'safe'],
             [['id_dokumen', 'jenis_file'], 'string', 'max' => 100],
             [['nama_dokumen', 'nama_file', 'nama_jenis_dokumen', 'tautan', 'keterangan_dokumen'], 'string', 'max' => 255],
             [['id_dokumen'], 'unique'],

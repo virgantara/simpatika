@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\SisterFiles;
 use app\models\Pengajaran;
 use app\models\Verify;
 use app\models\PengajaranSearch;
@@ -186,9 +187,13 @@ class PengajaranController extends AppController
     {
       $model = $this->findModel($id);
       
-      
+      $bukti_pengajaran = SisterFiles::find()->where([
+        'parent_id' => $id,
+        'keterangan_dokumen' => 'AJAR'
+      ])->all(); 
       return $this->render('view', [
         'model' => $model,
+        'bukti_pengajaran' => $bukti_pengajaran
       ]);
     }
 
@@ -241,60 +246,76 @@ class PengajaranController extends AppController
     public function actionUpdate($id)
     {
       $model = $this->findModel($id);
-      $f_penugasan = $model->f_penugasan;
+      $fileBukti = new SisterFiles;
+      
+      $fileBukti->parent_id = $model->ID;
+            $fileBukti->keterangan_dokumen = 'AJAR';
+      $fileBuktiTautan = $fileBukti->tautan;
       $errors = '';
 
       $s3config = Yii::$app->params['s3'];
 
       $s3 = new \Aws\S3\S3Client($s3config);
 
-      if ($model->load(Yii::$app->request->post())) 
+      if ($fileBukti->load(Yii::$app->request->post())) 
       {
+          $tmp = SisterFiles::find()->where([
+            'parent_id' => $model->ID,
+            'nama_jenis_dokumen' => $fileBukti->nama_jenis_dokumen,
+            'keterangan_dokumen' => 'AJAR'
+          ])->one();
+
+          if(!empty($tmp))
+          {
+            $fileBukti = $tmp;
+            $fileBukti->load(Yii::$app->request->post());
+          }
+
           $connection = \Yii::$app->db;
           $transaction = $connection->beginTransaction();
-         
-
           try 
           {
-              
-              $model->f_penugasan =UploadedFile::getInstance($model,'f_penugasan');
-              
-              if($model->f_penugasan)
-              {
-                $f_penugasan = $model->f_penugasan->tempName;
-                $mime_type = $model->f_penugasan->type;
-                $file = 'bukti_ajar_'.$model->pengajaranData->nama.'_'.$model->NIY.'.'.$model->f_penugasan->extension;
+            $fileBukti->id_dokumen = \app\helpers\MyHelper::gen_uuid();
+            $fileBukti->nama_dokumen = $fileBukti->nama_jenis_dokumen;
+            $fileBukti->tautan =UploadedFile::getInstance($fileBukti,'tautan');
 
-                $key = 'pengajaran/bukti/'.$file;
-                $errors = '';
+            if($fileBukti->tautan)
+            {
+              $fileBuktiTautan = $fileBukti->tautan->tempName;
+              $mime_type = $fileBukti->tautan->type;
+              $file = strtolower($fileBukti->nama_jenis_dokumen).'_'.$model->NIY.'.'.$fileBukti->tautan->extension;
+              $fileBukti->jenis_file = $mime_type;
+              $fileBukti->tanggal_upload = date('Y-m-d H:i:s');
+              $key = 'pengajaran/'.$fileBukti->nama_jenis_dokumen.'/'.$file;
+              $errors = '';
 
-                 
-                $insert = $s3->putObject([
-                     'Bucket' => 'dosen',
-                     'Key'    => $key,
-                     'Body'   => 'This is the Body',
-                     'SourceFile' => $f_penugasan,
-                     'ContentType' => $mime_type
-                ]);
+               
+              $insert = $s3->putObject([
+                   'Bucket' => 'dosen',
+                   'Key'    => $key,
+                   'Body'   => 'This is the Body',
+                   'SourceFile' => $fileBuktiTautan,
+                   'ContentType' => $mime_type
+              ]);
 
-                $plainUrl = $s3->getObjectUrl('dosen', $key);
-                $model->f_penugasan = $plainUrl;
-              }
+              $plainUrl = $s3->getObjectUrl('dosen', $key);
+              $fileBukti->tautan = $plainUrl;
+            }
 
-              if (empty($model->f_penugasan)){
-                  $model->f_penugasan = $f_penugasan;
-              }
+            if (empty($fileBukti->tautan)){
+                $fileBukti->tautan = $sk_mengajar_tautan;
+            }
 
-              if($model->validate())
-              {
-                $model->save();
-                $transaction->commit();
-              }
+            if($fileBukti->validate())
+            {
+              $fileBukti->save();
+              $transaction->commit();
+            }
 
-              else{
-                $errors .= \app\helpers\MyHelper::logError($model);
-                throw new \Exception;
-              }
+            else{
+              $errors .= \app\helpers\MyHelper::logError($fileBukti);
+              throw new \Exception;
+            }
           }
 
           catch(\Exception $e)
@@ -306,7 +327,9 @@ class PengajaranController extends AppController
       }    
 
       return $this->render('update',[
-        'model' => $model
+        'model' => $model,
+        'fileBukti' => $fileBukti,
+        
       ]);
     }
 

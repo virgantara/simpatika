@@ -134,31 +134,38 @@ class SiteController extends AppController
                 'items' => [
                     [
                         'modul' => 'pengabdian',
-                        'data' => $res1['message']
+                        'data' => $res1['message'],
+                        'source' => 'SISTER'
                     ],
                     [
                         'modul' => 'penelitian',
-                        'data' => $res2['message']
+                        'data' => $res2['message'],
+                        'source' => 'SISTER'
                     ],
                     [
                         'modul' => 'penugasan',
-                        'data' => $res3['message']
+                        'data' => $res3['message'],
+                        'source' => 'SISTER'
                     ],
                     [
                         'modul' => 'inpassing',
-                        'data' => $res4['message']
+                        'data' => $res4['message'],
+                        'source' => 'SISTER'
                     ],
                     [
                         'modul' => 'jurnal_pengajaran',
-                        'data' => $res5['message']
+                        'data' => $res5['message'],
+                        'source' => 'SISTER'
                     ],
                     [
                         'modul' => 'pengajaran',
-                        'data' => $res6['message']
+                        'data' => $res6['message'],
+                        'source' => 'SIAKAD'
                     ],
                     [
                         'modul' => 'publikasi',
-                        'data' => $res7['message']
+                        'data' => $res7['message'],
+                        'source' => 'SISTER'
                     ],
                 ]
             ];
@@ -1035,6 +1042,7 @@ class SiteController extends AppController
                     $resp = json_decode($resp->getBody());
                     if($resp->error_code == 0){
                         $res = $resp->data;
+                        // print_r($res);exit;
                         $model->tahun_usulan = $res->nama_tahun_anggaran;
                         $model->tahun_kegiatan = $res->nama_tahun_anggaran;
                         $model->tahun_dilaksanakan = $res->nama_tahun_anggaran;
@@ -1047,7 +1055,30 @@ class SiteController extends AppController
 
                     if($model->save())
                     {
-                        $counter++;
+
+                        $pa = \app\models\PenelitianAnggota::find()->where([
+                            'penelitian_id' => $model->ID,
+                            'NIY' => Yii::$app->user->identity->NIY
+                        ])->one();
+
+                        if(empty($pa))
+                            $pa = new \app\models\PenelitianAnggota;
+
+                        
+                        $pa->NIY = Yii::$app->user->identity->NIY;
+                        $pa->penelitian_id = $model->ID;
+                        $pa->status_anggota = '-';
+                        $pa->beban_kerja = '0';
+
+                        if($pa->save())
+                        {
+                            $counter++;
+                        }
+
+                        else{
+                            $errors .= 'PenelitianAnggota_ERR: '.\app\helpers\MyHelper::logError($model);
+                            throw new \Exception;
+                        }
 
                         
                     }

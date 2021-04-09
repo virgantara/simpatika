@@ -123,6 +123,7 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
                 <?= $form->field($model, 'telp_hp')->textInput(['maxlength' => true]) ?>
 
                 <?= $form->field($model, 'permalink')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model->nIY, 'sister_id')->textInput(['readonly' => true]) ?>
 
                 <?= $form->field($model, 'f_foto')->fileInput().'NB: File format is png, jpeg, jpg and maximal sized 1 MB<br><br>' ?>
 

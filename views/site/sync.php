@@ -27,6 +27,7 @@ $this->title = 'UNIDA Gontor Lecturer Data';
                             <th>No</th>
                             <th>Module</th>
                             <th>Data</th>
+                            <th>Source</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,6 +77,7 @@ $(document).on("click","#btn-import",function(e){
                     row += "<td>"+eval(i+1)+"</td>";
                     row += "<td>"+obj.modul+"</td>";
                     row += "<td>"+obj.data+"</td>";
+                    row += "<td>"+obj.source+"</td>";
                     row += "</tr>";
                 })
 

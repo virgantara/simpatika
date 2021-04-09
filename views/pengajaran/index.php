@@ -43,25 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'kelas',
         'tahun_akademik',
 //            'f_penugasan',
-        [
-            'attribute'=>'bukti',
-            'format'=>'raw',
-            'value' => function($data){
-                if(!empty($data->f_penugasan)){
-                    return Html::a('View', $data->f_penugasan,['class' => 'btn btn-warning','data-pjax' => 0,'target'=>'_blank']);
-                }
-
-                else
-                {
-                    return "<p class='btn btn-danger' align='center'>No File</p>";
-                }
-            }
-        ],
-        [
-            'attribute' => 'ver',
-            'format' => 'raw',
-            'filter' => ['Belum Diverifikasi' => 'Belum Diverivikasi', 'Sudah Diverifikasi' => 'Sudah Diverifikasi','Ditolak' => 'Ditolak']
-        ],
+       
             
     [
         'class' => 'yii\grid\ActionColumn',
