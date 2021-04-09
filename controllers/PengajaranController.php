@@ -310,6 +310,8 @@ class PengajaranController extends AppController
             {
               $fileBukti->save();
               $transaction->commit();
+              Yii::$app->getSession()->setFlash('success','File successfully uploaded');
+              return $this->redirect(['update','id'=>$id]);
             }
 
             else{
