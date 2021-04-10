@@ -11,7 +11,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    
+    <div class="alert alert-info">
+        <h3>Data Pengajaran diambil dari SIAKAD.</h3>
+    </div>
     <?php 
     foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
       echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';
@@ -31,11 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ],
         
         
-        // [
-        //     'attribute'=>'namanya',
-        //     'value'=>'pengajaranData.nama',
-        // ],
-        // 'NIY',
         'kode_mk',
         'matkul',
         'jurusan',
@@ -48,6 +45,14 @@ $this->params['breadcrumbs'][] = $this->title;
     [
         'class' => 'yii\grid\ActionColumn',
         'template' => '{view} {update}',
+        'buttons' => [
+            'update' => function ($url, $model, $key) { 
+                 return Html::a('<span class="glyphicon glyphicon glyphicon-upload" aria-hidden="true"></span>', Url::to(['pengajaran/update', 'id' => $model->ID]),['title'=>'Upload Bukti Pengajaran']);
+
+            }
+
+         ],
+
     ]
 ];?>    
 <?= GridView::widget([

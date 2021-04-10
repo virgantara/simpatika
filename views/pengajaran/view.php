@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="panel-body">
                 <p>
-                    <?= Html::a('Edit', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
+                    <?= Html::a('<i class="fa fa-upload"></i> Upload Bukti', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
                     <?= Html::a('Delete', ['delete', 'id' => $model->ID], [
                         'class' => 'btn btn-danger',
                         'data' => [
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <th>Tipe File</th>
                                 <th>Tautan</th>
                                 
-                                <th>Aksi</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <td><?=$bukti->jenis_file;?></td>
                                 <td><?=Html::a('<i class="fa fa-share"></i> Tautan',$bukti->tautan,['target'=>'_blank','class'=>'btn btn-primary']);?></td>
 
-                                <td><?=Html::a('<i class="fa fa-trash"></i> Remove','#',['class'=>'btn btn-danger']);?></td>
+                           
                             </tr>
                             <?php
                             }
