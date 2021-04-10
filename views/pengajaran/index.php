@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <div class="alert alert-info">
-        <h3>Data Pengajaran diambil dari SIAKAD.</h3>
+        Data Pengajaran diambil dari SIAKAD sehingga perubahan data apapun hanya bisa dari SIAKAD.
     </div>
     <?php 
     foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
