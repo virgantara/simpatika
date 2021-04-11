@@ -882,7 +882,7 @@ class SiteController extends AppController
                     if(empty($model))
                         $model = new \app\models\Pengabdian;
 
-                    $model->NIY = Yii::$app->user->identity->NIY;
+                    // $model->NIY = Yii::$app->user->identity->NIY;
                     $model->sister_id = $item->id_penelitian_pengabdian;
                     $model->judul_penelitian_pengabdian = $item->judul_penelitian_pengabdian;
                     $model->nama_skim = $item->nama_skim;
@@ -899,12 +899,10 @@ class SiteController extends AppController
                         'headers' => ['Content-type' => 'application/json']
 
                     ]); 
-                    
-                    $res = [];
-                   
                     $resp = json_decode($resp->getBody());
                     if($resp->error_code == 0){
                         $res = $resp->data;
+                        // print_r($res);exit;
                         $model->tahun_usulan = $res->nama_tahun_anggaran;
                         $model->tahun_kegiatan = $res->nama_tahun_anggaran;
                         $model->tahun_dilaksanakan = $res->nama_tahun_anggaran;
@@ -913,11 +911,35 @@ class SiteController extends AppController
                         $model->dana_pt = $res->dana_dari_PT;
                         $model->dana_institusi_lain = $res->dana_dari_instansi_lain;
                         // print_r($res);exit;
-                    }
+                    } 
+
 
                     if($model->save())
                     {
-                        $counter++;
+
+                        $pa = \app\models\PengabdianAnggota::find()->where([
+                            'pengabdian_id' => $model->ID,
+                            'NIY' => Yii::$app->user->identity->NIY
+                        ])->one();
+
+                        if(empty($pa))
+                            $pa = new \app\models\PengabdianAnggota;
+
+                        
+                        $pa->NIY = Yii::$app->user->identity->NIY;
+                        $pa->pengabdian_id = $model->ID;
+                        $pa->status_anggota = '-';
+                        $pa->beban_kerja = '0';
+
+                        if($pa->save())
+                        {
+                            $counter++;
+                        }
+
+                        else{
+                            $errors .= 'PengabdianAnggota_ERR: '.\app\helpers\MyHelper::logError($model);
+                            throw new \Exception;
+                        }
 
                         
                     }
@@ -927,6 +949,8 @@ class SiteController extends AppController
                         $errors .= \app\helpers\MyHelper::logError($model);
                         throw new \Exception;
                     }
+
+                    
                 }
 
                 $transaction->commit();
@@ -1020,7 +1044,7 @@ class SiteController extends AppController
 
                     if(empty($model))
                         $model = new Penelitian;
-                    $model->NIY = Yii::$app->user->identity->NIY;
+                    // $model->NIY = Yii::$app->user->identity->NIY;
                     $model->sister_id = $item->id_penelitian_pengabdian;
                     $model->judul_penelitian_pengabdian = $item->judul_penelitian_pengabdian;
                     $model->nama_skim = $item->nama_skim;

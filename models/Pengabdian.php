@@ -54,7 +54,7 @@ class Pengabdian extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['NIY', 'judul_penelitian_pengabdian', 'tahun_pelaksanaan_ke', 'dana_dikti', 'dana_pt', 'dana_institusi_lain','tahun_usulan','tahun_kegiatan','tahun_dilaksanakan','durasi_kegiatan'], 'required'],
+            [['judul_penelitian_pengabdian', 'tahun_pelaksanaan_ke', 'dana_dikti', 'dana_pt', 'dana_institusi_lain','tahun_usulan','tahun_kegiatan','tahun_dilaksanakan','durasi_kegiatan'], 'required'],
             [['tgl_sk_tugas', 'updated_at', 'created_at','skim_kegiatan_id','kelompok_bidang_id','kategori_kegiatan_id','sister_id','nilai','is_claimed'], 'safe'],
             [['durasi_kegiatan', 'tahun_pelaksanaan_ke'], 'integer'],
             [['nilai', 'dana_dikti', 'dana_pt', 'dana_institusi_lain'], 'number'],

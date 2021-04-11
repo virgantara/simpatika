@@ -57,7 +57,7 @@ class Penelitian extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['NIY', 'judul_penelitian_pengabdian', 'tahun_usulan', 'tahun_dilaksanakan', 'tahun_pelaksanaan_ke'], 'required'],
+            [['judul_penelitian_pengabdian', 'tahun_usulan', 'tahun_dilaksanakan', 'tahun_pelaksanaan_ke'], 'required'],
             [['tahun_kegiatan', 'durasi_kegiatan', 'tahun_usulan', 'tahun_dilaksanakan', 'tahun_pelaksanaan_ke', 'komponen_kegiatan_id'], 'integer'],
             [['dana_institusi_lain', 'nilai', 'dana_pt'], 'number'],
             [['tgl_sk_tugas', 'updated_at', 'created_at'], 'safe'],

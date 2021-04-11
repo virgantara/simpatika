@@ -43,8 +43,9 @@ class PengabdianSearch extends Pengabdian
     public function search($params)
     {
         $query = Pengabdian::find();
-        $query->alias('p');
-        $query->where(['p.NIY' => Yii::$app->user->identity->NIY]);
+        $query->joinWith(['pengabdianAnggotas as pa']);
+        
+        $query->where(['pa.NIY' => Yii::$app->user->identity->NIY]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

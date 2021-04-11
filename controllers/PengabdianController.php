@@ -7,6 +7,7 @@ use app\models\User;
 use app\helpers\MyHelper;
 use app\models\Pengabdian;
 use app\models\Verify;
+use app\models\PengabdianAnggota;
 use app\models\PengabdianSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -30,6 +31,149 @@ class PengabdianController extends AppController
                 ],
             ],
         ];
+    }
+
+    public function actionAjaxListAnggota()
+    {
+        $dataPost = $_POST['dataPost'];
+        $query = PengabdianAnggota::find();
+        $query->where([
+          'pengabdian_id' => $dataPost['pengabdian_id'],
+        ]);
+        $list = $query->all();
+        $results = [];
+
+        foreach($list as $item)
+        {
+            $results[] = [
+                'NIY' => $item->NIY,
+                'nama' => $item->nIY->dataDiri->nama,
+                'status_anggota' => $item->status_anggota,
+                'beban_kerja' => $item->beban_kerja
+            ];
+        }
+
+        echo \yii\helpers\Json::encode($results);
+        die();
+    }
+
+    public function actionAjaxUpdateAuthor()
+    {
+        $list_peran = \app\helpers\MyHelper::getPeranPublikasi();
+        $dataPost = $_POST['dataPost'];
+        $model = PengabdianAnggota::find()->where([
+            'pengabdian_id' => $dataPost['pengabdian_id'],
+            'NIY' => $dataPost['NIY'],
+        ])->one();
+        if(!empty($model))
+        {
+            $user = User::find()->where([
+                'NIY'=>$dataPost['NIY']
+            ])->one();
+            $model->NIY = $dataPost['NIY'];
+            $model->pengabdian_id = $dataPost['pengabdian_id'];
+            $model->status_anggota = $dataPost['status_anggota'];
+            $model->beban_kerja = $dataPost['beban_kerja'];
+            
+            $results = [];
+            if($model->save())
+            {
+                $results = [
+                    'code' => 200,
+                    'message' => 'Data Updated'
+                ];
+            }
+
+            else
+            {
+                $results = [
+                    'code' => 500,
+                    'message' => \app\helpers\MyHelper::logError($model)
+                ];
+            }
+        }
+        
+        else
+        {
+            $results = [
+                'code' => 500,
+                'message' => 'Author not found'
+            ];
+        }
+        echo json_encode($results);
+        die();
+    }
+
+    public function actionAjaxRemoveAuthor()
+    {
+        $list_peran = \app\helpers\MyHelper::getPeranPublikasi();
+        $dataPost = $_POST['dataPost'];
+        $model = PengabdianAnggota::find()->where([
+            'pengabdian_id' => $dataPost['pengabdian_id'],
+            'NIY' => $dataPost['NIY'],
+        ])->one();
+        
+        $results = [];
+        if(!empty($model))
+        {
+            $model->delete();
+            $results = [
+                'code' => 200,
+                'message' => 'Data deleted'
+            ];
+        }
+
+        else
+        {
+            $results = [
+                'code' => 500,
+                'message' => \app\helpers\MyHelper::logError($model)
+            ];
+        }
+
+        echo json_encode($results);
+        die();
+    }
+
+    public function actionAjaxAddAuthor()
+    {
+        $list_peran = \app\helpers\MyHelper::getPeranPublikasi();
+        $dataPost = $_POST['dataPost'];
+        $model = PengabdianAnggota::find()->where([
+            'pengabdian_id' => $dataPost['pengabdian_id'],
+            'NIY' => $dataPost['NIY'],
+        ])->one();
+
+        if(empty($model))
+            $model = new PengabdianAnggota;
+
+        $user = User::find()->where([
+            'NIY'=>$dataPost['NIY']
+        ])->one();
+        $model->NIY = $dataPost['NIY'];
+        $model->pengabdian_id = $dataPost['pengabdian_id'];
+        $model->status_anggota = $dataPost['status_anggota'];
+        $model->beban_kerja = $dataPost['beban_kerja'];
+        
+        $results = [];
+        if($model->save())
+        {
+            $results = [
+                'code' => 200,
+                'message' => 'Data Added'
+            ];
+        }
+
+        else
+        {
+            $results = [
+                'code' => 500,
+                'message' => \app\helpers\MyHelper::logError($model)
+            ];
+        }
+
+        echo json_encode($results);
+        die();
     }
 
     public function actionAjaxList()
