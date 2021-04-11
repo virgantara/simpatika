@@ -9,7 +9,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'name' => 'SIMPEG UNIDA Gontor',
+    'name' => 'E-KHIDMAH UNIDA Gontor',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'app\components\Aliases'],
     'aliases' => [

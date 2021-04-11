@@ -44,7 +44,7 @@ SweetalertAsset::register($this);
 <div id="wrapper">
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="brand">
-            <a href="<?=Url::to(['site/homelog']);?>">LECTURER</a>
+            <a href="<?=Url::to(['site/homelog']);?>">E-KHIDMAH</a>
         </div>
         <div class="container-fluid">
             <div class="navbar-btn">
