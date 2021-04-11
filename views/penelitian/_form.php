@@ -89,7 +89,7 @@ $years = array_combine(range(date("Y"), 2006), range(date("Y"), 2006));
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-md-3">Judul Pengabdian</label>
+        <label class="control-label col-md-3">Judul Penelitian</label>
         <div class="col-md-9">
      <?= $form->field($model, 'judul_penelitian_pengabdian',['options' => ['tag' => false]])->textInput(['class'=>'form-control','maxlength' => true])->label(false) ?>
         </div>
