@@ -7,7 +7,7 @@ use kartik\grid\GridView;
 /* @var $searchModel app\models\PenelitianSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Penelitians';
+$this->title = 'Penelitian';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -20,7 +20,10 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 <div class="panel-body ">
 
-    
+    <p>
+        <?= Html::a('Tambah Data', ['create'], ['class' => 'btn btn-success']) ?>
+      
+    </p>
     <?php 
     foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
       echo '<div class="alert alert-' . $key . '">' . $message . '<button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button></div>';

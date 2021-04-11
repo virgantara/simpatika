@@ -387,40 +387,7 @@ class PenelitianController extends AppController
         }
         $model = new Penelitian();
         $model->NIY = Yii::$app->user->identity->NIY;
-        // $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
-        // $sisterToken = \app\helpers\MyHelper::getSisterToken();
-        // $sister_baseurl = Yii::$app->params['sister_baseurl'];
-        // $sister_id_pengguna = Yii::$app->params['sister_id_pengguna'];
-        // $sister_lembaga_iptek = Yii::$app->params['sister_lembaga_iptek'];
-        // $headers = ['content-type' => 'application/json'];
-        // $client = new \GuzzleHttp\Client([
-        //     'timeout'  => 5.0,
-        //     'headers' => $headers,
-        //     // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
-        // ]);
-        // $full_url = $sister_baseurl.'/Referensi/lembagaiptek';
-        // $response = $client->post($full_url, [
-        //     'body' => json_encode([
-        //         'id_token' => $sisterToken,
-        //         'id_pengguna' => $sister_id_pengguna,
-        //         // 'data' => $data
-        //     ]), 
-        //     'headers' => ['Content-type' => 'application/json']
-
-        // ]); 
-        
-        // $results = [];
        
-        // $response = json_decode($response->getBody());
-        
-        // if($response->error_code == 0)
-        // {
-        //     $results = $response->data;
-        //     echo '<pre>';
-        //     print_r($results);
-        //     echo '</pre>';
-        //     exit;
-        // }
 
         if ($model->load(Yii::$app->request->post())) 
         {
@@ -433,82 +400,82 @@ class PenelitianController extends AppController
 
                 if($model->save())
                 {   
-                    $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
-                    $sisterToken = \app\helpers\MyHelper::getSisterToken();
-                    $sister_baseurl = Yii::$app->params['sister_baseurl'];
-                    $sister_lembaga_iptek = Yii::$app->params['sister_lembaga_iptek'];
-                    $headers = ['content-type' => 'application/json'];
-                    $client = new \GuzzleHttp\Client([
-                        'timeout'  => 5.0,
-                        'headers' => $headers,
-                        // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
-                    ]);
-                    $full_url = $sister_baseurl.'/Penelitian/tambah';
-                    $data = [
-                        'id_penelitian_pengabdian' => 0,
-                        'id_kategori_kegiatan' => $model->kategori_kegiatan_id,
-                        'judul_penelitian_pengabdian' => $model->judul_penelitian_pengabdian,
-                        'id_lembaga_iptek' => $sister_lembaga_iptek,
-                        'id_kelompok_bidang' => $model->kelompok_bidang_id,
-                        'id_jenis_skim' => $model->skim_kegiatan_id,
-                        'tempat_kegiatan' => $model->tempat_kegiatan,
-                        'tahun_usulan' => $model->tahun_usulan,
-                        'tahun_kegiatan' => $model->tahun_kegiatan,
-                        'tahun_dilaksanakan' => $model->tahun_dilaksanakan,
-                        'durasi_kegiatan' => $model->durasi_kegiatan,
-                        'tahun_pelaksanaan_ke' => $model->tahun_pelaksanaan_ke,
-                        'dana_dari_dikti' => $model->dana_dikti,
-                        'dana_dari_instansi_lain' => $model->dana_institusi_lain,
-                        'dana_dari_PT' => $model->dana_pt,
-                        'no_sk_tugas' => $model->no_sk_tugas,
-                        'tanggal_sk_penugasan' => date('d/m/Y',strtotime($model->tgl_sk_tugas)),
-                        'tanggal_sk_penugasan' => [
-                            'tanggal_sk_penugasan_tanggal' => date('d',strtotime($model->tgl_sk_tugas)),
-                            'tanggal_sk_penugasan_tahun' => date('Y',strtotime($model->tgl_sk_tugas)),
-                            'tanggal_sk_penugasan_bulan' => date('m',strtotime($model->tgl_sk_tugas)),
-                        ],
+                    // $user = \app\models\User::findOne(Yii::$app->user->identity->ID);
+                    // $sisterToken = \app\helpers\MyHelper::getSisterToken();
+                    // $sister_baseurl = Yii::$app->params['sister_baseurl'];
+                    // $sister_lembaga_iptek = Yii::$app->params['sister_lembaga_iptek'];
+                    // $headers = ['content-type' => 'application/json'];
+                    // $client = new \GuzzleHttp\Client([
+                    //     'timeout'  => 5.0,
+                    //     'headers' => $headers,
+                    //     // 'base_uri' => 'http://sister.unida.gontor.ac.id/api.php/0.1'
+                    // ]);
+                    // $full_url = $sister_baseurl.'/Penelitian/tambah';
+                    // $data = [
+                    //     'id_penelitian_pengabdian' => 0,
+                    //     'id_kategori_kegiatan' => $model->kategori_kegiatan_id,
+                    //     'judul_penelitian_pengabdian' => $model->judul_penelitian_pengabdian,
+                    //     'id_lembaga_iptek' => $sister_lembaga_iptek,
+                    //     'id_kelompok_bidang' => $model->kelompok_bidang_id,
+                    //     'id_jenis_skim' => $model->skim_kegiatan_id,
+                    //     'tempat_kegiatan' => $model->tempat_kegiatan,
+                    //     'tahun_usulan' => $model->tahun_usulan,
+                    //     'tahun_kegiatan' => $model->tahun_kegiatan,
+                    //     'tahun_dilaksanakan' => $model->tahun_dilaksanakan,
+                    //     'durasi_kegiatan' => $model->durasi_kegiatan,
+                    //     'tahun_pelaksanaan_ke' => $model->tahun_pelaksanaan_ke,
+                    //     'dana_dari_dikti' => $model->dana_dikti,
+                    //     'dana_dari_instansi_lain' => $model->dana_institusi_lain,
+                    //     'dana_dari_PT' => $model->dana_pt,
+                    //     'no_sk_tugas' => $model->no_sk_tugas,
+                    //     'tanggal_sk_penugasan' => date('d/m/Y',strtotime($model->tgl_sk_tugas)),
+                    //     'tanggal_sk_penugasan' => [
+                    //         'tanggal_sk_penugasan_tanggal' => date('d',strtotime($model->tgl_sk_tugas)),
+                    //         'tanggal_sk_penugasan_tahun' => date('Y',strtotime($model->tgl_sk_tugas)),
+                    //         'tanggal_sk_penugasan_bulan' => date('m',strtotime($model->tgl_sk_tugas)),
+                    //     ],
                         
                         
-                        // 'tgl_sk_tugas' => date('d/m/Y',strtotime($model->tgl_sk_tugas)),
-                    ];
-                    echo '<pre>';
-                    // print_r($sisterToken);
-                    // echo '<br>';
-                    // print_r($user->sister_id);
-                    // echo '<br>';
-                    print_r($data);
-                    echo '</pre>';
-                    exit;
-                    $response = $client->post($full_url, [
-                        'body' => json_encode([
-                            'id_token' => $sisterToken,
-                            'id_dosen' => $user->sister_id,
-                            'data' => $data
-                        ]), 
-                        'headers' => ['Content-type' => 'application/json']
+                    //     // 'tgl_sk_tugas' => date('d/m/Y',strtotime($model->tgl_sk_tugas)),
+                    // ];
+                    // echo '<pre>';
+                    // // print_r($sisterToken);
+                    // // echo '<br>';
+                    // // print_r($user->sister_id);
+                    // // echo '<br>';
+                    // print_r($data);
+                    // echo '</pre>';
+                    // exit;
+                    // $response = $client->post($full_url, [
+                    //     'body' => json_encode([
+                    //         'id_token' => $sisterToken,
+                    //         'id_dosen' => $user->sister_id,
+                    //         'data' => $data
+                    //     ]), 
+                    //     'headers' => ['Content-type' => 'application/json']
 
-                    ]); 
+                    // ]); 
                     
-                    $results = [];
+                    // $results = [];
                    
-                    $response = json_decode($response->getBody());
+                    // $response = json_decode($response->getBody());
                     
-                    if($response->error_code == 0)
-                    {
-                        $results = $response->data;
+                    // if($response->error_code == 0)
+                    // {
+                    //     $results = $response->data;
                 
-                        $model->sister_id = $results;
-                        $model->save();
-                        $transaction->commit();
-                        Yii::$app->getSession()->setFlash('success','Data successfully added');
-                        return $this->redirect(['index']);
-                    }
+                    //     $model->sister_id = $results;
+                    //     $model->save();
+                    //     $transaction->commit();
+                    //     Yii::$app->getSession()->setFlash('success','Data successfully added');
+                    //     return $this->redirect(['index']);
+                    // }
 
-                    else{
-                        // print_r($response);exit;
-                        $errors .= 'SIST_ERR: '.json_encode($response);
-                        throw new \Exception;
-                    }
+                    // else{
+                    //     // print_r($response);exit;
+                    //     $errors .= 'SIST_ERR: '.json_encode($response);
+                    //     throw new \Exception;
+                    // }
                     $transaction->commit();
                     Yii::$app->getSession()->setFlash('success','Data successfully added');
                     return $this->redirect(['index']);

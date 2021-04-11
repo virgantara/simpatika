@@ -37,7 +37,7 @@ foreach($listKomponen as $k)
     $listKomponenKegiatan[$k->nama] = $tmp;
 }
 
-$listKegiatan = \app\helpers\MyHelper::convertKategoriKegiatan('120');
+$listKegiatan = \app\helpers\MyHelper::convertKategoriKegiatan('1206');
 
 
 // echo '<pre>';

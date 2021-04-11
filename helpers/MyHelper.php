@@ -34,6 +34,8 @@ class MyHelper
 		$results = [];
 		foreach($listKategori as $q=>$v)
 		{
+			$prefix = substr($prefix, 0,3);		  
+			
 		    $last3 = substr($v, -3,3);  
 		    if($last3 == '000') continue;
 
