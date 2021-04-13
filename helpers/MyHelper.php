@@ -8,6 +8,74 @@ use Yii;
  */
 class MyHelper
 {	
+
+	public static function listSatker()
+    {
+        $query = \app\models\UnitKerja::find();
+        $results = [];
+        if(Yii::$app->user->identity->access_role == 'fakultas')
+        {	
+        	$query->andWhere([
+                'id' => Yii::$app->user->identity->satker_id
+            ]);
+
+            $res = $query->one();
+            $results[] = [
+            	'id' => $res->id,
+            	'nama' => $res->nama
+            ];
+            foreach($res->unitKerjas as $r)
+            {
+            	$results[] = [
+            		'id' => $r->id,
+            		'nama' => $r->nama
+            	];
+            }
+
+            
+        }
+
+        else
+        {
+        	$res = $query->all();
+
+            foreach($res as $r)
+            {
+            	$results[] = [
+            		'id' => $r->id,
+            		'nama' => $r->nama
+            	];
+            }
+        }
+
+
+        return $results;
+    }
+
+	public static function getListSkema()
+	{
+		$api_baseurl = Yii::$app->params['api_baseurl'];
+        $client = new \yii\httpclient\Client(['baseUrl' => $api_baseurl]);
+        $client_token = Yii::$app->params['client_token'];
+        $headers = ['x-access-token'=>$client_token];
+
+        $list_skema = [];
+
+        $params = [];
+
+        $response = $client->get('/litab/skema/abdimas', $params,$headers)->send();
+        if ($response->isOk) 
+        {
+            $res = $response->data['values'];
+            $status = $response->data['status'];
+            foreach($res as $m)
+            {
+                $list_skema[$m['kode']] = $m['nama'];
+            }
+        }
+
+        return $list_skema;
+	}
 	public static function getPeranPublikasi(){
 		$list_peran = [
             'A' => 'Penulis',
