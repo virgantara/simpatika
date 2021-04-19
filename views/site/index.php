@@ -3,6 +3,8 @@ use app\helpers\MyHelper;
 use yii\helpers\Html;
 use app\models\MasterLevel;
 use app\models\GameLevelClass;
+use app\assets\IntroAsset;
+IntroAsset::register($this);
 /* @var $this yii\web\View */
 
 $this->title = 'UNIDA Gontor Lecturer Data';
@@ -160,10 +162,10 @@ else{
 ?>
 <h1>Pencapaian Anda Semester ini (<?=$bkd_periode->nama_periode;?>)</h1>
 <h4><?=\app\helpers\MyHelper::convertTanggalIndo($bkd_periode->tanggal_bkd_awal);?> sampai dengan <?=\app\helpers\MyHelper::convertTanggalIndo($bkd_periode->tanggal_bkd_akhir);?></h4>
-<div class="row">
+<div class="row" data-step="1" data-intro="Yuk, ikuti tur pengenalan fitur baru, yaitu Beban Kinerja Dosen atau yang biasa disebut BKD" data-title="Selamat datang di E-Khidmah">
     <div class="col-md-6">
     
-        <div class="panel">
+        <div class="panel" data-step="2" data-intro="Progres Anda Selama Satu Semester" >
             <div class="panel-heading">
                 <h3 class="panel-title">My Tasks</h3>
                 <div class="right">
@@ -219,7 +221,7 @@ else{
         <!-- END TASKS -->
     </div>
     <div class="col-md-6">	
-        <div class="panel">
+        <div class="panel" data-step="3" data-title="Summary Report" data-intro="Kinerja ini dihitung secara keseluruhan sesuai aturan BKD yang terbaru">
             <div class="panel-heading">
             	<h3 class="panel-title">Summary Reports</h3>
                 <div class="right">
@@ -231,10 +233,10 @@ else{
                 
             	<div class="alert alert-default">
                      <ul >
-                    <li>
+                    <li data-step="4" data-title="Indikator kinerja Anda dari Pengajaran & Penelitian" data-intro="Sudah mencukupi jika beban minimal BKD terpenuhi">
                             Kegiatan Pengajaran dan Penelitian Anda <?=$label_ab;?>
                     </li>
-                    <li>
+                    <li data-step="5" data-title="Indikator kinerja Anda dari Pengabdian & Penunjang" data-intro="Sudah mencukupi jika beban minimal BKD terpenuhi">
                         Kegiatan Pengabdian dan Penunjang Anda <?=$label_cd;?>
                     </li>
                     
@@ -248,3 +250,45 @@ else{
     
                         
 </div>   
+
+
+<?php
+
+$this->registerJs('
+ var introguide = introJs();
+    introguide.setOptions({
+        exitOnOverlayClick: false
+    });
+    // introguide.start();
+    // // localStorage.clear();
+    var doneTour = localStorage.getItem(\'evt_pa\') === \'Completed\';
+    
+    if(!doneTour) {
+        introguide.start()
+
+        introguide.oncomplete(function () {
+            localStorage.setItem(\'evt_pa\', \'Completed\');
+            Swal.fire({
+              title: \'Ulangi Langkah Fitur ini ?\',
+              text: "",
+              icon: \'warning\',
+              showCancelButton: true,
+              width:\'35%\',
+              confirmButtonColor: \'#3085d6\',
+              cancelButtonColor: \'#d33\',
+              confirmButtonText: \'Ya, ulangi lagi!\',
+              cancelButtonText: \'Tidak, sudah cukup\'
+            }).then((result) => {
+              if (result.value) {
+                introguide.start();
+                localStorage.removeItem(\'evt_pa\');
+              }
+
+            });
+        });
+
+       
+    }
+', \yii\web\View::POS_READY);
+
+?>

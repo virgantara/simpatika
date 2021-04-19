@@ -2,6 +2,8 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use app\assets\IntroAsset;
+IntroAsset::register($this);
 
 $list_tahun = ArrayHelper::map($list_bkd_periode,'tahun_id','nama_periode');
 ?>
@@ -27,7 +29,7 @@ $list_tahun = ArrayHelper::map($list_bkd_periode,'tahun_id','nama_periode');
 							<th>Prodi</th>
 							<th>TA</th>
 							<th>SKS BKD</th>
-							<th>Klaim</th>
+							<th class="klaim">Klaim</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -133,6 +135,77 @@ $list_tahun = ArrayHelper::map($list_bkd_periode,'tahun_id','nama_periode');
 <?php 
 
 $this->registerJs(' 
+
+var introguide = introJs();
+introguide.setOptions({
+    exitOnOverlayClick: false,
+    steps : [
+        {
+            intro: "Fitur ini berisi kegiatan apapun yang akan diklaim sebagai BKD",
+            title: "Fitur Klaim BKD",
+            element : "h1"
+        },
+        {
+            intro: "Periode BKD yang berjalan. Periode ini hanya bisa diubah oleh bagian Admin Biro SDM",
+            title: "Pilihan Periode",
+            element : "#tahun_list"
+        },
+        {
+            intro: "Data ini bersumber dari SIAKAD pada tahun periode BKD",
+            title: "Data Pengajaran",
+            element : "#tabel-pengajaran"
+        },
+        {
+            intro: "Anda bisa klaim kegiatan dengan cara mencentang checkbox di bawah ini",
+            title: "Checkbox Klaim",
+            element : ".klaim"
+        },
+        {
+            intro: "Data ini bersumber dari SISTER atau Input manual",
+            title: "Data Penelitian & Publikasi",
+            element : "#tabel-publikasi"
+        },
+        {
+            intro: "Data ini bersumber dari SISTER atau Input manual",
+            title: "Data Pengabdian",
+            element : "#tabel-pengabdian"
+        },
+        {
+            intro: "Data ini bersumber dari SISTER atau Input manual",
+            title: "Data Penunjang",
+            element : "#tabel-penunjang"
+        },
+        
+    ]
+});
+
+var doneTour = localStorage.getItem(\'evt_klaim_bkd\') === \'Completed\';
+
+if(!doneTour) {
+    introguide.start()
+
+    introguide.oncomplete(function () {
+        localStorage.setItem(\'evt_klaim_bkd\', \'Completed\');
+        Swal.fire({
+          title: \'Ulangi Langkah Fitur ini ?\',
+          text: "",
+          icon: \'warning\',
+          showCancelButton: true,
+          width:\'35%\',
+          confirmButtonColor: \'#3085d6\',
+          cancelButtonColor: \'#d33\',
+          confirmButtonText: \'Ya, ulangi lagi!\',
+          cancelButtonText: \'Tidak, sudah cukup\'
+        }).then((result) => {
+          if (result.value) {
+            introguide.start();
+            localStorage.removeItem(\'evt_klaim_bkd\');
+          }
+
+        });
+    });
+
+}
 
 $(document).on("click",".btn-claim-pengelolaJurnal",function(e){
     e.preventDefault()

@@ -2,11 +2,12 @@
 use app\helpers\MyHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
-
+use app\assets\IntroAsset;
+IntroAsset::register($this);
 $this->title = 'UNIDA Gontor Lecturer Data';
 
 ?>
-<h1>Impor data dari SISTER</h1>
+<h1 >Impor data dari SISTER</h1>
 
 <div class="row">
     <div class="col-md-12">
@@ -19,7 +20,11 @@ $this->title = 'UNIDA Gontor Lecturer Data';
             <div class="panel-body">
 
                 <div class="form-group">
-                    <?= Html::a('Import Now',[''], ['class' => 'btn btn-success','id'=>'btn-import']) ?>
+                    <?= Html::a('Import Now',[''], [
+                        'class' => 'btn btn-success',
+                        'id'=>'btn-import',
+
+                    ]) ?>
                 </div>
                 <table class="table" id="tabel-sync">
                     <thead>
@@ -43,7 +48,56 @@ $this->title = 'UNIDA Gontor Lecturer Data';
 <?php
 
 $this->registerJs(' 
- 
+    
+    var introguide = introJs();
+    introguide.setOptions({
+        exitOnOverlayClick: false,
+        steps : [
+            {
+                intro: "Fitur ini mengambil data dari 2 sumber, yaitu SISTER dan SIAKAD",
+                title: "Fitur Sinkronisasi",
+                element : "h1"
+            },
+            {
+                intro: "Klik Tombol ini untuk menjalankan proses import",
+                title: "Tombol Sinkronisasi",
+                element : "#btn-import"
+            },
+            {
+                intro: "Hasil Sinkronisasi akan muncul di tabel ini",
+                title: "Hasil Sinkronisasi",
+                element : "#tabel-sync"
+            },
+        ]
+    });
+
+    var doneTour = localStorage.getItem(\'evt_sync\') === \'Completed\';
+    
+    if(!doneTour) {
+        introguide.start()
+
+        introguide.oncomplete(function () {
+            localStorage.setItem(\'evt_sync\', \'Completed\');
+            Swal.fire({
+              title: \'Ulangi Langkah Fitur ini ?\',
+              text: "",
+              icon: \'warning\',
+              showCancelButton: true,
+              width:\'35%\',
+              confirmButtonColor: \'#3085d6\',
+              cancelButtonColor: \'#d33\',
+              confirmButtonText: \'Ya, ulangi lagi!\',
+              cancelButtonText: \'Tidak, sudah cukup\'
+            }).then((result) => {
+              if (result.value) {
+                introguide.start();
+                localStorage.removeItem(\'evt_sync\');
+              }
+
+            });
+        });
+
+    }
 
 $(document).on("click","#btn-import",function(e){
     e.preventDefault()

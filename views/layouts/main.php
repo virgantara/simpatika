@@ -15,6 +15,7 @@ use kartik\nav\NavX;
 
 AppAsset::register($this);
 SweetalertAsset::register($this);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
