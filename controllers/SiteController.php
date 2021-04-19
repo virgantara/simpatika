@@ -1491,11 +1491,156 @@ class SiteController extends AppController
             ])
             ->one();
 
-        if(!empty($user)){
-            $user->otp = null;
-            $user->save(false,['otp']);
-            Yii::$app->user->login($user);
-            return $this->goHome();
+        if(!empty($user))
+        {
+            $api_baseurl = Yii::$app->params['invoke_token_uri'];
+            $client = new Client(['baseUrl' => $api_baseurl]);
+            $headers = [];
+
+            $params = [
+                'uuid' => $user->uuid
+            ];
+            
+            $response = $client->get($api_baseurl, $params,$headers)->send();
+            if ($response->isOk) {
+                $res = $response->data;
+
+                if($res['code'] != '200')
+                {
+                    return $this->redirect(Yii::$app->params['sso_login']);
+                }
+
+                else{
+                    $session = Yii::$app->session;
+                    $session->set('token',$res['token']);
+                    $user->otp = null;
+                    $user->save(false,['otp']);
+                    
+                    $api_baseurl = Yii::$app->params['api_baseurl'];
+                    $client = new Client(['baseUrl' => $api_baseurl]);
+                    $client_token = Yii::$app->params['client_token'];
+                    $headers = ['x-access-token'=>$client_token];
+
+                    $results = [];
+                    // foreach($listTahun as $tahun)
+                    // {
+                    $params = [
+                        
+                    ];
+
+                    $response = $client->get('/tahun/aktif', $params,$headers)->send();
+                     
+                    $tahun_akademik = '';
+
+                    if ($response->isOk) {
+                        $results = $response->data['values'];
+                        if(!empty($results[0]))
+                        {
+                            $tahun_akademik = $results[0];
+                        }
+                    }
+
+                    $pengajaran = Pengajaran::find()->where([
+                        'NIY' => $user->NIY,
+                        // 'is_claimed' => 1,
+                        'tahun_akademik' => $tahun_akademik['tahun_id']
+                    ])->all();
+
+                    // print_r($tahun_akademik);exit;
+
+                    $query = Publikasi::find()->where([
+                        'NIY' => $user->NIY,
+                        'is_claimed' => 1,
+                    ]);
+
+                    $query->andWhere(['not',['kegiatan_id' => null]]);
+
+                    $sd = $tahun_akademik['kuliah_mulai'];
+                    $ed = $tahun_akademik['nilai_selesai'];
+
+                    $totalCatatanHarian = $this->sumPoinCatatanHarian($sd, $ed, $user->ID);
+
+                    $query->andFilterWhere(['between','tanggal_terbit',$sd, $ed]);
+                    $query->orderBy(['tanggal_terbit'=>SORT_ASC]);
+
+                    $publikasi = $query->all();
+
+                    $query = Pengabdian::find()->where([
+                        'NIY' => $user->NIY,
+                        'is_claimed' => 1,
+                    ]);
+
+                    // $sd = $tahun_akademik['kuliah_mulai'];
+                    // $ed = $tahun_akademik['nilai_selesai'];
+
+                    // $query->andFilterWhere(['between','tahun_kegiatan',$sd, $ed]);
+                    $query->orderBy(['tahun_kegiatan'=>SORT_ASC]);
+
+                    $pengabdian = $query->all();
+
+                    $query = Organisasi::find()->where([
+                        'NIY' => $user->NIY,
+                        'is_claimed' => 1,
+                    ]);
+
+                    $organisasi = $query->all();
+
+                    $query = PengelolaJurnal::find()->where([
+                        'NIY' => $user->NIY,
+                        'is_claimed' => 1,
+                    ]);
+
+                    $pengelolaJurnal = $query->all();
+                    $total_abdi = 0;
+                    $total_penunjang = 0;
+                    $total_ajar = 0;
+                    $total_pub = 0;
+                    $total_ajar = 0; 
+                    foreach ($pengajaran as $key => $value) 
+                    {
+                        $total_ajar += $value->sks_bkd;
+                    }
+
+                    foreach ($publikasi as $key => $value) 
+                    {
+                        $total_pub += $value->sks_bkd;
+                    }
+
+                    foreach ($pengabdian as $key => $value) 
+                    {
+                        $total_abdi += $value->nilai;
+                    }
+
+                    foreach ($organisasi as $key => $value) 
+                    {
+                        $total_penunjang += $value->sks_bkd;
+                    }
+                    foreach ($pengelolaJurnal as $key => $value) 
+                    {
+                        $total_penunjang += $value->sks_bkd;
+                    }
+
+                    $total_bkd = $total_ajar+$total_pub+$total_abdi+$total_penunjang;
+
+                    $exp = $total_bkd * 1000;
+                    $exp += $totalCatatanHarian;
+                    $level = MasterLevel::getLevel($exp);
+                    $currentClass = GameLevelClass::getCurrentClass($level);
+                    $nextLevel = MasterLevel::getNextLevel($exp);
+                    $remainingExp = $nextLevel['nextExp'] - $exp;
+
+                    $session->set('level',$level);
+                    $session->set('class',$currentClass['class']);
+                    $session->set('rank',$currentClass['rank']);
+                    $session->set('stars',$currentClass['stars']);
+                    $session->set('remainingExp',$remainingExp);
+
+                    Yii::$app->user->login($user);
+                    return $this->redirect(['site/index']);
+                }
+            }
+            
+
         }
 
         else{
