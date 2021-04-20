@@ -53,9 +53,9 @@ $num_bkd_pub = $bkd_pub->nilai_minimal;
 $num_bkd_abdi = $bkd_abdi->nilai_minimal;
 $num_bkd_penunjang = $bkd_penunjang->nilai_minimal;
 $persen_a = round(($total_ajar) / ($num_bkd_ajar) * 100,2);
-$persen_b = !empty($num_bkd_pub) ? round(($total_pub) / ($num_bkd_pub) * 100,2) : 0;
-$persen_c = !empty($num_bkd_abdi) ? round(($total_abdi) / ($num_bkd_abdi) * 100,2) : 0;
-$persen_d = !empty($num_bkd_penunjang) ? round(($total_penunjang) / ($num_bkd_penunjang) * 100,2) : 0;
+$persen_b = !empty($num_bkd_pub) ? round(($total_pub) / ($num_bkd_pub) * 100,2) : $total_pub * 100;
+$persen_c = !empty($num_bkd_abdi) ? round(($total_abdi) / ($num_bkd_abdi) * 100,2) : $total_abdi * 100;
+$persen_d = !empty($num_bkd_penunjang) ? round(($total_penunjang) / ($num_bkd_penunjang) * 100,2) : $total_penunjang * 100;
 
 if($persen_a >= 100){
     $label_a = 'progress-bar-success';
