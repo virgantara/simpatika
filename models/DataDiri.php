@@ -44,7 +44,7 @@ class DataDiri extends \yii\db\ActiveRecord
             [['NIY', 'nama', 'gender', 'tempat_lahir', 'tanggal_lahir', 'status_kawin', 'agama', 'pangkat', 'jabatan_fungsional','alamat_rumah', 'telp_hp','status_dosen','kode_unik', 'nik','kampus'], 'required'],
             [['gender', 'status_kawin', 'alamat_kampus', 'alamat_rumah','status_dosen','jenjang_kode'], 'string'],
             [['permalink'], 'unique'],
-            [['kode_unik','tanggal_lahir','bidang_ilmu_id','permalink','expertise','kepakaran_id','kode_feeder','id_reg_ptk','tugas_dosen_id'], 'safe'],
+            [['kode_unik','tanggal_lahir','bidang_ilmu_id','permalink','expertise','kepakaran_id','kode_feeder','id_reg_ptk','tugas_dosen_id','telegram_username'], 'safe'],
             [['NIY', 'telp_kampus', 'fax_kampus', 'telp_hp'], 'string', 'max' => 15],
             [['nama', 'perguruan_tinggi'], 'string', 'max' => 50],
             [['tempat_lahir'], 'string', 'max' => 30],

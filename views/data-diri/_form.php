@@ -121,7 +121,7 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
                 <?= $form->field($model, 'alamat_rumah')->textarea(['rows' => 6]) ?>
 
                 <?= $form->field($model, 'telp_hp')->textInput(['maxlength' => true]) ?>
-
+                <?= $form->field($model, 'telegram_username')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'permalink')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model->nIY, 'sister_id')->textInput(['readonly' => true]) ?>
 
