@@ -72,7 +72,7 @@ class User extends UserIdentity
             ['password', 'required', 'on' => 'create'],
             // use passwordStrengthRule() method to determine password strength
             $this->passwordStrengthRule(),
-            [['fakultas', 'prodi','kampus','display_name','nim','username','uuid','is_accept_term'], 'safe'],
+            [['fakultas', 'prodi','kampus','display_name','nim','username','uuid','is_accept_term','level','class','rank','stars'], 'safe'],
             ['status', 'required'],
             ['item_name', 'string', 'min' => 3, 'max' => 64],
             ['access_role', 'string', 'min' => 3, 'max' => 64],

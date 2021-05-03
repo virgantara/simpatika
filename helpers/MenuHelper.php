@@ -220,8 +220,8 @@ class MenuHelper
         }
     	if(!Yii::$app->user->isGuest){	
 			
-    		$class = $session->has('class') ? $session->get('class') : '';
-    		$stars = $session->has('stars') ? $session->get('stars') : '';
+    		$class = Yii::$app->user->identity->class ?: '';
+    		$stars = Yii::$app->user->identity->stars ?: '';
     		$label_stars = '';
     		for($i=0;$i<$stars;$i++){
     			$label_stars .= '<i class="lnr lnr-star"></i>';

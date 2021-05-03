@@ -84,4 +84,11 @@ class CatatanHarian extends \yii\db\ActiveRecord
     {
         return $this->hasOne(UnsurKegiatan::className(), ['id' => 'unsur_id']);
     }
+
+    public static function sumPoinCatatanHarian($user_id)
+    {
+        $query = CatatanHarian::find()->where(['user_id'=>$user_id]);
+        // $query->andFilterWhere(['between','tanggal',$sd, $ed]);
+        return $query->sum('poin');
+    }
 }
