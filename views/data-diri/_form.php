@@ -39,6 +39,8 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
                 <?= $form->field($model, 'NIDN')->textInput(['maxlength' => true]) ?>
                 
                 <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'gelar_depan')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'gelar_belakang')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'nik')->textInput(['maxlength' => true]) ?>
 
                 <?= $form->field($model, 'gender')->radioList([ 'Laki-laki' => 'Laki-laki', 'Perempuan' => 'Perempuan', ]) ?>

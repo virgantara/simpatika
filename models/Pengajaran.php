@@ -55,6 +55,7 @@ class Pengajaran extends \yii\db\ActiveRecord
             [['NIY', 'matkul', 'jadwal_id', 'tahun_akademik'], 'required'],
             [['matkul'], 'string'],
             [['sks', 'sks_bkd'], 'number'],
+            [['kode_mk', 'sks','tahun_akademik','kelas','NIY'], 'unique','on' => 'insert'],
             [['jadwal_id', 'tahun_akademik', 'komponen_id'], 'integer'],
             [['tanggal_awal', 'tanggal_akhir', 'updated_at', 'created_at'], 'safe'],
             [['NIY'], 'string', 'max' => 15],

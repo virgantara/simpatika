@@ -349,7 +349,7 @@ class BkdController extends AppController
 
     public function actionKlaim()
     {
-        $list_bkd_periode = BkdPeriode::find()->all();
+        $list_bkd_periode = BkdPeriode::find()->orderBy(['tahun_id'=>SORT_DESC])->all();
         return $this->render('klaim',[
           'list_bkd_periode' => $list_bkd_periode
         ]);

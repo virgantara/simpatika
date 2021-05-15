@@ -343,9 +343,10 @@ class PengajaranController extends AppController
      */
     public function actionDelete($id)
     {
-      $this->findModel($id)->delete();
-      $this->findVer($id)->delete();
-
+      $model = $this->findModel($id);
+      $model->delete();
+      
+      
       return $this->redirect(['index']);
     }
 

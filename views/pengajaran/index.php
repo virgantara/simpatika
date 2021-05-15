@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
             
     [
         'class' => 'yii\grid\ActionColumn',
-        'template' => '{view} {update}',
+        'template' => '{view} {update} {delete}',
         'buttons' => [
             'update' => function ($url, $model, $key) { 
                  return Html::a('<span class="glyphicon glyphicon glyphicon-upload" aria-hidden="true"></span>', Url::to(['pengajaran/update', 'id' => $model->ID]),['title'=>'Upload Bukti Pengajaran']);
