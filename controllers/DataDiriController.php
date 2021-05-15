@@ -322,7 +322,7 @@ class DataDiriController extends AppController
                         'nidn' => $model->NIDN,
                         'kode_unik' => $model->kode_unik,
                         'niy' => $model->NIY,
-                        'nama' => $model->nama,
+                        'nama' => $model->gelar_depan.' '.$model->nama.', '.$model->gelar_belakang,
                         'jenjang' => !empty($jenjang) ? $jenjang->kode_siakad : 'B',
                         'kampus' => $model->kampus,
                         'password_hash' => $model->nIY->password_hash,
