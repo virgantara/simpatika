@@ -179,7 +179,25 @@
 		<?php echo $form->error($model,'kode_dosen'); ?>
 	</div>
 	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'nama_dosen',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<div class="col-sm-9">
+		<?php
 
+		$nama_dosen_bernidn = '';
+		if(!$model->isNewRecord)
+		{
+			$dosen = Masterdosen::model()->findByAttributes(array('nidn'=>$model->kode_pengampu_nidn));
+			// echo $model->kode_dosen;
+			if(!empty($dosen))
+				$nama_dosen_bernidn = $dosen->nama_dosen;
+		}
+		echo $form->hiddenField($model,'kode_pengampu_nidn',array('size'=>20,'maxlength'=>20));
+		echo CHtml::textField('nama_dosen_bernidn',$nama_dosen_bernidn,['class'=>'form-control','size'=>20,'maxlength'=>20,'id'=>'nama_dosen']); 
+		?>
+		<?php echo $form->error($model,'kode_pengampu_nidn'); ?>
+	</div>
+	</div>
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'semester',['class'=>'col-sm-3 control-label no-padding-right']); ?>
 		<div class="col-sm-9">
