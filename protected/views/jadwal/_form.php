@@ -180,7 +180,7 @@
 	</div>
 	</div>
 	<div class="form-group">
-		<?php echo $form->labelEx($model,'nama_dosen',['class'=>'col-sm-3 control-label no-padding-right']); ?>
+		<?php echo $form->labelEx($model,'nama_dosen_bernidn',['class'=>'col-sm-3 control-label no-padding-right']); ?>
 		<div class="col-sm-9">
 		<?php
 
@@ -193,7 +193,7 @@
 				$nama_dosen_bernidn = $dosen->nama_dosen;
 		}
 		echo $form->hiddenField($model,'kode_pengampu_nidn',array('size'=>20,'maxlength'=>20));
-		echo CHtml::textField('nama_dosen_bernidn',$nama_dosen_bernidn,['class'=>'form-control','size'=>20,'maxlength'=>20,'id'=>'nama_dosen']); 
+		echo CHtml::textField('nama_dosen_bernidn',$nama_dosen_bernidn,['class'=>'form-control','size'=>20,'maxlength'=>20,'id'=>'nama_dosen_bernidn']); 
 		?>
 		<?php echo $form->error($model,'kode_pengampu_nidn'); ?>
 	</div>
@@ -461,6 +461,35 @@ function findMk(prodi){
             })
         },
        
+  });
+
+  $('#nama_dosen_bernidn').autocomplete({
+      minLength:1,
+      select:function(event, ui){
+       
+        $('#Jadwal_kode_pengampu_nidn').val(ui.item.id);
+        $('#nama_dosen_bernidn').val(ui.item.value);
+                
+      },
+      
+      focus: function (event, ui) {
+        $('#Jadwal_kode_pengampu_nidn').val(ui.item.id);
+       $('#nama_dosen_bernidn').val(ui.item.value);
+      },
+      source:function(request, response) {
+        $.ajax({
+                url: "<?php echo Yii::app()->createUrl('Jadwal/GetDosen');?>",
+                dataType: "json",
+                data: {
+                    term: request.term,
+                    
+                },
+                success: function (data) {
+                    response(data);
+                }
+            })
+        },
+       
   }); 
-	});
+});
 </script>
