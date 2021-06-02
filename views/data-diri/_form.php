@@ -35,9 +35,6 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
                 echo $form->errorSummary($model,['header'=>'<div class="alert alert-danger">','footer'=>'</div>']);
                 
                 ?>
-                <?= $form->field($model, 'tugas_dosen_id')->dropDownList($listTugasDosen, ['prompt' => '-Pilih Tugas Dosen-']) ?>
-                <?= $form->field($model, 'NIDN')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'no_sertifikat_pendidik')->textInput(['maxlength' => true]) ?>
                 <div class="form-group">
                     <label for="">Nama Dosen (<i>Tuliskan nama lengkap tanpa gelar</i>)</label>
                 <?= $form->field($model, 'nama',['options'=>['tag'=>false]])->textInput(['maxlength' => true])->label(false) ?>
@@ -45,6 +42,18 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
                 </div>
                 <?= $form->field($model, 'gelar_depan')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'gelar_belakang')->textInput(['maxlength' => true]) ?>
+                
+               
+                <?= $form->field($model, 'tugas_dosen_id')->dropDownList($listTugasDosen, ['prompt' => '-Pilih Tugas Dosen-']) ?>
+                <?= $form->field($model, 'NIDN')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'no_sertifikat_pendidik')->textInput(['maxlength' => true]) ?>
+                </div>
+            </div>
+            <div class="panel">
+            <div class="panel-heading">
+                Data Pribadi
+            </div>
+            <div class="panel-body">
                 <?= $form->field($model, 'nik')->textInput(['maxlength' => true]) ?>
 
                 <?= $form->field($model, 'gender')->radioList([ 'Laki-laki' => 'Laki-laki', 'Perempuan' => 'Perempuan', ]) ?>
@@ -65,31 +74,64 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
                     ]
                 ) ?>
                 <?= $form->field($model, 'status_kawin')->dropDownList([ 'Kawin' => 'Kawin', 'Belum Kawin' => 'Belum Kawin', 'Duda/Janda' => 'Duda/Janda', ]) ?>
+                 <?= $form->field($model, 'alamat_rumah')->textarea(['rows' => 6]) ?>
 
+                <?= $form->field($model, 'telp_hp')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'agama')->textInput(['maxlength' => true]) ?>
 
+               </div>
+           </div>
+               <div class="panel">
+            <div class="panel-heading">
+                Karir
+            </div>
+            <div class="panel-body">
                 <?= $form->field($model, 'jabatan_fungsional')->dropDownList($listData, ['prompt'=>'..Pilih Jabatan Fungsional..','id'=>'jabfung']); ?>
                 
-                <div class="form-group">
-                    <label class="control-label">Bidang Ilmu</label><div class="">
-                    <?= Html::dropDownList('bidang_ilmu',$bidang_ilmu, ArrayHelper::map($listBidangIlmu,'kode',function($data){
-                        return (!empty($data->kode0) ? $data->kode0->nama : '').' - '.$data->nama;
-                    }),['prompt'=>'..Pilih Bidang Ilmu','id'=>'bidang_ilmu']); ?>
-                        
-                    <?php
+                
+                
+                <?php
 
-
-                    echo $form->field($model, 'bidang_ilmu_id',['options'=>['tag'=>false]])->widget(DepDrop::classname(), [
-                    'options' => ['id' => 'bidang_ilmu_id', 'placeholder' => '- Pilih Bidang Ilmu -','class'=>' '],
+                $data = !$model->isNewRecord ? [$model->pangkat => $model->pangkat0->nama.' '.$model->pangkat0->golongan] : [];
+                 echo $form->field($model, 'pangkat')->widget(DepDrop::classname(), [
+                    'data' => $data, 
+                    'options'=>['id'=>'pangkat'],
                     'pluginOptions'=>[
-                        'depends'=>['bidang_ilmu'],
-                        'class'=>'',
-                        'url'=>\yii\helpers\Url::to(['/bidang-ilmu/get-bidang-ilmu'])
+                        'depends'=>['jabfung'],
+                        'placeholder'=>'..Pilih Pangkat..',
+                        'url'=>\yii\helpers\Url::to(['/m-jabatan-akademik/get-pangkat'])
                     ]
-                ])->label(false);?>
-                    </div>
+                ]);
+                 ?>
+                 <?= $form->field($model, 'jenjang_kode')->dropDownList($listDataJenjang, ['prompt' => '-Pilih Jenjang-']) ?>
+                
                 </div>
-                <div class="form-group">
+            </div>
+            <div class="panel">
+                <div class="panel-heading">
+                    Kepakaran
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="control-label">Bidang Ilmu</label><div class="">
+                        <?= Html::dropDownList('bidang_ilmu',$bidang_ilmu, ArrayHelper::map($listBidangIlmu,'kode',function($data){
+                            return (!empty($data->kode0) ? $data->kode0->nama : '').' - '.$data->nama;
+                        }),['prompt'=>'..Pilih Bidang Ilmu','id'=>'bidang_ilmu']); ?>
+                            
+                        <?php
+
+
+                        echo $form->field($model, 'bidang_ilmu_id',['options'=>['tag'=>false]])->widget(DepDrop::classname(), [
+                        'options' => ['id' => 'bidang_ilmu_id', 'placeholder' => '- Pilih Bidang Ilmu -','class'=>' '],
+                        'pluginOptions'=>[
+                            'depends'=>['bidang_ilmu'],
+                            'class'=>'',
+                            'url'=>\yii\helpers\Url::to(['/bidang-ilmu/get-bidang-ilmu'])
+                        ]
+                    ])->label(false);?>
+                        </div>
+                    </div>
+                    <div class="form-group">
                     <label class="control-label">Bidang Kepakaran</label><div class="">
                     <?= Html::dropDownList('kepakaran_id_parent',$kepakaran_id_parent, ArrayHelper::map($listKepakaran,'kode',function($data){
                         return $data->kode.' - '.$data->nama;
@@ -109,32 +151,23 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
                     </div>
                 </div>
                 <?= $form->field($model, 'expertise')->textInput(['maxlength' => true,'placeholder'=>'Jika lebih dari satu keahlian, pisahkan dengan tanda koma. Contoh: Machine Learning, Computer Vision']) ?>
-                <?php
-
-                $data = !$model->isNewRecord ? [$model->pangkat => $model->pangkat0->nama.' '.$model->pangkat0->golongan] : [];
-                 echo $form->field($model, 'pangkat')->widget(DepDrop::classname(), [
-                    'data' => $data, 
-                    'options'=>['id'=>'pangkat'],
-                    'pluginOptions'=>[
-                        'depends'=>['jabfung'],
-                        'placeholder'=>'..Pilih Pangkat..',
-                        'url'=>\yii\helpers\Url::to(['/m-jabatan-akademik/get-pangkat'])
-                    ]
-                ]);
-                 ?>
-                 <?= $form->field($model, 'jenjang_kode')->dropDownList($listDataJenjang, ['prompt' => '-Pilih Jenjang-']) ?>
-                 
-                <?= $form->field($model, 'alamat_rumah')->textarea(['rows' => 6]) ?>
-
-                <?= $form->field($model, 'telp_hp')->textInput(['maxlength' => true]) ?>
+                </div>
+            </div>
+            <div class="panel">
+            <div class="panel-heading">
+                Data Lainnya
+            </div>
+            <div class="panel-body">
+               
+                
                 <?= $form->field($model, 'telegram_username')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'permalink')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model->nIY, 'sister_id')->textInput(['readonly' => true]) ?>
 
-                <?= $form->field($model, 'f_foto')->fileInput().'NB: File format is png, jpeg, jpg and maximal sized 1 MB<br><br>' ?>
+                <?= $form->field($model, 'f_foto')->fileInput().'NB: File format is png, jpeg, jpg and maxsize 1 MB<br><br>' ?>
 
                 <div class="form-group">
-                    <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                    <?= Html::submitButton($model->isNewRecord ? '<i class="fa fa-save"></i> Create' : '<i class="fa fa-save"></i> Update', ['class' => $model->isNewRecord ? 'btn btn-success btn-block btn-lg' : 'btn btn-lg btn-primary btn-block']) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>                
