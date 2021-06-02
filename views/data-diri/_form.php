@@ -37,6 +37,7 @@ $kepakaran_id_parent = !empty($model->kepakaran) && !empty($model->kepakaran->pa
                 ?>
                 <?= $form->field($model, 'tugas_dosen_id')->dropDownList($listTugasDosen, ['prompt' => '-Pilih Tugas Dosen-']) ?>
                 <?= $form->field($model, 'NIDN')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'no_sertifikat_pendidik')->textInput(['maxlength' => true]) ?>
                 
                 <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'gelar_depan')->textInput(['maxlength' => true]) ?>
