@@ -74,7 +74,7 @@ class DataDiri extends \yii\db\ActiveRecord
             'NIDN' => 'NIDN',
             'nik' => 'NIK/No KTP',
             'nama' => 'Nama',
-            'no_sertifikat_pendidik' => 'No Sertifikat Pendidik',
+            'no_sertifikat_pendidik' => 'No Sertifikat Pendidik (SERDOS)',
             'bidang_ilmu_id' => 'Bidang Ilmu',
             'gender' => 'JK',
             'kode_unik' => 'Kode Unik',
