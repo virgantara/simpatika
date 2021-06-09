@@ -19,7 +19,10 @@ class Aliases extends Component
     public function init() 
     {
 
-        Yii::setAlias('@klorofil', Yii::getAlias('@web').'/klorofil/');
+        // Yii::setAlias('@adminlte', Yii::getAlias('@web').'/adminlte/');
+        Yii::setAlias('@themes', Yii::getAlias('@web').'/adminlte/');
+        // Yii::setAlias('@uploads', Yii::getAlias('@webroot').'/uploads/');
+        // Yii::setAlias('@tests', Yii::getAlias('@webroot').'/_protected/tests/');
 
     }
 }

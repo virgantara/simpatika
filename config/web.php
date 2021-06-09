@@ -9,7 +9,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'name' => 'E-KHIDMAH UNIDA Gontor',
+    'name' => 'SIMPATIKA',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'app\components\Aliases'],
     'aliases' => [
@@ -66,17 +66,17 @@ $config = [
         'view' => [
             'theme' => [
                 'pathMap' => [
-                    '@app/views' => '@webroot/klorofil/views'
+                    // '@app/views' => '@webroot/adminlte/views'
                 ],
-                'baseUrl' => '@web/klorofil',
-                'basePath' => '@webroot/klorofil',
+                'baseUrl' => '@web/adminlte',
+                'basePath' => '@webroot/adminlte',
             ],
         ],
         'assetManager' => [
             'assetMap' => [
-                'jquery.js' => '@web/klorofil/assets/vendor/jquery/jquery.min.js',
-                // 'jquery.ui.js' => '@web/themes/klorofil/js/jquery-ui.min.js',
-                'bootstrap.js' => '@web/klorofil/assets/vendor/bootstrap/js/bootstrap.min.js'
+                'jquery.js' => '@web/adminlte/bower_components/jquery/dist/jquery.min.js',
+                // 'jquery.ui.js' => '@web/themes/bsb/js/jquery-ui.min.js',
+                'bootstrap.js' => '@web/adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js'
             ],
             'bundles' => [
                 // we will use bootstrap css from our theme

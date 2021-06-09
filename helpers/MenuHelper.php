@@ -18,168 +18,44 @@ class MenuHelper
 		if(!Yii::$app->user->isGuest)
 		{
 			$menuItems[] = [
-		     	'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-home"></i><span>Dashboard</span>', 
-		        'url' => ['site/index'],
+		        'label' => 'Beranda', 
+		        'template' => '<a href="{url}" ><i class="fa fa-home"></i><span>{label}</span></a>',
+		        'url' => ['site/index']
 		    ];
 
 		    $menuItems[] = [
-	    		'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-user"></i><span>Profil</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		        'url' => '#',
-		        'submenuTemplate' => "\n<div id='pages_profil' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_profil">{label}</a>',
+	    		'label' => 'Jadwal', 
+	        	'template' => '<a href="#" ><i class="fa fa-book"></i> <span>{label}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>',
+	        	'options' => ['class' => 'treeview'],
+	        	'url' => '#',
+		        'submenuTemplate' => "\n<ul class='treeview-menu'>\n{items}\n</ul>\n",
 		        'items'=>[
-		           	['label' => 'Data Pribadi', 'url' => ['/data-diri/create']],
-	                ['label' => 'Inpassing', 'url' => ['/inpassing']],
-	                ['label' => 'Jabatan Fungsional', 'url' => ['/jabatan-fungsional/index']],
-	                ['label' => 'Kepangkatan', 'url' => ['/kepangkatan/index']],
-	                ['label' => 'Penempatan', 'url' => ['/penugasan/index']],
-		        ]
+	           	
+		           	[
+		            	'label' => '<i class="fa fa-circle-o "></i> Manage',  
+		            	'template' => '<a href="{url}" >{label}</a>',
+		                'url' => ['/simak-jadwal-temp/index'],	      
+		               
+		            ],
+		            [
+		            	'label' => '<i class="fa fa-circle-o "></i> Monitor',  
+		            	'template' => '<a href="{url}" >{label}</a>',
+		                'url' => ['/pengabdian/index'],	        
+		            ],
+		            [
+		            	'label' => '<i class="fa fa-circle-o "></i> Personal',  
+		            	'template' => '<a href="{url}" >{label}</a>',
+		                'url' => ['/pengabdian/index'],	        
+		            ],
+	        	]
 	        ];
-
-		    $menuItems[] = [
-	    		'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-book"></i><span>Catatan Harian</span>', 
-		        'url' => ['catatan-harian/index'],
-	        ];
-
-	        $menuItems[] = [
-	    		'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-book"></i><span>Unit Kerja</span>', 
-		        'url' => ['jabatan/list'],
-		        'visible' => Yii::$app->user->can('pimpinan')
-	        ];
-
-		    $menuItems[] = [
-	    		'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-graduation-hat"></i><span>Kualifikasi</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		        'url' => '#',
-		        'submenuTemplate' => "\n<div id='pages_kualifikasi' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_kualifikasi">{label}</a>',
-		        'items'=>[
-		           	['label' => 'Pendidikan Formal', 'url' => ['/pendidikan/index']],
-	                ['label' => 'Diklat', 'url' => ['/pelatihan/index']]
-		        ]
-	        ];
-
-	        $menuItems[] = [
-	    		'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-book"></i><span>Pelaks. Pendidikan</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		        'url' => '#',
-		        'submenuTemplate' => "\n<div id='pages_pendidikan' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_pendidikan">{label}</a>',
-		        'items'=>[
-		           	['label' => 'Pengajaran', 'url' => ['/pengajaran/index']],
-		           	['label' => 'Bimbingan Mahasiswa', 'url' => ['/bimbingan-mahasiswa/index']],
-		           	['label' => 'Pengujian Mahasiswa', 'url' => ['/pengajaran/index']],
-		           	['label' => 'Bahan Ajar', 'url' => ['/produk-ajar/index']],
-		           	['label' => 'Orasi ilmiah', 'url' => ['/konferensi/index']],
-		           	['label' => 'Tugas Tambahan', 'url' => ['/jabatan/index']],
-		        ]
-	        ];
-
 	        
-	       	$menuItems[] = [
-	    		'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-book"></i><span>Pelaks. Penelitian</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		        'url' => '#',
-		        'submenuTemplate' => "\n<div id='pages_penelitian' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_penelitian">{label}</a>',
-		        'items'=>[
-		           	['label' => 'Penelitian', 'url' => ['/penelitian/index']],
-		           	['label' => 'Publikasi karya', 'url' => ['/publikasi/index']],
-		           	['label' => 'Paten/HKI', 'url' => ['/hki/index']],
-		           	
-		        ]
-	        ];
 
-	        $menuItems[] = [
-	    		'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-book"></i><span>Pelaks. Pengabdian</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		        'url' => '#',
-		        'submenuTemplate' => "\n<div id='pages_pengabdian' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_pengabdian">{label}</a>',
-		        'items'=>[
-		           	['label' => 'Pengabdian', 'url' => ['/pengabdian/index']],
-		           	['label' => 'Pembicara', 'url' => ['/pembicara/index']],
-		           	['label' => 'Jabatan Struktural', 'url' => ['/organisasi/index']],
-		           	['label' => 'Pengelola jurnal', 'url' => ['/pengelola-jurnal/index']],
-		        ]
-	        ];
-
-	        $menuItems[] = [
-	    		'template' => '<a href="{url}">{label}</a>',
-		        'label' => '<i class="lnr lnr-book"></i><span>Penunjang</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		        'url' => '#',
-		        'submenuTemplate' => "\n<div id='pages_penunjang' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_penunjang">{label}</a>',
-		        'items'=>[
-		           	['label' => 'Anggota Profesi', 'url' => ['/organisasi/index']],
-		           	
-		           	['label' => 'Penghargaan', 'url' => '#'],
-		           	['label' => 'Visiting Scientist', 'url' => '#'],
-		           	['label' => 'Penunjang lain', 'url' => ['penunjang-lain/index']],
-		        ]
-	        ];
-
-	      //   $menuItems[] = [
-	    		// 'label' => '<i class="lnr lnr-chart-bars"></i><span>Luaran</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		     //    'url' => '#',
-		     //    'submenuTemplate' => "\n<div id='pages_luaran' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		     //    'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_luaran">{label}</a>',
-		     //    'items'=>[
-		     //       	['label' => 'Jurnal', 'url' => ['/jurnal/index']],
-       //              ['label' => 'Buku', 'url' => ['/buku/index']],    
-       //              ['label' => 'Forum Ilmiah', 'url' => ['/konferensi/index']],
-       //              ['label' => 'HKI', 'url' => ['/hki/index']],
-       //              ['label' => 'Luaran Lain', 'url' => ['/luaran-lain/index']], 
-		     //    ]
-	      //   ];
-
-	        $menuItems[] = [
-	    		'label' => '<i class="lnr lnr-list"></i><span>Layanan BKD</span><i class="icon-submenu lnr lnr-chevron-left"></i>', 
-		        'url' => '#',
-		        'submenuTemplate' => "\n<div id='pages_bkd' class='collapse'><ul class='nav'>\n{items}\n</ul></div>\n",
-		        'template' => '<a class="collapsed" data-toggle="collapse" href="#pages_bkd">{label}</a>',
-		        'items'=>[
-		        	['label' => 'Klaim Kegiatan', 'url' => ['/bkd/klaim']],
-		           	['label' => 'BKD Saya', 'url' => ['/bkd/index']],
-		           	['label' => 'Rubrik', 'url' => ['/tugas-dosen-bkd/index']],
-		        ]
-	        ];
-
-	        $menuItems[] = [
-	    		'label' => '<i class="lnr lnr-sync"></i><span>Sinkronisasi</span>', 
-		        'url' => ['site/sync'],
-		        
-	        ];
 
 	            
 	          
 		}
 
-		else
-		{
-			$menuItems[] = [ 
-	            ['label' => 'Home', 'url' => ['/site/index']],
-	            ['label'=>'Lecturer',
-	                 'items' => [
-	                    ['label' => 'Search Lecturer', 'url' => ['/dosen/index']],    
-	                    ['label' => 'Faculty of Ushuluddin', 'url' => ['/dosen/faculty','kategori'=>'1']],    
-	                    ['label' => 'Faculty of Islamic Education', 'url' => ['/dosen/faculty','kategori'=>'2']],    
-	                    ['label' => "Faculty of Shari'ah", 'url' => ['/dosen/faculty','kategori'=>'3']],    
-	                    ['label' => 'Faculty of Economics and Management', 'url' => ['/dosen/faculty','kategori'=>'4']],    
-	                    ['label' => 'Faculty of Humanities', 'url' => ['/dosen/faculty','kategori'=>'5']],    
-	                    ['label' => 'Faculty of Science and Technology', 'url' => ['/dosen/faculty','kategori'=>'6']],    
-	                    ['label' => 'Faculty of Health Science', 'url' => ['/dosen/faculty','kategori'=>'7']],    
-	                            ],
-	            ],
-
-	            ['label' => 'Login', 'url' => ['/site/login']]
-
-	        ];   
-		}
 
 
 
