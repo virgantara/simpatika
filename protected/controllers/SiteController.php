@@ -55,6 +55,7 @@ class SiteController extends Controller
 	public function actionLoginSso($token)
     {
     	
+    
         $key = Yii::app()->params->jwt_key;
         $decoded = JWT::decode($token, base64_decode(strtr($key, '-_', '+/')), ['HS256']);
         // print_r($decoded);exit;

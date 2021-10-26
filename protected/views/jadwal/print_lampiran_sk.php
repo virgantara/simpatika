@@ -69,10 +69,24 @@ $sk = Sk::model()->findByAttributes([
   {
     $m= (object)$m;
 
-
+    $mk = Matakuliah::model()->findByAttributes([
+      'prodi'=>$prodi->kode_prodi,
+      'kode_mk' => $m->kode_mk
+    ]);
     
-    $sks = !empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : 0;
-    $total_sks += $sks;
+    $sks = '-';
+    $kode_mk = '<span style="color:red">MK tidak ditemukan di kurikulum</span>';
+    $nama_mk = $kode_mk;
+    if(!empty($mk))
+    {
+      $sks = $mk->sks_mk;
+      $kode_mk = $mk->kode_mk;
+      $nama_mk = $mk->nama_mk;
+      $total_sks += $sks;  
+    }
+    
+
+    $prodi_tujuan = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=>$m->prodi]);
 
     if($counter==1)
     {
@@ -80,8 +94,8 @@ $sk = Sk::model()->findByAttributes([
         <tr>
      <td width="15%" rowspan="<?=count($model)+1;?>" style="text-align: center;"><?=$m->kode_dosen;?></td>
       <td width="20%" rowspan="<?=count($model)+1;?>" style="text-align: center;"><?=$m->nama_dosen;?></td>
-      <td width="35%"  style="text-align: center;"><?=$m->kode_mk.' - '.$m->nama_mk;?></td>
-    <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
+      <td width="35%"  style="text-align: center;"><?=$kode_mk.' - '.$nama_mk;?></td>
+    <td width="8%"  style="text-align: center;"><?=$prodi_tujuan->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
     <td width="10%"  style="text-align: center;"><?=!empty($listkelas[$m->kelas]) ? $listkelas[$m->kelas] : $m->kelas;?></td>
     <td width="5%"  style="text-align: center;"><?=$sks;?></td>
@@ -93,8 +107,8 @@ $sk = Sk::model()->findByAttributes([
     else{
   ?>
    <tr>
-      <td width="35%"  style="text-align: center;"><?=$m->kode_mk.' - '.$m->nama_mk;?></td>
-    <td width="8%"  style="text-align: center;"><?=$m->nama_prodi;?></td>
+      <td width="35%"  style="text-align: center;"><?=$kode_mk.' - '.$nama_mk;?></td>
+    <td width="8%"  style="text-align: center;"><?=$prodi_tujuan->nama_prodi;?></td>
     <td width="7%"  style="text-align: center;"><?=$m->semester;?></td>
     <td width="10%"  style="text-align: center;"><?=!empty($listkelas[$m->kelas]) ? $listkelas[$m->kelas] : $m->kelas;?></td>
     <td width="5%"  style="text-align: center;"><?=$sks;?></td>

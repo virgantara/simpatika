@@ -115,11 +115,10 @@ foreach($kampuses as $kampus)
       <th>Jam</th>
       <th>Waktu</th>
       <th>Kode Mk</th>
-      <th width="15%">Nama Mk</th>
+      <th width="20%">Nama Mk</th>
       <th>NIY</th>
       <th width="15%">Nama Dosen</th>
       <th width="5%">SKS</th>
-      <th width="5%">Fakultas</th>
       <th width="15%">Prodi</th>
       
       
@@ -165,13 +164,12 @@ foreach($kampuses as $kampus)
 		<td><?php echo $m->jam_ke;?></td>
 		<td><?php echo substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3);?></td>
 		<td><?php echo $m->kode_mk;?></td>
-		<td width="15%"><?php echo $m->nama_mk;?></td>
+		<td width="20%"><?php echo $m->nama_mk;?></td>
 		<td><?php echo $m->kode_dosen;?></td>
 
 		<td width="15%"><?php echo $m->nama_dosen;?></td>
 
-		<td width="5%"><?php echo !empty($list_mk[$m->kode_mk]) ? $list_mk[$m->kode_mk]->sks : '-';?></td>
-		<td width="5%"><?php echo $m->nama_fakultas;?></td>
+		<td width="5%"><?php echo $m->sks ;?></td>
 		<td width="15%">
 			<?php
 			 

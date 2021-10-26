@@ -517,12 +517,12 @@ class JadwalController extends Controller
 				$listkelas[$t->id] = $t->nama_kelas;
 			}
 			$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
-			$mks = Mastermatakuliah::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik->tahun_id]);
+			// $mks = Mastermatakuliah::model()->findAllByAttributes(['tahun_akademik'=>$tahun_akademik->tahun_id]);
 
-			$list_mk = [];
-			foreach($mks as $mk){
-				$list_mk[$mk->kode_mata_kuliah] = $mk;
-			}
+			// $list_mk = [];
+			// foreach($mks as $mk){
+			// 	$list_mk[$mk->kode_mata_kuliah] = $mk;
+			// }
 
 			$setting_sk = JadwalLampiranSk::model()->find();
 
@@ -533,7 +533,7 @@ class JadwalController extends Controller
 			$pdf->SetAutoPageBreak(TRUE,10);
 			$this->layout = '';
 			
-			
+			$prodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=>$kode_prodi]);
 			foreach($listdosenprodi as $p)
 			{
 
@@ -543,7 +543,7 @@ class JadwalController extends Controller
 
 
 				$model = Yii::app()->db->createCommand()
-			    ->select('t.kode_dosen, t.nama_dosen, t.nama_mk, t.kode_mk, t.semester, t.kelas, t.nama_prodi, t.id as idjadwal')
+			    ->select('t.kode_dosen, t.nama_dosen, t.nama_mk, t.kode_mk, t.semester, t.prodi, t.kelas, t.nama_prodi, t.id as idjadwal')
 			    ->from('simak_jadwal_temp t')
 			    // ->join('m_hari h', 'h.nama_hari=t.hari')
 			    // ->join('m_jam j', 'j.id_jam=t.jam_ke')
@@ -565,14 +565,14 @@ class JadwalController extends Controller
 				
 				$pdf->AddPage();
 				
-				$prodi = Masterprogramstudi::model()->findByAttributes(['kode_prodi'=>$kode_prodi]);
+				
 				ob_start();	
 				echo $this->renderPartial('print_lampiran_sk',array(
 					'model'=>$model,
 					'listkelas' => $listkelas,
 					'prodi' => $prodi,
 					'ttd' => $ttd,
-					'list_mk' => $list_mk,
+					// 'list_mk' => $list_mk,
 					'setting_sk' => $setting_sk
 				));
 
