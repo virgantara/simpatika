@@ -70,12 +70,12 @@ $sk = Sk::model()->findByAttributes([
     $m= (object)$m;
 
     $mk = Matakuliah::model()->findByAttributes([
-      'prodi'=>$prodi->kode_prodi,
+      'prodi'=>$m->prodi,
       'kode_mk' => $m->kode_mk
     ]);
     
     $sks = '-';
-    $kode_mk = '<span style="color:red">MK tidak ditemukan di kurikulum</span>';
+    $kode_mk = '<span style="color:red">MK '.$m->kode_mk.' tidak ditemukan di kurikulum</span>';
     $nama_mk = $kode_mk;
     if(!empty($mk))
     {
