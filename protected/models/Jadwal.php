@@ -476,7 +476,7 @@ class Jadwal extends CActiveRecord
 	    ->where('kode_dosen=:p1 AND t.tahun_akademik=:p2', [
 	    	':p1'=>$kode_dosen,
 	    	':p2'=>$tahun_id,
-	    	':p3'=>$tahun_id
+	    
 	    ])
 	    // ->group('idjadwal')
 	    ->order('t.kode_dosen ASC')
