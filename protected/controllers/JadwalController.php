@@ -1264,12 +1264,12 @@ class JadwalController extends Controller
 			    ->from('simak_jadwal_temp t')
 			    ->join('m_hari h', 'h.nama_hari=t.hari')
 			    ->join('m_jam j', 'j.id_jam=t.jam_ke')
-			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+			    // ->join('simak_matakuliah m', 'm.kode_mk=t.kode_mk')
 			    ->join('simak_kampus km', 'km.id=t.kampus')
 			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
 			    ->where('kode_dosen=:p1', array(':p1' => $id))
 			    ->queryAll();
-
+			    
 				$dosen = Jadwal::model()->findDosenInJadwal($id);				
 				
 				if(count($dosen) == 0) continue;
@@ -1319,12 +1319,12 @@ class JadwalController extends Controller
 			    ->from('simak_jadwal_temp t')
 			    ->join('m_hari h', 'h.nama_hari=t.hari')
 			    ->join('m_jam j', 'j.id_jam=t.jam_ke')
-			    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+			    // ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 			    ->join('simak_kampus km', 'km.id=t.kampus')
 			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
 			    ->where('kode_dosen=:p1', array(':p1' => $id))
 			    ->queryAll();
-
+			    // print_r($model);exit;
 				$dosen = Jadwal::model()->findDosenInJadwal($id);				
 				
 				if(count($dosen) == 0) continue;

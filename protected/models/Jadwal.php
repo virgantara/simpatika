@@ -560,14 +560,14 @@ class Jadwal extends CActiveRecord
 	{
 		$tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$model = Yii::app()->db->createCommand()
-	    ->select('t.*,km.nama_kampus,kls.nama_kelas,m.sks, m.nama_mata_kuliah as nama_matkul')
+	    ->select('t.*,km.nama_kampus,kls.nama_kelas')
 	    ->from('simak_jadwal_temp t')
 	    ->join('m_hari h', 'h.nama_hari=t.hari')
 	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
-	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+	    // ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-	    ->where('m.kode_prodi = t.prodi AND  m.tahun_akademik = t.tahun_akademik AND kode_dosen=:p1 AND hari=:p2 AND jam_ke=:p3 AND t.tahun_akademik=:p4', array(':p1'=>$dosen,':p2'=>$hari,':p3'=>$jamke,':p4'=>$tahun_akademik->tahun_id))
+	    ->where('kode_dosen=:p1 AND hari=:p2 AND jam_ke=:p3 AND t.tahun_akademik=:p4', array(':p1'=>$dosen,':p2'=>$hari,':p3'=>$jamke,':p4'=>$tahun_akademik->tahun_id))
 	    ->queryAll();
 
 		// $params = array(

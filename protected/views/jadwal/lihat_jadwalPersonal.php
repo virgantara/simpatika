@@ -95,6 +95,25 @@ foreach($jam as $j)
     foreach($jadwaldsn as $jd)
     {
       $jd = (object)$jd;
+
+      $attr = array(
+        'kode_mk' => $jd->kode_mk,
+        'prodi' => $jd->prodi
+      );
+
+      $mk = Matakuliah::model()->findByAttributes($attr);
+
+      $sks = '-';
+      $kode_mk = '<span style="color:red">MK '.$jd->kode_mk.' tidak ditemukan di kurikulum</span>';
+      $nama_mk = $kode_mk;
+      if(!empty($mk))
+      {
+        $sks = $mk->sks_mk;
+        $kode_mk = $mk->kode_mk;
+        $nama_mk = $mk->nama_mk;
+        // $total_sks += $sks;  
+      }
+
       $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$jd->prodi));
 
       if(empty($prodi)) continue;
@@ -109,7 +128,7 @@ foreach($jam as $j)
         $nama_prodi .= '/'.$jd->nama_prodi;
       }
 
-      $label0 = $jd->nama_matkul.'<br>';
+      $label0 = $nama_mk.'<br>';
       $lbl_prodi = '';
       if($jd->bentrok == 2)
       {
@@ -132,7 +151,7 @@ foreach($jam as $j)
         $lbl_prodi = $prodi->singkatan;
       }
       $label1 = $lbl_prodi.'-'.$jd->semester.'<br>';
-      $label2 = $jd->nama_kampus.'-'.$jd->nama_kelas.' / '.$jd->sks.' SKS';
+      $label2 = $jd->nama_kampus.'-'.$jd->nama_kelas.' / '.$sks.' SKS';
       $label3 = '<br><span style="background-color:yellow">'.substr($jd->jam_mulai, 0, -3).'-'.substr($jd->jam_selesai, 0, -3).'</span>';
       
       $idx++;

@@ -92,6 +92,7 @@ $(document).ready(function(){
 </div><!-- form -->
 
 <?php
+
 if(!empty($model))
 {
 
@@ -111,6 +112,7 @@ if(!empty($model))
 $i = 0; 
 foreach($model as $m)
 {
+
 	$i++;
 ?>
 <tr>
