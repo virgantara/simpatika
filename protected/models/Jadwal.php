@@ -332,7 +332,7 @@ class Jadwal extends CActiveRecord
 	    ->join('m_hari h', 'h.nama_hari=t.hari')
 	    ->join('simak_masterdosen d', 'd.nidn=t.kode_dosen')
 	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
-	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+	    // ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
 	    ->where('kode_dosen=:p1 AND t.tahun_akademik=:p2', array(':p1'=>$id,':p2'=>$tahunaktif))
@@ -466,14 +466,14 @@ class Jadwal extends CActiveRecord
 		}
 		// $tahun_akademik = Tahunakademik::model()->findByAttributes(array('buka'=>'Y'));
 		$model = Yii::app()->db->createCommand()
-	    ->select('DISTINCT(t.id) as idjadwal,t.*,m.sks,j.nama_jam,km.nama_kampus,kls.nama_kelas')
+	    ->select('DISTINCT(t.id) as idjadwal,t.*,j.nama_jam,km.nama_kampus,kls.nama_kelas')
 	    ->from('simak_jadwal_temp t')
 	    ->join('m_hari h', 'h.nama_hari=t.hari')
 	    ->join('m_jam j', 'j.id_jam=t.jam_ke')
-	    ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
+	    // ->join('simak_mastermatakuliah m', 'm.kode_mata_kuliah=t.kode_mk')
 	    ->join('simak_kampus km', 'km.id=t.kampus')
 	    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
-	    ->where('kode_dosen=:p1 AND t.tahun_akademik=:p2 AND m.tahun_akademik =:p3', [
+	    ->where('kode_dosen=:p1 AND t.tahun_akademik=:p2', [
 	    	':p1'=>$kode_dosen,
 	    	':p2'=>$tahun_id,
 	    	':p3'=>$tahun_id

@@ -829,6 +829,23 @@ class JadwalController extends Controller
 
 		  		$nm_prodi = $m->nama_prodi;
 				
+				$attr = array(
+			        'kode_mk' => $m->kode_mk,
+			        'prodi' => $m->prodi
+			      );
+
+			      $mk = Matakuliah::model()->findByAttributes($attr);
+
+			      $sks = '-';
+			      $kode_mk = '<span style="color:red">MK '.$m->kode_mk.' tidak ditemukan di kurikulum</span>';
+			      $nama_mk = $kode_mk;
+			      if(!empty($mk))
+			      {
+			        $sks = $mk->sks_mk;
+			        $kode_mk = $mk->kode_mk;
+			        $nama_mk = $mk->nama_mk;
+			        // $total_sks += $sks;  
+			      }
 
 				$i++;
 				$sheet->getRowDimension($row+1)->setRowHeight(15);
@@ -836,11 +853,11 @@ class JadwalController extends Controller
 				$sheet->setCellValueByColumnAndRow(1,$row+1, $m->hari);
 				$sheet->setCellValueByColumnAndRow(2,$row+1, $m->nama_jam);
 				$sheet->setCellValueByColumnAndRow(3,$row+1, substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3));
-				$sheet->setCellValueByColumnAndRow(4,$row+1, $m->kode_mk);
-				$sheet->setCellValueByColumnAndRow(5,$row+1, $m->nama_mk);
+				$sheet->setCellValueByColumnAndRow(4,$row+1, $kode_mk);
+				$sheet->setCellValueByColumnAndRow(5,$row+1, $nama_mk);
 				$sheet->setCellValueByColumnAndRow(6,$row+1, $m->kode_dosen);
 				$sheet->setCellValueByColumnAndRow(7,$row+1, $m->nama_dosen);
-				$sheet->setCellValueByColumnAndRow(8,$row+1, $m->sks);
+				$sheet->setCellValueByColumnAndRow(8,$row+1, $sks);
 				$sheet->setCellValueByColumnAndRow(9,$row+1, $m->nama_fakultas);
 				// $prodi = Masterprogramstudi::model()->findByAttributes(array('kode_prodi'=>$m->prodi));
 	 			$sheet->setCellValueByColumnAndRow(10,$row+1, $nm_prodi);
@@ -1269,7 +1286,7 @@ class JadwalController extends Controller
 			    ->join('simak_masterkelas kls', 'kls.id=t.kelas')
 			    ->where('kode_dosen=:p1', array(':p1' => $id))
 			    ->queryAll();
-			    
+
 				$dosen = Jadwal::model()->findDosenInJadwal($id);				
 				
 				if(count($dosen) == 0) continue;

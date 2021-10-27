@@ -139,8 +139,27 @@ $this->menu=array(
 		  	$m = (object)$m;
 		  	 $i++;
 
-		  	$sks_dosen += $m->sks;
 
+		  	$attr = array(
+		        'kode_mk' => $m->kode_mk,
+		        'prodi' => $m->prodi
+		      );
+
+		      $mk = Matakuliah::model()->findByAttributes($attr);
+
+		      $sks = '-';
+		      $kode_mk = '<span style="color:red">MK '.$m->kode_mk.' tidak ditemukan di kurikulum</span>';
+		      $nama_mk = $kode_mk;
+		      if(!empty($mk))
+		      {
+		        $sks = $mk->sks_mk;
+		        $kode_mk = $mk->kode_mk;
+		        $nama_mk = $mk->nama_mk;
+		        // $total_sks += $sks;  
+		        $sks_dosen += $sks;
+
+		      }
+		  	
 
 		?>
 		<tr <?php echo $m->bentrok == 1 ? 'style="background-color:orange"' : '';?>>
@@ -149,13 +168,13 @@ $this->menu=array(
 		<td width="5%"><?php echo $m->hari;?></td>
 		<td><?php echo $m->nama_jam;?></td>
 		<td><?php echo substr($m->jam_mulai, 0, -3).'-'.substr($m->jam_selesai, 0, -3);?></td>
-		<td><?php echo $m->kode_mk;?></td>
-		<td width="15%"><?php echo $m->nama_mk;?></td>
+		<td><?php echo $kode_mk;?></td>
+		<td width="15%"><?php echo $nama_mk;?></td>
 		<td><?php echo $m->kode_dosen;?></td>
 
 		<td width="15%"><?php echo $m->nama_dosen;?></td>
 
-		<td width="5%"><?php echo $m->sks;?></td>
+		<td width="5%"><?php echo $sks;?></td>
 		<td width="5%"><?php echo $m->nama_fakultas;?></td>
 		<td width="15%">
 			<?php
