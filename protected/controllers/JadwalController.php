@@ -113,7 +113,7 @@ class JadwalController extends Controller
 			try
 			{
 				$jadwals = Jadwal::model()->findAllByAttributes([
-					'tahun_akademik' =>$data['tahun_akademik',
+					'tahun_akademik' =>$data['tahun_akademik'],
 					'prodi' => $data['prodi']
 				]);
 				
