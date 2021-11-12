@@ -103,7 +103,7 @@ class JadwalController extends Controller
 		$data['tahun_akademik'] = $_GET['ta'] ?: '0';
 
 		// print_r($data['tahun_akademik']);exit;
-		if(!empty($data['tahun_akademik']))
+		if(!empty($data['tahun_akademik']) && !empty($data['prodi']))
 		{
 			$results = [];
 
@@ -112,7 +112,11 @@ class JadwalController extends Controller
 			$counter = 0;
 			try
 			{
-				$jadwals = Jadwal::model()->findAllByAttributes(['tahun_akademik' =>$data['tahun_akademik']]);
+				$jadwals = Jadwal::model()->findAllByAttributes([
+					'tahun_akademik' =>$data['tahun_akademik',
+					'prodi' => $data['prodi']
+				]]);
+				
 				foreach($jadwals as $m)
 				{
 

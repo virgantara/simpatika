@@ -42,7 +42,7 @@ $('.search-form form').submit(function(){
 echo '<ul>';
 echo '<li>'.CHtml::link('Upload Mahasiswa Ke SIAKAD',array('mastermahasiswa/uploadMhs')).'</li>';
 echo '<li>'.CHtml::link('Mahasiswa Belum Melengkapi Data Ortu',array('mastermahasiswa/dataortu')).'</li>';
-echo '<li>'.CHtml::link('Sync Jadwal ke SIAKAD',array('jadwal/syncJadwal')).'</li>';
+// echo '<li>'.CHtml::link('Sync Jadwal ke SIAKAD',array('jadwal/syncJadwal')).'</li>';
 echo '<li>'.CHtml::link('Laporan Input Nilai',array('krs/nilai')).'</li>';
 echo '<li>'.CHtml::link('Lampiran SK Jadwal',array('JadwalLampiranSk/admin')).'</li>';
 echo '<li>'.CHtml::link('Mata Kuliah',array('Mastermatakuliah/index')).'</li>';
