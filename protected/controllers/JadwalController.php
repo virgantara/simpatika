@@ -115,7 +115,7 @@ class JadwalController extends Controller
 				$jadwals = Jadwal::model()->findAllByAttributes([
 					'tahun_akademik' =>$data['tahun_akademik',
 					'prodi' => $data['prodi']
-				]]);
+				]);
 				
 				foreach($jadwals as $m)
 				{
