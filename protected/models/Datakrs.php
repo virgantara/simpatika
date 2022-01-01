@@ -93,7 +93,10 @@ class Datakrs extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'ekdJawabans' => array(self::HAS_MANY, 'EkdJawaban', 'simak_datakrs_id'),
+			'kodeJadwal' => array(self::BELONGS_TO, 'SimakJadwal', 'kode_jadwal'),
+            'kodeProdi' => array(self::BELONGS_TO, 'Masterprogramstudi', 'kode_prodi'),
+            'mahasiswa0' => array(self::BELONGS_TO, 'Mastermahasiswa', 'mahasiswa'),
+            'ekdJawabans' => array(self::HAS_MANY, 'EkdJawaban', 'simak_datakrs_id'),
 		);
 	}
 

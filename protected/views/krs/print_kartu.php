@@ -101,16 +101,26 @@
     {
       $i++;
 
-      $total_sks += $krs->sks
+      $jadwal = $krs->kodeJadwal;
+
+      $mk = Matakuliah::model()->findByAttributes([
+        'prodi' => !empty($jadwal) ? $jadwal->prodi : '-',
+        'kode_mk' => $krs->kode_mk
+      ]);
+
+      
+      if(!empty($mk)){
+        $total_sks += $mk->sks_mk;
+      }
     
 ?>
 
       
         <tr>
           <td valign="middle" align="center" style="padding:5px;"><?=$i;?>. </td>
-          <td valign="middle" style="padding:5px;"> <?=$krs->nama_mk;?></td>
-          <td valign="middle" align="center" style="padding:5px;"><?=$krs->sks;?></td>
-          <td valign="middle" align="center" style="padding:5px;"><?=$krs->kelas;?></td>
+          <td valign="middle" style="padding:5px;"> <?=!empty($mk) ? $mk->nama_mk : null;?></td>
+          <td valign="middle" align="center" style="padding:5px;"><?=!empty($mk) ? $mk->sks_mk : null;?></td>
+          <td valign="middle" align="center" style="padding:5px;"><?=!empty($jadwal) ? $jadwal->kelas : null;?></td>
           <td valign="middle" align="center" style="padding:5px;">&nbsp;</td>
           <td valign="middle" align="center" style="padding:5px;">&nbsp;</td>
           <td style="padding:5px;" valign="top">&nbsp;</td>
